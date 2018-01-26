@@ -61,7 +61,7 @@ public class UiActorCreator {
                     }
                     @Override
                     public void touchUp(InputEvent event, float x, float y, int pointer, int button){
-                        game.androidSide.actionSend();
+                        game.androidSide.sendMail();
                     }
                 });
                 break;
@@ -310,7 +310,7 @@ public class UiActorCreator {
             case 5://Иконка контроля звука
                 smallButtonActor.setVisible(true);
 
-                if (game.prefs.isSoundIsOn()) {
+                if (game.prefs.isSoundOn()) {
                     sprite = game.atlas.createSprite("soundOn_icon");
                 } else {
                     sprite = game.atlas.createSprite("soundOff_icon");
@@ -328,13 +328,13 @@ public class UiActorCreator {
 
                     @Override
                     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                        if (game.prefs.isSoundIsOn()) {
+                        if (game.prefs.isSoundOn()) {
                             smallButtonActor.sprite = game.atlas.createSprite("soundOff_icon");
                             game.prefs.setSound(false);
                             game.backgroundMusic.pause();
                             game.savePrefsFile();
                             //System.out.println("sound on");
-                        } else if (!game.prefs.isSoundIsOn()) {
+                        } else if (!game.prefs.isSoundOn()) {
                             smallButtonActor.sprite = game.atlas.createSprite("soundOn_icon");
                             game.prefs.setSound(true);
                             game.backgroundMusic.play();

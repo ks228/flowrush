@@ -12,20 +12,25 @@ import com.blackhornetworkshop.flowrush.FlowRush;
 //Created by TScissors. Отдельный скрин для отображения лого компании и лого игры
 
 public class LogoScreen implements Screen {
+    final private FlowRush game;
+
+    //Graphics
     private Sprite logo;
     private SpriteBatch batch;
 
-    final private FlowRush game;
-
+    //Primitives
     private long startTime;
-
     private boolean isFRlogo;
 
     public LogoScreen(final FlowRush game) {
         Gdx.input.setInputProcessor(game.oneTouchProcessor);
         this.game = game;
         setBHWlogo();
-        batch = new SpriteBatch();
+
+        //CHANGE THIS
+        //batch = new SpriteBatch();
+        //WITH THIS
+        this.batch = game.batch;
     }
 
     private void setBHWlogo() {
@@ -66,20 +71,20 @@ public class LogoScreen implements Screen {
         logo.draw(batch);
         batch.end();
 
-        if (TimeUtils.nanoTime()-startTime>1500000000l&&!isFRlogo) {
+        if (TimeUtils.nanoTime()-startTime>1500000000L&&!isFRlogo) {
             isFRlogo = true;
             setFRlogo();
         }
-        if (TimeUtils.nanoTime()-startTime>3000000000l&&isFRlogo) {
+        if (TimeUtils.nanoTime()-startTime>3000000000L&&isFRlogo) {
 
             game.setMainMenuScreen();
-            if(game.prefs.isSoundIsOn()) {
+            if(game.prefs.isSoundOn()) {
                 game.backgroundMusic.play();
             }
             if(!game.playServices.isSignedIn()) {
                 game.playServices.signIn();
             }
-            dispose();
+            //dispose(); /* DELETED !!!!!
         }
     }
 
@@ -104,7 +109,7 @@ public class LogoScreen implements Screen {
 
     @Override
     public void dispose() {
-        batch.dispose();
+        //batch.dispose();/* DELETED !!!!!!!!!!
         //System.out.println("dispose() был вызван в LogoScreen");
     }
 }

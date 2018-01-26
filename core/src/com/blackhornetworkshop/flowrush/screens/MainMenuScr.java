@@ -19,24 +19,25 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.blackhornetworkshop.flowrush.ConstantBase;
+import com.blackhornetworkshop.flowrush.FlowRush;
+import com.blackhornetworkshop.flowrush.initialization.LevelGroupCreator;
 import com.blackhornetworkshop.flowrush.initialization.UiActorCreator;
+import com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener;
+import com.blackhornetworkshop.flowrush.ui.SmallButtonActor;
 
 //Created by TScissors. Экран меню игры
 
 public class MainMenuScr implements Screen {
-    private final com.blackhornetworkshop.flowrush.FlowRush game;
-
+    private final FlowRush game;
     private Stage stage;
-    private com.blackhornetworkshop.flowrush.initialization.LevelGroupCreator levelGroupCreator;
+    private LevelGroupCreator levelGroupCreator;
 
-    //private Image logoActor;
-
-    private Label messageBack, innerScreenBack;
+    //Actors
+    private Group levelGroup, packGroup;
+    private SmallButtonActor twitterButton, facebookButton, vkButton, authorsButton, closeButton, supportUsSmallButton;
     private TextButton playButton, lvlButton, supportUsButton, rateUsButton, feedButton, levelsLabel, packsLabel, supportUsLabel, /**removeAds,*/ socialBack, authorsLabel;
     public  TextButton exitButton;
-
-    private com.blackhornetworkshop.flowrush.ui.SmallButtonActor twitterButton, facebookButton, vkButton, authorsButton, closeButton, supportUsSmallButton;
-    private Group levelGroup, packGroup;
+    private Label messageBack, innerScreenBack;
 
     public MainMenuScr(final com.blackhornetworkshop.flowrush.FlowRush gam) {
         game = gam;
@@ -45,20 +46,22 @@ public class MainMenuScr implements Screen {
         game.levelLoader.setLvl(game.save.getCurrentPack(), game.save.getCurrentLvl());
 
         //Кнопка звука одна для всех экранов
-        game.soundButton = UiActorCreator.getSmallButtonActor(5, game);
+        game.soundButton = UiActorCreator.getSmallButtonActor(5, game); // MAYBE IT SHOULD BE IN FLOWRUSH.JAVA !!!!!!!!!!!!!!!!!!!!!!!!!!???????????????????????????????????????????????????
 
         //Заливаем фон
         Gdx.gl.glClearColor(0.26f, 0.64f, 0.87f, 1);
 
         //Создаем сцену
-        stage = new Stage(new ScreenViewport());
+        //stage = new Stage(new ScreenViewport()); // CHANGED THIS !!!!!!!
+        this.stage = new Stage(new ScreenViewport(), game.batch);
 
         //Кнопка играть!
-        playButton = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getTextButton(1, game);
-        playButton.addListener(new com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener(playButton, game));
+        playButton = UiActorCreator.getTextButton(1, game);
+
+        playButton.addListener(new ButtonScaleListener(playButton, game)); // DELETED IN 1.04 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         //Создаем группу актеров
-        levelGroupCreator = new com.blackhornetworkshop.flowrush.initialization.LevelGroupCreator(game);
+        levelGroupCreator = new LevelGroupCreator(game);
         levelGroup = new Group(); //класс пустышка, так оптимальней чтобы сразу он там был в случае нескольких кликов по пакам оправдано, сразу есть что удалять в слушателе ниже
         levelGroup.setVisible(false);
         levelGroup.setName("levelgroup"); //имя для поиска
@@ -67,8 +70,8 @@ public class MainMenuScr implements Screen {
         packGroup = new Group();
         for(int x = 1; x<6; x++){
             final int p = x;
-            TextButton packButton = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getPackTextButton(p, game);
-            packButton.addListener(new com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener(packButton, game));
+            TextButton packButton = UiActorCreator.getPackTextButton(p, game);
+            packButton.addListener(new ButtonScaleListener(packButton, game));
             if(game.levelLoader.getLevelPack(p-1).available) {
                 packButton.addListener(new ClickListener() {
                     @Override
@@ -78,7 +81,7 @@ public class MainMenuScr implements Screen {
 
                     @Override
                     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                        game.screenType = ConstantBase.ScreenType.MAINE_MENU_LVL_CHOISE;
+                        game.screenType = ConstantBase.ScreenType.MAIN_MENU_LVL_CHOISE;
                         setOnVisibleForInnerScreen();
                         packsLabel.setVisible(false);
                         levelsLabel.setVisible(true);
@@ -95,10 +98,10 @@ public class MainMenuScr implements Screen {
         packGroup.setVisible(false);
 
         //Кнопка выбора паков
-        lvlButton = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getTextButton(2, game);
-        lvlButton.addListener(new com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener(lvlButton, game));
+        lvlButton = UiActorCreator.getTextButton(2, game);
+        lvlButton.addListener(new ButtonScaleListener(lvlButton, game));
 
-        exitButton = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getTextButton(13, game);
+        exitButton = UiActorCreator.getTextButton(13, game);
         exitButton.setVisible(false);
 
         //Основное окно для информации
@@ -108,13 +111,13 @@ public class MainMenuScr implements Screen {
         innerScreenBack.setVisible(false);
 
         //Статические надписи над окнами с информацией и выбором уровней
-        levelsLabel = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getTextButton(7, game);
+        levelsLabel = UiActorCreator.getTextButton(7, game);
         levelsLabel.setText("SELECT LEVEL");
-        packsLabel= com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getTextButton(7, game);
+        packsLabel= UiActorCreator.getTextButton(7, game);
         packsLabel.setText("SELECT PACK");
-        authorsLabel = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getTextButton(7, game);
+        authorsLabel = UiActorCreator.getTextButton(7, game);
         authorsLabel.setText("AUTHORS");
-        supportUsLabel = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getTextButton(7, game);
+        supportUsLabel = UiActorCreator.getTextButton(7, game);
         supportUsLabel.setText("SUPPORT US");
 
         //!!!!!!!!!!! НЕ УДАЛИТЬ СЛУЧАЙНО
@@ -122,14 +125,14 @@ public class MainMenuScr implements Screen {
         removeAds.addListener(new com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener(removeAds, game));*/
 
         //Фон и кнопки социальных сетей
-        socialBack = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getTextButton(8, game);
-        twitterButton = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getSmallButtonActor(9, game);
-        facebookButton = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getSmallButtonActor(8, game);
-        vkButton = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getSmallButtonActor(10, game);
+        socialBack = UiActorCreator.getTextButton(8, game);
+        twitterButton = UiActorCreator.getSmallButtonActor(9, game);
+        facebookButton = UiActorCreator.getSmallButtonActor(8, game);
+        vkButton = UiActorCreator.getSmallButtonActor(10, game);
 
         //Кнопка открывающая варианты поддержки
-        supportUsButton = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getTextButton(5, game);
-        supportUsButton.addListener(new com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener(supportUsButton, game));
+        supportUsButton = UiActorCreator.getTextButton(5, game);
+        supportUsButton.addListener(new ButtonScaleListener(supportUsButton, game));
 
         rateUsButton= com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getTextButton(4, game);
         rateUsButton.addListener(new com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener(rateUsButton, game));
@@ -150,7 +153,7 @@ public class MainMenuScr implements Screen {
 
         //Кнопка закрытия окна с информацией или выбором уровней
         closeButton = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getSmallButtonActor(6, game);
-        closeButton.setVisible(false);
+        closeButton.setVisible(false); /* DELETED IN 1.05 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 
         //Кнопка открытия окна с информацией об авторах
         authorsButton = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getSmallButtonActor(7, game);

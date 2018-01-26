@@ -85,7 +85,7 @@ public class FlowRush extends Game {
         this.executor = new AsyncExecutor(20);// ++ADDED NEW
     }
     public void create() {
-        this.batch = new SpriteBatch();// ++ADDED NEW
+        batch = new SpriteBatch();// ++ADDED NEW
 
         //Отлавливаем кнопку BACK
         Gdx.input.setCatchBackKey(true);
@@ -245,12 +245,12 @@ public class FlowRush extends Game {
 
         // CHANGE
         getScreen().dispose();
-        playServices.disposeAsyncExecutor();
+        //playServices.disposeAsyncExecutor();
 
         /* WITH THAT
         this.getScreen().hide();
-        this.executor.dispose();
          */
+        executor.dispose();
     }
 
     public void savePrefsFile(){
@@ -280,7 +280,7 @@ public class FlowRush extends Game {
     public void pause(){
         backgroundMusic.pause();
     }
-    public void resume(){ if(prefs.isSoundIsOn()) backgroundMusic.play(); }
+    public void resume(){ if(prefs.isSoundOn()) backgroundMusic.play(); }
     public void render() {
         super.render(); // important!
     }

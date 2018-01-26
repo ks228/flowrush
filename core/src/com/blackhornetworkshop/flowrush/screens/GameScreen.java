@@ -75,13 +75,11 @@ public class GameScreen implements Screen {
         game = gam;
 
         //Основная сцена для гексов и сцена для UI
-        stage = new Stage(new ScreenViewport()); // CHANGE THIS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        hudStage = new Stage(new ScreenViewport());// CHANGE THIS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //stage = new Stage(new ScreenViewport()); // CHANGE THIS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //hudStage = new Stage(new ScreenViewport());// CHANGE THIS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-        /* WITH THIS
-        this.stage = new Stage(new ScreenViewport(), this.game.batch);
-        this.hudStage = new Stage(new ScreenViewport(), this.game.batch);
-        */
+        stage = new Stage(new ScreenViewport(), game.batch);
+        hudStage = new Stage(new ScreenViewport(), game.batch);
 
         //множитель inputprocessor
         inputMultiplexer = new InputMultiplexer();
@@ -102,9 +100,9 @@ public class GameScreen implements Screen {
         specialActorsArray = new ArrayList<TileActor>();
 
         //Батч для фона из точек
-        batchForBack = new SpriteBatch();
-        ///!!!!!!!!!!!!!!!!!!!! CHANGE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        /* this.batchForBack = this.game.batch; */
+        //batchForBack = new SpriteBatch();
+        ///!!!!!!!!!!!!!!!!!!!! CHANGED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        batchForBack = this.game.batch;
 
         //номер уровня
         game.levelNumberActor.setText("" + game.levelLoader.getLvl());
@@ -292,7 +290,7 @@ public class GameScreen implements Screen {
         //level complete отображается в любом случае
         game.screenType = ConstantBase.ScreenType.GAME_LVL_COMPLETE;
 
-        if (game.prefs.isSoundIsOn()) {
+        if (game.prefs.isSoundOn()) {
             game.lvlCompleteSound.play();
         }
 
@@ -328,7 +326,7 @@ public class GameScreen implements Screen {
         pauseActor.setVisible(false);
         game.levelNumberActor.setVisible(false);
 
-        if (game.prefs.isSoundIsOn()) {
+        if (game.prefs.isSoundOn()) {
             game.packCompleteSound.play();
         }
         if (packCompleteNextButton.getName().equals("visible")) { //!!!!!!!!!!!!!!!!!!!!!!! VISIBLE ???????????????
@@ -486,8 +484,8 @@ public class GameScreen implements Screen {
 
     @Override
     public void hide() {
-        /* DISPOSE ADDED HERE, WHY ???????????????????????????????????????????????????? */
-        //this.dispose();
+        /* DISPOSE ADDED HERE IN 1.04, WHY ???????????????????????????????????????????????????? */
+        dispose();
     }
 
     @Override
@@ -496,7 +494,7 @@ public class GameScreen implements Screen {
         hudStage.dispose();
 
         //DELETED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
-        batchForBack.dispose();// DELETE!
+        //batchForBack.dispose();// DELETE!
 
         //System.out.println("dispose() был вызван в GameScreen");
     }

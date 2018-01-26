@@ -45,7 +45,7 @@ public class OneTouchProcessor implements InputProcessor {
                 case MAIN_MENU_PACK_CHOISE://mainmenu packchoise
                     game.getMainMenuScr().resume();
                     break;
-                case MAINE_MENU_LVL_CHOISE://mainmenu lvlchoise
+                case MAIN_MENU_LVL_CHOISE://mainmenu lvlchoise
                     game.getMainMenuScr().resume();
                     game.getMainMenuScr().setPackChoiseScreen();
                     break;

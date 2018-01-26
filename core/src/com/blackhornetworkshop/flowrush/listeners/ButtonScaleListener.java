@@ -28,7 +28,7 @@ public class ButtonScaleListener extends ClickListener{
     }
     @Override
     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-        if(game.prefs.isSoundIsOn()){
+        if(game.prefs.isSoundOn()){
             game.tapSound.play(1f);
         }
         buttonScaleToAction.setScale(0.85f, 0.85f);

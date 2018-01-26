@@ -10,5 +10,10 @@ public interface PlayServices
     void writeSnapshotAsync(byte[] data);
     boolean isSignedIn();
     void checkAndSave(boolean onStart);
-    void disposeAsyncExecutor();
+    
+    //DELETED !!!!!!!!!!!!!!!!!!!!!!!! 
+    //void disposeAsyncExecutor(); //DELETED !!!!!!!!!!!!!!!!!!!!!!!
+    
+    //ADDED IN 1.04 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    void disconnectGameHelper();
 }

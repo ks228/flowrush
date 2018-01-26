@@ -10,7 +10,7 @@ public class GamePreferences{ //решить вопрос приватности
     public boolean isAdsIsRemoved(){return adsIsRemoved;}
     public void setAdsIsRemoved(boolean value){adsIsRemoved = value;}
 
-    public boolean isSoundIsOn(){return soundIsOn;}
+    public boolean isSoundOn(){return soundIsOn;}
     void setSound(boolean value){
         soundIsOn = value;
     }

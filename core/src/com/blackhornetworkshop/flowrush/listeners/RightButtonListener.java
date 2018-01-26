@@ -38,7 +38,7 @@ public class RightButtonListener extends ClickListener {
             if(isRateButton){
                 gameScreen.game.androidSide.openPlaymarket();
             }else if(!isRateButton){
-                gameScreen.game.androidSide.actionSend();
+                gameScreen.game.androidSide.sendMail();
             }
             gameScreen.game.prefs.setShowRateDialog(false);
             gameScreen.game.savePrefsFile();
