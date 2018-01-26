@@ -46,6 +46,7 @@ public class FlowRush extends Game {
     public SavedGame save;
 
     //Screens
+    private LogoScreen logoScreen;
     private GameScreen gameScreen;
     private MainMenuScr mainMenuScr;
 
@@ -76,8 +77,6 @@ public class FlowRush extends Game {
     public AndroidSide androidSide;
 
     public AsyncExecutor executor;// ++ADDED NEW
-
-
 
     public FlowRush(AndroidSide androidSide, PlayServices playServices){
         this.androidSide = androidSide;
@@ -237,7 +236,12 @@ public class FlowRush extends Game {
 
 
     public void dispose() {
-        /* ++++++++++++++ ADD this.batch.dispose();*/
+
+        logoScreen.dispose();
+        mainMenuScr.dispose();
+        gameScreen.dispose();
+
+        batch.dispose();
         skin.remove("fontLarge", BitmapFont.class);// выгружаем шрифты из скина, так как manager делает их dispose() а затем повторяет эту же процедуру для скина. при второй попытке exception
         skin.remove("fontMid", BitmapFont.class);
         skin.remove("fontSmall", BitmapFont.class);
@@ -265,7 +269,10 @@ public class FlowRush extends Game {
         file.writeString(string, false);
         System.out.println("Saved progress on local");
     }
-    void setLogoScreen(){ setScreen(new LogoScreen(this)); }
+    void setLogoScreen(){
+        logoScreen = new LogoScreen(this);
+        setScreen(logoScreen);
+    }
     public void setMainMenuScreen(){
         mainMenuScr = new MainMenuScr(this);
         setScreen(mainMenuScr);

@@ -11,9 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.blackhornetworkshop.flowrush.ConstantBase;
+import com.blackhornetworkshop.flowrush.FlowRush;
 
 public class LevelGroupCreator {
-    final private com.blackhornetworkshop.flowrush.FlowRush game;
+    final private FlowRush game;
 
     final private Sprite greyback;
 
@@ -29,9 +30,8 @@ public class LevelGroupCreator {
     private int lvlAvailable;
     private int pack;
 
-    public LevelGroupCreator(com.blackhornetworkshop.flowrush.FlowRush gam){
-        game = gam;
-
+    public LevelGroupCreator(com.blackhornetworkshop.flowrush.FlowRush game){
+        this.game = game;
         greyback = game.atlas.createSprite("lock");
     }
 
@@ -55,10 +55,8 @@ public class LevelGroupCreator {
         for (int x = 1; x < 51; x++) {
             final int i = x;
             setPos(x);
-            TextButton levelNumberButton;
-            Actor levelLock;
             if(x<=lvlAvailable) {
-                levelNumberButton = new TextButton(""+x, game.skin, "lightblue");
+                TextButton levelNumberButton = new TextButton(""+x, game.skin, "lightblue");
                 levelNumberButton.setSize(lvlNumSize, lvlNumSize);
                 levelNumberButton.setPosition(xPos, yPos);
                 levelNumberButton.setOrigin(lvlNumSize/2, lvlNumSize/2);
@@ -68,14 +66,14 @@ public class LevelGroupCreator {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
                         game.levelLoader.setLvl(pack, i);
-                        game.getMainMenuScr().dispose();
+                        //game.getMainMenuScr().dispose();
                         game.setGameScreen();
                     }
                 });
                 levelNumberButton.addListener(new com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener(levelNumberButton, game));
                 levelGroup.addActor(levelNumberButton);
             }else{
-                levelLock = new Actor(){
+                Actor levelLock = new Actor(){
                     @Override
                     public void draw(Batch batch, float alpha) {
                             batch.draw(greyback, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());

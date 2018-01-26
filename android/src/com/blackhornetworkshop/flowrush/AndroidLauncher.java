@@ -1,8 +1,6 @@
 package com.blackhornetworkshop.flowrush;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -16,7 +14,6 @@ import com.badlogic.gdx.utils.async.AsyncExecutor;
 import com.badlogic.gdx.utils.async.AsyncResult;
 import com.badlogic.gdx.utils.async.AsyncTask;
 import com.blackhornetworkshop.flowrush.initialization.SavedGame;
-import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.snapshot.Snapshot;
 import com.google.android.gms.games.snapshot.SnapshotMetadata;
@@ -30,16 +27,16 @@ import static com.google.android.gms.internal.zzs.TAG;
 
 public class AndroidLauncher extends AndroidApplication implements PlayServices {
 
+    private final AndroidLauncher androidLauncher;
     private GameHelper gameHelper;
     private FlowRush flowRush;
-    private final AndroidLauncher androidLauncher;
+
     private static final int RC_SAVED_GAMES = 9009;
 
     AsyncExecutor asyncExecutor;
     AsyncResult<Void> task;
 
     private SavedGame savedGameOnline;
-
     byte[] data;
 
     public AndroidLauncher() {
@@ -49,7 +46,9 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final AndroidApplicationConfiguration config = getConfigApp();
+        final AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+        config.useAccelerometer = false;
+        config.useCompass = false;
 
         final AndroidSide androidSide = new AndroidSideConcrete(this);
         flowRush = new FlowRush(androidSide, androidLauncher);
@@ -103,20 +102,11 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
         gameHelper.setup(gameHelperListener);
     }
 
-    private AndroidApplicationConfiguration getConfigApp() { // WHAT IS IT ??????????????????????????????????????????????????????????? SIMPLIFY
-        final AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-        config.useAccelerometer = false;
-        config.useCompass = false;
-
-        return config;
-    }
-
     private void showSavedGamesUI() {
         int maxNumberOfSavedGamesToShow = 3;
         Intent savedGamesIntent = Games.Snapshots.getSelectSnapshotIntent(gameHelper.getApiClient(), "Flow Rush Saves", true, true, maxNumberOfSavedGamesToShow);
         startActivityForResult(savedGamesIntent, RC_SAVED_GAMES);
     }
-
 
     @Override
     protected void onStart() {
@@ -140,13 +130,13 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
                 loadCloudSaveAndWriteToLocal(uniqueName);
 
                 //DELETED IN 1.04 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                Gdx.app.postRunnable(new Runnable() {
+                /*Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {
                         flowRush.getScreen().dispose();
                         flowRush.setLogoScreen();
                     }
-                });
+                });*/
                 //DELETED IN 1.04 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
             } else if (intent.hasExtra(Snapshots.EXTRA_SNAPSHOT_NEW)) {
@@ -162,17 +152,11 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
     @Override
     public void writeSnapshotAsync(final byte[] data) {
         this.data = data;
-
-        //DELETED IN 1.04 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        final Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.save);
-        //DELETED IN 1.04 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
         task = asyncExecutor.submit(new AsyncTask<Void>() {
             public Void call() {
                 //System.out.println("task async start save");
-                writeSnapshot(flowRush.save.getUniqSaveGameName(), data, bitmap, "Last saved game");
-                //CHANGED WITH THIS IN 1.04 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                //writeSnapshot(flowRush.save.getUniqSaveGameName(), data, "Last saved game");
+                //CHANGED !!!!!!
+                writeSnapshot(flowRush.save.getUniqSaveGameName(), data, "Last saved game");
                 return null;
             }
         });
@@ -185,10 +169,9 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
             public Void call() {
                 //System.out.println("task async start load");
                 // Open the saved game using its name.
-                //THIS CHANGED (BOOLEAN) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-                Snapshots.OpenSnapshotResult result = Games.Snapshots.open(gameHelper.getApiClient(), snapshotName, true).await();
-                //WITH THIS:
-                //Snapshots.OpenSnapshotResult result = Games.Snapshots.open(gameHelper.getApiClient(), snapshotName, false).await();
+
+                //THIS CHANGED (BOOLEAN) !
+                Snapshots.OpenSnapshotResult result = Games.Snapshots.open(gameHelper.getApiClient(), snapshotName, false).await();
 
 
                 // Check the result of the open operation
@@ -198,13 +181,9 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
                     // Read the byte content of the saved game.
                     try {
                         String string = new String(snapshot.getSnapshotContents().readFully());
-                        //THIS CHANGED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                        flowRush.save = flowRush.gson.fromJson(string, SavedGame.class);
-                        flowRush.saveSaveFile();
-
-                        /* WTIH THIS
+                        //CHANGED !!!
                         if (string != null) {
-                            flowRush.save = AndroidLauncher.this.flowRush.gson.fromJson(string, SavedGame.class);
+                            flowRush.save = flowRush.gson.fromJson(string, SavedGame.class);
                             flowRush.saveSaveFile();
                             Gdx.app.postRunnable(new Runnable() {
                                 @Override
@@ -217,7 +196,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
                         else {
                             System.out.println("SAVED GAME IS NULL OR CONNECTION LOST");
                         }
-                        */
+
                     } catch (IOException e) {
                         Log.w(TAG, "Error while reading Snapshot.");
                     }
@@ -273,10 +252,8 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
                 //System.out.println("task async start load from server and check");
                 // Open the saved game using its name.
 
-                //THIS (BOOLEAN) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                Snapshots.OpenSnapshotResult result = Games.Snapshots.open(gameHelper.getApiClient(), snapshotName, true).await();
-                //CHANGED WITH THIS:!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111111111111!!!!11!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-                //Snapshots.OpenSnapshotResult result = Games.Snapshots.open(gameHelper.getApiClient(), snapshotName, false).await();
+                //CHANGED BOOLEAN !!!
+                Snapshots.OpenSnapshotResult result = Games.Snapshots.open(gameHelper.getApiClient(), snapshotName, false).await();
 
                 // Check the result of the open operation
                 if (result.getStatus().isSuccess()) {
@@ -299,8 +276,6 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
             }
         });
     }
-
-    //ADDED BOOLEAN private void checkSavesBeforeLoadToCloud(final SavedGame savedGame, final SavedGame savedGame2, final boolean b) { !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     private void checkSavesBeforeLoadFromCloud(final SavedGame savedGame, final SavedGame savedGameOnline){ //проверяем и обновляем локальный файл сохранения
         //для current level
@@ -344,7 +319,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
         }
     }
 
-    //NEW METHOD IN 1.04 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //NEW METHOD IN 1.04 !!!!!
     public boolean isOnline() {
         final NetworkInfo activeNetworkInfo = ((ConnectivityManager)this.getSystemService(CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
         if (activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting()) {
@@ -358,7 +333,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
         System.out.println("internet is off");
         return false;
     }
-    //NEW METHOD IN 1.04 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //NEW METHOD IN 1.04 !!!!
 
     private void checkSavesBeforeLoadToCloud(final SavedGame savedGame, final SavedGame savedGameOnline, boolean onStart){ //проверяем с состоянием на сервере перед отправкой новой инфы
         //System.out.println("calling checkSavesBeforeLoadToCloud");
@@ -400,8 +375,8 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
         return flowRush.gson.toJson(save).getBytes();
     }
 
-    //CHANGED TO VOID TYPE HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    private PendingResult<Snapshots.CommitSnapshotResult> writeSnapshot(String newSnapshotFilename, byte[] data, Bitmap coverImage, String desc) {
+    //CHANGED TO VOID TYPE HERE !!
+    private void writeSnapshot(String newSnapshotFilename, byte[] data, String desc) {
         Log.w(TAG, "write snapshot method call");
         Snapshots.OpenSnapshotResult result = Games.Snapshots.open(gameHelper.getApiClient(), newSnapshotFilename, true).await();
         Log.w(TAG, "after calling open");
@@ -415,16 +390,16 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
             // Create the change operation
             SnapshotMetadataChange metadataChange = new
                     SnapshotMetadataChange.Builder()
-                    //.setCoverImage(coverImage) DELETED IN 1.04 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    //.setCoverImage(coverImage) DELETED  !!!
                     .setDescription(desc)
                     .build();
 
             // Commit the operation
-            return Games.Snapshots.commitAndClose(gameHelper.getApiClient(), snapshot, metadataChange); // DELETED
+            //return Games.Snapshots.commitAndClose(gameHelper.getApiClient(), snapshot, metadataChange); // DELETED
             // return
         } else {
             Log.w(TAG, "open result is not success");
-            return null;// DELETED
+            //return null;// DELETED
         }
     }
 
@@ -496,11 +471,6 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
             Gdx.app.log("MainActivity", "Log out failed: " + e.getMessage() + ".");
         }
     }
-
-    /*@Override
-    public void disposeAsyncExecutor(){
-        asyncExecutor.dispose();
-    }*/
 
     @Override
     public void disconnectGameHelper() {

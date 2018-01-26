@@ -1,6 +1,6 @@
 package com.blackhornetworkshop.flowrush.initialization;
 
-public class GamePreferences{ //решить вопрос приватности
+public class GamePreferences{
 
 
     private boolean soundIsOn = true;

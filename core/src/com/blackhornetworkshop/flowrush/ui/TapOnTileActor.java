@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+import com.blackhornetworkshop.flowrush.ConstantBase;
 
 
 public class TapOnTileActor extends Actor {
@@ -18,6 +19,8 @@ public class TapOnTileActor extends Actor {
 
     public TapOnTileActor(Sprite sprite){
         setPosition(-1000, -1000);
+        setSize(ConstantBase.HEX_WIDTH, ConstantBase.HEX_HEIGHT);
+        setOrigin(getWidth()/2, getHeight()/2);
 
         tapEffect = sprite;
 
@@ -32,10 +35,7 @@ public class TapOnTileActor extends Actor {
         sequenceAction = new SequenceAction(scale1, scale2);
     }
 
-    public void setParameters(float parentWidth, float parentHeight){
-        setSize(parentWidth, parentHeight);
-        setOrigin(getWidth()/2, getHeight()/2);
-    }
+    //DELETED FOR 1.05 setParameters
 
     public void goAnim(float xPos, float yPos){
 

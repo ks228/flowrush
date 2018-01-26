@@ -6,7 +6,7 @@ public class ActorInfo {
 
     private int index; //порядковый индекс текстуры
     private int position; // позиция для выставления angle
-    private int include = 0; // 0 - без центра, 1 - с центром источником, 2 - с центром приемником, 3 - с центром передатчиком
+    private int include; // 0 - без центра, 1 - с центром источником, 2 - с центром приемником, 3 - с центром передатчиком
 
     public ActorInfo(){
 

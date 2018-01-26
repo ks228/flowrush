@@ -167,8 +167,8 @@ public class GameScreen implements Screen {
             createPackCompleteGroup();
         }
 
-        //!!!!!!!!!!!!!!!!!!! IN VERSION 1.04 DOESNT EXIST HEX WIDTH & HEIGHT HERE, REPLACED WITH CONSTANTBASE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        mapGroup = new MapActorGroupCreator(this, game.levelLoader.getActorList(), game.atlas, ConstantBase.HEX_WIDTH, ConstantBase.HEX_HEIGHT).getGroup();
+        // HEX WIDTH & HEIGHT DELETED!!!
+        mapGroup = new MapActorGroupCreator(this, game.levelLoader.getActorList(), game.atlas).getGroup();
         game.checker.initialization(this, mapGroup); //обязательно после создания mapgroup иначе special actors array будет пустым
 
         stage.addActor(mapGroup);
@@ -214,8 +214,8 @@ public class GameScreen implements Screen {
         //Добавляем фоновую анимацию
         stage.addActor(game.backGroup);
 
-        //загружаем группу актеров // DELETE HEX WIDTH & HEIGHT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        mapGroup = new MapActorGroupCreator(this, game.levelLoader.getActorList(), game.atlas, ConstantBase.HEX_WIDTH, ConstantBase.HEX_HEIGHT).getGroup();
+        //загружаем группу актеров // DELETED HEX WIDTH & HEIGHT !!!!!!
+        mapGroup = new MapActorGroupCreator(this, game.levelLoader.getActorList(), game.atlas).getGroup();
         stage.addActor(mapGroup);
 
         //обновляем чекер
