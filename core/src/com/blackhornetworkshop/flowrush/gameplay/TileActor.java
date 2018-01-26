@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.blackhornetworkshop.flowrush.initialization.ActorInfo;
 
 public class TileActor extends Actor{
     private int index;
@@ -17,18 +18,15 @@ public class TileActor extends Actor{
     private int xIndex;
     private int yIndex;
 
-    private com.blackhornetworkshop.flowrush.initialization.ActorInfo actorInfo;
+    private ActorInfo actorInfo;
 
     private boolean[] sourceArray;
 
     private boolean powerOn;
 
-    //private TextureAtlas atlas;
-    private Sprite hexback;
-    private Sprite sprite;
-    private Sprite icon;
+    private Sprite hexback, sprite, icon;
 
-    public TileActor(com.blackhornetworkshop.flowrush.initialization.ActorInfo actorInfo){ //конструктор класса
+    public TileActor(ActorInfo actorInfo){ //конструктор класса
         this.actorInfo = actorInfo;
 
         //Инициализируем основные Fields класса
@@ -96,5 +94,5 @@ public class TileActor extends Actor{
 
     public int getInclude(){return include;}
 
-    public com.blackhornetworkshop.flowrush.initialization.ActorInfo getActorInfo(){return actorInfo;}
+    public ActorInfo getActorInfo(){return actorInfo;}
 }

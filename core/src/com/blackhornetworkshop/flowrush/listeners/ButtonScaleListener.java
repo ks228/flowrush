@@ -4,16 +4,17 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.blackhornetworkshop.flowrush.FlowRush;
 
 //Created by TScissors. Класс для ScaleToAction кнопок по нажатию
 
 public class ButtonScaleListener extends ClickListener{
 
     private final Actor actor;
-    private final com.blackhornetworkshop.flowrush.FlowRush game;
+    private final FlowRush game;
 
     private ScaleToAction buttonScaleToAction;
-    public ButtonScaleListener(Actor actr, com.blackhornetworkshop.flowrush.FlowRush gam){
+    public ButtonScaleListener(Actor actr, FlowRush gam){
         actor = actr;
         game = gam;
 

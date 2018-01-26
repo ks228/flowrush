@@ -35,21 +35,11 @@ public class TapOnTileActor extends Actor {
         sequenceAction = new SequenceAction(scale1, scale2);
     }
 
-    //DELETED FOR 1.05 setParameters
-
     public void goAnim(float xPos, float yPos){
-
-        //removeAction(sequenceAction);
-        //setScale(0, 0);
-
 
         setX(xPos);
         setY(yPos);
-
-        //setX(xPos + (width / 2));
-        //setY(yPos + (height / 2));
-
-        //sequenceAction = new SequenceAction(scale1, scale2); //пока так, приходиться создавать такой объект каждый раз, но по идее он сам по себе лишь оболочка
+        
         sequenceAction.restart();
 
         scale1.reset();

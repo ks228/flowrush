@@ -20,7 +20,7 @@ public class LevelLoader {
     private int pack;
     private int lvl;
 
-    public LevelLoader(FlowRush gam){
+    public LevelLoader(FlowRush gam) {
         game = gam;
         try {
             packs = new Gson().fromJson(Gdx.files.internal("lvls/levels.json").reader(), Packs.class);
@@ -31,13 +31,13 @@ public class LevelLoader {
         }
     }
 
-    public void setLvl(int pck, int lv){
+    public void setLvl(int pck, int lv) {
         //System.out.println(pck+" pack");
         //System.out.println(lv+" lvl");
         this.pack = pck;
         this.lvl = lv;
 
-        levelPack = packs.packsArray.get(pack-1);
+        levelPack = packs.packsArray.get(pack - 1);
         level = levelPack.levels.get(lvl - 1);
 
         reloadActorList();
@@ -45,65 +45,72 @@ public class LevelLoader {
         checkPackProgress();
     }
 
-    public void nextLvl(){
-        lvl+=1;
+    public void nextLvl() {
+        lvl++;
         //System.out.println("next "+pack+"-pack, "+lvl+"-lvl.");
-        level = levelPack.levels.get(lvl-1);
+        level = levelPack.levels.get(lvl - 1);
 
 
         reloadActorList();
         saveToPrefs();
         checkPackProgress();
     }
-    public void nextPack(){
-        lvl=1;
+
+    public void nextPack() {
+        lvl = 1;
         pack++;
         //System.out.println("next "+pack+"-pack, "+lvl+"-lvl.");
-        levelPack = packs.packsArray.get(pack-1);
-        level = levelPack.levels.get(lvl-1);
+        levelPack = packs.packsArray.get(pack - 1);
+        level = levelPack.levels.get(lvl - 1);
 
         reloadActorList();
         saveToPrefs();
     }
 
-    private void saveToPrefs(){
+    private void saveToPrefs() {
         game.save.setCurrentPack(getPack());
         game.save.setCurrentLvl(getLvl());
     }
 
-    public boolean containsNext(){
-        if(levelPack.levels.size()>lvl){
-            //System.out.println((lvl+1)+" next level - is exists");
-            return true;
-        }else{
-            //System.out.println((lvl+1)+" next level  - is not exists");
-            return false;
-        }
+    public boolean containsNext() {
+        return levelPack.levels.size() > lvl;
     }
 
-    public ArrayList<ArrayList<ActorInfo>> getActorList(){
+    public ArrayList<ArrayList<ActorInfo>> getActorList() {
         return actorList;
     }
-    void reloadActorList(){ //restart если отдельно взять метод
-        actorList = game.gson.fromJson(level.actorListJson, new TypeToken<ArrayList<ArrayList<ActorInfo>>>(){}.getType());
+
+    void reloadActorList() { //restart если отдельно взять метод
+        actorList = game.gson.fromJson(level.actorListJson, new TypeToken<ArrayList<ArrayList<ActorInfo>>>() {
+        }.getType());
     }
-    public int getPack(){return pack;}
-    public int getLvl(){return lvl;}
-    private void checkPackProgress(){
-        if(game.save.getLevelsProgress()[getPack() - 1]<game.save.getCurrentLvl()) { //здесь мы обновляем прогресс пака
+
+    public int getPack() {
+        return pack;
+    }
+
+    public int getLvl() {
+        return lvl;
+    }
+
+    private void checkPackProgress() {
+        if (game.save.getLevelsProgress()[getPack() - 1] < game.save.getCurrentLvl()) { //здесь мы обновляем прогресс пака
             //System.out.println("pack progress saved");
             game.save.setLevelsProgress(getPack() - 1, getLvl());
         }
     }
-    void prevLvl(){
-        lvl-=1;
+
+    void prevLvl() {
+        lvl--;
         //System.out.println("previous "+pack+"-pack, "+lvl+"-lvl.");
-        level = levelPack.levels.get(lvl-1);
+        level = levelPack.levels.get(lvl - 1);
 
         reloadActorList();
 
         saveToPrefs();
     }
 
-    public Packs.LevelPack getLevelPack(int x){return packs.packsArray.get(x);}
+    public Packs.LevelPack getLevelPack(int x) {
+        return packs.packsArray.get(x);
+    }
 }

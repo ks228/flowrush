@@ -97,31 +97,13 @@ public class HexActorListener extends ClickListener {
             }
 
         }else{
-
-            //sequenceAction = new SequenceAction(rotateToAction1, rotateToAction2); //пока так, приходиться создавать такой объект каждый раз, но по идее он сам по себе лишь оболочка
-
-            /*if (actor.getActions().contains(sequenceAction, true)) { //вся фишка в том что нужено reset() для содержимого sequence а не для него самого
-                sequenceAction.restart();
-                System.out.println("contains");
-            } else {*/
-            //System.out.println(actor.getActions().size);
             sequenceAction.restart();
-            //System.out.println("not contains");
             rotateToAction1.reset();
             rotateToAction2.reset();
             actor.addAction(sequenceAction);
-            //}
-
         }
 
         gameScreen.game.tapOnTileActor.goAnim(actor.getX(), actor.getY());
-
-       /*String sources = "";
-        for (int n = 0; n < actor.getSourceArray().length; n++) {
-            boolean source = actor.getSourceArray()[n];
-            sources += "Source" + n + ": |" + source + "| ";
-        }
-        System.out.println("XYName: " + actor.getName() + " Include: "+actor.getInclude()+" Type: " + actor.getType() + " Index: " + actor.getIndex() + " Position: " + actor.getRotatePosition() + " " + sources + " PowerOn: " + actor.isPowerOn());*/
     }
 
 }

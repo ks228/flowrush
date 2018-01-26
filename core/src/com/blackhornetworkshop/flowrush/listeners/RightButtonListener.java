@@ -42,7 +42,7 @@ public class RightButtonListener extends ClickListener {
             }
             gameScreen.game.prefs.setShowRateDialog(false);
             gameScreen.game.savePrefsFile();
-            gameScreen.game.getGameScreen().dispose();
+            //gameScreen.game.getGameScreen().dispose();
             gameScreen.game.setMainMenuScreen();
         }
     }
