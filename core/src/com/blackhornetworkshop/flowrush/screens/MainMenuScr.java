@@ -16,7 +16,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.blackhornetworkshop.flowrush.ConstantBase;
 import com.blackhornetworkshop.flowrush.initialization.UiActorCreator;
 
 //Created by TScissors. Экран меню игры
@@ -76,7 +78,7 @@ public class MainMenuScr implements Screen {
 
                     @Override
                     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                        game.screenType = 25;
+                        game.screenType = ConstantBase.ScreenType.MAINE_MENU_LVL_CHOISE;
                         setOnVisibleForInnerScreen();
                         packsLabel.setVisible(false);
                         levelsLabel.setVisible(true);
@@ -101,8 +103,8 @@ public class MainMenuScr implements Screen {
 
         //Основное окно для информации
         innerScreenBack = new Label("", game.skin, "default");
-        innerScreenBack.setSize(Gdx.graphics.getWidth()*0.9f, (((Gdx.graphics.getHeight()*0.98f-game.cButtonSize))+(game.cButtonSize)/2)-(game.cButtonSize/2+Gdx.graphics.getHeight()*0.02f)); // размеры up и down иннерскрин? высчитываем через высоту textButton любого выше высчитываем через высоту кнопки circle button back
-        innerScreenBack.setPosition((Gdx.graphics.getWidth()-innerScreenBack.getWidth())/2, game.cButtonSize/2+Gdx.graphics.getHeight()*0.02f);
+        innerScreenBack.setSize(Gdx.graphics.getWidth()*0.9f, (((Gdx.graphics.getHeight()*0.98f- ConstantBase.C_BUTTON_SIZE))+(ConstantBase.C_BUTTON_SIZE)/2)-(ConstantBase.C_BUTTON_SIZE/2+Gdx.graphics.getHeight()*0.02f)); // размеры up и down иннерскрин? высчитываем через высоту textButton любого выше высчитываем через высоту кнопки circle button back
+        innerScreenBack.setPosition((Gdx.graphics.getWidth()-innerScreenBack.getWidth())/2, ConstantBase.C_BUTTON_SIZE/2+Gdx.graphics.getHeight()*0.02f);
         innerScreenBack.setVisible(false);
 
         //Статические надписи над окнами с информацией и выбором уровней
@@ -143,8 +145,8 @@ public class MainMenuScr implements Screen {
         messageBack.setWrap(true);
         Container<Label> labelContainer = new Container<Label>(messageBack); //Контейнер нужен для того чтобы сделать перенос строки
         labelContainer.fill();
-        labelContainer.setSize(innerScreenBack.getWidth()*0.9f, (innerScreenBack.getHeight()-game.cButtonSize)*0.95f);
-        labelContainer.setPosition((Gdx.graphics.getWidth()-innerScreenBack.getWidth()*0.9f)/2, innerScreenBack.getY()+game.cButtonSize/2+(innerScreenBack.getHeight()-game.cButtonSize)*0.05f/2);
+        labelContainer.setSize(innerScreenBack.getWidth()*0.9f, (innerScreenBack.getHeight()-ConstantBase.C_BUTTON_SIZE)*0.95f);
+        labelContainer.setPosition((Gdx.graphics.getWidth()-innerScreenBack.getWidth()*0.9f)/2, innerScreenBack.getY()+ConstantBase.C_BUTTON_SIZE/2+(innerScreenBack.getHeight()-ConstantBase.C_BUTTON_SIZE)*0.05f/2);
 
         //Кнопка закрытия окна с информацией или выбором уровней
         closeButton = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getSmallButtonActor(6, game);
@@ -218,7 +220,7 @@ public class MainMenuScr implements Screen {
     }
 
     public void setPackChoiseScreen(){
-        game.screenType = 24;
+        game.screenType = ConstantBase.ScreenType.MAIN_MENU_PACK_CHOISE;
         //System.out.println("screen main menu choose pack screen type 24");
         setOnVisibleForInnerScreen();
         packsLabel.setVisible(true);
@@ -226,7 +228,7 @@ public class MainMenuScr implements Screen {
     }
 
     public void setSupportUsScreen(){
-        game.screenType = 23;
+        game.screenType = ConstantBase.ScreenType.MAIN_MENU_SUPPORT_US;
        // System.out.println("screen main menu support us type 23");
 
         setOnVisibleForInnerScreen();
@@ -248,7 +250,7 @@ public class MainMenuScr implements Screen {
     }
 
     public void setAuthorsScreen(){
-        game.screenType = 22;
+        game.screenType = ConstantBase.ScreenType.MAIN_MENU_AUTHORS;
         //System.out.println("screen main menu authors type 22");
 
         setOnVisibleForInnerScreen();
@@ -269,7 +271,7 @@ public class MainMenuScr implements Screen {
         playButton.setVisible(false);
         lvlButton.setVisible(false);
         exitButton.setVisible(false);
-        game.oneTouchProcessor.timerForExitDisplay.instance().clear();
+        Timer.instance().clear();
         game.soundButton.setVisible(false);
         packGroup.setVisible(false);
     }
@@ -300,7 +302,7 @@ public class MainMenuScr implements Screen {
 
     @Override
     public void resume() {
-        game.screenType = 21;
+        game.screenType = ConstantBase.ScreenType.MAIN_MENU;
         //System.out.println("screen main menu type 21");
 
         levelsLabel.setVisible(false);

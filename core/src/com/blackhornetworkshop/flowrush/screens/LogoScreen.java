@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.blackhornetworkshop.flowrush.ConstantBase;
 import com.blackhornetworkshop.flowrush.FlowRush;
 
 //Created by TScissors. Отдельный скрин для отображения лого компании и лого игры
@@ -28,7 +29,7 @@ public class LogoScreen implements Screen {
     }
 
     private void setBHWlogo() {
-        game.screenType = 11;
+        game.screenType = ConstantBase.ScreenType.LOGO_BHW;
         //System.out.println("screen logo type 11");
 
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1f);
@@ -41,7 +42,7 @@ public class LogoScreen implements Screen {
     }
 
     private void setFRlogo() {
-        game.screenType = 12;
+        game.screenType = ConstantBase.ScreenType.LOGO_FR;
         //System.out.println("screen logo type 12");
 
         Gdx.gl.glClearColor(0.26f, 0.64f, 0.87f, 1);

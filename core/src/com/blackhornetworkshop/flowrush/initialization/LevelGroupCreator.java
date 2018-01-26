@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.blackhornetworkshop.flowrush.ConstantBase;
 
 public class LevelGroupCreator {
     final private com.blackhornetworkshop.flowrush.FlowRush game;
@@ -39,8 +40,8 @@ public class LevelGroupCreator {
         lvlAvailable = game.save.getLevelsProgress()[pack-1];
         //System.out.println(lvlAvailable+" available level");
 
-        up = (Gdx.graphics.getHeight()*0.98f-game.cButtonSize); //верхний отступ
-        down = (game.cButtonSize)+Gdx.graphics.getHeight()*0.02f; //нижний отступ
+        up = (Gdx.graphics.getHeight()*0.98f- ConstantBase.C_BUTTON_SIZE); //верхний отступ
+        down = (ConstantBase.C_BUTTON_SIZE)+Gdx.graphics.getHeight()*0.02f; //нижний отступ
 
         lvlNumSize = (up-down)/12;
 

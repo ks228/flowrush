@@ -19,10 +19,15 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
+import com.blackhornetworkshop.flowrush.ConstantBase;
+import com.blackhornetworkshop.flowrush.gameplay.TileActor;
+import com.blackhornetworkshop.flowrush.gameplay.TileController;
 import com.blackhornetworkshop.flowrush.initialization.MapActorGroupCreator;
 import com.blackhornetworkshop.flowrush.initialization.UiActorCreator;
+import com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener;
 import com.blackhornetworkshop.flowrush.listeners.LeftButtonListener;
 import com.blackhornetworkshop.flowrush.listeners.RightButtonListener;
+import com.blackhornetworkshop.flowrush.ui.PackBackActor;
 import com.blackhornetworkshop.flowrush.ui.PackCompleteActor;
 import com.blackhornetworkshop.flowrush.ui.SmallButtonActor;
 
@@ -31,45 +36,52 @@ import java.util.ArrayList;
 //Created by TScissors. Главный класс игрового экрана
 
 public class GameScreen implements Screen {
+
     public final com.blackhornetworkshop.flowrush.FlowRush game;
-
-    public final InputMultiplexer inputMultiplexer;
-
-    private SpriteBatch batchForBack;
     public final Stage stage;
-    private TiledDrawable background;
     private Stage hudStage;
 
-    private Actor qCircle;
-
-    private MoveToAction moveToActionPause;
-    private SmallButtonActor pauseActor, nextButton, wellDonehex;
-    private TextButton packComplMenuButton, packCompleteNextButton;
-    public TextButton leftButton, rightButton;
+    //Actors
     public Label dialogBack;
-    private Label wellDone;
-    private PackCompleteActor packCompleteActor;
-    private com.blackhornetworkshop.flowrush.ui.PackBackActor packBackActor;
-
+    public ArrayList<com.blackhornetworkshop.flowrush.gameplay.TileActor> groupArray;
+    public TextButton leftButton, rightButton;
     private Group mapGroup;
     private Group movePauseGroup;
-
-    public ArrayList<com.blackhornetworkshop.flowrush.gameplay.TileActor> groupArray;
+    private SmallButtonActor pauseActor, nextButton, wellDonehex;
+    private PackBackActor packBackActor;
+    private TextButton packComplMenuButton, packCompleteNextButton;
+    private Actor qCircle;
     public ArrayList<com.blackhornetworkshop.flowrush.gameplay.TileActor> specialActorsArray;
+    private Label wellDone;
+    private PackCompleteActor packCompleteActor;
 
+    //Graphics
+    private TiledDrawable background;
+    private SpriteBatch batchForBack;
+
+
+    //Utils
+    public final InputMultiplexer inputMultiplexer;
+
+    //Primitives
     public static int numOfReceivers;
-
-    public boolean iconWhite = false;
-
     public boolean firstTap;
+    public boolean iconWhite;
+
+    //Other
+    private MoveToAction moveToActionPause;
 
     public GameScreen(com.blackhornetworkshop.flowrush.FlowRush gam) {
-
         game = gam;
 
         //Основная сцена для гексов и сцена для UI
-        stage = new Stage(new ScreenViewport());
-        hudStage = new Stage(new ScreenViewport());
+        stage = new Stage(new ScreenViewport()); // CHANGE THIS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        hudStage = new Stage(new ScreenViewport());// CHANGE THIS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+        /* WITH THIS
+        this.stage = new Stage(new ScreenViewport(), this.game.batch);
+        this.hudStage = new Stage(new ScreenViewport(), this.game.batch);
+        */
 
         //множитель inputprocessor
         inputMultiplexer = new InputMultiplexer();
@@ -83,18 +95,16 @@ public class GameScreen implements Screen {
 
     private void go() {
         //Количество получателей на каждой карте уникально
-        numOfReceivers = 0;
+        numOfReceivers = 0; // SHOULD IT BE STATIC ????????????????????
 
         //Массивы необходимые для быстрой проверки всех актеров, параллельно с mapGroup !!!!!!!!!!!!!! ПОЧЕМУ НЕ ХВАТАЕТ MAPGROUP???
-        groupArray = new ArrayList<com.blackhornetworkshop.flowrush.gameplay.TileActor>();
-        specialActorsArray = new ArrayList<com.blackhornetworkshop.flowrush.gameplay.TileActor>();
-
-        //Таймер сохранения и таймер анимации миганция иконок
-        //timerSave = new Timer();
-        Timer timerAnim = new Timer();
+        groupArray = new ArrayList<TileActor>();
+        specialActorsArray = new ArrayList<TileActor>();
 
         //Батч для фона из точек
         batchForBack = new SpriteBatch();
+        ///!!!!!!!!!!!!!!!!!!!! CHANGE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        /* this.batchForBack = this.game.batch; */
 
         //номер уровня
         game.levelNumberActor.setText("" + game.levelLoader.getLvl());
@@ -108,8 +118,8 @@ public class GameScreen implements Screen {
         SmallButtonActor mmenuButton = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getSmallButtonActor(4, game);
         pauseActor = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getSmallButtonActor(1, game);
         SmallButtonActor backButton = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getSmallButtonActor(2, game);
-        backButton.setPosition(0, 0);
-        game.soundButton.setPosition(0, game.cButtonSize + Gdx.graphics.getHeight() * 0.05f);
+        backButton.setPosition(0, 0); /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! NOT EXIST IN 1.04 */
+        game.soundButton.setPosition(0, ConstantBase.C_BUTTON_SIZE+ Gdx.graphics.getHeight() * 0.05f);
         game.soundButton.setVisible(true);
 
         //Фон для актеров паузы
@@ -119,14 +129,14 @@ public class GameScreen implements Screen {
                 batch.draw(game.qCircle, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
             }
         };
-        //qCircle.setSize(Gdx.graphics.getWidth() * 0.45f, Gdx.graphics.getWidth() * 0.45f);
-        qCircle.setSize(game.cButtonSize*2 + Gdx.graphics.getHeight() * 0.1f, game.cButtonSize*2 + Gdx.graphics.getHeight() * 0.1f);
+
+        qCircle.setSize(ConstantBase.C_BUTTON_SIZE*2 + Gdx.graphics.getHeight() * 0.1f, ConstantBase.C_BUTTON_SIZE*2 + Gdx.graphics.getHeight() * 0.1f);
 
         qCircle.setPosition(0, 0);
 
         wellDone = new Label("WELL DONE!", game.skin, "darkblue");
-        wellDone.setSize(Gdx.graphics.getWidth() * 0.6f, game.cButtonSize * 0.7f);
-        wellDone.setPosition((Gdx.graphics.getWidth() - wellDone.getWidth()) / 2, Gdx.graphics.getHeight() - game.cButtonSize * 0.85f);
+        wellDone.setSize(Gdx.graphics.getWidth() * 0.6f, ConstantBase.C_BUTTON_SIZE * 0.7f);
+        wellDone.setPosition((Gdx.graphics.getWidth() - wellDone.getWidth()) / 2, Gdx.graphics.getHeight() - ConstantBase.C_BUTTON_SIZE * 0.85f);
         wellDone.setAlignment(Align.center);
         wellDone.setVisible(false);
         nextButton = UiActorCreator.getSmallButtonActor(12, game);
@@ -159,7 +169,8 @@ public class GameScreen implements Screen {
             createPackCompleteGroup();
         }
 
-        mapGroup = new MapActorGroupCreator(this, game.levelLoader.getActorList(), game.atlas, game.hexWidth, game.hexHeight).getGroup();
+        //!!!!!!!!!!!!!!!!!!! IN VERSION 1.04 DOESNT EXIST HEX WIDTH & HEIGHT HERE, REPLACED WITH CONSTANTBASE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        mapGroup = new MapActorGroupCreator(this, game.levelLoader.getActorList(), game.atlas, ConstantBase.HEX_WIDTH, ConstantBase.HEX_HEIGHT).getGroup();
         game.checker.initialization(this, mapGroup); //обязательно после создания mapgroup иначе special actors array будет пустым
 
         stage.addActor(mapGroup);
@@ -173,19 +184,15 @@ public class GameScreen implements Screen {
         game.checker.checkAndSetActor();
 
         //таймер для анимации иконок
-        timerAnim.schedule(new Timer.Task() {
+        Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
                 for (int x = 0; x < specialActorsArray.size(); x++) {
                     if (specialActorsArray.get(x).getInclude() == 2 && !specialActorsArray.get(x).isPowerOn()) {
-                        com.blackhornetworkshop.flowrush.gameplay.TileController.animIcon(specialActorsArray.get(x), iconWhite, game.atlas);
+                        TileController.animIcon(specialActorsArray.get(x), iconWhite, game.atlas);
                     }
                 }
-                if (iconWhite) {
-                    iconWhite = false;
-                } else {
-                    iconWhite = true;
-                }
+                iconWhite = !iconWhite;
             }
         }, 0.6f, 0.6f);
 
@@ -200,7 +207,7 @@ public class GameScreen implements Screen {
 
         //очистка
         numOfReceivers = 0;
-        stage.clear();
+        stage.clear(); // NEED HERE SOME REFACTORING !!!!!!!!!!!!!!!!!!!!! CLEAR AND AGAIN ADD ? CHANGE IT!!!!!!!!!!!!!!
         groupArray.clear();
         specialActorsArray.clear();
         mapGroup.clear();
@@ -209,8 +216,8 @@ public class GameScreen implements Screen {
         //Добавляем фоновую анимацию
         stage.addActor(game.backGroup);
 
-        //загружаем группу актеров
-        mapGroup = new MapActorGroupCreator(this, game.levelLoader.getActorList(), game.atlas, game.hexWidth, game.hexHeight).getGroup();
+        //загружаем группу актеров // DELETE HEX WIDTH & HEIGHT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        mapGroup = new MapActorGroupCreator(this, game.levelLoader.getActorList(), game.atlas, ConstantBase.HEX_WIDTH, ConstantBase.HEX_HEIGHT).getGroup();
         stage.addActor(mapGroup);
 
         //обновляем чекер
@@ -231,20 +238,15 @@ public class GameScreen implements Screen {
             }
             game.save.getAchievements()[0] = true;
         }
-        if (game.levelLoader.getLvl() == 1 && game.levelLoader.getPack() == 2 && !game.save.getAchievements()[1]) {//прошел первый уровень с голубем !!!!!!!!!!!!! ПОМЕнЯТь КОГДА ГОЛУБ ОКАЖЕТСЯ НА СВОЕМ МЕСТе
-            if (game.playServices.isSignedIn()) {
-                game.playServices.unlockAchievement(2);
-            }
-            game.save.getAchievements()[1] = true;
-        }
-        if (game.levelLoader.getLvl() == 10 && game.levelLoader.getPack() == 1 && !game.save.getAchievements()[1]) {//прошел первый уровень с голубем !!!!!!!!!!!!! ПОМЕнЯТь КОГДА ГОЛУБ ОКАЖЕТСЯ НА СВОЕМ МЕСТе
+
+        // FIRST LEVEL WITH A DOVE
+        if (((game.levelLoader.getLvl() == 10 && game.levelLoader.getPack() == 1) || (game.levelLoader.getLvl() == 1 && (game.levelLoader.getPack() == 2 || game.levelLoader.getPack() == 3 || game.levelLoader.getPack() == 4 || game.levelLoader.getPack() == 5))) && !game.save.getAchievements()[1]) {
             if (game.playServices.isSignedIn()) {
                 game.playServices.unlockAchievement(2);
             }
             game.save.getAchievements()[1] = true;
         }
 
-        //!!!!!!!!!!!!!!!СДЕЛАТЬ АЧИВКУ ДЛЯ ТРЕТЬЕГО И ЧЕТВЕРТОГО (5) ПАКОВ!!!!!!!
         if (game.levelLoader.getLvl() == 50 && game.levelLoader.getPack() == 1 && !game.save.getAchievements()[2]) { //прошел первый пак
             if (game.playServices.isSignedIn()) {
                 game.playServices.unlockAchievement(3);
@@ -275,20 +277,20 @@ public class GameScreen implements Screen {
             }
             game.save.getAchievements()[6] = true;
         }
+
         if (game.save.getLevelsProgress()[0] == 50 && game.save.getLevelsProgress()[1] == 50 && game.save.getLevelsProgress()[2] == 50 && game.save.getLevelsProgress()[3] == 50 && game.save.getLevelsProgress()[4] == 50 && !game.save.getAchievements()[7]) { // прошел все уровни
             if (game.playServices.isSignedIn()) {
                 game.playServices.unlockAchievement(8);
             }
             game.save.getAchievements()[7] = true;
         }
-        //тут же проверяем был ли это первый пак с ураганом
     }
     public void levelComplete() {
 
         checkAchievements();
 
         //level complete отображается в любом случае
-        game.screenType = 33;
+        game.screenType = ConstantBase.ScreenType.GAME_LVL_COMPLETE;
 
         if (game.prefs.isSoundIsOn()) {
             game.lvlCompleteSound.play();
@@ -318,7 +320,7 @@ public class GameScreen implements Screen {
         wellDone.setVisible(false);
         wellDonehex.setVisible(false);
 
-        game.screenType = 34;
+        game.screenType = ConstantBase.ScreenType.GAME_PACK_COMPLETE;
 
         //System.out.println("screen game packcomplete type 34");
 
@@ -329,7 +331,7 @@ public class GameScreen implements Screen {
         if (game.prefs.isSoundIsOn()) {
             game.packCompleteSound.play();
         }
-        if (packCompleteNextButton.getName().equals("visible")) {
+        if (packCompleteNextButton.getName().equals("visible")) { //!!!!!!!!!!!!!!!!!!!!!!! VISIBLE ???????????????
             packCompleteNextButton.setVisible(true);
             packCompleteNextButton.setName("");
         }
@@ -346,21 +348,21 @@ public class GameScreen implements Screen {
 
     private void createPackCompleteGroup() { //Для создания группы актеров PackComplete
         packCompleteActor = new PackCompleteActor(game.atlas, game.skin.getFont("fontMid"), game.save.getPackName());
-        packBackActor = new com.blackhornetworkshop.flowrush.ui.PackBackActor(game.atlas);
-        packComplMenuButton = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getTextButton(9, game);
-        packCompleteNextButton = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getTextButton(12, game);
+        packBackActor = new PackBackActor(game.atlas);
+        packComplMenuButton = UiActorCreator.getTextButton(9, game);
+        packCompleteNextButton = UiActorCreator.getTextButton(12, game);
         packCompleteNextButton.setName("");
 
         //части диалога об оценке/отзыве игры
         dialogBack = new Label("ENJOYING  FLOW RUSH?", game.skin, "darkbluesmall");
-        dialogBack.setSize(Gdx.graphics.getWidth(), game.cButtonSize * 1.45f);
+        dialogBack.setSize(Gdx.graphics.getWidth(), ConstantBase.C_BUTTON_SIZE * 1.45f);
         dialogBack.setPosition(0, 0);
         dialogBack.setAlignment(Align.top);
 
         leftButton = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getTextButton(10, game);
         leftButton.setStyle(game.skin.get("bordersmall", TextButton.TextButtonStyle.class));
         leftButton.setText("NOT SURE");
-        leftButton.addListener(new com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener(leftButton, game));
+        leftButton.addListener(new ButtonScaleListener(leftButton, game));
         LeftButtonListener leftButtonListener = new LeftButtonListener(this);
         leftButton.addListener(leftButtonListener);
 
@@ -368,9 +370,8 @@ public class GameScreen implements Screen {
         rightButton.setStyle(game.skin.get("whitesmall", TextButton.TextButtonStyle.class));
         rightButton.setText("YES!");
         rightButton.setX((Gdx.graphics.getWidth() - rightButton.getWidth() * 2) / 3 * 2 + rightButton.getWidth());
-        rightButton.addListener(new com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener(rightButton, game));
-        RightButtonListener rightButtonListener = new RightButtonListener(this, leftButtonListener);
-        rightButton.addListener(rightButtonListener);
+        rightButton.addListener(new ButtonScaleListener(rightButton, game));
+        rightButton.addListener(new RightButtonListener(this, leftButtonListener));
 
 
         packCompleteNextButton.setVisible(false);
@@ -418,11 +419,11 @@ public class GameScreen implements Screen {
 
     @Override
     public void pause() {
-        if (game.screenType == 33) {
-            game.screenType = 35; //lvlcomplete+pause
+        if (game.screenType == ConstantBase.ScreenType.GAME_LVL_COMPLETE) {
+            game.screenType = ConstantBase.ScreenType.GAME_LVL_COMPLETE_PAUSE; //lvlcomplete+pause
             //System.out.println("screen game pause on type 35");
         }else{
-            game.screenType = 32;
+            game.screenType = ConstantBase.ScreenType.GAME_PAUSE;
             //System.out.println("screen game pause on type 32");
         }
 
@@ -453,16 +454,16 @@ public class GameScreen implements Screen {
 
     @Override
     public void resume() {
-        if (game.screenType == 32) {//Вариант когда нажата пауза
-            game.screenType = 31;
-            if (inputMultiplexer.getProcessors().size < 3 && game.screenType != 33) {
+        if (game.screenType == ConstantBase.ScreenType.GAME_PAUSE) {//Вариант когда нажата пауза
+            game.screenType = ConstantBase.ScreenType.GAME;
+            if (inputMultiplexer.getProcessors().size < 3 && game.screenType != ConstantBase.ScreenType.GAME_LVL_COMPLETE) {
                 inputMultiplexer.addProcessor(stage);
             }
             pauseActor.setVisible(true);
             game.alphawhiteBack.setVisible(false);
             movePauseGroupDown();
-        } else if (game.screenType != 33&&game.screenType != 35) {
-            game.screenType = 31;
+        } else if (game.screenType != ConstantBase.ScreenType.GAME_LVL_COMPLETE && game.screenType != ConstantBase.ScreenType.GAME_LVL_COMPLETE_PAUSE) {
+            game.screenType = ConstantBase.ScreenType.GAME;
 
             if (inputMultiplexer.getProcessors().size < 3) {
                 inputMultiplexer.addProcessor(stage);
@@ -476,22 +477,26 @@ public class GameScreen implements Screen {
             wellDone.setVisible(false);
             wellDonehex.setVisible(false);
             nextButton.setVisible(false);
-        } else if (game.screenType == 35) {
+        } else if (game.screenType == ConstantBase.ScreenType.GAME_LVL_COMPLETE_PAUSE) {
             pauseActor.setVisible(true);
             movePauseGroupDown();
-            game.screenType = 33;
+            game.screenType = ConstantBase.ScreenType.GAME_LVL_COMPLETE;
         }
     }
 
     @Override
     public void hide() {
+        /* DISPOSE ADDED HERE, WHY ???????????????????????????????????????????????????? */
+        //this.dispose();
     }
 
     @Override
     public void dispose() {
         stage.dispose();
         hudStage.dispose();
-        batchForBack.dispose();
+
+        //DELETED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
+        batchForBack.dispose();// DELETE!
 
         //System.out.println("dispose() был вызван в GameScreen");
     }

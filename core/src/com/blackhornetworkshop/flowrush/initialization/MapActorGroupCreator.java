@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
+import com.blackhornetworkshop.flowrush.ConstantBase;
 import com.blackhornetworkshop.flowrush.screens.GameScreen;
 
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class MapActorGroupCreator {
         mapGroup.setWidth(list.size() * hexWidth - (list.size() - 1) * (hexWidth / 4));
         mapGroup.setHeight(maxCoord - minCoord);
 
-        float availHeight = (Gdx.graphics.getHeight()-(Gdx.graphics.getWidth()/10)-gameScreen.game.levelNumberActor.getHeight()*1.1f-gameScreen.game.cButtonSize*1.1f);
+        float availHeight = (Gdx.graphics.getHeight()-(Gdx.graphics.getWidth()/10)-gameScreen.game.levelNumberActor.getHeight()*1.1f- ConstantBase.C_BUTTON_SIZE*1.1f);
         float zoom  = (Gdx.graphics.getWidth()-(Gdx.graphics.getWidth()/10))/mapGroup.getWidth();
 
         if(mapGroup.getHeight()*zoom>availHeight&&zoom>availHeight/mapGroup.getHeight()){

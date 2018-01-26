@@ -10,6 +10,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
@@ -22,8 +23,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.async.AsyncExecutor;
 import com.blackhornetworkshop.flowrush.gameplay.SourceChecker;
 import com.blackhornetworkshop.flowrush.initialization.GamePreferences;
+import com.blackhornetworkshop.flowrush.initialization.LevelLoader;
 import com.blackhornetworkshop.flowrush.initialization.OneTouchProcessor;
 import com.blackhornetworkshop.flowrush.initialization.SavedGame;
 import com.blackhornetworkshop.flowrush.screens.GameScreen;
@@ -36,59 +39,59 @@ import com.google.gson.Gson;
 
 public class FlowRush extends Game {
 
-    public Gson gson;
-    public Skin skin;
-    public TiledDrawable spriteBack;
-    public TextureAtlas atlas;
-    public Sound tapSound, lvlCompleteSound, packCompleteSound;
-    public Music backgroundMusic;
+    public ConstantBase.ScreenType screenType; // ++ADDED NEW
 
+    //Data
+    public GamePreferences prefs;
+    public SavedGame save;
+
+    //Screens
+    private GameScreen gameScreen;
+    private MainMenuScr mainMenuScr;
+
+    //Actors
+    public Group backGroup;
+    public TapOnTileActor tapOnTileActor;
     public SmallButtonActor soundButton;
     public Label alphawhiteBack, levelNumberActor;
 
-
-    public OneTouchProcessor oneTouchProcessor;
-
-    public com.blackhornetworkshop.flowrush.initialization.LevelLoader levelLoader;
-    public SourceChecker checker;
-    public TapOnTileActor tapOnTileActor;
-    public Group backGroup;
-
-    public float cButtonSize, hexWidth, hexHeight;
-
+    //Graphics
+    public SpriteBatch batch;
+    public Skin skin;
+    public TiledDrawable spriteBack;
+    public TextureAtlas atlas;
     public Sprite qCircle;
 
-    private AssetManager manager;
+    //Audio
+    public Sound tapSound, lvlCompleteSound, packCompleteSound;
+    public Music backgroundMusic;
 
+    //Utils
+    public Gson gson;
+    private AssetManager manager;
+    public final PlayServices playServices;
+    public OneTouchProcessor oneTouchProcessor;
+    public LevelLoader levelLoader;
+    public SourceChecker checker;
     public AndroidSide androidSide;
 
-    public final PlayServices playServices;
+    public AsyncExecutor executor;// ++ADDED NEW
 
-    public GamePreferences prefs;
-    public SavedGame save;
+
 
     public FlowRush(AndroidSide androidSide, PlayServices playServices){
         this.androidSide = androidSide;
         this.playServices = playServices;
-
+        this.executor = new AsyncExecutor(20);// ++ADDED NEW
     }
-
-    public byte screenType;
-
-    private GameScreen gameScreen;
-    private MainMenuScr mainMenuScr;
-
     public void create() {
+        this.batch = new SpriteBatch();// ++ADDED NEW
+
         //Отлавливаем кнопку BACK
         Gdx.input.setCatchBackKey(true);
 
         //Создаем процеесор ввода, необходим чтобы отключить мультитач и отлавливать кнопку BACK
         oneTouchProcessor = new OneTouchProcessor(this);
-
-        //Тут размеры для верстки
-        cButtonSize = Gdx.graphics.getHeight()/12; //Основной размер всех кнопок UI
-        hexWidth = Gdx.graphics.getWidth()/5;        //Размеры гексов задаваемые в зависимости от размера экрана.
-        hexHeight = Gdx.graphics.getWidth()/5*0.8658536585365854f;
 
         //Загружаем все ресурсы в AssetManager
         manager = new AssetManager();
@@ -100,18 +103,18 @@ public class FlowRush extends Game {
 
         FreetypeFontLoader.FreeTypeFontLoaderParameter param = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
         param.fontFileName = "ui/Iceberg-Regular.ttf";
-        param.fontParameters.size = (int)(cButtonSize);
+        param.fontParameters.size = (int)(ConstantBase.C_BUTTON_SIZE);
         manager.load("fontLarge.ttf", BitmapFont.class, param);     //Загружаем шрифт первого размера
 
         FreetypeFontLoader.FreeTypeFontLoaderParameter param2 = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
         param2.fontFileName = "ui/Iceberg-Regular.ttf";
-        param2.fontParameters.size = (int)(cButtonSize*0.5f);
+        param2.fontParameters.size = (int)(ConstantBase.C_BUTTON_SIZE*0.5f);
         manager.load("fontMid.ttf", BitmapFont.class, param2);     //Загружаем шрифт второго размера
 
         FreetypeFontLoader.FreeTypeFontLoaderParameter param3 = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
         param3.fontFileName = "ui/Iceberg-Regular.ttf";
-        param3.fontParameters.size = (int)(cButtonSize*0.43);
-        manager.load("fontSmall.ttf", BitmapFont.class, param3);     //Загружаем шрифт второго размера
+        param3.fontParameters.size = (int)(ConstantBase.C_BUTTON_SIZE*0.43);
+        manager.load("fontSmall.ttf", BitmapFont.class, param3);     //Загружаем шрифт третьего размера
 
         manager.finishLoadingAsset("fontLarge.ttf");
         manager.finishLoadingAsset("fontMid.ttf");
@@ -125,7 +128,6 @@ public class FlowRush extends Game {
         oMap.put("fontSmall", fontSmall);
         manager.load("ui/skin.json", Skin.class, new SkinLoader.SkinParameter("texture/atlas.atlas", oMap));      //Загружаем СКИН и с ним атлас интерфейса
 
-        //manager.load("texture/point.png", Texture.class); //Текстура фона
         manager.load("sound/tap.ogg", Sound.class); //Загружаем звук тапа
         manager.load("sound/lvlcomplete.ogg", Sound.class); //Звук лвлкомплет
         manager.load("sound/background.ogg", Music.class); //Загружаем фоновую музыку
@@ -156,7 +158,7 @@ public class FlowRush extends Game {
             spriteBack = new TiledDrawable(atlas.findRegion("point2"));
             sprite = atlas.createSprite("animation2");
         }else if(Gdx.graphics.getWidth()<1300){
-            spriteBack = new TiledDrawable(atlas.findRegion("point2"));
+            spriteBack = new TiledDrawable(atlas.findRegion("point3"));
             sprite = atlas.createSprite("animation3");
         }else{
             spriteBack = new TiledDrawable(atlas.findRegion("point4"));
@@ -165,22 +167,22 @@ public class FlowRush extends Game {
 
         //анимация фона
         backGroup = new Group();
-        for(int index = 1, type = 1; type<5; type++, index+=0.6f){
+        for(int index = 1, type = 1; type<5; type++, index+=0.6f){ /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! FIX BUG INT---FLOAT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
             backGroup.addActor(new com.blackhornetworkshop.flowrush.ui.BackAnimActor(sprite,index ,type));
-            backGroup.addActor(new com.blackhornetworkshop.flowrush.ui.BackAnimActor(sprite,index+0.3f,type));
+            backGroup.addActor(new com.blackhornetworkshop.flowrush.ui.BackAnimActor(sprite,index+0.3f,type));/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! FIX BUG INT---FLOAT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
         }
 
         //Файл настроек
         if(Gdx.files.local("prefs.json").exists()){
-            //System.out.println("load exist prefs");
+            System.out.println("load exist prefs");
             prefs = gson.fromJson(Gdx.files.local("prefs.json").reader(), GamePreferences.class);
         }else{
             prefs = new GamePreferences();
-            //System.out.println("create new prefs");
+            System.out.println("create new prefs");
         }
         //Файл сохранения
         if(Gdx.files.local("save.json").exists()){
-            //System.out.println("load exist save");
+            System.out.println("load exist save");
             save = gson.fromJson(Gdx.files.local("save.json").reader(), SavedGame.class);
         }else{
             save = new SavedGame();
@@ -205,7 +207,7 @@ public class FlowRush extends Game {
 
         //Актер номера уровня
         levelNumberActor = new Label("", skin, "greyfont");
-        levelNumberActor.setSize(cButtonSize, cButtonSize);
+        levelNumberActor.setSize(ConstantBase.C_BUTTON_SIZE, ConstantBase.C_BUTTON_SIZE);
         levelNumberActor.setPosition(Gdx.graphics.getWidth() - levelNumberActor.getWidth(), Gdx.graphics.getHeight()-levelNumberActor.getHeight());
         levelNumberActor.setAlignment(Align.center);
 
@@ -220,7 +222,7 @@ public class FlowRush extends Game {
             }
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button){
-                if(screenType == 32){
+                if(screenType == ConstantBase.ScreenType.GAME_PAUSE){
                     getGameScreen().resume();
                 }
             }
@@ -232,9 +234,23 @@ public class FlowRush extends Game {
         setLogoScreen();
     }
 
-    void setLogoScreen(){
-        LogoScreen logoScreen = new LogoScreen(this);
-        setScreen(logoScreen);
+
+
+    public void dispose() {
+        /* ++++++++++++++ ADD this.batch.dispose();*/
+        skin.remove("fontLarge", BitmapFont.class);// выгружаем шрифты из скина, так как manager делает их dispose() а затем повторяет эту же процедуру для скина. при второй попытке exception
+        skin.remove("fontMid", BitmapFont.class);
+        skin.remove("fontSmall", BitmapFont.class);
+        manager.dispose();
+
+        // CHANGE
+        getScreen().dispose();
+        playServices.disposeAsyncExecutor();
+
+        /* WITH THAT
+        this.getScreen().hide();
+        this.executor.dispose();
+         */
     }
 
     public void savePrefsFile(){
@@ -243,45 +259,30 @@ public class FlowRush extends Game {
         file.writeString(string, false);
         //System.out.println("Saved prefs");
     }
-
     public void saveSaveFile(){
         String string = gson.toJson(save);
         FileHandle file = Gdx.files.local("save.json");
         file.writeString(string, false);
         System.out.println("Saved progress on local");
     }
-
+    void setLogoScreen(){ setScreen(new LogoScreen(this)); }
     public void setMainMenuScreen(){
         mainMenuScr = new MainMenuScr(this);
         setScreen(mainMenuScr);
 
     }
-    public GameScreen getGameScreen(){return gameScreen;}
     public void setGameScreen(){
         gameScreen = new GameScreen(this);
         setScreen(gameScreen);
     }
     public MainMenuScr getMainMenuScr(){return mainMenuScr;}
-
-    public void render() {
-        super.render(); // important!
-    }
-
-    public void dispose() {
-        skin.remove("fontLarge", BitmapFont.class);// выгружаем шрифты из скина, так как manager делает их dispose() а затем повторяет эту же процедуру для скина. при второй попытке exception
-        skin.remove("fontMid", BitmapFont.class);
-        skin.remove("fontSmall", BitmapFont.class);
-        manager.dispose();
-        getScreen().dispose();
-        playServices.disposeAsyncExecutor();
-    }
+    public GameScreen getGameScreen(){return gameScreen;}
     public void pause(){
         backgroundMusic.pause();
     }
-    public void resume(){
-        if(prefs.isSoundIsOn()) {
-            backgroundMusic.play();
-        }
+    public void resume(){ if(prefs.isSoundIsOn()) backgroundMusic.play(); }
+    public void render() {
+        super.render(); // important!
     }
 }
 

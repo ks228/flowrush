@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.RotateByAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.blackhornetworkshop.flowrush.ConstantBase;
 
 //Created by TScissors. Главный класс игрового экрана
 
@@ -19,8 +20,8 @@ public class UiActorCreator {
         switch (type) {
             case 1: //Кнопка PLAY
                 textButton = new TextButton("PLAY", game.skin, "playbutton");
-                textButton.setSize(Gdx.graphics.getWidth() * 0.9f, game.cButtonSize * 1.3f);
-                textButton.setPosition((Gdx.graphics.getWidth() - textButton.getWidth()) / 2, (Gdx.graphics.getHeight() - game.cButtonSize * 4 - textButton.getHeight()));
+                textButton.setSize(Gdx.graphics.getWidth() * 0.9f, ConstantBase.C_BUTTON_SIZE * 1.3f);
+                textButton.setPosition((Gdx.graphics.getWidth() - textButton.getWidth()) / 2, (Gdx.graphics.getHeight() - ConstantBase.C_BUTTON_SIZE * 4 - textButton.getHeight()));
                 textButton.addListener(new ClickListener() {
                     @Override
                     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -35,8 +36,8 @@ public class UiActorCreator {
                 break;
             case 2://Levels
                 textButton = new TextButton("LEVELS", game.skin, "lightblue");
-                textButton.setSize(Gdx.graphics.getWidth() * 0.7f, game.cButtonSize);
-                textButton.setPosition((Gdx.graphics.getWidth() - textButton.getWidth()) / 2, (Gdx.graphics.getHeight() - game.cButtonSize * 4 - game.cButtonSize * 1.3f - textButton.getHeight() * 1.1f));
+                textButton.setSize(Gdx.graphics.getWidth() * 0.7f, ConstantBase.C_BUTTON_SIZE);
+                textButton.setPosition((Gdx.graphics.getWidth() - textButton.getWidth()) / 2, (Gdx.graphics.getHeight() - ConstantBase.C_BUTTON_SIZE * 4 - ConstantBase.C_BUTTON_SIZE * 1.3f - textButton.getHeight() * 1.1f));
                 textButton.addListener(new ClickListener() {
                     @Override
                     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -50,8 +51,8 @@ public class UiActorCreator {
                 break;
             case 3: //Кнопка SEND FEEDBACK
                 textButton = new TextButton("SEND FEEDBACK", game.skin, "white");
-                textButton.setSize(Gdx.graphics.getWidth() * 0.7f, game.cButtonSize);
-                textButton.setPosition((Gdx.graphics.getWidth() - textButton.getWidth()) / 2, (game.cButtonSize / 2 + Gdx.graphics.getHeight() * 0.02f) + game.cButtonSize / 2 + ((((Gdx.graphics.getHeight() * 0.98f - game.cButtonSize)) + (game.cButtonSize) / 2) - (game.cButtonSize / 2 + Gdx.graphics.getHeight() * 0.02f) - game.cButtonSize) * 0.05f / 2 + textButton.getHeight() * 0.3f);
+                textButton.setSize(Gdx.graphics.getWidth() * 0.7f, ConstantBase.C_BUTTON_SIZE);
+                textButton.setPosition((Gdx.graphics.getWidth() - textButton.getWidth()) / 2, (ConstantBase.C_BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f) + ConstantBase.C_BUTTON_SIZE / 2 + ((((Gdx.graphics.getHeight() * 0.98f - ConstantBase.C_BUTTON_SIZE)) + (ConstantBase.C_BUTTON_SIZE) / 2) - (ConstantBase.C_BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f) - ConstantBase.C_BUTTON_SIZE) * 0.05f / 2 + textButton.getHeight() * 0.3f);
                 textButton.setVisible(false);
                 textButton.addListener(new ClickListener(){
                     @Override
@@ -66,8 +67,8 @@ public class UiActorCreator {
                 break;
             case 4: //Кнопка RATE
                 textButton = new TextButton("RATE", game.skin, "white");
-                textButton.setSize(Gdx.graphics.getWidth() * 0.7f, game.cButtonSize);
-                textButton.setPosition((Gdx.graphics.getWidth() - textButton.getWidth()) / 2, (game.cButtonSize / 2 + Gdx.graphics.getHeight() * 0.02f) + game.cButtonSize / 2 + ((((Gdx.graphics.getHeight() * 0.98f - game.cButtonSize)) + (game.cButtonSize) / 2) - (game.cButtonSize / 2 + Gdx.graphics.getHeight() * 0.02f) - game.cButtonSize) * 0.05f / 2 + textButton.getHeight() * 1.4f);
+                textButton.setSize(Gdx.graphics.getWidth() * 0.7f, ConstantBase.C_BUTTON_SIZE);
+                textButton.setPosition((Gdx.graphics.getWidth() - textButton.getWidth()) / 2, (ConstantBase.C_BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f) + ConstantBase.C_BUTTON_SIZE / 2 + ((((Gdx.graphics.getHeight() * 0.98f - ConstantBase.C_BUTTON_SIZE)) + (ConstantBase.C_BUTTON_SIZE) / 2) - (ConstantBase.C_BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f) - ConstantBase.C_BUTTON_SIZE) * 0.05f / 2 + textButton.getHeight() * 1.4f);
                 textButton.setVisible(false);
                 textButton.addListener(new ClickListener() {
                     @Override
@@ -82,8 +83,8 @@ public class UiActorCreator {
                 break;
             case 5: //Кнопка SUPPORT US
                 textButton = new TextButton("SUPPORT US", game.skin, "white");
-                textButton.setSize(Gdx.graphics.getWidth() * 0.7f, game.cButtonSize);
-                textButton.setPosition((Gdx.graphics.getWidth() - textButton.getWidth()) / 2, (game.cButtonSize / 2 + Gdx.graphics.getHeight() * 0.02f) + game.cButtonSize / 2 + ((((Gdx.graphics.getHeight() * 0.98f - game.cButtonSize)) + (game.cButtonSize) / 2) - (game.cButtonSize / 2 + Gdx.graphics.getHeight() * 0.02f) - game.cButtonSize) * 0.05f / 2 + textButton.getHeight() * 2.5f);
+                textButton.setSize(Gdx.graphics.getWidth() * 0.7f, ConstantBase.C_BUTTON_SIZE);
+                textButton.setPosition((Gdx.graphics.getWidth() - textButton.getWidth()) / 2, (ConstantBase.C_BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f) + ConstantBase.C_BUTTON_SIZE / 2 + ((((Gdx.graphics.getHeight() * 0.98f - ConstantBase.C_BUTTON_SIZE)) + (ConstantBase.C_BUTTON_SIZE) / 2) - (ConstantBase.C_BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f) - ConstantBase.C_BUTTON_SIZE) * 0.05f / 2 + textButton.getHeight() * 2.5f);
                 textButton.setVisible(false);
                 textButton.addListener(new ClickListener() {
                     @Override
@@ -98,26 +99,26 @@ public class UiActorCreator {
                 break;
             case 6: //Кнопка REMOVE ADS
                 textButton = new TextButton("REMOVE ADS", game.skin, "white");
-                textButton.setSize(Gdx.graphics.getWidth() * 0.7f, game.cButtonSize);
-                textButton.setPosition((Gdx.graphics.getWidth() - textButton.getWidth()) / 2, (game.cButtonSize / 2 + Gdx.graphics.getHeight() * 0.02f) + game.cButtonSize / 2 + ((((Gdx.graphics.getHeight() * 0.98f - game.cButtonSize)) + (game.cButtonSize) / 2) - (game.cButtonSize / 2 + Gdx.graphics.getHeight() * 0.02f) - game.cButtonSize) * 0.05f / 2 + textButton.getHeight() * 1.9f);
+                textButton.setSize(Gdx.graphics.getWidth() * 0.7f, ConstantBase.C_BUTTON_SIZE);
+                textButton.setPosition((Gdx.graphics.getWidth() - textButton.getWidth()) / 2, (ConstantBase.C_BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f) + ConstantBase.C_BUTTON_SIZE / 2 + ((((Gdx.graphics.getHeight() * 0.98f - ConstantBase.C_BUTTON_SIZE)) + (ConstantBase.C_BUTTON_SIZE) / 2) - (ConstantBase.C_BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f) - ConstantBase.C_BUTTON_SIZE) * 0.05f / 2 + textButton.getHeight() * 1.9f);
                 textButton.setVisible(false);
                 break;
             case 7: //Надпись пустышка
                 textButton = new TextButton("", game.skin, "white");
-                textButton.setSize(Gdx.graphics.getWidth() * 0.7f, game.cButtonSize);
+                textButton.setSize(Gdx.graphics.getWidth() * 0.7f, ConstantBase.C_BUTTON_SIZE);
                 textButton.setPosition((Gdx.graphics.getWidth() - textButton.getWidth()) / 2, (Gdx.graphics.getHeight() * 0.98f - textButton.getHeight()));
                 textButton.setVisible(false);
                 break;
             case 8: //Фон для кнопок соц сетей
                 textButton = new TextButton("", game.skin, "white");
-                textButton.setSize(Gdx.graphics.getWidth() * 0.7f, game.cButtonSize * 1.5f);
-                textButton.setPosition((Gdx.graphics.getWidth() - textButton.getWidth()) / 2, (game.cButtonSize / 2 + Gdx.graphics.getHeight() * 0.02f) + game.cButtonSize / 2 + ((((Gdx.graphics.getHeight() * 0.98f - game.cButtonSize)) + (game.cButtonSize) / 2) - (game.cButtonSize / 2 + Gdx.graphics.getHeight() * 0.02f) - game.cButtonSize) * 0.05f / 2 + game.cButtonSize * 0.3f);
+                textButton.setSize(Gdx.graphics.getWidth() * 0.7f, ConstantBase.C_BUTTON_SIZE * 1.5f);
+                textButton.setPosition((Gdx.graphics.getWidth() - textButton.getWidth()) / 2, (ConstantBase.C_BUTTON_SIZE/ 2 + Gdx.graphics.getHeight() * 0.02f) + ConstantBase.C_BUTTON_SIZE / 2 + ((((Gdx.graphics.getHeight() * 0.98f - ConstantBase.C_BUTTON_SIZE)) + (ConstantBase.C_BUTTON_SIZE) / 2) - (ConstantBase.C_BUTTON_SIZE/ 2 + Gdx.graphics.getHeight() * 0.02f) - ConstantBase.C_BUTTON_SIZE) * 0.05f / 2 + ConstantBase.C_BUTTON_SIZE * 0.3f);
                 textButton.setVisible(false);
                 break;
             case 9: //Кнопка MENU в PackComplete
                 textButton = new TextButton("MENU", game.skin, "default");
-                textButton.setSize(Gdx.graphics.getWidth() * 0.4f, game.cButtonSize * 0.8f);
-                textButton.setPosition((Gdx.graphics.getWidth() - textButton.getWidth()) / 2, (Gdx.graphics.getHeight() - Gdx.graphics.getHeight()*0.35f) / 4 * 3 - game.cButtonSize * 2.9f);
+                textButton.setSize(Gdx.graphics.getWidth() * 0.4f, ConstantBase.C_BUTTON_SIZE * 0.8f);
+                textButton.setPosition((Gdx.graphics.getWidth() - textButton.getWidth()) / 2, (Gdx.graphics.getHeight() - Gdx.graphics.getHeight()*0.35f) / 4 * 3 - ConstantBase.C_BUTTON_SIZE * 2.9f);
                 textButton.setVisible(false);
                 textButton.addListener(new com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener(textButton, game) {
                     @Override
@@ -129,14 +130,14 @@ public class UiActorCreator {
                 break;
             case 10: //Кнопка пустышка для диалога об оценке игры
                 textButton = new TextButton("", game.skin);
-                textButton.setSize(Gdx.graphics.getWidth() * 0.45f, game.cButtonSize * 0.8f);
-                textButton.setPosition((Gdx.graphics.getWidth() - textButton.getWidth() * 2) / 3, (game.cButtonSize * 1.45f - game.skin.getFont("fontSmall").getLineHeight() - game.cButtonSize * 0.8f) / 2);
+                textButton.setSize(Gdx.graphics.getWidth() * 0.45f, ConstantBase.C_BUTTON_SIZE * 0.8f);
+                textButton.setPosition((Gdx.graphics.getWidth() - textButton.getWidth() * 2) / 3, (ConstantBase.C_BUTTON_SIZE * 1.45f - game.skin.getFont("fontSmall").getLineHeight() - ConstantBase.C_BUTTON_SIZE * 0.8f) / 2);
                 textButton.setVisible(false);
                 break;
             case 12: //Кнопка Next в PackComplete
                 textButton = new TextButton("NEXT", game.skin, "darkblue");
-                textButton.setSize(Gdx.graphics.getWidth() * 0.5f, game.cButtonSize);
-                textButton.setPosition((Gdx.graphics.getWidth() - textButton.getWidth()) / 2, (Gdx.graphics.getHeight() - Gdx.graphics.getHeight()*0.35f) / 4 * 3 - game.cButtonSize * 2);
+                textButton.setSize(Gdx.graphics.getWidth() * 0.5f, ConstantBase.C_BUTTON_SIZE);
+                textButton.setPosition((Gdx.graphics.getWidth() - textButton.getWidth()) / 2, (Gdx.graphics.getHeight() - Gdx.graphics.getHeight()*0.35f) / 4 * 3 - ConstantBase.C_BUTTON_SIZE* 2);
                 textButton.setVisible(false);
                 textButton.addListener(new com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener(textButton, game) {
                     @Override
@@ -148,8 +149,8 @@ public class UiActorCreator {
                 break;
             case 13://Кнопка EXIT
                 textButton = new TextButton("EXIT", game.skin, "lightblue");
-                textButton.setSize(Gdx.graphics.getWidth() * 0.7f, game.cButtonSize);
-                textButton.setPosition((Gdx.graphics.getWidth() - textButton.getWidth()) / 2, (Gdx.graphics.getHeight() - game.cButtonSize * 4 - game.cButtonSize * 1.3f - textButton.getHeight() * 2.2f));
+                textButton.setSize(Gdx.graphics.getWidth() * 0.7f, ConstantBase.C_BUTTON_SIZE);
+                textButton.setPosition((Gdx.graphics.getWidth() - textButton.getWidth()) / 2, (Gdx.graphics.getHeight() - ConstantBase.C_BUTTON_SIZE * 4 - ConstantBase.C_BUTTON_SIZE * 1.3f - textButton.getHeight() * 2.2f));
                 textButton.addListener(new com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener(textButton, game) {
                     @Override
                     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
@@ -201,8 +202,8 @@ public class UiActorCreator {
                 break;
         }
 
-        float up = (Gdx.graphics.getHeight() * 0.98f - game.cButtonSize); //верхний отступ
-        float down = (game.cButtonSize) + Gdx.graphics.getHeight() * 0.02f; //нижний отступ
+        float up = (Gdx.graphics.getHeight() * 0.98f - ConstantBase.C_BUTTON_SIZE); //верхний отступ
+        float down = (ConstantBase.C_BUTTON_SIZE) + Gdx.graphics.getHeight() * 0.02f; //нижний отступ
         float packButtonHeight = (up - down) / 6;
 
         textButton.setText(string);
@@ -217,7 +218,7 @@ public class UiActorCreator {
     public static com.blackhornetworkshop.flowrush.ui.SmallButtonActor getSmallButtonActor(int type, final com.blackhornetworkshop.flowrush.FlowRush game) { //Маленькие кнопки актеры
         final com.blackhornetworkshop.flowrush.ui.SmallButtonActor smallButtonActor = new com.blackhornetworkshop.flowrush.ui.SmallButtonActor();
 
-        smallButtonActor.setSize(game.cButtonSize, game.cButtonSize);
+        smallButtonActor.setSize(ConstantBase.C_BUTTON_SIZE, ConstantBase.C_BUTTON_SIZE);
         if (type != 11) {
             smallButtonActor.addListener(new com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener(smallButtonActor, game));
         }
@@ -240,7 +241,7 @@ public class UiActorCreator {
 
                     @Override
                     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                        if (game.screenType != 33) {
+                        if (game.screenType != ConstantBase.ScreenType.GAME_LVL_COMPLETE) {
                             game.alphawhiteBack.setVisible(true);
                         }
                         game.getGameScreen().pause();
@@ -267,14 +268,14 @@ public class UiActorCreator {
                 break;
             case 3://Иконка рестарта уровня
                 sprite = game.atlas.createSprite("restart_icon");
-                smallButtonActor.setPosition(game.cButtonSize + Gdx.graphics.getHeight() * 0.05f, 0);
+                smallButtonActor.setPosition(ConstantBase.C_BUTTON_SIZE + Gdx.graphics.getHeight() * 0.05f, 0);
                 smallButtonActor.setVisible(true);
                 smallButtonActor.addListener(new com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener(smallButtonActor, game) {
                     @Override
                     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                        if(game.screenType==35){
+                        if(game.screenType== ConstantBase.ScreenType.GAME_LVL_COMPLETE_PAUSE){
                             game.levelLoader.prevLvl();
-                            game.screenType = 31;
+                            game.screenType = ConstantBase.ScreenType.GAME;
                             game.getGameScreen().changeLvl();
                         }else {
                             game.levelLoader.reloadActorList();
@@ -285,7 +286,7 @@ public class UiActorCreator {
                 break;
             case 4://Иконка перехода в главное меню из игры
                 sprite = game.atlas.createSprite("mmenu_icon");
-                smallButtonActor.setPosition(game.cButtonSize, game.cButtonSize);
+                smallButtonActor.setPosition(ConstantBase.C_BUTTON_SIZE, ConstantBase.C_BUTTON_SIZE);
 
                 smallButtonActor.setVisible(true);
 
@@ -346,7 +347,7 @@ public class UiActorCreator {
             case 6://Иконка закрыть в главном меню
                 sprite = game.atlas.createSprite("close_icon");
                 smallButtonActor.setVisible(true);
-                smallButtonActor.setPosition((Gdx.graphics.getWidth() - game.cButtonSize) / 2, Gdx.graphics.getHeight() * 0.02f);
+                smallButtonActor.setPosition((Gdx.graphics.getWidth() - ConstantBase.C_BUTTON_SIZE) / 2, Gdx.graphics.getHeight() * 0.02f);
                 smallButtonActor.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
@@ -365,7 +366,7 @@ public class UiActorCreator {
                 break;
             case 7://Иконка информации об авторах
                 sprite = game.atlas.createSprite("authors_icon");
-                smallButtonActor.setPosition(Gdx.graphics.getWidth() - game.cButtonSize - Gdx.graphics.getHeight() * 0.02f, Gdx.graphics.getHeight() * 0.02f);
+                smallButtonActor.setPosition(Gdx.graphics.getWidth() - ConstantBase.C_BUTTON_SIZE- Gdx.graphics.getHeight() * 0.02f, Gdx.graphics.getHeight() * 0.02f);
                 smallButtonActor.setVisible(true);
                 smallButtonActor.addListener(new ClickListener() {
                     @Override
@@ -380,8 +381,8 @@ public class UiActorCreator {
                 break;
             case 8://Кнопка Facebook
                 sprite = game.atlas.createSprite("fb_icon");
-                smallButtonActor.setSize(game.cButtonSize, game.cButtonSize);
-                smallButtonActor.setPosition((Gdx.graphics.getWidth() - smallButtonActor.getWidth()) / 2 - game.cButtonSize * 1.25f, (game.cButtonSize / 2 + Gdx.graphics.getHeight() * 0.02f) + game.cButtonSize / 2 + ((((Gdx.graphics.getHeight() * 0.98f - game.cButtonSize)) + (game.cButtonSize) / 2) - (game.cButtonSize / 2 + Gdx.graphics.getHeight() * 0.02f) - game.cButtonSize) * 0.05f / 2 + game.cButtonSize * 0.3f + (game.cButtonSize * 1.5f - smallButtonActor.getHeight()) / 2);
+                smallButtonActor.setSize(ConstantBase.C_BUTTON_SIZE, ConstantBase.C_BUTTON_SIZE);
+                smallButtonActor.setPosition((Gdx.graphics.getWidth() - smallButtonActor.getWidth()) / 2 - ConstantBase.C_BUTTON_SIZE * 1.25f, (ConstantBase.C_BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f) + ConstantBase.C_BUTTON_SIZE/ 2 + ((((Gdx.graphics.getHeight() * 0.98f - ConstantBase.C_BUTTON_SIZE)) + (ConstantBase.C_BUTTON_SIZE) / 2) - (ConstantBase.C_BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f) - ConstantBase.C_BUTTON_SIZE) * 0.05f / 2 + ConstantBase.C_BUTTON_SIZE * 0.3f + (ConstantBase.C_BUTTON_SIZE * 1.5f - smallButtonActor.getHeight()) / 2);
                 smallButtonActor.setVisible(false);
                 smallButtonActor.addListener(new ClickListener() {
                     @Override
@@ -401,9 +402,9 @@ public class UiActorCreator {
                 break;
             case 9://Кнопка Twitter
                 sprite = game.atlas.createSprite("tw_icon");
-                smallButtonActor.setSize(game.cButtonSize, game.cButtonSize);
+                smallButtonActor.setSize(ConstantBase.C_BUTTON_SIZE, ConstantBase.C_BUTTON_SIZE);
 
-                smallButtonActor.setPosition((Gdx.graphics.getWidth() - smallButtonActor.getWidth()) / 2, (game.cButtonSize / 2 + Gdx.graphics.getHeight() * 0.02f) + game.cButtonSize / 2 + ((((Gdx.graphics.getHeight() * 0.98f - game.cButtonSize)) + (game.cButtonSize) / 2) - (game.cButtonSize / 2 + Gdx.graphics.getHeight() * 0.02f) - game.cButtonSize) * 0.05f / 2 + game.cButtonSize * 0.3f + (game.cButtonSize * 1.5f - smallButtonActor.getHeight()) / 2);
+                smallButtonActor.setPosition((Gdx.graphics.getWidth() - smallButtonActor.getWidth()) / 2, (ConstantBase.C_BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f) + ConstantBase.C_BUTTON_SIZE / 2 + ((((Gdx.graphics.getHeight() * 0.98f - ConstantBase.C_BUTTON_SIZE)) + (ConstantBase.C_BUTTON_SIZE) / 2) - (ConstantBase.C_BUTTON_SIZE/ 2 + Gdx.graphics.getHeight() * 0.02f) - ConstantBase.C_BUTTON_SIZE) * 0.05f / 2 + ConstantBase.C_BUTTON_SIZE * 0.3f + (ConstantBase.C_BUTTON_SIZE * 1.5f - smallButtonActor.getHeight()) / 2);
                 smallButtonActor.setVisible(false);
                 smallButtonActor.addListener(new ClickListener() {
                     @Override
@@ -423,8 +424,8 @@ public class UiActorCreator {
                 break;
             case 10://Кнопка Vk
                 sprite = game.atlas.createSprite("vk_icon");
-                smallButtonActor.setSize(game.cButtonSize, game.cButtonSize);
-                smallButtonActor.setPosition((Gdx.graphics.getWidth() - smallButtonActor.getWidth()) / 2 + game.cButtonSize * 1.25f, (game.cButtonSize / 2 + Gdx.graphics.getHeight() * 0.02f) + game.cButtonSize / 2 + ((((Gdx.graphics.getHeight() * 0.98f - game.cButtonSize)) + (game.cButtonSize) / 2) - (game.cButtonSize / 2 + Gdx.graphics.getHeight() * 0.02f) - game.cButtonSize) * 0.05f / 2 + game.cButtonSize * 0.3f + (game.cButtonSize * 1.5f - smallButtonActor.getHeight()) / 2);
+                smallButtonActor.setSize(ConstantBase.C_BUTTON_SIZE, ConstantBase.C_BUTTON_SIZE);
+                smallButtonActor.setPosition((Gdx.graphics.getWidth() - smallButtonActor.getWidth()) / 2 + ConstantBase.C_BUTTON_SIZE * 1.25f, (ConstantBase.C_BUTTON_SIZE/ 2 + Gdx.graphics.getHeight() * 0.02f) + ConstantBase.C_BUTTON_SIZE/ 2 + ((((Gdx.graphics.getHeight() * 0.98f - ConstantBase.C_BUTTON_SIZE)) + (ConstantBase.C_BUTTON_SIZE) / 2) - (ConstantBase.C_BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f) - ConstantBase.C_BUTTON_SIZE) * 0.05f / 2 + ConstantBase.C_BUTTON_SIZE * 0.3f + (ConstantBase.C_BUTTON_SIZE * 1.5f - smallButtonActor.getHeight()) / 2);
                 smallButtonActor.setVisible(false);
                 smallButtonActor.addListener(new ClickListener() {
                     @Override
@@ -446,10 +447,10 @@ public class UiActorCreator {
                 sprite = game.atlas.createSprite("bighex_light");
                 //sprite = game.atlas.createSprite("lvlcomplete_XL");
 
-                smallButtonActor.setSize(game.cButtonSize*0.9f, game.cButtonSize*0.9f*0.8947368421052632f);
+                smallButtonActor.setSize(ConstantBase.C_BUTTON_SIZE*0.9f, ConstantBase.C_BUTTON_SIZE*0.9f*0.8947368421052632f);
                 //smallButtonActor.setSize(game.cButtonSize*0.9f, game.cButtonSize*0.9f*0.866025f);
                 smallButtonActor.setOrigin(smallButtonActor.getWidth()/2, smallButtonActor.getHeight()/2);
-                smallButtonActor.setPosition((Gdx.graphics.getWidth()-Gdx.graphics.getWidth()*0.6f)/2-smallButtonActor.getWidth()/2, Gdx.graphics.getHeight()-smallButtonActor.getHeight()-(game.cButtonSize-smallButtonActor.getHeight())/2);
+                smallButtonActor.setPosition((Gdx.graphics.getWidth()-Gdx.graphics.getWidth()*0.6f)/2-smallButtonActor.getWidth()/2, Gdx.graphics.getHeight()-smallButtonActor.getHeight()-(ConstantBase.C_BUTTON_SIZE-smallButtonActor.getHeight())/2);
                 smallButtonActor.setVisible(false);
 
                 RotateByAction rotateToActionWellDone = new RotateByAction();
@@ -480,7 +481,7 @@ public class UiActorCreator {
 
                     @Override
                     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                        game.screenType = 31;
+                        game.screenType = ConstantBase.ScreenType.GAME;
                         if(smallButtonActor.getName().equals("show pack")){
                             game.getGameScreen().showPackComplete();
                             smallButtonActor.setName("");
@@ -507,7 +508,7 @@ public class UiActorCreator {
                 break;
             case 13://Кнопка SupportUs mainmenuscreen
                 sprite = game.atlas.createSprite("ads_icon");
-                smallButtonActor.setSize(game.cButtonSize, game.cButtonSize);
+                smallButtonActor.setSize(ConstantBase.C_BUTTON_SIZE, ConstantBase.C_BUTTON_SIZE);
                 smallButtonActor.setPosition((Gdx.graphics.getWidth() - smallButtonActor.getWidth()) / 2, Gdx.graphics.getHeight() * 0.02f);
                 smallButtonActor.setVisible(true);
                 smallButtonActor.addListener(new ClickListener() {

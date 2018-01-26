@@ -12,59 +12,56 @@ public class OneTouchProcessor implements InputProcessor {
 
     final private FlowRush game;
 
-    public Timer timerForExitDisplay;
-
     public OneTouchProcessor(FlowRush game){
         this.game = game;
-        timerForExitDisplay = new Timer();
     }
 
     @Override
     public boolean keyDown(int keycode) {
         if(keycode == Input.Keys.BACK){
             switch (game.screenType){
-                case 11: //logo bhw
+                case LOGO_BHW: //logo bhw
                     Gdx.app.exit();
                     break;
-                case 12: //logo fr
+                case LOGO_FR: //logo fr
                     Gdx.app.exit();
                     break;
-                case 21: //mainmenu
+                case MAIN_MENU: //mainmenu
                     //close app message
-                    timerForExitDisplay.instance().clear();
-                    if(timerForExitDisplay.instance().isEmpty()){
+                    Timer.instance().clear();
+                    if(Timer.instance().isEmpty()){
                         game.getMainMenuScr().exitButton.setVisible(true);
-                        timerForExitDisplay.schedule(new Task(), 3);
-                        timerForExitDisplay.instance().start();
+                        Timer.schedule(new Task(), 3);
+                        Timer.instance().start();
                     }
                     break;
-                case 22: //mainmenu authors
+                case MAIN_MENU_AUTHORS: //mainmenu authors
                     game.getMainMenuScr().resume();
                     break;
-                case 23:// mainmenu support us
+                case MAIN_MENU_SUPPORT_US:// mainmenu support us
                     game.getMainMenuScr().resume();
                     game.getMainMenuScr().setAuthorsScreen();
                     break;
-                case 24://mainmenu packchoise
+                case MAIN_MENU_PACK_CHOISE://mainmenu packchoise
                     game.getMainMenuScr().resume();
                     break;
-                case 25://mainmenu lvlchoise
+                case MAINE_MENU_LVL_CHOISE://mainmenu lvlchoise
                     game.getMainMenuScr().resume();
                     game.getMainMenuScr().setPackChoiseScreen();
                     break;
-                case 31://game
+                case GAME://game
                     game.setMainMenuScreen();
                     break;
-                case 32://game pause
+                case GAME_PAUSE://game pause
                     game.getGameScreen().resume();
                     break;
-                case 33://game lvlcomplete
+                case GAME_LVL_COMPLETE://game lvlcomplete
                     game.setMainMenuScreen();
                     break;
-                case 34://game packcomplete
+                case GAME_PACK_COMPLETE://game packcomplete
                     game.setMainMenuScreen();
                     break;
-                case 35://game lvlcomplete+pause
+                case GAME_LVL_COMPLETE_PAUSE://game lvlcomplete+pause
                     game.getGameScreen().resume();
                     break;
                 default:
@@ -77,7 +74,7 @@ public class OneTouchProcessor implements InputProcessor {
     private class Task extends Timer.Task{
         @Override
         public void run() {
-            //System.out.println("close app message is not visible");
+            System.out.println("close app message is not visible");
             game.getMainMenuScr().exitButton.setVisible(false);
         }
     }
@@ -94,29 +91,17 @@ public class OneTouchProcessor implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if(pointer==0){
-            return false;
-        }else {
-            return true;
-        }
+        return pointer != 0;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        if(pointer==0){
-            return false;
-        }else {
-            return true;
-        }
+        return pointer != 0;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        if(pointer==0){
-            return false;
-        }else {
-            return true;
-        }
+        return pointer != 0;
     }
 
     @Override
