@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.async.AsyncExecutor;
+import com.blackhornetworkshop.flowrush.ex.FlowRushInitializeException;
 import com.blackhornetworkshop.flowrush.gameplay.SourceChecker;
 import com.blackhornetworkshop.flowrush.initialization.GamePreferences;
 import com.blackhornetworkshop.flowrush.initialization.LevelLoader;
@@ -39,7 +40,7 @@ import com.google.gson.Gson;
 
 public class FlowRush extends Game {
 
-    public ConstantBase.ScreenType screenType; // ++ADDED NEW
+    private static FlowRush flowRush;
 
     //Data
     public GamePreferences prefs;
@@ -75,16 +76,36 @@ public class FlowRush extends Game {
     public LevelLoader levelLoader;
     public SourceChecker checker;
     public AndroidSide androidSide;
+    public AsyncExecutor asyncExecutor;
 
-    public AsyncExecutor executor;// ++ADDED NEW
+    //Primitives
+    public ConstantBase.ScreenType screenType;
 
-    public FlowRush(AndroidSide androidSide, PlayServices playServices){
+
+    public static void initialize(AndroidSide androidSide, PlayServices playServices, AsyncExecutor asyncExecutor) throws FlowRushInitializeException{
+        if(flowRush == null) {
+            flowRush = new FlowRush(androidSide, playServices, asyncExecutor);
+        }else {
+            throw new FlowRushInitializeException("FlowRush is already initialized!");
+        }
+    }
+
+    public static FlowRush getInstance() throws FlowRushInitializeException{
+        if(flowRush != null) {
+            return flowRush;
+        }else {
+            throw new FlowRushInitializeException("FlowRush is not initialized!");
+        }
+    }
+
+    private FlowRush(AndroidSide androidSide, PlayServices playServices, AsyncExecutor asyncExecutor){
         this.androidSide = androidSide;
         this.playServices = playServices;
-        this.executor = new AsyncExecutor(20);// ++ADDED NEW
+        this.asyncExecutor = asyncExecutor;
+
     }
     public void create() {
-        batch = new SpriteBatch();// ++ADDED NEW
+        batch = new SpriteBatch();
 
         //Отлавливаем кнопку BACK
         Gdx.input.setCatchBackKey(true);
@@ -233,10 +254,7 @@ public class FlowRush extends Game {
         setLogoScreen();
     }
 
-
-
     public void dispose() {
-
         logoScreen.dispose();
         mainMenuScr.dispose();
         gameScreen.dispose();
@@ -246,15 +264,7 @@ public class FlowRush extends Game {
         skin.remove("fontMid", BitmapFont.class);
         skin.remove("fontSmall", BitmapFont.class);
         manager.dispose();
-
-        // CHANGE
-        getScreen().dispose();
-        //playServices.disposeAsyncExecutor();
-
-        /* WITH THAT
-        this.getScreen().hide();
-         */
-        executor.dispose();
+        asyncExecutor.dispose();
     }
 
     public void savePrefsFile(){
@@ -276,7 +286,6 @@ public class FlowRush extends Game {
     public void setMainMenuScreen(){
         mainMenuScr = new MainMenuScr(this);
         setScreen(mainMenuScr);
-
     }
     public void setGameScreen(){
         gameScreen = new GameScreen(this);

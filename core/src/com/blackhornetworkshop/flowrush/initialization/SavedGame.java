@@ -18,7 +18,7 @@ public class SavedGame {
         uniqSaveGameName = "SnapshotFR-" + (new BigInteger(281, new Random()).toString(13));
         //System.out.println("Create a new saved game: "+uniqSaveGameName);
     }
-    public String getUniqSaveGameName(){return uniqSaveGameName;}
+    public String getUniqSnapshotName(){return uniqSaveGameName;}
 
     public boolean[] getAchievements(){return achievements;} //через этот же метод и устанавливаем
 

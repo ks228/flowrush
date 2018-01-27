@@ -58,4 +58,17 @@ public class AndroidSideConcrete implements AndroidSide {
             appContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
         }
     }
+
+    @Override
+    public boolean isDebug() {return FlowRushLogger.isDebug();}
+
+    @Override
+    public void logError(String msg, Throwable tr) {
+        FlowRushLogger.logError(msg, tr);
+    }
+
+    @Override
+    public void logDebug(String msg) {
+        FlowRushLogger.logDebug(msg);
+    }
 }
