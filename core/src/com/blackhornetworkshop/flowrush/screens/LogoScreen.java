@@ -81,9 +81,10 @@ public class LogoScreen implements Screen {
             if(game.prefs.isSoundOn()) {
                 game.backgroundMusic.play();
             }
-            if(!game.playServices.isSignedIn()) {
-                game.playServices.signIn();
-            }
+
+            //game.playServices.logDebug("Calling signIn() from LogoScreen.render()");
+            //game.playServices.signIn();
+
             //dispose(); /* DELETED !!!!!
         }
     }

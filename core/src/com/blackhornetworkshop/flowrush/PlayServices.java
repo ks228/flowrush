@@ -6,14 +6,15 @@ public interface PlayServices
 {
     void signIn();
     void signOut();
+    void showSavedSnapshots();
+    void showAchievements();
+
     void unlockAchievement(int num);
     void writeSnapshotAsync(byte[] data);
     boolean isSignedIn();
     void checkAndSave(boolean onStart);
-    
-    //DELETED !!!!!!!!!!!!!!!!!!!!!!!! 
-    //void disposeAsyncExecutor(); //DELETED !!!!!!!!!!!!!!!!!!!!!!!
-    
-    //ADDED IN 1.04 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     void disconnectGameHelper();
+
+    void logError(String msg, Throwable tr);
+    void logDebug(String msg);
 }

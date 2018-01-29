@@ -3,37 +3,36 @@ package com.blackhornetworkshop.flowrush;
 //Created by TScissors
 
 
-import android.util.Log;
-
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.async.AsyncExecutor;
 import com.badlogic.gdx.utils.async.AsyncTask;
-import com.blackhornetworkshop.flowrush.ex.FlowRushInitializeException;
 import com.blackhornetworkshop.flowrush.initialization.SavedGame;
-import com.google.android.gms.games.Games;
-import com.google.android.gms.games.snapshot.Snapshot;
-import com.google.android.gms.games.snapshot.Snapshots;
-import com.google.example.games.basegameutils.GameHelper;
+//import com.google.example.games.basegameutils.GameHelper;
 
-import java.io.IOException;
 
 public class FlowRushPlayServices implements PlayServices {
 
-    AndroidLauncher androidLauncher;
-    GameHelper gameHelper;
-    AsyncExecutor asyncExecutor;
 
+
+    AndroidLauncher androidLauncher;
+    AsyncExecutor asyncExecutor;
+    //GameHelper gameHelper;
     private SavedGame savedGameOnline;
 
-    public FlowRushPlayServices(AndroidLauncher androidLauncher, GameHelper gameHelper, AsyncExecutor asyncExecutor) {
+    public FlowRushPlayServices(AndroidLauncher androidLauncher, AsyncExecutor asyncExecutor) {
         this.androidLauncher = androidLauncher;
-        this.gameHelper = gameHelper;
         this.asyncExecutor = asyncExecutor;
+
+        //Game services helper initialization
+        /*gameHelper = new GameHelper(androidLauncher, GameHelper.CLIENT_GAMES_AND_SNAPSHOT);
+        gameHelper.setConnectOnStart(false);
+        gameHelper.enableDebugLog(FRLogger.isDebug());
+        gameHelper.createApiClientBuilder();
+        gameHelper.setup(new FlowRushGameHelperListener(gameHelper, androidLauncher, asyncExecutor, this));*/
     }
 
     @Override
     public void signIn() {
-        try {
+        /*try {
             androidLauncher.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -41,13 +40,22 @@ public class FlowRushPlayServices implements PlayServices {
                 }
             });
         } catch (Exception e) {
-            FlowRushLogger.logError("Play Services log in failed", e);
-        }
+            FRLogger.logError("Play Services log in failed", e);
+        }*/
+        FRLogger.logDebug("Thread count: "+Thread.activeCount());
+        asyncExecutor.submit(new AsyncTask<Void>() {
+            public Void call() {
+                FRLogger.logDebug("Thread count: "+Thread.activeCount());
+                FRLogger.logDebug("Asynchronous signIn() started");
+                //gameHelper.beginUserInitiatedSignIn();
+                return null;
+            }
+        });
     }
 
     @Override
     public void signOut() {
-        try {
+        /*try {
             androidLauncher.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -55,13 +63,32 @@ public class FlowRushPlayServices implements PlayServices {
                 }
             });
         } catch (Exception e) {
-            FlowRushLogger.logError("Play Services log out failed", e);
-        }
+            FRLogger.logError("Play Services log out failed", e);
+        }*/
+        asyncExecutor.submit(new AsyncTask<Void>() {
+            public Void call() {
+                FRLogger.logDebug("Asynchronous signOut() started");
+                //gameHelper.signOut();
+                return null;
+            }
+        });
     }
 
     @Override
+    public void showSavedSnapshots() {
+
+    }
+
+    @Override
+    public void showAchievements() {
+
+    }
+
+
+
+    @Override
     public void unlockAchievement(int num) {
-        FlowRushLogger.logDebug("Play Services unlock achievment"+num);
+        FRLogger.logDebug("Play Services unlock achievment"+num);
         String s;
         switch (num) {
             case 1:
@@ -92,15 +119,15 @@ public class FlowRushPlayServices implements PlayServices {
                 s = null;
                 break;
         }
-        Games.Achievements.unlock(gameHelper.getApiClient(), s);
+        //Games.Achievements.unlock(gameHelper.getApiClient(), s);
     }
 
     @Override
     public void writeSnapshotAsync(final byte[] data) {
         asyncExecutor.submit(new AsyncTask<Void>() {
             public Void call() {
-                FlowRushLogger.logDebug("Asynchronous snapshot writing is started");
-                androidLauncher.writeSnapshot(androidLauncher.flowRush.save.getUniqSnapshotName(), data, "Last saved game");
+                FRLogger.logDebug("Asynchronous snapshot writing is started");
+                //androidLauncher.writeSnapshot(androidLauncher.flowRush.save.getUniqSnapshotName(), data, "Last saved game");
                 return null;
             }
         });
@@ -108,60 +135,70 @@ public class FlowRushPlayServices implements PlayServices {
 
     @Override
     public boolean isSignedIn() {
-        return gameHelper.isSignedIn();
+        //return gameHelper.isSignedIn();
+        return false;
     }
 
     @Override
     public void checkAndSave(boolean onStart) {
-        FlowRushLogger.logDebug("Calling checkAndSave()");
-        if (androidLauncher.isOnline()) {
+        FRLogger.logDebug("Calling checkAndSave()");
+        /*if (androidLauncher.isOnline() && gameHelper.getApiClient().isConnected()) {
             loadCloudSaveAndWriteToServer(androidLauncher.flowRush.save.getUniqSnapshotName(), onStart);
-        }
+        }*/
     }
 
     @Override
     public void disconnectGameHelper() {
-        gameHelper.disconnect();
+        //gameHelper.disconnect();
+    }
+
+    @Override
+    public void logError(String msg, Throwable tr) {
+        FRLogger.logError(msg, tr);
+    }
+
+    @Override
+    public void logDebug(String msg) {
+        FRLogger.logDebug(msg);
     }
 
     public void loadCloudSaveAndWriteToServer(final String snapshotName, final boolean onStart) { //для проверки загружаем с сервера с помощью этого метода
-        //System.out.println("calling loadCloudSaveAndWriteToServer from server");
-        asyncExecutor.submit(new AsyncTask<Void>() {
-            public Void call() {
-                //System.out.println("task async start load");
-                // Open the saved game using its name.
-                Snapshots.OpenSnapshotResult result = Games.Snapshots.open(gameHelper.getApiClient(), snapshotName, true).await();
+        /*if(androidLauncher.isOnline() && gameHelper.getApiClient().isConnected()) {
+            FRLogger.logDebug("Play Services is connected, calling loadCloudSaveAndWriteToServer() method");
+            asyncExecutor.submit(new AsyncTask<Void>() {
+                public Void call() {
+                    // Open the saved game using its name.
+                    Snapshots.OpenSnapshotResult result = Games.Snapshots.open(gameHelper.getApiClient(), snapshotName, true).await();
 
-                // Check the result of the open operation
-                if (result.getStatus().isSuccess()) {
-                    //System.out.println("result of open snapshot "+result.getStatus().getStatusCode());
-                    Snapshot snapshot = result.getSnapshot();
-                    // Read the byte content of the saved game.
-                    try {
-                        //data = snapshot.getSnapshotContents().readFully();
-                        String string = new String(snapshot.getSnapshotContents().readFully());
-                        savedGameOnline = androidLauncher.flowRush.gson.fromJson(string, SavedGame.class);
-                        if(savedGameOnline!=null) {
-                            //System.out.println("String savedgameonline is not null");
-                            checkSavesBeforeLoadToCloud(androidLauncher.flowRush.save, savedGameOnline, onStart);
-                        }else{
-                            //System.out.println("Write new SNAPSHOT");
-                            writeSnapshotAsync(androidLauncher.saveToGsonToBytes(androidLauncher.flowRush.save));
+                    // Check the result of the open operation
+                    if (result.getStatus().isSuccess()) {
+                        Snapshot snapshot = result.getSnapshot();
+                        // Read the byte content of the saved game.
+                        try {
+                            String string = new String(snapshot.getSnapshotContents().readFully());
+                            savedGameOnline = androidLauncher.flowRush.gson.fromJson(string, SavedGame.class);
+                            if (savedGameOnline != null) {
+                                checkSavesBeforeLoadToCloud(androidLauncher.flowRush.save, savedGameOnline, onStart);
+                            } else {
+                                writeSnapshotAsync(androidLauncher.saveToGsonToBytes(androidLauncher.flowRush.save));
+                            }
+                        } catch (IOException e) {
+                            FRLogger.logError("Error while reading Snapshot.", new FlowRushInitializeException("loadCloudSaveAndWriteToServer() method error"));
                         }
-                    } catch (IOException e) {
-                        FlowRushLogger.logError("Error while reading Snapshot.", new FlowRushInitializeException("loadCloudSaveAndWriteToServer() method error"));
+                    } else {
+                        FRLogger.logError("Error while loading snapshot: " + result.getStatus().getStatusCode(), new FlowRushInitializeException("loadCloudSaveAndWriteToServer() method error"));
                     }
-                } else {
-                    FlowRushLogger.logError("Error while loading snapshot: " + result.getStatus().getStatusCode(), new FlowRushInitializeException("loadCloudSaveAndWriteToServer() method error"));
+                    return null;
                 }
-                return null;
-            }
-        });
+            });
+        }else {
+            FRLogger.logDebug("Play Services is not connected");
+        }*/
     }
 
     public void loadCloudSaveAndWriteToLocal(final String snapshotName){
         //System.out.println("load cloud save and write to local called method");
-        asyncExecutor.submit(new AsyncTask<Void>() {
+        /*asyncExecutor.submit(new AsyncTask<Void>() {
             public Void call() {
                 //System.out.println("task async start load");
                 // Open the saved game using its name.
@@ -194,14 +231,14 @@ public class FlowRushPlayServices implements PlayServices {
                         }
 
                     } catch (IOException e) {
-                        FlowRushLogger.logError("Error while reading Snapshot.", new FlowRushInitializeException("loadCloudSaveAndWriteToLocal() method error"));
+                        FRLogger.logError("Error while reading Snapshot.", new FlowRushInitializeException("loadCloudSaveAndWriteToLocal() method error"));
                     }
                 } else {
-                    FlowRushLogger.logError("Error while loading snapshot: " + result.getStatus().getStatusCode(), new FlowRushInitializeException("loadCloudSaveAndWriteToLocal() method error"));
+                    FRLogger.logError("Error while loading snapshot: " + result.getStatus().getStatusCode(), new FlowRushInitializeException("loadCloudSaveAndWriteToLocal() method error"));
                 }
                 return null;
             }
-        });
+        });*/
     }
     private void checkSavesBeforeLoadFromCloud(final SavedGame savedGame, final SavedGame savedGameOnline){ //проверяем и обновляем локальный файл сохранения
         //для current level
@@ -237,7 +274,7 @@ public class FlowRushPlayServices implements PlayServices {
     }
 
     public void loadCloudSaveAndCheck(final String snapshotName) { //для загрузки с сервера и проверки
-        asyncExecutor.submit(new AsyncTask<Void>() {
+        /*asyncExecutor.submit(new AsyncTask<Void>() {
             public Void call() {
                 //System.out.println("task async start load from server and check");
                 // Open the saved game using its name.
@@ -255,14 +292,14 @@ public class FlowRushPlayServices implements PlayServices {
                         checkSavesBeforeLoadFromCloud(androidLauncher.flowRush.save, savedGameOnline);
                         androidLauncher.flowRush.saveSaveFile();
                     } catch (IOException e) {
-                        FlowRushLogger.logError("Error while reading Snapshot.", new FlowRushInitializeException("loadCloudSaveAndCheck() method error"));
+                        FRLogger.logError("Error while reading Snapshot.", new FlowRushInitializeException("loadCloudSaveAndCheck() method error"));
                     }
                 } else {
-                    FlowRushLogger.logError("Error while loading snapshot: " + result.getStatus().getStatusCode(), new FlowRushInitializeException("loadCloudSaveAndCheck() method error"));
+                    FRLogger.logError("Error while loading snapshot: " + result.getStatus().getStatusCode(), new FlowRushInitializeException("loadCloudSaveAndCheck() method error"));
                 }
                 return null;
             }
-        });
+        });*/
     }
 
     private void checkSavesBeforeLoadToCloud(final SavedGame savedGame, final SavedGame savedGameOnline, boolean onStart){ //проверяем с состоянием на сервере перед отправкой новой инфы
@@ -300,4 +337,31 @@ public class FlowRushPlayServices implements PlayServices {
             loadCloudSaveAndCheck(androidLauncher.flowRush.save.getUniqSnapshotName()); //каждый раз при запуске, если файл присутствует save чекаем прогресс
         }
     }
+
+    //CHANGED TO VOID TYPE HERE !!
+    void writeSnapshot(String newSnapshotFilename, byte[] data, String desc) {
+        /*FRLogger.logDebug("writeWnapshot() method call");
+        Snapshots.OpenSnapshotResult result = Games.Snapshots.open(gameHelper.getApiClient(), newSnapshotFilename, true).await();
+        // Check the result of the open operation
+        if (result.getStatus().isSuccess()) {
+            FRLogger.logDebug("OpenSnapshotResult status is success");
+            Snapshot snapshot = result.getSnapshot();
+            snapshot.getSnapshotContents().writeBytes(data);
+            // Create the change operation
+            SnapshotMetadataChange metadataChange = new
+                    SnapshotMetadataChange.Builder()
+                    .setDescription(desc)
+                    .build();
+
+            SnapshotsClient snapshotsClient =
+                    Games.getSnapshotsClient(this, GoogleSignIn.getLastSignedInAccount(this));
+
+            // Commit the operation
+            return snapshotsClient.commitAndClose(snapshot, metadataChange);
+
+        } else {
+            FRLogger.logDebug("OpenSnapshotResult status is failed");
+        }*/
+    }
+
 }

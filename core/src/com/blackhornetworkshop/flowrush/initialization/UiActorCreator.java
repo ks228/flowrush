@@ -1,6 +1,7 @@
 package com.blackhornetworkshop.flowrush.initialization;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
@@ -169,11 +170,60 @@ public class UiActorCreator {
                 textButton = new TextButton("EXIT", game.skin, "lightblue");
                 textButton.setSize(Gdx.graphics.getWidth() * 0.7f, ConstantBase.C_BUTTON_SIZE);
                 textButton.setPosition((Gdx.graphics.getWidth() - textButton.getWidth()) / 2, (Gdx.graphics.getHeight() - ConstantBase.C_BUTTON_SIZE * 4 - ConstantBase.C_BUTTON_SIZE * 1.3f - textButton.getHeight() * 2.2f));
-                textButton.addListener(new com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener(textButton, game) {
+                textButton.addListener(new ButtonScaleListener(textButton, game) {
                     @Override
                     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                         game.playServices.disconnectGameHelper(); // ADDED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                         Gdx.app.exit(); // DISPOSE ??????????????????????????????????????????????????????????????????
+                    }
+                });
+                break;
+            case 14: //Button sign in
+                textButton = new TextButton("SIGN IN", game.skin, "white");
+                textButton.setSize(Gdx.graphics.getWidth() * 0.7f, ConstantBase.C_BUTTON_SIZE);
+                textButton.setPosition((Gdx.graphics.getWidth() - textButton.getWidth()) / 2, (ConstantBase.C_BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f) + ConstantBase.C_BUTTON_SIZE / 2 + ((((Gdx.graphics.getHeight() * 0.98f - ConstantBase.C_BUTTON_SIZE)) + (ConstantBase.C_BUTTON_SIZE) / 2) - (ConstantBase.C_BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f) - ConstantBase.C_BUTTON_SIZE) * 0.05f / 2 + textButton.getHeight() * 0.3f);
+                textButton.setVisible(false);
+                textButton.addListener(new ClickListener() {
+                    @Override
+                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                        return true;
+                    }
+                    @Override
+                    public void touchUp(InputEvent event, float x, float y, int pointer, int button){
+                        game.playServices.signIn();
+                        game.getMainMenuScr().resume();
+                    }
+                });
+                break;
+            case 15: //Button show snapshots
+                textButton = new TextButton("LOAD GAME", game.skin, "white");
+                textButton.setSize(Gdx.graphics.getWidth() * 0.7f, ConstantBase.C_BUTTON_SIZE);
+                textButton.setPosition((Gdx.graphics.getWidth() - textButton.getWidth()) / 2, (ConstantBase.C_BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f) + ConstantBase.C_BUTTON_SIZE / 2 + ((((Gdx.graphics.getHeight() * 0.98f - ConstantBase.C_BUTTON_SIZE)) + (ConstantBase.C_BUTTON_SIZE) / 2) - (ConstantBase.C_BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f) - ConstantBase.C_BUTTON_SIZE) * 0.05f / 2 + textButton.getHeight() * 0.3f);
+                textButton.setVisible(false);
+                textButton.addListener(new ClickListener() {
+                    @Override
+                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                        return true;
+                    }
+                    @Override
+                    public void touchUp(InputEvent event, float x, float y, int pointer, int button){
+                        game.playServices.showSavedSnapshots();
+                    }
+                });
+                break;
+            case 16: //Button show achievements
+                textButton = new TextButton("ACHIEVEMENTS", game.skin, "white");
+                textButton.setSize(Gdx.graphics.getWidth() * 0.7f, ConstantBase.C_BUTTON_SIZE);
+                textButton.setPosition((Gdx.graphics.getWidth() - textButton.getWidth()) / 2, (ConstantBase.C_BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f) + ConstantBase.C_BUTTON_SIZE / 2 + ((((Gdx.graphics.getHeight() * 0.98f - ConstantBase.C_BUTTON_SIZE)) + (ConstantBase.C_BUTTON_SIZE) / 2) - (ConstantBase.C_BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f) - ConstantBase.C_BUTTON_SIZE) * 0.05f / 2 + textButton.getHeight() * 1.4f);
+                textButton.setVisible(false);
+                textButton.addListener(new ClickListener() {
+                    @Override
+                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                        return true;
+                    }
+                    @Override
+                    public void touchUp(InputEvent event, float x, float y, int pointer, int button){
+                        game.playServices.showAchievements();
                     }
                 });
                 break;
@@ -235,14 +285,6 @@ public class UiActorCreator {
     }
 
     public static SmallButtonActor getSmallButtonActor(int type, final FlowRush game) { //Маленькие кнопки актеры
-        //final SmallButtonActor smallButtonActor = new SmallButtonActor();
-
-        /*smallButtonActor.setSize(ConstantBase.C_BUTTON_SIZE, ConstantBase.C_BUTTON_SIZE);
-        if (type != 11) {
-            smallButtonActor.addListener(new com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener(smallButtonActor, game));
-        }
-        Sprite sprite;*/
-
         switch (type) {
             case 1://Иконка паузы
                 SmallButtonActor pauseButton= createSmallButtonActor(0.0f, 0.0f, Gdx.graphics.getWidth() / 8, Gdx.graphics.getWidth() / 8, true, "", game.atlas.createSprite("pause_icon"), true, game);
@@ -514,6 +556,29 @@ public class UiActorCreator {
                     }
                 });
                 return supportUsButton;
+            case 14://Google Play Games button
+                Sprite googlePlaySprite = new Sprite(new Texture(Gdx.files.internal("controller.png")));
+                SmallButtonActor googlePlayButton = createSmallButtonActor(Gdx.graphics.getHeight() * 0.02f, Gdx.graphics.getHeight() - ConstantBase.C_BUTTON_SIZE, ConstantBase.C_BUTTON_SIZE*0.8f, ConstantBase.C_BUTTON_SIZE*0.8f, true, "", googlePlaySprite, true, game);
+                googlePlayButton.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                    }
+
+                    @Override
+                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                        return true;
+                    }
+
+                    @Override
+                    public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                        if(game.playServices.isSignedIn()){
+                            game.getMainMenuScr().setSignedScreen();
+                        }else {
+                            game.getMainMenuScr().setSignInScreen();
+                        }
+                    }
+                });
+                return googlePlayButton ;
             default:
                 return null;
         }

@@ -3,9 +3,11 @@ package com.blackhornetworkshop.flowrush.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+
 import com.badlogic.gdx.graphics.GL20;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -34,8 +36,8 @@ public class MainMenuScr implements Screen {
 
     //Actors
     private Group levelGroup, packGroup;
-    private SmallButtonActor twitterButton, facebookButton, vkButton, authorsButton, closeButton, supportUsSmallButton;
-    private TextButton playButton, lvlButton, supportUsButton, rateUsButton, feedButton, levelsLabel, packsLabel, supportUsLabel, /**removeAds,*/ socialBack, authorsLabel;
+    private SmallButtonActor twitterButton, facebookButton, vkButton, authorsButton, closeButton, supportUsSmallButton, googlePlayButton;
+    private TextButton playButton, lvlButton, supportUsButton, rateUsButton, feedButton, /**removeAds,*/ socialBack, menuLabel, signInButton, showSnapshotsButton, showAchievementsButton;
     public  TextButton exitButton;
     private Label messageBack, innerScreenBack;
 
@@ -52,12 +54,14 @@ public class MainMenuScr implements Screen {
         Gdx.gl.glClearColor(0.26f, 0.64f, 0.87f, 1);
 
         //Создаем сцену
-        //stage = new Stage(new ScreenViewport()); // CHANGED THIS !!!!!!!
         this.stage = new Stage(new ScreenViewport(), game.batch);
+
+        //MainMenu top label
+        menuLabel = UiActorCreator.getTextButton(7, game);
+        menuLabel.setText("SUPPORT US");
 
         //Кнопка играть!
         playButton = UiActorCreator.getTextButton(1, game);
-
         playButton.addListener(new ButtonScaleListener(playButton, game)); // DELETED IN 1.04 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         //Создаем группу актеров
@@ -81,15 +85,7 @@ public class MainMenuScr implements Screen {
 
                     @Override
                     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                        game.screenType = ConstantBase.ScreenType.MAIN_MENU_LVL_CHOISE;
-                        setOnVisibleForInnerScreen();
-                        packsLabel.setVisible(false);
-                        levelsLabel.setVisible(true);
-                        stage.getRoot().findActor("levelgroup").remove(); //удаляем старую группу она улетает к сборщику мусора так как кроме stage она нигде не задействована
-                        levelGroup = levelGroupCreator.getLevelGroup(p); //создаем новую группу
-                        levelGroup.setName("levelgroup"); //имя для поиска и удаления
-                        stage.addActor(levelGroup);
-                        levelGroup.setVisible(true);
+                        selectLevelScreen(p);
                     }
                 });
             }
@@ -110,16 +106,6 @@ public class MainMenuScr implements Screen {
         innerScreenBack.setPosition((Gdx.graphics.getWidth()-innerScreenBack.getWidth())/2, ConstantBase.C_BUTTON_SIZE/2+Gdx.graphics.getHeight()*0.02f);
         innerScreenBack.setVisible(false);
 
-        //Статические надписи над окнами с информацией и выбором уровней
-        levelsLabel = UiActorCreator.getTextButton(7, game);
-        levelsLabel.setText("SELECT LEVEL");
-        packsLabel= UiActorCreator.getTextButton(7, game);
-        packsLabel.setText("SELECT PACK");
-        authorsLabel = UiActorCreator.getTextButton(7, game);
-        authorsLabel.setText("AUTHORS");
-        supportUsLabel = UiActorCreator.getTextButton(7, game);
-        supportUsLabel.setText("SUPPORT US");
-
         //!!!!!!!!!!! НЕ УДАЛИТЬ СЛУЧАЙНО
         /**removeAds = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getTextButton(6, game);
         removeAds.addListener(new com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener(removeAds, game));*/
@@ -134,12 +120,12 @@ public class MainMenuScr implements Screen {
         supportUsButton = UiActorCreator.getTextButton(5, game);
         supportUsButton.addListener(new ButtonScaleListener(supportUsButton, game));
 
-        rateUsButton= com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getTextButton(4, game);
-        rateUsButton.addListener(new com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener(rateUsButton, game));
+        rateUsButton= UiActorCreator.getTextButton(4, game);
+        rateUsButton.addListener(new ButtonScaleListener(rateUsButton, game));
 
         //Кнопка перехода на скрин отправки отзыва
-        feedButton = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getTextButton(3, game);
-        feedButton.addListener(new com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener(feedButton, game));
+        feedButton = UiActorCreator.getTextButton(3, game);
+        feedButton.addListener(new ButtonScaleListener(feedButton, game));
 
         //Фон для отображения информации
         messageBack = new Label("development\nTIMUR SCISSORS\n\ndesign\nSONYA KOVALSKI\n\nmusic\nERIC HOPTON", game.skin, "default");
@@ -153,7 +139,6 @@ public class MainMenuScr implements Screen {
 
         //Кнопка закрытия окна с информацией или выбором уровней
         closeButton = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getSmallButtonActor(6, game);
-        closeButton.setVisible(false); /* DELETED IN 1.05 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 
         //Кнопка открытия окна с информацией об авторах
         authorsButton = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getSmallButtonActor(7, game);
@@ -184,6 +169,14 @@ public class MainMenuScr implements Screen {
         game.soundButton.setPosition(Gdx.graphics.getHeight()*0.02f, Gdx.graphics.getHeight()*0.02f);
         game.soundButton.setVisible(true);
 
+        //Google Play
+        googlePlayButton = UiActorCreator.getSmallButtonActor(14, game);
+        signInButton = UiActorCreator.getTextButton(14, game);
+        signInButton.addListener(new ButtonScaleListener(signInButton, game));
+        showSnapshotsButton = UiActorCreator.getTextButton(15, game);
+        showSnapshotsButton.addListener(new ButtonScaleListener(showSnapshotsButton, game));
+        showAchievementsButton = UiActorCreator.getTextButton(16, game);
+        showAchievementsButton.addListener(new ButtonScaleListener(showAchievementsButton, game));
 
         //Добавляем всех актеров на сцену
         stage.addActor(game.backGroup);
@@ -207,11 +200,12 @@ public class MainMenuScr implements Screen {
         stage.addActor(facebookButton);
         stage.addActor(vkButton);
         stage.addActor(levelGroup);
-        stage.addActor(levelsLabel);
-        stage.addActor(packsLabel);
-        stage.addActor(authorsLabel);
-        stage.addActor(supportUsLabel);
         stage.addActor(closeButton);
+        stage.addActor(googlePlayButton);
+        stage.addActor(menuLabel);
+        stage.addActor(signInButton);
+        stage.addActor(showSnapshotsButton);
+        stage.addActor(showAchievementsButton);
 
         //Процессоры ввода
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
@@ -222,11 +216,24 @@ public class MainMenuScr implements Screen {
         resume();
     }
 
+    public void selectLevelScreen(int pack){
+        game.screenType = ConstantBase.ScreenType.MAIN_MENU_LVL_CHOISE;
+
+        setOnVisibleForInnerScreen();
+        menuLabel.setText("SELECT LEVEL");
+        stage.getRoot().findActor("levelgroup").remove(); //удаляем старую группу она улетает к сборщику мусора так как кроме stage она нигде не задействована
+        levelGroup = levelGroupCreator.getLevelGroup(pack); //создаем новую группу
+        levelGroup.setName("levelgroup"); //имя для поиска и удаления
+        stage.addActor(levelGroup);
+        levelGroup.setVisible(true);
+    }
+
     public void setPackChoiseScreen(){
         game.screenType = ConstantBase.ScreenType.MAIN_MENU_PACK_CHOISE;
         //System.out.println("screen main menu choose pack screen type 24");
+        menuLabel.setText("SELECT PACK");
+
         setOnVisibleForInnerScreen();
-        packsLabel.setVisible(true);
         packGroup.setVisible(true);
     }
 
@@ -235,16 +242,16 @@ public class MainMenuScr implements Screen {
        // System.out.println("screen main menu support us type 23");
 
         setOnVisibleForInnerScreen();
-        authorsLabel.setVisible(false);
         supportUsButton.setVisible(false);
         rateUsButton.setVisible(false);
         feedButton.setVisible(false);
 
         /**messageBack.setText("\nPlease support our indie development team. Remove ads or share our game with your friends .\n\nYou help us to grow.\nThank you!");*/
         messageBack.setText("Please support our indie development team. Share our game with your friends.\n\nYou help us to grow.\nThank you!");
-        messageBack.setVisible(true);
+        menuLabel.setText("SUPPORT US");
 
-        supportUsLabel.setVisible(true);
+        messageBack.setVisible(true);
+        //supportUsLabel.setVisible(true);
         socialBack.setVisible(true);
         /**removeAds.setVisible(true);*/
         twitterButton.setVisible(true);
@@ -256,19 +263,49 @@ public class MainMenuScr implements Screen {
         game.screenType = ConstantBase.ScreenType.MAIN_MENU_AUTHORS;
         //System.out.println("screen main menu authors type 22");
 
+        messageBack.setText("development\nTIMUR SCISSORS\n\ndesign\nSONYA KOVALSKI\n\nmusic\nERIC HOPTON");
+        menuLabel.setText("AUTHORS");
         setOnVisibleForInnerScreen();
 
         messageBack.setVisible(true);
-        authorsLabel.setVisible(true);
         supportUsButton.setVisible(true);
         rateUsButton.setVisible(true);
         feedButton.setVisible(true);
     }
 
+    public void setSignInScreen(){
+        game.screenType = ConstantBase.ScreenType.MAIN_MENU_GOOGLE_PLAY;
+
+        messageBack.setText("By signing in your game progress will be saved online " +
+                "with Google Play. Your Google Play Games Achievements will be associated with your" +
+                "Google+ indentity. These will be viewable from some Google products");
+        menuLabel.setText("GOOGLE PLAY");
+
+        setOnVisibleForInnerScreen();
+        messageBack.setVisible(true);
+        googlePlayButton.setVisible(false);
+        signInButton.setVisible(true);
+    }
+
+    public void setSignedScreen(){
+        game.screenType = ConstantBase.ScreenType.MAIN_MENU_LOAD_SAVED_GAME;
+
+        messageBack.setText("Welcome!\nHere you can see your Flow Rush achievements and manage your saved games");
+        menuLabel.setText("GOOGLE PLAY");
+
+        setOnVisibleForInnerScreen();
+        messageBack.setVisible(true);
+        googlePlayButton.setVisible(false);
+        showSnapshotsButton.setVisible(true);
+        showAchievementsButton.setVisible(true);
+    }
+
     private void setOnVisibleForInnerScreen(){
         innerScreenBack.setVisible(true);
         closeButton.setVisible(true);
+        menuLabel.setVisible(true);
 
+        googlePlayButton.setVisible(false);
         authorsButton.setVisible(false);
         supportUsSmallButton.setVisible(false);
         playButton.setVisible(false);
@@ -308,10 +345,7 @@ public class MainMenuScr implements Screen {
         game.screenType = ConstantBase.ScreenType.MAIN_MENU;
         //System.out.println("screen main menu type 21");
 
-        levelsLabel.setVisible(false);
-        authorsLabel.setVisible(false);
-        packsLabel.setVisible(false);
-        supportUsLabel.setVisible(false);
+        menuLabel.setVisible(false);
         levelGroup.setVisible(false);
         innerScreenBack.setVisible(false);
         closeButton.setVisible(false);
@@ -325,9 +359,11 @@ public class MainMenuScr implements Screen {
         twitterButton.setVisible(false);
         facebookButton.setVisible(false);
         vkButton.setVisible(false);
+        signInButton.setVisible(false);
+        showSnapshotsButton.setVisible(false);
+        showAchievementsButton.setVisible(false);
 
-        messageBack.setText("development\nTIMUR SCISSORS\n\ndesign\nSONYA KOVALSKI\n\nmusic\nERIC HOPTON");
-
+        googlePlayButton.setVisible(true);
         playButton.setVisible(true);
         lvlButton.setVisible(true);
         game.soundButton.setVisible(true);

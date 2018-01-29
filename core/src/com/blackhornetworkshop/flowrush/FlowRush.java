@@ -194,11 +194,11 @@ public class FlowRush extends Game {
 
         //Файл настроек
         if(Gdx.files.local("prefs.json").exists()){
-            System.out.println("load exist prefs");
+            playServices.logDebug("load exist prefs");
             prefs = gson.fromJson(Gdx.files.local("prefs.json").reader(), GamePreferences.class);
         }else{
+            playServices.logDebug("create new prefs");
             prefs = new GamePreferences();
-            System.out.println("create new prefs");
         }
         //Файл сохранения
         if(Gdx.files.local("save.json").exists()){

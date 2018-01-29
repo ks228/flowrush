@@ -60,15 +60,15 @@ public class AndroidSideConcrete implements AndroidSide {
     }
 
     @Override
-    public boolean isDebug() {return FlowRushLogger.isDebug();}
+    public boolean isDebug() {return FRLogger.isDebug();}
 
     @Override
     public void logError(String msg, Throwable tr) {
-        FlowRushLogger.logError(msg, tr);
+        FRLogger.logError(msg, tr);
     }
 
     @Override
     public void logDebug(String msg) {
-        FlowRushLogger.logDebug(msg);
+        FRLogger.logDebug(msg);
     }
 }
