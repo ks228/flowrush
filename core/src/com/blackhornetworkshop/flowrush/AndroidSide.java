@@ -11,4 +11,5 @@ public interface AndroidSide{
     boolean isDebug();
     void logError(String msg, Throwable tr);
     void logDebug(String msg);
+    void handleException(Exception exception, String details);
 }

@@ -71,7 +71,7 @@ public class FlowRush extends Game {
     //Utils
     public Gson gson;
     private AssetManager manager;
-    public final PlayServices playServices;
+    public PlayServices playServices;
     public OneTouchProcessor oneTouchProcessor;
     public LevelLoader levelLoader;
     public SourceChecker checker;
@@ -80,11 +80,23 @@ public class FlowRush extends Game {
 
     //Primitives
     public ConstantBase.ScreenType screenType;
+    public static boolean isPlayServicesAvailable;
 
 
     public static void initialize(AndroidSide androidSide, PlayServices playServices, AsyncExecutor asyncExecutor) throws FlowRushInitializeException{
         if(flowRush == null) {
+            isPlayServicesAvailable = true;
             flowRush = new FlowRush(androidSide, playServices, asyncExecutor);
+            androidSide.logDebug("FlowRush initialized, play services are available");
+        }else {
+            throw new FlowRushInitializeException("FlowRush is already initialized!");
+        }
+    }
+
+    public static void initialize(AndroidSide androidSide, AsyncExecutor asyncExecutor) throws FlowRushInitializeException{
+        if(flowRush == null) {
+            flowRush = new FlowRush(androidSide, asyncExecutor);
+            androidSide.logDebug("FlowRush initialized, play services are not available");
         }else {
             throw new FlowRushInitializeException("FlowRush is already initialized!");
         }
@@ -99,10 +111,13 @@ public class FlowRush extends Game {
     }
 
     private FlowRush(AndroidSide androidSide, PlayServices playServices, AsyncExecutor asyncExecutor){
-        this.androidSide = androidSide;
+        this(androidSide, asyncExecutor);
         this.playServices = playServices;
-        this.asyncExecutor = asyncExecutor;
+    }
 
+    private FlowRush(AndroidSide androidSide, AsyncExecutor asyncExecutor){
+        this.androidSide = androidSide;
+        this.asyncExecutor = asyncExecutor;
     }
     public void create() {
         batch = new SpriteBatch();
@@ -194,10 +209,10 @@ public class FlowRush extends Game {
 
         //Файл настроек
         if(Gdx.files.local("prefs.json").exists()){
-            playServices.logDebug("load exist prefs");
+            androidSide.logDebug("load exist prefs");
             prefs = gson.fromJson(Gdx.files.local("prefs.json").reader(), GamePreferences.class);
         }else{
-            playServices.logDebug("create new prefs");
+            androidSide.logDebug("create new prefs");
             prefs = new GamePreferences();
         }
         //Файл сохранения
@@ -206,7 +221,7 @@ public class FlowRush extends Game {
             save = gson.fromJson(Gdx.files.local("save.json").reader(), SavedGame.class);
         }else{
             save = new SavedGame();
-            save.setUniqSaveGameName();
+            save.setUniqSaveName();
             //System.out.println("create new save");
         }
 
@@ -279,6 +294,10 @@ public class FlowRush extends Game {
         file.writeString(string, false);
         System.out.println("Saved progress on local");
     }
+
+    byte[] getSaveData() {
+        return gson.toJson(save).getBytes();
+    }
     void setLogoScreen(){
         logoScreen = new LogoScreen(this);
         setScreen(logoScreen);
@@ -294,9 +313,13 @@ public class FlowRush extends Game {
     public MainMenuScr getMainMenuScr(){return mainMenuScr;}
     public GameScreen getGameScreen(){return gameScreen;}
     public void pause(){
+        getScreen().pause();
         backgroundMusic.pause();
     }
-    public void resume(){ if(prefs.isSoundOn()) backgroundMusic.play(); }
+    public void resume(){
+        getScreen().resume();
+        if(prefs.isSoundOn()) backgroundMusic.play();
+    }
     public void render() {
         super.render(); // important!
     }

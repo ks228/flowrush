@@ -161,7 +161,6 @@ public class UiActorCreator {
                 textButton.addListener(new com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener(textButton, game) {
                     @Override
                     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                        //game.getGameScreen().dispose();
                         game.setGameScreen();
                     }
                 });
@@ -173,7 +172,6 @@ public class UiActorCreator {
                 textButton.addListener(new ButtonScaleListener(textButton, game) {
                     @Override
                     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                        game.playServices.disconnectGameHelper(); // ADDED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                         Gdx.app.exit(); // DISPOSE ??????????????????????????????????????????????????????????????????
                     }
                 });
@@ -190,6 +188,7 @@ public class UiActorCreator {
                     }
                     @Override
                     public void touchUp(InputEvent event, float x, float y, int pointer, int button){
+                        game.androidSide.logDebug("Sign In button was pressed");
                         game.playServices.signIn();
                         game.getMainMenuScr().resume();
                     }
@@ -198,7 +197,7 @@ public class UiActorCreator {
             case 15: //Button show snapshots
                 textButton = new TextButton("LOAD GAME", game.skin, "white");
                 textButton.setSize(Gdx.graphics.getWidth() * 0.7f, ConstantBase.C_BUTTON_SIZE);
-                textButton.setPosition((Gdx.graphics.getWidth() - textButton.getWidth()) / 2, (ConstantBase.C_BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f) + ConstantBase.C_BUTTON_SIZE / 2 + ((((Gdx.graphics.getHeight() * 0.98f - ConstantBase.C_BUTTON_SIZE)) + (ConstantBase.C_BUTTON_SIZE) / 2) - (ConstantBase.C_BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f) - ConstantBase.C_BUTTON_SIZE) * 0.05f / 2 + textButton.getHeight() * 0.3f);
+                textButton.setPosition((Gdx.graphics.getWidth() - textButton.getWidth()) / 2, (ConstantBase.C_BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f) + ConstantBase.C_BUTTON_SIZE / 2 + ((((Gdx.graphics.getHeight() * 0.98f - ConstantBase.C_BUTTON_SIZE)) + (ConstantBase.C_BUTTON_SIZE) / 2) - (ConstantBase.C_BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f) - ConstantBase.C_BUTTON_SIZE) * 0.05f / 2 + textButton.getHeight() * 2.5f);
                 textButton.setVisible(false);
                 textButton.addListener(new ClickListener() {
                     @Override
@@ -207,6 +206,7 @@ public class UiActorCreator {
                     }
                     @Override
                     public void touchUp(InputEvent event, float x, float y, int pointer, int button){
+                        game.androidSide.logDebug("Load button was pressed");
                         game.playServices.showSavedSnapshots();
                     }
                 });
@@ -223,7 +223,26 @@ public class UiActorCreator {
                     }
                     @Override
                     public void touchUp(InputEvent event, float x, float y, int pointer, int button){
+                        game.androidSide.logDebug("Achievements button was pressed");
                         game.playServices.showAchievements();
+                    }
+                });
+                break;
+            case 17: //Button sign out
+                textButton = new TextButton("SIGN OUT", game.skin, "white");
+                textButton.setSize(Gdx.graphics.getWidth() * 0.7f, ConstantBase.C_BUTTON_SIZE);
+                textButton.setPosition((Gdx.graphics.getWidth() - textButton.getWidth()) / 2, (ConstantBase.C_BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f) + ConstantBase.C_BUTTON_SIZE / 2 + ((((Gdx.graphics.getHeight() * 0.98f - ConstantBase.C_BUTTON_SIZE)) + (ConstantBase.C_BUTTON_SIZE) / 2) - (ConstantBase.C_BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f) - ConstantBase.C_BUTTON_SIZE) * 0.05f / 2 + textButton.getHeight() * 0.3f);
+                textButton.setVisible(false);
+                textButton.addListener(new ClickListener() {
+                    @Override
+                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                        return true;
+                    }
+                    @Override
+                    public void touchUp(InputEvent event, float x, float y, int pointer, int button){
+                        game.androidSide.logDebug("Sign Out button was pressed");
+                        game.playServices.signOut();
+                        game.getMainMenuScr().resume();
                     }
                 });
                 break;
@@ -571,7 +590,7 @@ public class UiActorCreator {
 
                     @Override
                     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                        if(game.playServices.isSignedIn()){
+                        if(FlowRush.isPlayServicesAvailable && game.playServices.isSignedIn()){
                             game.getMainMenuScr().setSignedScreen();
                         }else {
                             game.getMainMenuScr().setSignInScreen();

@@ -37,7 +37,7 @@ public class MainMenuScr implements Screen {
     //Actors
     private Group levelGroup, packGroup;
     private SmallButtonActor twitterButton, facebookButton, vkButton, authorsButton, closeButton, supportUsSmallButton, googlePlayButton;
-    private TextButton playButton, lvlButton, supportUsButton, rateUsButton, feedButton, /**removeAds,*/ socialBack, menuLabel, signInButton, showSnapshotsButton, showAchievementsButton;
+    private TextButton playButton, lvlButton, supportUsButton, rateUsButton, feedButton, /**removeAds,*/ socialBack, menuLabel, signInButton, signOutButton, showSnapshotsButton, showAchievementsButton;
     public  TextButton exitButton;
     private Label messageBack, innerScreenBack;
 
@@ -169,14 +169,7 @@ public class MainMenuScr implements Screen {
         game.soundButton.setPosition(Gdx.graphics.getHeight()*0.02f, Gdx.graphics.getHeight()*0.02f);
         game.soundButton.setVisible(true);
 
-        //Google Play
-        googlePlayButton = UiActorCreator.getSmallButtonActor(14, game);
-        signInButton = UiActorCreator.getTextButton(14, game);
-        signInButton.addListener(new ButtonScaleListener(signInButton, game));
-        showSnapshotsButton = UiActorCreator.getTextButton(15, game);
-        showSnapshotsButton.addListener(new ButtonScaleListener(showSnapshotsButton, game));
-        showAchievementsButton = UiActorCreator.getTextButton(16, game);
-        showAchievementsButton.addListener(new ButtonScaleListener(showAchievementsButton, game));
+
 
         //Добавляем всех актеров на сцену
         stage.addActor(game.backGroup);
@@ -201,11 +194,26 @@ public class MainMenuScr implements Screen {
         stage.addActor(vkButton);
         stage.addActor(levelGroup);
         stage.addActor(closeButton);
-        stage.addActor(googlePlayButton);
         stage.addActor(menuLabel);
-        stage.addActor(signInButton);
-        stage.addActor(showSnapshotsButton);
-        stage.addActor(showAchievementsButton);
+
+        //Google Play
+        if(FlowRush.isPlayServicesAvailable) {
+            googlePlayButton = UiActorCreator.getSmallButtonActor(14, game);
+            signInButton = UiActorCreator.getTextButton(14, game);
+            signInButton.addListener(new ButtonScaleListener(signInButton, game));
+            showSnapshotsButton = UiActorCreator.getTextButton(15, game);
+            showSnapshotsButton.addListener(new ButtonScaleListener(showSnapshotsButton, game));
+            showAchievementsButton = UiActorCreator.getTextButton(16, game);
+            showAchievementsButton.addListener(new ButtonScaleListener(showAchievementsButton, game));
+            signOutButton = UiActorCreator.getTextButton(17, game);
+            signOutButton.addListener(new ButtonScaleListener(signOutButton, game));
+
+            stage.addActor(googlePlayButton);
+            stage.addActor(signInButton);
+            stage.addActor(signOutButton);
+            stage.addActor(showSnapshotsButton);
+            stage.addActor(showAchievementsButton);
+        }
 
         //Процессоры ввода
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
@@ -298,6 +306,7 @@ public class MainMenuScr implements Screen {
         googlePlayButton.setVisible(false);
         showSnapshotsButton.setVisible(true);
         showAchievementsButton.setVisible(true);
+        signOutButton.setVisible(true);
     }
 
     private void setOnVisibleForInnerScreen(){
@@ -305,7 +314,9 @@ public class MainMenuScr implements Screen {
         closeButton.setVisible(true);
         menuLabel.setVisible(true);
 
-        googlePlayButton.setVisible(false);
+        if(FlowRush.isPlayServicesAvailable) {
+            googlePlayButton.setVisible(false);
+        }
         authorsButton.setVisible(false);
         supportUsSmallButton.setVisible(false);
         playButton.setVisible(false);
@@ -359,11 +370,15 @@ public class MainMenuScr implements Screen {
         twitterButton.setVisible(false);
         facebookButton.setVisible(false);
         vkButton.setVisible(false);
-        signInButton.setVisible(false);
-        showSnapshotsButton.setVisible(false);
-        showAchievementsButton.setVisible(false);
 
-        googlePlayButton.setVisible(true);
+        if(FlowRush.isPlayServicesAvailable) {
+            googlePlayButton.setVisible(true);
+            signInButton.setVisible(false);
+            showSnapshotsButton.setVisible(false);
+            showAchievementsButton.setVisible(false);
+            signOutButton.setVisible(false);
+        }
+
         playButton.setVisible(true);
         lvlButton.setVisible(true);
         game.soundButton.setVisible(true);

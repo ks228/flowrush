@@ -2,9 +2,6 @@ package com.blackhornetworkshop.flowrush.initialization;
 
 //Created by TScissors. Файл с сохранением прогресса игрока
 
-import java.math.BigInteger;
-import java.util.Random;
-
 public class SavedGame {
 
     private String uniqSaveGameName;
@@ -14,10 +11,14 @@ public class SavedGame {
     private int[] levelsProgress = {1, 1, 1, 1, 1};
 
 
-    public void setUniqSaveGameName(){//Вызывать только когда создатся новый объект GamePreferences
-        uniqSaveGameName = "SnapshotFR-" + (new BigInteger(281, new Random()).toString(13));
-        //System.out.println("Create a new saved game: "+uniqSaveGameName);
+    public void setUniqSaveName(){//Вызывать только когда создатся новый объект GamePreferences
+        uniqSaveGameName = Long.toString(System.currentTimeMillis());
     }
+
+    public void setUniqSaveName(String uniqSaveGameName) {
+        this.uniqSaveGameName = uniqSaveGameName;
+    }
+
     public String getUniqSnapshotName(){return uniqSaveGameName;}
 
     public boolean[] getAchievements(){return achievements;} //через этот же метод и устанавливаем

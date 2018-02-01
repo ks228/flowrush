@@ -26,10 +26,6 @@ public class LogoScreen implements Screen {
         Gdx.input.setInputProcessor(game.oneTouchProcessor);
         this.game = game;
         setBHWlogo();
-
-        //CHANGE THIS
-        //batch = new SpriteBatch();
-        //WITH THIS
         this.batch = game.batch;
     }
 
@@ -81,11 +77,6 @@ public class LogoScreen implements Screen {
             if(game.prefs.isSoundOn()) {
                 game.backgroundMusic.play();
             }
-
-            //game.playServices.logDebug("Calling signIn() from LogoScreen.render()");
-            //game.playServices.signIn();
-
-            //dispose(); /* DELETED !!!!!
         }
     }
 
@@ -97,10 +88,12 @@ public class LogoScreen implements Screen {
 
     @Override
     public void pause() {
+
     }
 
     @Override
     public void resume() {
+
     }
 
     @Override
@@ -110,7 +103,6 @@ public class LogoScreen implements Screen {
 
     @Override
     public void dispose() {
-        //batch.dispose();/* DELETED !!!!!!!!!!
         //System.out.println("dispose() был вызван в LogoScreen");
     }
 }

@@ -20,6 +20,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import com.blackhornetworkshop.flowrush.ConstantBase;
+import com.blackhornetworkshop.flowrush.FlowRush;
 import com.blackhornetworkshop.flowrush.gameplay.TileActor;
 import com.blackhornetworkshop.flowrush.gameplay.TileController;
 import com.blackhornetworkshop.flowrush.initialization.MapActorGroupCreator;
@@ -230,8 +231,9 @@ public class GameScreen implements Screen {
     }
 
     private void checkAchievements() {
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! REFACTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         if (game.levelLoader.getLvl() == 1 && !game.save.getAchievements()[0]) {//прошел первый уровень
-            if (game.playServices.isSignedIn()) {
+            if (FlowRush.isPlayServicesAvailable && game.playServices.isSignedIn()) {
                 game.playServices.unlockAchievement(1);
             }
             game.save.getAchievements()[0] = true;
@@ -239,52 +241,52 @@ public class GameScreen implements Screen {
 
         // FIRST LEVEL WITH A DOVE
         if (((game.levelLoader.getLvl() == 10 && game.levelLoader.getPack() == 1) || (game.levelLoader.getLvl() == 1 && (game.levelLoader.getPack() == 2 || game.levelLoader.getPack() == 3 || game.levelLoader.getPack() == 4 || game.levelLoader.getPack() == 5))) && !game.save.getAchievements()[1]) {
-            if (game.playServices.isSignedIn()) {
+            if (FlowRush.isPlayServicesAvailable && game.playServices.isSignedIn()) {
                 game.playServices.unlockAchievement(2);
             }
             game.save.getAchievements()[1] = true;
         }
 
         if (game.levelLoader.getLvl() == 50 && game.levelLoader.getPack() == 1 && !game.save.getAchievements()[2]) { //прошел первый пак
-            if (game.playServices.isSignedIn()) {
+            if (FlowRush.isPlayServicesAvailable && game.playServices.isSignedIn()) {
                 game.playServices.unlockAchievement(3);
             }
             game.save.getAchievements()[2] = true;
         }
         if (game.levelLoader.getLvl() == 50 && game.levelLoader.getPack() == 2 && !game.save.getAchievements()[3]) { //прошел второй пак
-            if (game.playServices.isSignedIn()) {
+            if (FlowRush.isPlayServicesAvailable && game.playServices.isSignedIn()) {
                 game.playServices.unlockAchievement(4);
             }
             game.save.getAchievements()[3] = true;
         }
         if (game.levelLoader.getLvl() == 50 && game.levelLoader.getPack() == 3 && !game.save.getAchievements()[4]) { //прошел третий пак
-            if (game.playServices.isSignedIn()) {
+            if (FlowRush.isPlayServicesAvailable && game.playServices.isSignedIn()) {
                 game.playServices.unlockAchievement(5);
             }
             game.save.getAchievements()[4] = true;
         }
         if (game.levelLoader.getLvl() == 50 && game.levelLoader.getPack() == 4 && !game.save.getAchievements()[5]) { //прошел четвертый пак
-            if (game.playServices.isSignedIn()) {
+            if (FlowRush.isPlayServicesAvailable && game.playServices.isSignedIn()) {
                 game.playServices.unlockAchievement(6);
             }
             game.save.getAchievements()[5] = true;
         }
         if (game.levelLoader.getLvl() == 50 && game.levelLoader.getPack() == 5 && !game.save.getAchievements()[6]) { //прошел пятый пак
-            if (game.playServices.isSignedIn()) {
+            if (FlowRush.isPlayServicesAvailable && game.playServices.isSignedIn()) {
                 game.playServices.unlockAchievement(7);
             }
             game.save.getAchievements()[6] = true;
         }
 
         if (game.save.getLevelsProgress()[0] == 50 && game.save.getLevelsProgress()[1] == 50 && game.save.getLevelsProgress()[2] == 50 && game.save.getLevelsProgress()[3] == 50 && game.save.getLevelsProgress()[4] == 50 && !game.save.getAchievements()[7]) { // прошел все уровни
-            if (game.playServices.isSignedIn()) {
+            if (FlowRush.isPlayServicesAvailable && game.playServices.isSignedIn()) {
                 game.playServices.unlockAchievement(8);
             }
             game.save.getAchievements()[7] = true;
         }
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! REFACTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
     public void levelComplete() {
-
         checkAchievements();
 
         //level complete отображается в любом случае
@@ -298,6 +300,8 @@ public class GameScreen implements Screen {
         wellDone.setVisible(true);
         wellDonehex.setVisible(true);
 
+
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! REFACTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         if (game.levelLoader.containsNext()) { //если следующий уровень существует в паке то переключаем его тут
             game.levelLoader.nextLvl();
             game.save.setCurrentLvl(game.levelLoader.getLvl());
@@ -310,8 +314,11 @@ public class GameScreen implements Screen {
                 packCompleteNextButton.setName("visible");
             }
         }
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! REFACTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-        game.playServices.checkAndSave(false); //сохраняем результат
+        if(FlowRush.isPlayServicesAvailable) {
+            game.playServices.saveGame();// Save in Google Play
+        }
     }
     public void showPackComplete(){
         nextButton.setVisible(false);

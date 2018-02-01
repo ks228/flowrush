@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">FlowRush</string>
-    <string name="signin_other_error">Error!</string>
+    <string name="write_snapshot_error">There was a problem with saving in Google Play!</string>
+
 </resources>
