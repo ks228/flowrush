@@ -11,30 +11,47 @@ public class SavedGame {
     private int[] levelsProgress = {1, 1, 1, 1, 1};
 
 
-    public void setUniqSaveName(){//Вызывать только когда создатся новый объект GamePreferences
+    public void setUniqSaveName() {//Вызывать только когда создатся новый объект GamePreferences
         uniqSaveGameName = Long.toString(System.currentTimeMillis());
     }
 
-    public void setUniqSaveName(String uniqSaveGameName) {
-        this.uniqSaveGameName = uniqSaveGameName;
+    public String getUniqSnapshotName() {
+        return uniqSaveGameName;
     }
 
-    public String getUniqSnapshotName(){return uniqSaveGameName;}
+    public boolean[] getAchievements() {
+        return achievements;
+    }
 
-    public boolean[] getAchievements(){return achievements;} //через этот же метод и устанавливаем
+    public void unlockAchievement(int num) { achievements[num] = true; }
 
-    public int getCurrentLvl(){return currentLvl;}
-    public void setCurrentLvl(int lvl){ currentLvl=lvl;}
-    public int getCurrentPack(){return currentPack;}
-    public void setCurrentPack(int pack){currentPack = pack;}
+    public int getCurrentLvl() {
+        return currentLvl;
+    }
 
+    public void setCurrentLvl(int lvl) {
+        currentLvl = lvl;
+    }
 
-    public int[] getLevelsProgress(){return  levelsProgress;}
-    public void setLevelsProgress(int pos, int value){levelsProgress[pos]=value;}
+    public int getCurrentPack() {
+        return currentPack;
+    }
 
-    public String getPackName(){
+    public void setCurrentPack(int pack) {
+        currentPack = pack;
+    }
+
+    public int[] getLevelsProgress() {
+        return levelsProgress;
+    }
+
+    public void setLevelsProgress(int pack, int value) {
+        levelsProgress[pack] = value;
+    }
+
+    public String getPackName() {
         String string;
-        switch (currentPack){
+        switch (currentPack) {
             case 1:
                 string = "QUESTION";
                 break;

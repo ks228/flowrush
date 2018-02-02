@@ -81,7 +81,7 @@ public class LevelLoader {
     }
 
     void reloadActorList() { //restart если отдельно взять метод
-        actorList = game.gson.fromJson(level.actorListJson, new TypeToken<ArrayList<ArrayList<ActorInfo>>>() {
+        actorList = game.getGson().fromJson(level.actorListJson, new TypeToken<ArrayList<ArrayList<ActorInfo>>>() {
         }.getType());
     }
 

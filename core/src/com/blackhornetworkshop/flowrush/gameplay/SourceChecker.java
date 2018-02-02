@@ -175,7 +175,7 @@ public class SourceChecker { //основная логика игры наход
         for (int x = 0; x < gameScreen.groupArray.size(); x++) {
             actor = gameScreen.groupArray.get(x);
             if (actor.getInclude() != 1) {
-                com.blackhornetworkshop.flowrush.gameplay.TileController.setPowerOff(actor, gameScreen.iconWhite, gameScreen.game.atlas);
+                TileController.setPowerOff(actor, gameScreen.iconWhite, gameScreen.game.atlas);
             }
         }
         doveIsOn = false;

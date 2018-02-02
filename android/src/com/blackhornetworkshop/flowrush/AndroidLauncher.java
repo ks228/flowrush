@@ -10,27 +10,25 @@ import android.widget.RelativeLayout;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.badlogic.gdx.utils.async.AsyncExecutor;
 
 public class AndroidLauncher extends AndroidApplication {
 
-    boolean isPlayServicesAvailable;
+    private AndroidSide androidSide;
+    private FRPlayServices playServices;
 
-    AndroidSide androidSide;
-    FRPlayServices playServices;
+    private ProgressDialog loadingDialog;
 
-    ProgressDialog loadingDialog;
-
-    FlowRush flowRush;
+    private FlowRush flowRush;
 
     @Override
     public void onCreate (Bundle savedInstanceState) {
         FRLogger.logDebug("AndroidLauncher onCreate() method");
         super.onCreate(savedInstanceState);
 
-        isPlayServicesAvailable = FRPlayServices.isPlayServicesAvailable(this);
+        boolean isPlayServicesAvailable = FRPlayServices.isPlayServicesAvailable(this);
 
         loadingDialog = new ProgressDialog(this, ProgressDialog.THEME_HOLO_LIGHT);
+        loadingDialog.setMessage("Loading...");
         loadingDialog.setCancelable(false);
         loadingDialog.setCanceledOnTouchOutside(false);
 
@@ -39,19 +37,16 @@ public class AndroidLauncher extends AndroidApplication {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 
-        //---------------------------
-        AsyncExecutor asyncExecutor = new AsyncExecutor(20);
-
         //FlowRush initialization
         androidSide = new AndroidSideConcrete(this);
         if(isPlayServicesAvailable) {
             FRLogger.logDebug("Play Services are available");
             FRPlayServices.initialize(this);
             playServices = FRPlayServices.getInstance();
-            FlowRush.initialize(androidSide, playServices ,asyncExecutor);
+            FlowRush.initialize(androidSide, playServices);
         }else {
             FRLogger.logDebug("Play Services are not available");
-            FlowRush.initialize(androidSide, asyncExecutor);
+            FlowRush.initialize(androidSide);
         }
         flowRush = FlowRush.getInstance();
 
@@ -71,8 +66,12 @@ public class AndroidLauncher extends AndroidApplication {
         return config;
     }
 
-    void handleException(Exception exception, String details){
-        androidSide.handleException(exception, details);
+    AndroidSide getAndroidSide(){
+        return androidSide;
+    }
+
+    FlowRush getGame(){
+        return flowRush;
     }
 
     @Override
@@ -92,11 +91,10 @@ public class AndroidLauncher extends AndroidApplication {
         }
     }
 
-    void showLoadingDialog(final String msg){
+    void showLoadingDialog(){
         runOnUiThread(new Runnable() {
             public void run() {
                 FRLogger.logDebug("Display loading dialog");
-                loadingDialog.setMessage(msg);
                 loadingDialog.show();
             }
         });

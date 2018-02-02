@@ -30,7 +30,7 @@ public class LevelGroupCreator {
     private int lvlAvailable;
     private int pack;
 
-    public LevelGroupCreator(com.blackhornetworkshop.flowrush.FlowRush game){
+    public LevelGroupCreator(FlowRush game){
         this.game = game;
         greyback = game.atlas.createSprite("lock");
     }

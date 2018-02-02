@@ -74,7 +74,7 @@ public class OneTouchProcessor implements InputProcessor {
     private class Task extends Timer.Task{
         @Override
         public void run() {
-            System.out.println("close app message is not visible");
+            //System.out.println("close app message is not visible");
             game.getMainMenuScr().exitButton.setVisible(false);
         }
     }

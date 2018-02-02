@@ -1,15 +1,13 @@
 package com.blackhornetworkshop.flowrush;
 
-import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.view.View;
 import android.widget.Toast;
 
 public class AndroidSideConcrete implements AndroidSide {
-    AndroidLauncher androidLauncher;
-    String fbUrl, twUrl, vkUrl, appPackageName;
+
+    private final AndroidLauncher androidLauncher;
+    private final String fbUrl, twUrl, vkUrl, appPackageName;
 
     AndroidSideConcrete(AndroidLauncher androidLauncher){
         this.androidLauncher = androidLauncher;
@@ -68,6 +66,7 @@ public class AndroidSideConcrete implements AndroidSide {
     @Override
     public void logError(String msg, Throwable tr) {
         FRLogger.logError(msg, tr);
+        showToast(msg);
     }
 
     @Override
@@ -75,15 +74,15 @@ public class AndroidSideConcrete implements AndroidSide {
         FRLogger.logDebug(msg);
     }
 
+    @Deprecated
     @Override
-    public void handleException(Exception exception, String details) {
-        String message = details + " " + exception.getMessage();
-
-        Toast.makeText(androidLauncher, message, Toast.LENGTH_LONG);
-
-        /*new AlertDialog.Builder(androidLauncher)
-                .setMessage(message)
-                .setNeutralButton(android.R.string.ok, null)
-                .show();*/
+    public void showToast(final String message) {
+        androidLauncher.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast toast = Toast.makeText(androidLauncher, message, Toast.LENGTH_LONG);
+                toast.show();
+            }
+        });
     }
 }

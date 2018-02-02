@@ -23,13 +23,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.badlogic.gdx.utils.async.AsyncExecutor;
 import com.blackhornetworkshop.flowrush.ex.FlowRushInitializeException;
 import com.blackhornetworkshop.flowrush.gameplay.SourceChecker;
 import com.blackhornetworkshop.flowrush.initialization.GamePreferences;
 import com.blackhornetworkshop.flowrush.initialization.LevelLoader;
 import com.blackhornetworkshop.flowrush.initialization.OneTouchProcessor;
 import com.blackhornetworkshop.flowrush.initialization.SavedGame;
+import com.blackhornetworkshop.flowrush.initialization.UiActorCreator;
 import com.blackhornetworkshop.flowrush.screens.GameScreen;
 import com.blackhornetworkshop.flowrush.screens.LogoScreen;
 import com.blackhornetworkshop.flowrush.screens.MainMenuScr;
@@ -69,40 +69,39 @@ public class FlowRush extends Game {
     public Music backgroundMusic;
 
     //Utils
-    public Gson gson;
+    private Gson gson;
     private AssetManager manager;
     public PlayServices playServices;
     public OneTouchProcessor oneTouchProcessor;
     public LevelLoader levelLoader;
     public SourceChecker checker;
     public AndroidSide androidSide;
-    public AsyncExecutor asyncExecutor;
 
     //Primitives
     public ConstantBase.ScreenType screenType;
     public static boolean isPlayServicesAvailable;
 
 
-    public static void initialize(AndroidSide androidSide, PlayServices playServices, AsyncExecutor asyncExecutor) throws FlowRushInitializeException{
+    static void initialize(AndroidSide androidSide, PlayServices playServices) throws FlowRushInitializeException{
         if(flowRush == null) {
             isPlayServicesAvailable = true;
-            flowRush = new FlowRush(androidSide, playServices, asyncExecutor);
+            flowRush = new FlowRush(androidSide, playServices);
             androidSide.logDebug("FlowRush initialized, play services are available");
         }else {
             throw new FlowRushInitializeException("FlowRush is already initialized!");
         }
     }
 
-    public static void initialize(AndroidSide androidSide, AsyncExecutor asyncExecutor) throws FlowRushInitializeException{
+    static void initialize(AndroidSide androidSide) throws FlowRushInitializeException{
         if(flowRush == null) {
-            flowRush = new FlowRush(androidSide, asyncExecutor);
+            flowRush = new FlowRush(androidSide);
             androidSide.logDebug("FlowRush initialized, play services are not available");
         }else {
             throw new FlowRushInitializeException("FlowRush is already initialized!");
         }
     }
 
-    public static FlowRush getInstance() throws FlowRushInitializeException{
+    static FlowRush getInstance() throws FlowRushInitializeException{
         if(flowRush != null) {
             return flowRush;
         }else {
@@ -110,14 +109,13 @@ public class FlowRush extends Game {
         }
     }
 
-    private FlowRush(AndroidSide androidSide, PlayServices playServices, AsyncExecutor asyncExecutor){
-        this(androidSide, asyncExecutor);
+    private FlowRush(AndroidSide androidSide, PlayServices playServices){
+        this(androidSide);
         this.playServices = playServices;
     }
 
-    private FlowRush(AndroidSide androidSide, AsyncExecutor asyncExecutor){
+    private FlowRush(AndroidSide androidSide){
         this.androidSide = androidSide;
-        this.asyncExecutor = asyncExecutor;
     }
     public void create() {
         batch = new SpriteBatch();
@@ -179,7 +177,6 @@ public class FlowRush extends Game {
 
         //классы-конструкторы для работы
         gson = new Gson();
-
 
         //Текстура фона для группы актров паузы
         qCircle = atlas.createSprite("q_circle");
@@ -263,9 +260,18 @@ public class FlowRush extends Game {
             }
         });
 
+        //Кнопка звука одна для всех экранов
+        soundButton = UiActorCreator.getSmallButtonActor(5, this);
+
         //Актер отображающий анимацию при касании тайла
         tapOnTileActor = new TapOnTileActor(atlas.createSprite("animbackhex"));
 
+        //Creating screens
+        mainMenuScr = new MainMenuScr(this);
+        GameScreen.initialize(this);
+        gameScreen = GameScreen.getInstance();
+
+        //Start a game
         setLogoScreen();
     }
 
@@ -279,7 +285,17 @@ public class FlowRush extends Game {
         skin.remove("fontMid", BitmapFont.class);
         skin.remove("fontSmall", BitmapFont.class);
         manager.dispose();
-        asyncExecutor.dispose();
+    }
+
+    public void unlockAchievement(int num){
+        if(num > 0 && num < 9) {
+            save.unlockAchievement(num - 1);
+            if (FlowRush.isPlayServicesAvailable && playServices.isSignedIn()) {
+                playServices.unlockAchievement(num);
+            }
+        }else{
+            androidSide.logError("No such achievement!", new IllegalArgumentException());
+        }
     }
 
     public void savePrefsFile(){
@@ -295,19 +311,21 @@ public class FlowRush extends Game {
         System.out.println("Saved progress on local");
     }
 
-    byte[] getSaveData() {
-        return gson.toJson(save).getBytes();
-    }
-    void setLogoScreen(){
+    public Gson getGson(){return gson;}
+    public PlayServices getPlayServices(){return playServices;}
+    private void setLogoScreen(){
         logoScreen = new LogoScreen(this);
         setScreen(logoScreen);
     }
     public void setMainMenuScreen(){
-        mainMenuScr = new MainMenuScr(this);
         setScreen(mainMenuScr);
     }
     public void setGameScreen(){
-        gameScreen = new GameScreen(this);
+        if(gameScreen == null){
+            GameScreen.initialize(this);
+            gameScreen = GameScreen.getInstance();
+        }
+        //gameScreen = new GameScreen(this);
         setScreen(gameScreen);
     }
     public MainMenuScr getMainMenuScr(){return mainMenuScr;}
@@ -323,5 +341,7 @@ public class FlowRush extends Game {
     public void render() {
         super.render(); // important!
     }
+
+    public void logError(String msg, Throwable tr) { androidSide.logError(msg, tr);}
 }
 

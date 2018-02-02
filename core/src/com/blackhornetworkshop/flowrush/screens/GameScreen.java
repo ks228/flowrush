@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import com.blackhornetworkshop.flowrush.ConstantBase;
 import com.blackhornetworkshop.flowrush.FlowRush;
+import com.blackhornetworkshop.flowrush.ex.FlowRushInitializeException;
 import com.blackhornetworkshop.flowrush.gameplay.TileActor;
 import com.blackhornetworkshop.flowrush.gameplay.TileController;
 import com.blackhornetworkshop.flowrush.initialization.MapActorGroupCreator;
@@ -38,6 +39,8 @@ import java.util.ArrayList;
 
 public class GameScreen implements Screen {
 
+    private static GameScreen instance;
+
     public final com.blackhornetworkshop.flowrush.FlowRush game;
     public final Stage stage;
     private Stage hudStage;
@@ -48,11 +51,11 @@ public class GameScreen implements Screen {
     public TextButton leftButton, rightButton;
     private Group mapGroup;
     private Group movePauseGroup;
-    private SmallButtonActor pauseActor, nextButton, wellDonehex;
+    private SmallButtonActor pauseActor, nextButton, wellDonehex, restartButton, mmenuButton, backButton;
     private PackBackActor packBackActor;
     private TextButton packComplMenuButton, packCompleteNextButton;
     private Actor qCircle;
-    public ArrayList<com.blackhornetworkshop.flowrush.gameplay.TileActor> specialActorsArray;
+    public ArrayList<TileActor> specialActorsArray;
     private Label wellDone;
     private PackCompleteActor packCompleteActor;
 
@@ -63,6 +66,7 @@ public class GameScreen implements Screen {
 
     //Utils
     public final InputMultiplexer inputMultiplexer;
+    public final MapActorGroupCreator mapActorGroupCreator;
 
     //Primitives
     public static int numOfReceivers;
@@ -72,54 +76,51 @@ public class GameScreen implements Screen {
     //Other
     private MoveToAction moveToActionPause;
 
-    public GameScreen(com.blackhornetworkshop.flowrush.FlowRush gam) {
+    public static void initialize(FlowRush game){
+        if(instance == null) {
+            instance = new GameScreen(game);
+        }else {
+            throw new FlowRushInitializeException("GameScreen already initialized!");
+        }
+    }
+
+    public static GameScreen getInstance(){
+        if(instance != null) {
+            return instance;
+        }else {
+            throw new FlowRushInitializeException("GameScreen should be already initialized!");
+        }
+    }
+
+    private GameScreen(FlowRush gam) {
         game = gam;
 
         //Основная сцена для гексов и сцена для UI
-        //stage = new Stage(new ScreenViewport()); // CHANGE THIS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        //hudStage = new Stage(new ScreenViewport());// CHANGE THIS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
         stage = new Stage(new ScreenViewport(), game.batch);
         hudStage = new Stage(new ScreenViewport(), game.batch);
 
         //множитель inputprocessor
         inputMultiplexer = new InputMultiplexer();
+
         //спрайт для отрисовки фона
         background = game.spriteBack;
-        //Цвет заливки фона
-        Gdx.gl.glClearColor(0.93f, 0.93f, 0.93f, 1);
-
-        go();
-    }
-
-    private void go() {
-        //Количество получателей на каждой карте уникально
-        numOfReceivers = 0; // SHOULD IT BE STATIC ????????????????????
 
         //Массивы необходимые для быстрой проверки всех актеров, параллельно с mapGroup !!!!!!!!!!!!!! ПОЧЕМУ НЕ ХВАТАЕТ MAPGROUP???
         groupArray = new ArrayList<TileActor>();
         specialActorsArray = new ArrayList<TileActor>();
 
         //Батч для фона из точек
-        //batchForBack = new SpriteBatch();
-        ///!!!!!!!!!!!!!!!!!!!! CHANGED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         batchForBack = this.game.batch;
 
-        //номер уровня
-        game.levelNumberActor.setText("" + game.levelLoader.getLvl());
-
-        //Добавляем фоновую анимацию
-        stage.addActor(game.backGroup);
+        //Map creator
+        mapActorGroupCreator = new MapActorGroupCreator(this);
 
         //Актеры паузы
-        SmallButtonActor restartButton = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getSmallButtonActor(3, game);
-
-        SmallButtonActor mmenuButton = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getSmallButtonActor(4, game);
-        pauseActor = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getSmallButtonActor(1, game);
-        SmallButtonActor backButton = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getSmallButtonActor(2, game);
-        backButton.setPosition(0, 0); /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! NOT EXIST IN 1.04 */
-        game.soundButton.setPosition(0, ConstantBase.C_BUTTON_SIZE+ Gdx.graphics.getHeight() * 0.05f);
-        game.soundButton.setVisible(true);
+        restartButton = UiActorCreator.getSmallButtonActor(3, game);
+        mmenuButton = UiActorCreator.getSmallButtonActor(4, game);
+        pauseActor = UiActorCreator.getSmallButtonActor(1, game);
+        backButton = UiActorCreator.getSmallButtonActor(2, game);
+        //backButton.setPosition(0, 0); /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! NOT EXIST IN 1.04 */
 
         //Фон для актеров паузы
         qCircle = new Actor() {
@@ -145,15 +146,46 @@ public class GameScreen implements Screen {
         //Экшн для группы актеров паузы
         moveToActionPause = new MoveToAction();
         moveToActionPause.setDuration(0.2f);
+    }
+
+    @Override
+    public void show() {
+        game.androidSide.logDebug("Game screen show() method called");
+        //Количество получателей на каждой карте уникально
+        //numOfReceivers = 0; // SHOULD IT BE STATIC ????????????????????
+
+        //Батч для фона из точек
+        //batchForBack = new SpriteBatch();
+        ///!!!!!!!!!!!!!!!!!!!! CHANGED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //batchForBack = this.game.batch;
+
+        //номер уровня
+        //game.levelNumberActor.setText("" + game.levelLoader.getLvl());
+
+
+
+        //PackComplete создается только при условии что уровень последний
+        /*if (!game.levelLoader.containsNext()) {
+            createPackCompleteGroup();
+        }*/
+
+        // HEX WIDTH & HEIGHT DELETED!!!
+        //mapGroup = mapActorGroupCreator.getGroup(this, game.levelLoader.getActorList(), game.atlas);
+        //game.checker.initialization(this, mapGroup); //обязательно после создания mapgroup иначе special actors array будет пустым
+
+        //stage.addActor(mapGroup);
+
+        game.soundButton.setPosition(0, ConstantBase.C_BUTTON_SIZE+ Gdx.graphics.getHeight() * 0.05f);
+        game.soundButton.setVisible(true);
 
         //Группа для актеров паузы
         movePauseGroup = new Group();
         movePauseGroup.addActor(qCircle);
         movePauseGroup.addActor(mmenuButton);
-        movePauseGroup.addActor(game.soundButton);
         movePauseGroup.addActor(backButton);
         movePauseGroup.addActor(restartButton);
-        movePauseGroup.setPosition(-Gdx.graphics.getWidth() * 0.4f, -Gdx.graphics.getWidth() * 0.4f);
+        movePauseGroup.addActor(game.soundButton);
+        //movePauseGroup.setPosition(-Gdx.graphics.getWidth() * 0.4f, -Gdx.graphics.getWidth() * 0.4f);
 
         hudStage.addActor(game.alphawhiteBack);
         hudStage.addActor(wellDone);
@@ -163,24 +195,17 @@ public class GameScreen implements Screen {
         hudStage.addActor(game.levelNumberActor);
         hudStage.addActor(movePauseGroup);
 
-        //PackComplete создается только при условии что уровень последний
-        if (!game.levelLoader.containsNext()) {
-            createPackCompleteGroup();
-        }
+        stage.addActor(game.backGroup);
 
-        // HEX WIDTH & HEIGHT DELETED!!!
-        mapGroup = new MapActorGroupCreator(this, game.levelLoader.getActorList(), game.atlas).getGroup();
-        game.checker.initialization(this, mapGroup); //обязательно после создания mapgroup иначе special actors array будет пустым
-
-        stage.addActor(mapGroup);
-
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         inputMultiplexer.addProcessor(0, game.oneTouchProcessor);
         inputMultiplexer.addProcessor(1, hudStage);
         inputMultiplexer.addProcessor(2, stage);
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         Gdx.input.setInputProcessor(inputMultiplexer);
 
-        game.checker.checkAndSetActor();
+        //game.checker.checkAndSetActor();
 
         //таймер для анимации иконок
         Timer.schedule(new Timer.Task() {
@@ -196,27 +221,43 @@ public class GameScreen implements Screen {
         }, 0.6f, 0.6f);
 
         //Выставляем основные настройки отображения
-        resume();
+        //resume();
+
+        //Цвет заливки фона
+        Gdx.gl.glClearColor(0.93f, 0.93f, 0.93f, 1);
+
+        restart();
     }
 
+    @Override
+    public void hide() {
+        game.androidSide.logDebug("Game screen hide() method called");
 
-    public void changeLvl() { //обязательно вместе с restart или nextlvl (в levelloader)
+        //inputMultiplexer.clear();
+        stage.clear();
+        movePauseGroup.clear();
+        mapGroup.clear();
+        /* DISPOSE ADDED HERE IN 1.04, WHY ???????????????????????????????????????????????????? */
+        //dispose();
+    }
+
+    public void restart() { //обязательно вместе с restart или nextlvl (в levelloader)
         //номер уровня
         game.levelNumberActor.setText("" + game.levelLoader.getLvl());
 
         //очистка
         numOfReceivers = 0;
-        stage.clear(); // NEED HERE SOME REFACTORING !!!!!!!!!!!!!!!!!!!!! CLEAR AND AGAIN ADD ? CHANGE IT!!!!!!!!!!!!!!
+        //stage.clear(); // NEED HERE SOME REFACTORING !!!!!!!!!!!!!!!!!!!!! CLEAR AND AGAIN ADD ? CHANGE IT!!!!!!!!!!!!!!
         groupArray.clear();
         specialActorsArray.clear();
-        mapGroup.clear();
         game.alphawhiteBack.setVisible(false);
 
-        //Добавляем фоновую анимацию
-        stage.addActor(game.backGroup);
+        if(mapGroup != null) {
+            mapGroup.clear();
+        }
 
         //загружаем группу актеров // DELETED HEX WIDTH & HEIGHT !!!!!!
-        mapGroup = new MapActorGroupCreator(this, game.levelLoader.getActorList(), game.atlas).getGroup();
+        mapGroup = mapActorGroupCreator.getGroup(this, game.levelLoader.getActorList(), game.atlas);
         stage.addActor(mapGroup);
 
         //обновляем чекер
@@ -233,56 +274,32 @@ public class GameScreen implements Screen {
     private void checkAchievements() {
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! REFACTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         if (game.levelLoader.getLvl() == 1 && !game.save.getAchievements()[0]) {//прошел первый уровень
-            if (FlowRush.isPlayServicesAvailable && game.playServices.isSignedIn()) {
-                game.playServices.unlockAchievement(1);
-            }
-            game.save.getAchievements()[0] = true;
+            game.unlockAchievement(1);
         }
 
         // FIRST LEVEL WITH A DOVE
         if (((game.levelLoader.getLvl() == 10 && game.levelLoader.getPack() == 1) || (game.levelLoader.getLvl() == 1 && (game.levelLoader.getPack() == 2 || game.levelLoader.getPack() == 3 || game.levelLoader.getPack() == 4 || game.levelLoader.getPack() == 5))) && !game.save.getAchievements()[1]) {
-            if (FlowRush.isPlayServicesAvailable && game.playServices.isSignedIn()) {
-                game.playServices.unlockAchievement(2);
-            }
-            game.save.getAchievements()[1] = true;
+            game.unlockAchievement(2);
         }
 
         if (game.levelLoader.getLvl() == 50 && game.levelLoader.getPack() == 1 && !game.save.getAchievements()[2]) { //прошел первый пак
-            if (FlowRush.isPlayServicesAvailable && game.playServices.isSignedIn()) {
-                game.playServices.unlockAchievement(3);
-            }
-            game.save.getAchievements()[2] = true;
+            game.unlockAchievement(3);
         }
         if (game.levelLoader.getLvl() == 50 && game.levelLoader.getPack() == 2 && !game.save.getAchievements()[3]) { //прошел второй пак
-            if (FlowRush.isPlayServicesAvailable && game.playServices.isSignedIn()) {
-                game.playServices.unlockAchievement(4);
-            }
-            game.save.getAchievements()[3] = true;
+            game.unlockAchievement(4);
         }
         if (game.levelLoader.getLvl() == 50 && game.levelLoader.getPack() == 3 && !game.save.getAchievements()[4]) { //прошел третий пак
-            if (FlowRush.isPlayServicesAvailable && game.playServices.isSignedIn()) {
-                game.playServices.unlockAchievement(5);
-            }
-            game.save.getAchievements()[4] = true;
+            game.unlockAchievement(5);
         }
         if (game.levelLoader.getLvl() == 50 && game.levelLoader.getPack() == 4 && !game.save.getAchievements()[5]) { //прошел четвертый пак
-            if (FlowRush.isPlayServicesAvailable && game.playServices.isSignedIn()) {
-                game.playServices.unlockAchievement(6);
-            }
-            game.save.getAchievements()[5] = true;
+            game.unlockAchievement(6);
         }
         if (game.levelLoader.getLvl() == 50 && game.levelLoader.getPack() == 5 && !game.save.getAchievements()[6]) { //прошел пятый пак
-            if (FlowRush.isPlayServicesAvailable && game.playServices.isSignedIn()) {
-                game.playServices.unlockAchievement(7);
-            }
-            game.save.getAchievements()[6] = true;
+            game.unlockAchievement(7);
         }
 
         if (game.save.getLevelsProgress()[0] == 50 && game.save.getLevelsProgress()[1] == 50 && game.save.getLevelsProgress()[2] == 50 && game.save.getLevelsProgress()[3] == 50 && game.save.getLevelsProgress()[4] == 50 && !game.save.getAchievements()[7]) { // прошел все уровни
-            if (FlowRush.isPlayServicesAvailable && game.playServices.isSignedIn()) {
-                game.playServices.unlockAchievement(8);
-            }
-            game.save.getAchievements()[7] = true;
+            game.unlockAchievement(8);
         }
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! REFACTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
@@ -316,8 +333,8 @@ public class GameScreen implements Screen {
         }
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! REFACTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-        if(FlowRush.isPlayServicesAvailable) {
-            game.playServices.saveGame();// Save in Google Play
+        if(FlowRush.isPlayServicesAvailable && game.getPlayServices().isSignedIn()) {
+            game.getPlayServices().saveGame();// Save in Google Play
         }
     }
     public void showPackComplete(){
@@ -398,10 +415,6 @@ public class GameScreen implements Screen {
 
 
     @Override
-    public void show() {
-    }
-
-    @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -462,6 +475,7 @@ public class GameScreen implements Screen {
         if (game.screenType == ConstantBase.ScreenType.GAME_PAUSE) {//Вариант когда нажата пауза
             game.screenType = ConstantBase.ScreenType.GAME;
             if (inputMultiplexer.getProcessors().size < 3 && game.screenType != ConstantBase.ScreenType.GAME_LVL_COMPLETE) {
+                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! inputMultiplexer.getProcessors().contains(stage, true);
                 inputMultiplexer.addProcessor(stage);
             }
             pauseActor.setVisible(true);
@@ -487,12 +501,6 @@ public class GameScreen implements Screen {
             movePauseGroupDown();
             game.screenType = ConstantBase.ScreenType.GAME_LVL_COMPLETE;
         }
-    }
-
-    @Override
-    public void hide() {
-        /* DISPOSE ADDED HERE IN 1.04, WHY ???????????????????????????????????????????????????? */
-        dispose();
     }
 
     @Override

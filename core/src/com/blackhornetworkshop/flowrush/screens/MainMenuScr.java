@@ -36,22 +36,21 @@ public class MainMenuScr implements Screen {
 
     //Actors
     private Group levelGroup, packGroup;
+    private Actor whiteBackActor, whiteBackActorTop;
     private SmallButtonActor twitterButton, facebookButton, vkButton, authorsButton, closeButton, supportUsSmallButton, googlePlayButton;
     private TextButton playButton, lvlButton, supportUsButton, rateUsButton, feedButton, /**removeAds,*/ socialBack, menuLabel, signInButton, signOutButton, showSnapshotsButton, showAchievementsButton;
     public  TextButton exitButton;
     private Label messageBack, innerScreenBack;
+    private Container<Label> labelContainer;
+
+    //Utils
+    InputMultiplexer inputMultiplexer;
 
     public MainMenuScr(final com.blackhornetworkshop.flowrush.FlowRush gam) {
         game = gam;
 
         //Начальный уровень берем из файла сохранения
         game.levelLoader.setLvl(game.save.getCurrentPack(), game.save.getCurrentLvl());
-
-        //Кнопка звука одна для всех экранов
-        game.soundButton = UiActorCreator.getSmallButtonActor(5, game); // MAYBE IT SHOULD BE IN FLOWRUSH.JAVA !!!!!!!!!!!!!!!!!!!!!!!!!!???????????????????????????????????????????????????
-
-        //Заливаем фон
-        Gdx.gl.glClearColor(0.26f, 0.64f, 0.87f, 1);
 
         //Создаем сцену
         this.stage = new Stage(new ScreenViewport(), game.batch);
@@ -132,7 +131,7 @@ public class MainMenuScr implements Screen {
         messageBack.setVisible(false);
         messageBack.setAlignment(Align.top);
         messageBack.setWrap(true);
-        Container<Label> labelContainer = new Container<Label>(messageBack); //Контейнер нужен для того чтобы сделать перенос строки
+        labelContainer = new Container<Label>(messageBack); //Контейнер нужен для того чтобы сделать перенос строки
         labelContainer.fill();
         labelContainer.setSize(innerScreenBack.getWidth()*0.9f, (innerScreenBack.getHeight()-ConstantBase.C_BUTTON_SIZE)*0.95f);
         labelContainer.setPosition((Gdx.graphics.getWidth()-innerScreenBack.getWidth()*0.9f)/2, innerScreenBack.getY()+ConstantBase.C_BUTTON_SIZE/2+(innerScreenBack.getHeight()-ConstantBase.C_BUTTON_SIZE)*0.05f/2);
@@ -146,7 +145,7 @@ public class MainMenuScr implements Screen {
         supportUsSmallButton = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getSmallButtonActor(13, game);
 
         //Актер фон треугольник из треугольников
-        Actor whiteBackActor = new Image(){
+        whiteBackActor = new Image(){
             public void draw(Batch batch, float alpha) {
                 batch.draw(game.atlas.createSprite("back_white"), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
             }
@@ -155,31 +154,39 @@ public class MainMenuScr implements Screen {
         whiteBackActor.setPosition(Gdx.graphics.getWidth()-whiteBackActor.getWidth(), 0);
 
         //Актер фон треугольник из треугольников
-        Actor whiteBackActorUp = new Actor(){
+        whiteBackActorTop = new Actor(){
             public void draw(Batch batch, float alpha) {
                 batch.draw(game.atlas.createSprite("back_white"), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
             }
         };
-        whiteBackActorUp.setSize(Gdx.graphics.getWidth()*0.65f, Gdx.graphics.getWidth()*0.65f*1.71358024691358f);
-        whiteBackActorUp.setOrigin(whiteBackActorUp.getWidth()/2, whiteBackActorUp.getHeight()/2);
-        whiteBackActorUp.setRotation(180);
-        whiteBackActorUp.setPosition(0, Gdx.graphics.getHeight()-whiteBackActorUp.getHeight());
+        whiteBackActorTop.setSize(Gdx.graphics.getWidth()*0.65f, Gdx.graphics.getWidth()*0.65f*1.71358024691358f);
+        whiteBackActorTop.setOrigin(whiteBackActorTop.getWidth()/2, whiteBackActorTop.getHeight()/2);
+        whiteBackActorTop.setRotation(180);
+        whiteBackActorTop.setPosition(0, Gdx.graphics.getHeight()-whiteBackActorTop.getHeight());
 
-        //Настраиваем общую актера кнопку звука
+        //Процессоры ввода
+        inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(0, game.oneTouchProcessor);
+        inputMultiplexer.addProcessor(1, stage);
+    }
+
+    @Override
+    public void show() {
+        game.androidSide.logDebug("Main menu screen show() method called");
+
+        //Common sound button
         game.soundButton.setPosition(Gdx.graphics.getHeight()*0.02f, Gdx.graphics.getHeight()*0.02f);
         game.soundButton.setVisible(true);
 
-
-
         //Добавляем всех актеров на сцену
-        stage.addActor(game.backGroup);
         stage.addActor(whiteBackActor);
-        stage.addActor(whiteBackActorUp);
+        stage.addActor(whiteBackActorTop);
+        stage.addActor(game.backGroup);
         stage.addActor(playButton);
         stage.addActor(lvlButton);
         stage.addActor(exitButton);
-        stage.addActor(game.soundButton);
         stage.addActor(authorsButton);
+        stage.addActor(game.soundButton);
         stage.addActor(supportUsSmallButton);
         stage.addActor(innerScreenBack);
         stage.addActor(labelContainer);
@@ -215,13 +222,22 @@ public class MainMenuScr implements Screen {
             stage.addActor(showAchievementsButton);
         }
 
-        //Процессоры ввода
-        InputMultiplexer inputMultiplexer = new InputMultiplexer();
-        inputMultiplexer.addProcessor(0, game.oneTouchProcessor);
-        inputMultiplexer.addProcessor(1, stage);
+
+
+        //Заливаем фон
+        Gdx.gl.glClearColor(0.26f, 0.64f, 0.87f, 1);
+        
         Gdx.input.setInputProcessor(inputMultiplexer);
 
         resume();
+    }
+
+
+    @Override
+    public void hide() {
+        game.androidSide.logDebug("Main menu screen hide() method called");
+        stage.clear();
+        //inputMultiplexer.clear();
     }
 
     public void selectLevelScreen(int pack){
@@ -339,13 +355,6 @@ public class MainMenuScr implements Screen {
     public void resize(int width, int height) {
     }
 
-    @Override
-    public void show() {
-    }
-
-    @Override
-    public void hide() {
-    }
 
     @Override
     public void pause() {

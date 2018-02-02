@@ -72,7 +72,7 @@ public class LogoScreen implements Screen {
             setFRlogo();
         }
         if (TimeUtils.nanoTime()-startTime>3000000000L&&isFRlogo) {
-
+            game.androidSide.logDebug("Set main menu screen");
             game.setMainMenuScreen();
             if(game.prefs.isSoundOn()) {
                 game.backgroundMusic.play();

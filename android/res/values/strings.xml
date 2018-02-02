@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="write_snapshot_error">There was a problem with saving in Google Play!</string>
+    <string name="template">template</string>
 
 </resources>

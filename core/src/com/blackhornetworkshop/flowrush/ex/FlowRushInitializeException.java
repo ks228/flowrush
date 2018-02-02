@@ -4,6 +4,8 @@ package com.blackhornetworkshop.flowrush.ex;
 
 public class FlowRushInitializeException extends RuntimeException{
 
+    public FlowRushInitializeException() {}
+
     public FlowRushInitializeException(String message) {
         super(message);
     }

@@ -27,11 +27,13 @@ public class MapActorGroupCreator {
     private float minCoord = Gdx.graphics.getHeight();
     private float maxCoord;
 
-    public MapActorGroupCreator(GameScreen gameScreen, ArrayList<ArrayList<ActorInfo>> list, TextureAtlas atlas) {
+    public MapActorGroupCreator(GameScreen gameScreen) {
+        this.gameScreen = gameScreen;
+    }
+
+    public Group getGroup(GameScreen gameScreen, ArrayList<ArrayList<ActorInfo>> list, TextureAtlas atlas) {
         minCoord = Gdx.graphics.getHeight();
         maxCoord = 0;
-
-        this.gameScreen = gameScreen;
 
         mapGroup = new Group();
 
@@ -69,6 +71,8 @@ public class MapActorGroupCreator {
 
         mapGroup.setOrigin(mapGroup.getWidth() / 2, mapGroup.getHeight() / 2);
         mapGroup.setScale(zoom);
+
+        return mapGroup;
     }
 
     private void createActor(int x, int y, ArrayList<ArrayList<ActorInfo>> list, TextureAtlas atlas) {
@@ -155,7 +159,5 @@ public class MapActorGroupCreator {
         }
     }
 
-    public Group getGroup() {
-        return mapGroup;
-    }
+
 }

@@ -189,7 +189,7 @@ public class UiActorCreator {
                     @Override
                     public void touchUp(InputEvent event, float x, float y, int pointer, int button){
                         game.androidSide.logDebug("Sign In button was pressed");
-                        game.playServices.signIn();
+                        game.getPlayServices().signIn();
                         game.getMainMenuScr().resume();
                     }
                 });
@@ -207,7 +207,7 @@ public class UiActorCreator {
                     @Override
                     public void touchUp(InputEvent event, float x, float y, int pointer, int button){
                         game.androidSide.logDebug("Load button was pressed");
-                        game.playServices.showSavedSnapshots();
+                        game.getPlayServices().showSavedSnapshots();
                     }
                 });
                 break;
@@ -224,7 +224,7 @@ public class UiActorCreator {
                     @Override
                     public void touchUp(InputEvent event, float x, float y, int pointer, int button){
                         game.androidSide.logDebug("Achievements button was pressed");
-                        game.playServices.showAchievements();
+                        game.getPlayServices().showAchievements();
                     }
                 });
                 break;
@@ -241,7 +241,7 @@ public class UiActorCreator {
                     @Override
                     public void touchUp(InputEvent event, float x, float y, int pointer, int button){
                         game.androidSide.logDebug("Sign Out button was pressed");
-                        game.playServices.signOut();
+                        game.getPlayServices().signOut();
                         game.getMainMenuScr().resume();
                     }
                 });
@@ -353,10 +353,10 @@ public class UiActorCreator {
                         if(game.screenType== ConstantBase.ScreenType.GAME_LVL_COMPLETE_PAUSE){
                             game.levelLoader.prevLvl();
                             game.screenType = ConstantBase.ScreenType.GAME;
-                            game.getGameScreen().changeLvl();
+                            game.getGameScreen().restart();
                         }else {
                             game.levelLoader.reloadActorList();
-                            game.getGameScreen().changeLvl();
+                            game.getGameScreen().restart();
                         }
                     }
                 });
@@ -537,7 +537,7 @@ public class UiActorCreator {
                             game.getGameScreen().showPackComplete();
                             nextButton.setName("");
                         }else {
-                            game.getGameScreen().changeLvl();
+                            game.getGameScreen().restart();
                         }
                     }
                 });
@@ -590,7 +590,7 @@ public class UiActorCreator {
 
                     @Override
                     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                        if(FlowRush.isPlayServicesAvailable && game.playServices.isSignedIn()){
+                        if(game.getPlayServices().isSignedIn()){
                             game.getMainMenuScr().setSignedScreen();
                         }else {
                             game.getMainMenuScr().setSignInScreen();
