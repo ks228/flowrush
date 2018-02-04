@@ -12,7 +12,7 @@ import com.blackhornetworkshop.flowrush.FlowRush;
 //Created by TScissors. Отдельный скрин для отображения лого компании и лого игры
 
 public class LogoScreen implements Screen {
-    final private FlowRush game;
+    private static LogoScreen instance;
 
     //Graphics
     private Sprite logo;
@@ -22,20 +22,32 @@ public class LogoScreen implements Screen {
     private long startTime;
     private boolean isFRlogo;
 
-    public LogoScreen(final FlowRush game) {
-        Gdx.input.setInputProcessor(game.oneTouchProcessor);
-        this.game = game;
+    public static LogoScreen getInstance(){
+        if(instance == null){
+            instance = new LogoScreen();
+            FlowRush.logDebug("LogoScreen is initialized. Return new instance");
+        }else{
+            FlowRush.logDebug("LogoScreen is already initialized. Return existing instance");
+        }
+        return instance;
+    }
+
+    private LogoScreen() {}
+
+    @Override
+    public void show() {
+        this.batch = FlowRush.getInstance().batch;
+        Gdx.input.setInputProcessor(FlowRush.getInstance().oneTouchProcessor);
         setBHWlogo();
-        this.batch = game.batch;
     }
 
     private void setBHWlogo() {
-        game.screenType = ConstantBase.ScreenType.LOGO_BHW;
+        FlowRush.getInstance().screenType = ConstantBase.ScreenType.LOGO_BHW;
         //System.out.println("screen logo type 11");
 
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1f);
 
-        logo = game.atlas.createSprite("h_logo");
+        logo = FlowRush.getInstance().atlas.createSprite("h_logo");
         logo.setSize(Gdx.graphics.getWidth() * 0.6f, Gdx.graphics.getWidth() * 0.6f*0.79f);
         logo.setPosition((Gdx.graphics.getWidth() - logo.getWidth()) / 2, (Gdx.graphics.getHeight() - logo.getHeight()) / 2);
 
@@ -43,21 +55,19 @@ public class LogoScreen implements Screen {
     }
 
     private void setFRlogo() {
-        game.screenType = ConstantBase.ScreenType.LOGO_FR;
+        FlowRush.getInstance().screenType = ConstantBase.ScreenType.LOGO_FR;
         //System.out.println("screen logo type 12");
 
         Gdx.gl.glClearColor(0.26f, 0.64f, 0.87f, 1);
 
         //logo = new Sprite(new Texture("texture/fr_logo.png"));
-        logo = game.atlas.createSprite("fr_logo");
+        logo = FlowRush.getInstance().atlas.createSprite("fr_logo");
         logo.setSize(Gdx.graphics.getWidth() * 0.8f, Gdx.graphics.getWidth() * 0.8f * 0.75f);
 
         logo.setPosition((Gdx.graphics.getWidth() - logo.getWidth()) / 2, (Gdx.graphics.getHeight() - logo.getHeight()*0.9f)/2);
     }
 
-    @Override
-    public void show() {
-    }
+
 
     @Override
     public void render(float delta) {
@@ -72,10 +82,10 @@ public class LogoScreen implements Screen {
             setFRlogo();
         }
         if (TimeUtils.nanoTime()-startTime>3000000000L&&isFRlogo) {
-            game.logDebug("Set main menu screen");
-            game.setMainMenuScreen();
-            if(game.prefs.isSoundOn()) {
-                game.backgroundMusic.play();
+            FlowRush.logDebug("Set main menu screen");
+            FlowRush.getInstance().setMainMenuScreen();
+            if(FlowRush.getInstance().prefs.isSoundOn()) {
+                FlowRush.getInstance().backgroundMusic.play();
             }
         }
     }

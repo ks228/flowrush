@@ -45,7 +45,7 @@ public class TileController {
         }
     }
 
-    public static void setPowerOn(TileActor actor, TextureAtlas atlas) {
+    static void setPowerOn(TileActor actor, TextureAtlas atlas) {
         actor.setPowerOn();
         if (actor.getIndex() < 13) {
             actor.setIndex(actor.getIndex() + 12);
@@ -63,7 +63,7 @@ public class TileController {
         }
     }
 
-    public static void setPowerOff(TileActor actor, boolean iconWhite, TextureAtlas atlas) {
+    static void setPowerOff(TileActor actor, boolean iconWhite, TextureAtlas atlas) {
         actor.setPowerOff();
         if (actor.getIndex() > 12 & actor.getIndex() < 25) {
             actor.setIndex(actor.getIndex() - 12);

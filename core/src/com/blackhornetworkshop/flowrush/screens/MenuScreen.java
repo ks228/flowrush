@@ -6,18 +6,13 @@ import com.badlogic.gdx.Screen;
 
 import com.badlogic.gdx.graphics.GL20;
 
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Timer;
 import com.blackhornetworkshop.flowrush.ConstantBase;
 import com.blackhornetworkshop.flowrush.FlowRush;
-import com.blackhornetworkshop.flowrush.UIPool;
+import com.blackhornetworkshop.flowrush.initialization.LevelLoader;
+import com.blackhornetworkshop.flowrush.ui.UIPool;
 import com.blackhornetworkshop.flowrush.initialization.LevelGroupCreator;
-import com.blackhornetworkshop.flowrush.initialization.UiActorCreator;
-import com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener;
 
 //Created by TScissors. Экран меню игры
 
@@ -26,12 +21,7 @@ public class MenuScreen implements Screen {
     private static MenuScreen instance;
 
     private Stage hudStage;
-    private LevelGroupCreator levelGroupCreator;
 
-    //Actors
-    private Group levelGroup, packGroup;
-
-    //Utils
     private InputMultiplexer inputMultiplexer;
 
     public static MenuScreen getInstance(){
@@ -44,51 +34,14 @@ public class MenuScreen implements Screen {
         return instance;
     }
 
-    private MenuScreen() {
-        //Начальный уровень берем из файла сохранения
-        FlowRush.getInstance().levelLoader.setLvl(FlowRush.getInstance().save.getCurrentPack(), FlowRush.getInstance().save.getCurrentLvl());
-
-        //Создаем группу актеров
-        levelGroupCreator = new LevelGroupCreator(FlowRush.getInstance());
-
-        levelGroup = new Group(); //класс пустышка, так оптимальней чтобы сразу он там был в случае нескольких кликов по пакам оправдано, сразу есть что удалять в слушателе ниже
-        levelGroup.setVisible(false);
-        levelGroup.setName("levelgroup"); //имя для поиска
-
-        //Группа актеров-паков
-        packGroup = new Group();
-        for(int x = 1; x<6; x++){
-            final int p = x;
-            TextButton packButton = UiActorCreator.getPackTextButton(p);
-            packButton.addListener(new ButtonScaleListener(packButton));
-            if(FlowRush.getInstance().levelLoader.getLevelPack(p-1).available) {
-                packButton.addListener(new ClickListener() {
-                    @Override
-                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        return true;
-                    }
-
-                    @Override
-                    public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                        selectLevelScreen(p);
-                    }
-                });
-            }
-            packGroup.addActor(packButton);
-        }
-        packGroup.setVisible(false);
-
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        //Процессоры ввода
-        inputMultiplexer = new InputMultiplexer();
-        inputMultiplexer.addProcessor(0, FlowRush.getInstance().oneTouchProcessor);
-        inputMultiplexer.addProcessor(1, FlowRush.getInstance().getHudStage());
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    }
+    private MenuScreen() {}
 
     @Override
     public void show() {
         FlowRush.logDebug("Main menu screen show() method called");
+
+        //Начальный уровень берем из файла сохранения
+        LevelLoader.getInstance().setLvl(FlowRush.getInstance().save.getCurrentPack(), FlowRush.getInstance().save.getCurrentLvl());
 
         //Создаем сцену каждый раз при переключении на экран
         hudStage = FlowRush.getInstance().getHudStage();
@@ -109,7 +62,7 @@ public class MenuScreen implements Screen {
         hudStage.addActor(UIPool.getSupportUsSmallButton());
         hudStage.addActor(UIPool.getInnerLayout());
         hudStage.addActor(UIPool.getLabelContainer());
-        hudStage.addActor(packGroup);
+        hudStage.addActor(UIPool.getPackGroup());
         hudStage.addActor(UIPool.getSupportUsButton());
         hudStage.addActor(UIPool.getRateUsButton());
         hudStage.addActor(UIPool.getFeedButton());
@@ -118,7 +71,7 @@ public class MenuScreen implements Screen {
         hudStage.addActor(UIPool.getTwitterButton());
         hudStage.addActor(UIPool.getFacebookButton());
         hudStage.addActor(UIPool.getVkButton());
-        hudStage.addActor(levelGroup);
+        hudStage.addActor(UIPool.getLevelGroup());
         hudStage.addActor(UIPool.getCloseButton());
         hudStage.addActor(UIPool.getMenuLabel());
 
@@ -131,11 +84,13 @@ public class MenuScreen implements Screen {
             hudStage.addActor(UIPool.getShowAchievementsButton());
         }
 
-
-
         //Заливаем фон
         Gdx.gl.glClearColor(0.26f, 0.64f, 0.87f, 1);
 
+
+        inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(0, FlowRush.getInstance().oneTouchProcessor);
+        inputMultiplexer.addProcessor(1, FlowRush.getInstance().getHudStage());
         Gdx.input.setInputProcessor(inputMultiplexer);
 
         resume();
@@ -146,7 +101,6 @@ public class MenuScreen implements Screen {
     public void hide() {
         FlowRush.logDebug("Main menu screen hide() method called");
         hudStage.clear();
-        //inputMultiplexer.clear();
     }
 
     public void selectLevelScreen(int pack){
@@ -154,11 +108,8 @@ public class MenuScreen implements Screen {
 
         setOnVisibleForInnerScreen();
         UIPool.getMenuLabel().setText("SELECT LEVEL");
-        hudStage.getRoot().findActor("levelgroup").remove(); //удаляем старую группу она улетает к сборщику мусора так как кроме hudStage она нигде не задействована
-        levelGroup = levelGroupCreator.getLevelGroup(pack); //создаем новую группу
-        levelGroup.setName("levelgroup"); //имя для поиска и удаления
-        hudStage.addActor(levelGroup);
-        levelGroup.setVisible(true);
+        LevelGroupCreator.getInstance().setupLevelGroup(UIPool.getLevelGroup(), pack);
+        UIPool.getLevelGroup().setVisible(true);
     }
 
     public void setPackChoiseScreen(){
@@ -167,7 +118,7 @@ public class MenuScreen implements Screen {
         UIPool.getMenuLabel().setText("SELECT PACK");
 
         setOnVisibleForInnerScreen();
-        packGroup.setVisible(true);
+        UIPool.getPackGroup().setVisible(true);
     }
 
     public void setSupportUsScreen(){
@@ -249,13 +200,12 @@ public class MenuScreen implements Screen {
         UIPool.getExitButton().setVisible(false);
         Timer.instance().clear();
         FlowRush.getInstance().soundButton.setVisible(false);
-        packGroup.setVisible(false);
+        UIPool.getPackGroup().setVisible(false);
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         hudStage.act(Gdx.graphics.getDeltaTime());
         hudStage.draw();
     }
@@ -275,11 +225,11 @@ public class MenuScreen implements Screen {
         //System.out.println("screen main menu type 21");
 
         UIPool.getMenuLabel().setVisible(false);
-        levelGroup.setVisible(false);
+        UIPool.getLevelGroup().setVisible(false);
         UIPool.getInnerLayout().setVisible(false);
         UIPool.getCloseButton().setVisible(false);
         UIPool.getMessageBackground().setVisible(false);
-        packGroup.setVisible(false);
+        UIPool.getPackGroup().setVisible(false);
         UIPool.getSupportUsButton().setVisible(false);
         UIPool.getRateUsButton().setVisible(false);
         UIPool.getFeedButton().setVisible(false);

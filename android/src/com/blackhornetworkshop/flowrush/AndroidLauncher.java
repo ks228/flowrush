@@ -25,8 +25,6 @@ public class AndroidLauncher extends AndroidApplication {
         FRLogger.logDebug("AndroidLauncher onCreate() method");
         super.onCreate(savedInstanceState);
 
-
-
         loadingDialog = new ProgressDialog(this, ProgressDialog.THEME_HOLO_LIGHT);
         loadingDialog.setMessage("Loading...");
         loadingDialog.setCancelable(false);

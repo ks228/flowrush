@@ -26,17 +26,17 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.blackhornetworkshop.flowrush.ex.FlowRushInitializeException;
-import com.blackhornetworkshop.flowrush.gameplay.SourceChecker;
 import com.blackhornetworkshop.flowrush.initialization.GamePreferences;
-import com.blackhornetworkshop.flowrush.initialization.LevelLoader;
 import com.blackhornetworkshop.flowrush.initialization.OneTouchProcessor;
 import com.blackhornetworkshop.flowrush.initialization.SavedGame;
 import com.blackhornetworkshop.flowrush.initialization.UiActorCreator;
 import com.blackhornetworkshop.flowrush.screens.GameScreen;
 import com.blackhornetworkshop.flowrush.screens.LogoScreen;
 import com.blackhornetworkshop.flowrush.screens.MenuScreen;
+import com.blackhornetworkshop.flowrush.ui.BackAnimActor;
 import com.blackhornetworkshop.flowrush.ui.SmallButtonActor;
 import com.blackhornetworkshop.flowrush.ui.TapOnTileActor;
+import com.blackhornetworkshop.flowrush.ui.UIPool;
 import com.google.gson.Gson;
 
 
@@ -53,9 +53,6 @@ public class FlowRush extends Game {
     public GamePreferences prefs;
     public SavedGame save;
 
-    //Screens
-    private LogoScreen logoScreen;
-
     //Actors
     public Group backGroup;
     public TapOnTileActor tapOnTileActor;
@@ -68,17 +65,17 @@ public class FlowRush extends Game {
     public TiledDrawable spriteBack;
     public TextureAtlas atlas;
     public Sprite qCircle;
-
+    private Sprite dotSprite;
     //Audio
     public Sound tapSound, lvlCompleteSound, packCompleteSound;
     public Music backgroundMusic;
 
+    // Input
+    public OneTouchProcessor oneTouchProcessor;
+
     //Utils
     private Gson gson;
     private AssetManager manager;
-    public OneTouchProcessor oneTouchProcessor;
-    public LevelLoader levelLoader;
-    public SourceChecker checker;
 
     //Primitives
     public ConstantBase.ScreenType screenType;
@@ -120,6 +117,84 @@ public class FlowRush extends Game {
         //Создаем процеесор ввода, необходим чтобы отключить мультитач и отлавливать кнопку BACK
         oneTouchProcessor = new OneTouchProcessor();
 
+        //классы-конструкторы для работы
+        gson = new Gson();
+
+        //Файл настроек
+        if(Gdx.files.local("prefs.json").exists()){
+            logDebug("Load existing prefs.json");
+            prefs = gson.fromJson(Gdx.files.local("prefs.json").reader(), GamePreferences.class);
+        }else{
+            androidHelper.logDebug("create new prefs");
+            prefs = new GamePreferences();
+        }
+
+        //Файл сохранения
+        if(Gdx.files.local("save.json").exists()){
+            System.out.println("load exist save");
+            save = gson.fromJson(Gdx.files.local("save.json").reader(), SavedGame.class);
+        }else{
+            save = new SavedGame();
+            save.setUniqSaveName();
+            //System.out.println("create new save");
+        }
+
+        loadAssets();
+
+        //анимация фона
+        backGroup = new Group();
+        for(int index = 1, type = 1; type<5; type++, index+=0.6f){ /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! FIX BUG INT---FLOAT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+            backGroup.addActor(new BackAnimActor(dotSprite,index ,type));
+            backGroup.addActor(new BackAnimActor(dotSprite,index+0.3f,type));/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! FIX BUG INT---FLOAT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+        }
+
+
+        //Настраиваем фоновую музыку, этот код поможет избежать ошибок на некоторых моделях телефонов с паузой музыки после проигрывания (вроде андро 5 и какой то там эксперементальный nu player)
+        backgroundMusic.setOnCompletionListener(new Music.OnCompletionListener(){
+            @Override
+            public void onCompletion(Music music) {
+                music.play();
+                music.setPosition(0.0f);
+            }
+        });
+        backgroundMusic.setVolume(0.7f);
+
+        //Актер номера уровня
+        levelNumberActor = new Label("", skin, "greyfont");
+        levelNumberActor.setSize(ConstantBase.C_BUTTON_SIZE, ConstantBase.C_BUTTON_SIZE);
+        levelNumberActor.setPosition(Gdx.graphics.getWidth() - levelNumberActor.getWidth(), Gdx.graphics.getHeight()-levelNumberActor.getHeight());
+        levelNumberActor.setAlignment(Align.center);
+
+        //Наложение белого цвета, для засветления во время паузы и прохождения уровня
+        alphawhiteBack = new Label("", skin, "alphawhite");
+        alphawhiteBack.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        alphawhiteBack.setVisible(false);
+        alphawhiteBack.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button){
+                if(screenType == ConstantBase.ScreenType.GAME_PAUSE){
+                    GameScreen.getInstance().resume();
+                }
+            }
+        });
+
+        //Кнопка звука одна для всех экранов
+        soundButton = UiActorCreator.getSmallButtonActor(5);
+
+        //Актер отображающий анимацию при касании тайла
+        tapOnTileActor = new TapOnTileActor(atlas.createSprite("animbackhex"));
+
+        UIPool.initialize();
+
+        //Start a game
+        setLogoScreen();
+    }
+
+    private void loadAssets(){
         //Загружаем все ресурсы в AssetManager
         manager = new AssetManager();
         InternalFileHandleResolver resolver = new InternalFileHandleResolver();
@@ -169,101 +244,23 @@ public class FlowRush extends Game {
         lvlCompleteSound = manager.get("sound/lvlcomplete.ogg");
         backgroundMusic = manager.get("sound/background.ogg");
 
-        //классы-конструкторы для работы
-        gson = new Gson();
-
         //Текстура фона для группы актров паузы
         qCircle = atlas.createSprite("q_circle");
 
         //Фон-точка
-        Sprite sprite;
         if(Gdx.graphics.getWidth()<500) {
             spriteBack = new TiledDrawable(atlas.findRegion("point"));
-            sprite = atlas.createSprite("animation");
+            dotSprite = atlas.createSprite("animation");
         }else if(Gdx.graphics.getWidth()<900){
             spriteBack = new TiledDrawable(atlas.findRegion("point2"));
-            sprite = atlas.createSprite("animation2");
+            dotSprite = atlas.createSprite("animation2");
         }else if(Gdx.graphics.getWidth()<1300){
             spriteBack = new TiledDrawable(atlas.findRegion("point3"));
-            sprite = atlas.createSprite("animation3");
+            dotSprite = atlas.createSprite("animation3");
         }else{
             spriteBack = new TiledDrawable(atlas.findRegion("point4"));
-            sprite = atlas.createSprite("animation4");
+            dotSprite = atlas.createSprite("animation4");
         }
-
-        //анимация фона
-        backGroup = new Group();
-        for(int index = 1, type = 1; type<5; type++, index+=0.6f){ /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! FIX BUG INT---FLOAT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-            backGroup.addActor(new com.blackhornetworkshop.flowrush.ui.BackAnimActor(sprite,index ,type));
-            backGroup.addActor(new com.blackhornetworkshop.flowrush.ui.BackAnimActor(sprite,index+0.3f,type));/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! FIX BUG INT---FLOAT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-        }
-
-        //Файл настроек
-        if(Gdx.files.local("prefs.json").exists()){
-            logDebug("Load existing prefs.json");
-            prefs = gson.fromJson(Gdx.files.local("prefs.json").reader(), GamePreferences.class);
-        }else{
-            androidHelper.logDebug("create new prefs");
-            prefs = new GamePreferences();
-        }
-        //Файл сохранения
-        if(Gdx.files.local("save.json").exists()){
-            System.out.println("load exist save");
-            save = gson.fromJson(Gdx.files.local("save.json").reader(), SavedGame.class);
-        }else{
-            save = new SavedGame();
-            save.setUniqSaveName();
-            //System.out.println("create new save");
-        }
-
-        //Настраиваем фоновую музыку, этот код поможет избежать ошибок на некоторых моделях телефонов с паузой музыки после проигрывания (вроде андро 5 и какой то там эксперементальный nu player)
-        backgroundMusic.setOnCompletionListener(new Music.OnCompletionListener(){
-            @Override
-            public void onCompletion(Music music) {
-                music.play();
-                music.setPosition(0.0f);
-            }
-        });
-        backgroundMusic.setVolume(0.7f);
-
-
-        //utils
-        levelLoader = new com.blackhornetworkshop.flowrush.initialization.LevelLoader(this);
-        checker = new SourceChecker();
-
-        //Актер номера уровня
-        levelNumberActor = new Label("", skin, "greyfont");
-        levelNumberActor.setSize(ConstantBase.C_BUTTON_SIZE, ConstantBase.C_BUTTON_SIZE);
-        levelNumberActor.setPosition(Gdx.graphics.getWidth() - levelNumberActor.getWidth(), Gdx.graphics.getHeight()-levelNumberActor.getHeight());
-        levelNumberActor.setAlignment(Align.center);
-
-        //Наложение белого цвета, для засветления во время паузы и прохождения уровня
-        alphawhiteBack = new Label("", skin, "alphawhite");
-        alphawhiteBack.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        alphawhiteBack.setVisible(false);
-        alphawhiteBack.addListener(new ClickListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                return true;
-            }
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button){
-                if(screenType == ConstantBase.ScreenType.GAME_PAUSE){
-                    GameScreen.getInstance().resume();
-                }
-            }
-        });
-
-        //Кнопка звука одна для всех экранов
-        soundButton = UiActorCreator.getSmallButtonActor(5);
-
-        //Актер отображающий анимацию при касании тайла
-        tapOnTileActor = new TapOnTileActor(atlas.createSprite("animbackhex"));
-
-        UIPool.initialize();
-
-        //Start a game
-        setLogoScreen();
     }
 
     public void unlockAchievement(int num){
@@ -293,19 +290,15 @@ public class FlowRush extends Game {
     public static AndroidHelper getAndroidHelper(){return androidHelper;}
     public Gson getGson(){return gson;}
     public PlayServices getPlayServices(){return playServices;}
-    private void setLogoScreen(){
-        logoScreen = new LogoScreen(this);
-        setScreen(logoScreen);
-    }
 
     public Stage getMainStage(){
         return mainStage;
     }
-
     public Stage getHudStage(){
         return hudStage;
     }
 
+    private void setLogoScreen(){setScreen(LogoScreen.getInstance());}
     public void setMainMenuScreen(){
         setScreen(MenuScreen.getInstance());
     }
@@ -330,9 +323,9 @@ public class FlowRush extends Game {
     public static void logDebug(String msg) { androidHelper.logDebug(msg);}
 
     public void dispose() {
-        logoScreen.dispose();
         mainStage.dispose();
         hudStage.dispose();
+        LogoScreen.getInstance().dispose();
         MenuScreen.getInstance().dispose();
         GameScreen.getInstance().dispose();
 

@@ -11,9 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 
 public class BackAnimActor extends Actor {
 
-    Sprite sprite;
-    MoveToAction moveToAction;
-    int vectorType;
+    private Sprite sprite;
+    private MoveToAction moveToAction;
+    private int vectorType;
 
     public BackAnimActor(Sprite sprite, float timeToMove, int vectorType){
         this.vectorType = vectorType;

@@ -2,9 +2,11 @@ package com.blackhornetworkshop.flowrush.initialization;
 
 //Created by TScissors. Кдасс для обработки типов и установки первоначального состояния источников.
 
-public class SourceInstaller {
+import com.blackhornetworkshop.flowrush.gameplay.TileActor;
 
-    public  static boolean[] getSourceArray(com.blackhornetworkshop.flowrush.gameplay.TileActor actor) { // МОЖНО ЛИ СДЕЛАТЬ БУЛЕАН ПРИМИТИВЫ А НЕ ОБЪЕКТЫ
+class SourceInstaller {
+
+    static boolean[] getSourceArray(TileActor actor) {
         boolean[] sourceArray;
         switch(actor.getType()){
             case 1:

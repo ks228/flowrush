@@ -16,7 +16,9 @@ import java.util.ArrayList;
 
 //Created by TScissors. Класс Group создает группу актеров HexActor на основании данных ActorInfo из массива ActorList
 
-public class MapActorGroupCreator {
+public class MapCreator {
+
+    private static MapCreator instance;
 
     private Group mapGroup;
 
@@ -26,6 +28,17 @@ public class MapActorGroupCreator {
     private float minCoord = Gdx.graphics.getHeight();
     private float maxCoord;
 
+    public static MapCreator getInstance(){
+        if(instance == null){
+            instance = new MapCreator();
+            FlowRush.logDebug("MapCreator is initialized. Return new instance");
+        }else{
+            FlowRush.logDebug("MapCreator is already initialized. Return existing instance");
+        }
+        return instance;
+    }
+
+    private MapCreator(){}
 
     public Group getGroup(ArrayList<ArrayList<ActorInfo>> list, TextureAtlas atlas) {
         minCoord = Gdx.graphics.getHeight();

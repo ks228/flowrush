@@ -5,7 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.utils.Timer;
 import com.blackhornetworkshop.flowrush.FlowRush;
-import com.blackhornetworkshop.flowrush.UIPool;
+import com.blackhornetworkshop.flowrush.ui.UIPool;
 import com.blackhornetworkshop.flowrush.screens.GameScreen;
 import com.blackhornetworkshop.flowrush.screens.MenuScreen;
 

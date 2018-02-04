@@ -4,18 +4,16 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.blackhornetworkshop.flowrush.FlowRush;
 import com.blackhornetworkshop.flowrush.screens.GameScreen;
+import com.blackhornetworkshop.flowrush.ui.UIPool;
 
 //Created by TScissors. Слушатель правой диалоговой кнопки
 
 public class RightButtonListener extends ClickListener {
-    final private GameScreen gameScreen;
     private boolean isRateButton = false;
-    final LeftButtonListener leftButtonListener;
+    private final LeftButtonListener leftButtonListener;
 
-
-    public RightButtonListener(final GameScreen gameScreen, final LeftButtonListener leftButtonListener){
-        this.gameScreen = gameScreen;
-        this.gameScreen.firstTap = true;
+    public RightButtonListener(final LeftButtonListener leftButtonListener){
+        GameScreen.getInstance().firstTap = true;
         this.leftButtonListener = leftButtonListener;
     }
 
@@ -28,17 +26,17 @@ public class RightButtonListener extends ClickListener {
     }
     @Override
     public void touchUp(InputEvent event, float x, float y, int pointer, int button){
-        if(gameScreen.firstTap) {
-            gameScreen.dialogBack.setText("RATE THE GAME, PLEASE");
-            gameScreen.rightButton.setText("YES, SURE");
-            gameScreen.leftButton.setText("NO, THANKS");
+        if(GameScreen.getInstance().firstTap) {
+            UIPool.getDialogBackground().setText("RATE THE GAME, PLEASE");
+            UIPool.getRightButton().setText("YES, SURE");
+            UIPool.getLeftButton().setText("NO, THANKS");
             isRateButton = true;
             leftButtonListener.isCancelRateButton = true;
-            gameScreen.firstTap = false;
+            GameScreen.getInstance().firstTap = false;
         }else{
             if(isRateButton){
                 FlowRush.getAndroidHelper().openPlaymarket();
-            }else if(!isRateButton){
+            }else{
                 FlowRush.getAndroidHelper().sendMail();
             }
             FlowRush.getInstance().prefs.setShowRateDialog(false);

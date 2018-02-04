@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class LevelLoader {
 
-    private final FlowRush game;
+    private static LevelLoader instance;
 
     private Packs packs;
     private Packs.LevelPack levelPack;
@@ -20,8 +20,17 @@ public class LevelLoader {
     private int pack;
     private int lvl;
 
-    public LevelLoader(FlowRush gam) {
-        game = gam;
+    public static LevelLoader getInstance(){
+        if(instance == null){
+            instance = new LevelLoader();
+            FlowRush.logDebug("LevelLoader is initialized. Return new instance");
+        }else{
+            FlowRush.logDebug("LevelLoader is already initialized. Return existing instance");
+        }
+        return instance;
+    }
+
+    private LevelLoader() {
         try {
             packs = new Gson().fromJson(Gdx.files.internal("lvls/levels.json").reader(), Packs.class);
             //System.out.println("Packs loaded!");
@@ -68,8 +77,8 @@ public class LevelLoader {
     }
 
     private void saveToPrefs() {
-        game.save.setCurrentPack(getPack());
-        game.save.setCurrentLvl(getLvl());
+        FlowRush.getInstance().save.setCurrentPack(getPack());
+        FlowRush.getInstance().save.setCurrentLvl(getLvl());
     }
 
     public boolean containsNext() {
@@ -80,8 +89,8 @@ public class LevelLoader {
         return actorList;
     }
 
-    void reloadActorList() { //restart если отдельно взять метод
-        actorList = game.getGson().fromJson(level.actorListJson, new TypeToken<ArrayList<ArrayList<ActorInfo>>>() {
+    void reloadActorList() { //startNewLevel если отдельно взять метод
+        actorList = FlowRush.getInstance().getGson().fromJson(level.actorListJson, new TypeToken<ArrayList<ArrayList<ActorInfo>>>() {
         }.getType());
     }
 
@@ -94,9 +103,9 @@ public class LevelLoader {
     }
 
     private void checkPackProgress() {
-        if (game.save.getLevelsProgress()[getPack() - 1] < game.save.getCurrentLvl()) { //здесь мы обновляем прогресс пака
+        if (FlowRush.getInstance().save.getLevelsProgress()[getPack() - 1] < FlowRush.getInstance().save.getCurrentLvl()) { //здесь мы обновляем прогресс пака
             //System.out.println("pack progress saved");
-            game.save.setLevelsProgress(getPack() - 1, getLvl());
+            FlowRush.getInstance().save.setLevelsProgress(getPack() - 1, getLvl());
         }
     }
 

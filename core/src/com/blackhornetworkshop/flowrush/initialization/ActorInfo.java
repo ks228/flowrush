@@ -8,14 +8,6 @@ public class ActorInfo {
     private int position; // позиция для выставления angle
     private int include; // 0 - без центра, 1 - с центром источником, 2 - с центром приемником, 3 - с центром передатчиком
 
-    public ActorInfo(){
-
-        index = 0;
-        position = 0;
-        include = 0;
-
-    }
-
     public void setIndex(int index){
         this.index = index;
     }

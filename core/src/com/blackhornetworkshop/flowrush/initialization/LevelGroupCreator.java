@@ -12,13 +12,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.blackhornetworkshop.flowrush.ConstantBase;
 import com.blackhornetworkshop.flowrush.FlowRush;
+import com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener;
 
 public class LevelGroupCreator {
-    final private FlowRush game;
 
-    final private Sprite greyback;
+    private static LevelGroupCreator instance;
 
-    private Group levelGroup;
     private float lvlNumSize;
 
     private float xPos;
@@ -30,14 +29,22 @@ public class LevelGroupCreator {
     private int lvlAvailable;
     private int pack;
 
-    public LevelGroupCreator(FlowRush game){
-        this.game = game;
-        greyback = game.atlas.createSprite("lock");
+    public static LevelGroupCreator getInstance(){
+        if(instance == null){
+            instance = new LevelGroupCreator();
+            FlowRush.logDebug("LevelGroupCreator is initialized. Return new instance");
+        }else{
+            FlowRush.logDebug("LevelGroupCreator is already initialized. Return existing instance");
+        }
+        return instance;
     }
 
-    public Group getLevelGroup(int pack){
+    private LevelGroupCreator(){}
+
+    public Group setupLevelGroup(Group levelGroup, int pack){
+        levelGroup.clear();
         this.pack = pack;
-        lvlAvailable = game.save.getLevelsProgress()[pack-1];
+        lvlAvailable = FlowRush.getInstance().save.getLevelsProgress()[pack-1];
         //System.out.println(lvlAvailable+" available level");
 
         up = (Gdx.graphics.getHeight()*0.98f- ConstantBase.C_BUTTON_SIZE); //верхний отступ
@@ -45,18 +52,18 @@ public class LevelGroupCreator {
 
         lvlNumSize = (up-down)/12;
 
-        createGroup();
+        createGroup(levelGroup);
+
         return levelGroup;
     }
 
-    private void createGroup(){
-        levelGroup = new Group();
-
+    private void createGroup(Group levelGroup){
+        final Sprite greyback = FlowRush.getInstance().atlas.createSprite("lock");
         for (int x = 1; x < 51; x++) {
             final int i = x;
             setPos(x);
             if(x<=lvlAvailable) {
-                TextButton levelNumberButton = new TextButton(""+x, game.skin, "lightblue");
+                TextButton levelNumberButton = new TextButton(""+x, FlowRush.getInstance().skin, "lightblue");
                 levelNumberButton.setSize(lvlNumSize, lvlNumSize);
                 levelNumberButton.setPosition(xPos, yPos);
                 levelNumberButton.setOrigin(lvlNumSize/2, lvlNumSize/2);
@@ -65,12 +72,12 @@ public class LevelGroupCreator {
                 levelNumberButton.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        game.levelLoader.setLvl(pack, i);
+                        LevelLoader.getInstance().setLvl(pack, i);
                         //game.getMenuScreen().dispose();
-                        game.setGameScreen();
+                        FlowRush.getInstance().setGameScreen();
                     }
                 });
-                levelNumberButton.addListener(new com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener(levelNumberButton));
+                levelNumberButton.addListener(new ButtonScaleListener());
                 levelGroup.addActor(levelNumberButton);
             }else{
                 Actor levelLock = new Actor(){
@@ -82,7 +89,7 @@ public class LevelGroupCreator {
                 levelLock.setSize(lvlNumSize, lvlNumSize);
                 levelLock.setPosition(xPos, yPos);
                 levelLock.setOrigin(lvlNumSize/2, lvlNumSize/2);
-                levelLock.addListener(new com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener(levelLock));
+                levelLock.addListener(new ButtonScaleListener());
                 levelGroup.addActor(levelLock);
             }
         }

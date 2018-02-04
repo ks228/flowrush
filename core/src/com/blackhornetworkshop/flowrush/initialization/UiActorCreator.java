@@ -30,7 +30,7 @@ public class UiActorCreator {
         smallButtonActor.setName(name);
         smallButtonActor.setSprite(sprite);
         if (isScalable) {
-            smallButtonActor.addListener(new ButtonScaleListener(smallButtonActor));
+            smallButtonActor.addListener(new ButtonScaleListener());
         }
         return smallButtonActor;
     }
@@ -141,7 +141,7 @@ public class UiActorCreator {
                 textButton.setSize(Gdx.graphics.getWidth() * 0.4f, ConstantBase.C_BUTTON_SIZE * 0.8f);
                 textButton.setPosition((Gdx.graphics.getWidth() - textButton.getWidth()) / 2, (Gdx.graphics.getHeight() - Gdx.graphics.getHeight()*0.35f) / 4 * 3 - ConstantBase.C_BUTTON_SIZE * 2.9f);
                 textButton.setVisible(false);
-                textButton.addListener(new ButtonScaleListener(textButton) {
+                textButton.addListener(new ButtonScaleListener() {
                     @Override
                     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                         //game.getGameScreen().dispose();
@@ -160,7 +160,7 @@ public class UiActorCreator {
                 textButton.setSize(Gdx.graphics.getWidth() * 0.5f, ConstantBase.C_BUTTON_SIZE);
                 textButton.setPosition((Gdx.graphics.getWidth() - textButton.getWidth()) / 2, (Gdx.graphics.getHeight() - Gdx.graphics.getHeight()*0.35f) / 4 * 3 - ConstantBase.C_BUTTON_SIZE* 2);
                 textButton.setVisible(false);
-                textButton.addListener(new com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener(textButton) {
+                textButton.addListener(new ButtonScaleListener() {
                     @Override
                     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                         FlowRush.getInstance().setGameScreen();
@@ -171,7 +171,7 @@ public class UiActorCreator {
                 textButton = new TextButton("EXIT", FlowRush.getInstance().skin, "lightblue");
                 textButton.setSize(Gdx.graphics.getWidth() * 0.7f, ConstantBase.C_BUTTON_SIZE);
                 textButton.setPosition((Gdx.graphics.getWidth() - textButton.getWidth()) / 2, (Gdx.graphics.getHeight() - ConstantBase.C_BUTTON_SIZE * 4 - ConstantBase.C_BUTTON_SIZE * 1.3f - textButton.getHeight() * 2.2f));
-                textButton.addListener(new ButtonScaleListener(textButton) {
+                textButton.addListener(new ButtonScaleListener() {
                     @Override
                     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                         Gdx.app.exit(); // DISPOSE ??????????????????????????????????????????????????????????????????
@@ -262,7 +262,7 @@ public class UiActorCreator {
     public static TextButton getPackTextButton(int pack) { //актеры отвечающие за переход на нужный пак
         TextButton textButton;
 
-        if(FlowRush.getInstance().levelLoader.getLevelPack(pack-1).available) {
+        if(LevelLoader.getInstance().getLevelPack(pack-1).available) {
             textButton = new TextButton("", FlowRush.getInstance().skin, "darkblue");
         } else {
             textButton = new TextButton("", FlowRush.getInstance().skin, "alphablackgrey");
@@ -349,16 +349,16 @@ public class UiActorCreator {
             case 3://Иконка рестарта уровня
                 SmallButtonActor restartButton = createSmallButtonActor(ConstantBase.C_BUTTON_SIZE + Gdx.graphics.getHeight() * 0.05f, 0.0f, ConstantBase.C_BUTTON_SIZE, ConstantBase.C_BUTTON_SIZE, true, "", FlowRush.getInstance().atlas.createSprite("restart_icon"), false);
 
-                restartButton.addListener(new com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener(restartButton) {
+                restartButton.addListener(new ButtonScaleListener() {
                     @Override
                     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                         if(FlowRush.getInstance().screenType== ConstantBase.ScreenType.GAME_LVL_COMPLETE_PAUSE){
-                            FlowRush.getInstance().levelLoader.prevLvl();
+                            LevelLoader.getInstance().prevLvl();
                             FlowRush.getInstance().screenType = ConstantBase.ScreenType.GAME;
-                            GameScreen.getInstance().restart();
+                            GameScreen.getInstance().startNewLevel();
                         }else {
-                            FlowRush.getInstance().levelLoader.reloadActorList();
-                            GameScreen.getInstance().restart();
+                            LevelLoader.getInstance().reloadActorList();
+                            GameScreen.getInstance().startNewLevel();
                         }
                     }
                 });
@@ -539,7 +539,7 @@ public class UiActorCreator {
                             GameScreen.getInstance().showPackComplete();
                             nextButton.setName("");
                         }else {
-                            GameScreen.getInstance().restart();
+                            GameScreen.getInstance().startNewLevel();
                         }
                     }
                 });

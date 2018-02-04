@@ -6,15 +6,14 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.blackhornetworkshop.flowrush.FlowRush;
 import com.blackhornetworkshop.flowrush.screens.GameScreen;
+import com.blackhornetworkshop.flowrush.ui.UIPool;
 
 public class LeftButtonListener extends ClickListener{
-    final private GameScreen gameScreen;
     public boolean isCancelRateButton;
 
 
-    public LeftButtonListener(final GameScreen gameScreen){
-        this.gameScreen = gameScreen;
-        this.gameScreen.firstTap = true;
+    public LeftButtonListener(){
+        GameScreen.getInstance().firstTap = true;
         isCancelRateButton = false;
 
     }
@@ -28,11 +27,11 @@ public class LeftButtonListener extends ClickListener{
     }
     @Override
     public void touchUp(InputEvent event, float x, float y, int pointer, int button){
-        if(gameScreen.firstTap) {
-            gameScreen.dialogBack.setText("SEND US FEEDBACK, PLEASE");
-            gameScreen.leftButton.setText("NO, THANKS");
-            gameScreen.rightButton.setText("YES");
-            gameScreen.firstTap = false;
+        if(GameScreen.getInstance().firstTap) {
+            UIPool.getDialogBackground().setText("SEND US FEEDBACK, PLEASE");
+            UIPool.getLeftButton().setText("NO, THANKS");
+            UIPool.getRightButton().setText("YES");
+            GameScreen.getInstance().firstTap = false;
         }else{
             if(!isCancelRateButton){
                 FlowRush.getInstance().prefs.setShowRateDialog(false);

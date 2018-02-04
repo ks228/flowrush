@@ -12,7 +12,7 @@ import com.blackhornetworkshop.flowrush.screens.GameScreen;
 
 public class SourceChecker { //основная логика игры находится тут
 
-    private GameScreen gameScreen;
+    private static SourceChecker instance;
 
     private TileActor actor;
     private Group group;
@@ -23,12 +23,23 @@ public class SourceChecker { //основная логика игры наход
     private boolean doveIsOn;
     private int numReceiversOn = 0;
 
-    public void initialization(GameScreen gameScrn, Group mapGroup) {
-        this.gameScreen = gameScrn;
+    public static SourceChecker getInstance(){
+        if(instance == null){
+            instance = new SourceChecker();
+            FlowRush.logDebug("SourceChecker is initialized. Return new instance");
+        }else{
+            FlowRush.logDebug("SourceChecker is already initialized. Return existing instance");
+        }
+        return instance;
+    }
+
+    private SourceChecker(){}
+
+    public void initialization(Group mapGroup) {
         group = mapGroup;
         clearFields();
-        for (int x = 0; x < gameScreen.specialActorsArray.size(); x++) {
-            actor = gameScreen.specialActorsArray.get(x);
+        for (int x = 0; x < GameScreen.getInstance().specialActorsArray.size(); x++) {
+            actor = GameScreen.getInstance().specialActorsArray.get(x);
             if (actor.getInclude() == 3) {
                 doveArray.add(actor); //заполняем массив голубей
             }
@@ -46,8 +57,8 @@ public class SourceChecker { //основная логика игры наход
     public void checkAndSetActor() {
         disconnectAll();
 
-        for (int x = 0; x < gameScreen.groupArray.size(); x++) {
-            actor = gameScreen.groupArray.get(x);
+        for (int x = 0; x < GameScreen.getInstance().groupArray.size(); x++) {
+            actor = GameScreen.getInstance().groupArray.get(x);
             if (actor.getInclude() == 1) {
                 sourceArrayMain = actor.getSourceArray();
                 tempoHexArray.add(actor); //первый член в массиве
@@ -83,23 +94,23 @@ public class SourceChecker { //основная логика игры наход
                 }
             }
         }
-        for (int x = 0; x < gameScreen.specialActorsArray.size(); x++) { //тут и ниже проверка на победу
-            actor = gameScreen.specialActorsArray.get(x);
+        for (int x = 0; x < GameScreen.getInstance().specialActorsArray.size(); x++) { //тут и ниже проверка на победу
+            actor = GameScreen.getInstance().specialActorsArray.get(x);
             if (actor.getInclude() == 2 && actor.isPowerOn()) {
                 numReceiversOn += 1;
             }
         }
-        if (gameScreen.numOfReceivers == numReceiversOn) {
-            gameScreen.inputMultiplexer.removeProcessor(gameScreen.stage);//отключает касание к тайлам пока не выскочил lvlCompleteActor
-            for (int i = 0; i < gameScreen.groupArray.size(); i++) {
-                TileController.setHexbackTouchOn(gameScreen.groupArray.get(i), FlowRush.getInstance().atlas);
+        if (GameScreen.numOfReceivers == numReceiversOn) {
+            GameScreen.getInstance().inputMultiplexer.removeProcessor(GameScreen.getInstance().mainStage);//отключает касание к тайлам пока не выскочил lvlCompleteActor
+            for (int i = 0; i < GameScreen.getInstance().groupArray.size(); i++) {
+                TileController.setHexbackTouchOn(GameScreen.getInstance().groupArray.get(i), FlowRush.getInstance().atlas);
             }
 
             Timer.instance().start();
             Timer.schedule(new Timer.Task() { //ждем посде сборки перед переходом на след уровень
                 @Override
                 public void run() {
-                    gameScreen.levelComplete();
+                    GameScreen.getInstance().levelComplete();
                 }
             }, 0.5f);
         }
@@ -119,10 +130,10 @@ public class SourceChecker { //основная логика игры наход
 
         if (group.findActor(name) != null) {
             TileActor actorTempo = group.findActor(name);
-            if (actorTempo.isPowerOn() == false) {
+            if (!actorTempo.isPowerOn()) {
                 boolean[] sourceArrayTempo = actorTempo.getSourceArray();
 
-                if (sourceArrayMain[side] == true && sourceArrayTempo[side2] == true) { //сравниваем две стороны основго актера и "соседа"
+                if (sourceArrayMain[side] && sourceArrayTempo[side2]) { //сравниваем две стороны основго актера и "соседа"
                     com.blackhornetworkshop.flowrush.gameplay.TileController.setPowerOn(actorTempo, FlowRush.getInstance().atlas);
                     tempoHexArray.add(actorTempo);
                     if (actorTempo.getInclude() == 3) {
@@ -133,7 +144,7 @@ public class SourceChecker { //основная логика игры наход
         }
     }
 
-    public void checkActor(TileActor actor) { //проверяет конкретно оддного актера по всем соседним позициям
+    private void checkActor(TileActor actor) { //проверяет конкретно оддного актера по всем соседним позициям
 
         int x, y;
 
@@ -170,13 +181,13 @@ public class SourceChecker { //основная логика игры наход
 
     }
 
-    public void disconnectAll() { //все отрубает
+    private void disconnectAll() { //все отрубает
         tempoHexArray.clear();
         numReceiversOn = 0;
-        for (int x = 0; x < gameScreen.groupArray.size(); x++) {
-            actor = gameScreen.groupArray.get(x);
+        for (int x = 0; x < GameScreen.getInstance().groupArray.size(); x++) {
+            actor = GameScreen.getInstance().groupArray.get(x);
             if (actor.getInclude() != 1) {
-                TileController.setPowerOff(actor, gameScreen.iconWhite, FlowRush.getInstance().atlas);
+                TileController.setPowerOff(actor, GameScreen.getInstance().iconWhite, FlowRush.getInstance().atlas);
             }
         }
         doveIsOn = false;
