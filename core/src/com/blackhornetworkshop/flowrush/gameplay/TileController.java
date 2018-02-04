@@ -1,6 +1,7 @@
 package com.blackhornetworkshop.flowrush.gameplay;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.blackhornetworkshop.flowrush.FRAssetManager;
 
 //Created by TScissors. Класс с методами для управления тайлами
 
@@ -29,67 +30,67 @@ public class TileController {
         actor.setSources(sourceArray);
     }
 
-    public static void setHexbackTouchOff(TileActor actor, TextureAtlas atlas) {
+    public static void setHexbackTouchOff(TileActor actor) {
         if (actor.getIndex() < 25) {
-            actor.setHexback(atlas.createSprite("backhex"));
+            actor.setHexback(FRAssetManager.getAtlas().createSprite("backhex"));
         } else if (actor.getIndex() > 24) {
-            actor.setHexback(atlas.createSprite("backhexS"));
+            actor.setHexback(FRAssetManager.getAtlas().createSprite("backhexS"));
         }
     }
 
-    public static void setHexbackTouchOn(TileActor actor, TextureAtlas atlas) {
+    public static void setHexbackTouchOn(TileActor actor) {
         if (actor.getIndex() < 25) {
-            actor.setHexback(atlas.createSprite("backhex_touched"));
+            actor.setHexback(FRAssetManager.getAtlas().createSprite("backhex_touched"));
         } else if (actor.getIndex() > 24) {
-            actor.setHexback(atlas.createSprite("backhex_touchedS"));
+            actor.setHexback(FRAssetManager.getAtlas().createSprite("backhex_touchedS"));
         }
     }
 
-    static void setPowerOn(TileActor actor, TextureAtlas atlas) {
+    static void setPowerOn(TileActor actor) {
         actor.setPowerOn();
         if (actor.getIndex() < 13) {
             actor.setIndex(actor.getIndex() + 12);
         } else if (actor.getIndex() > 24 & actor.getIndex() < 38) {
             actor.setIndex(actor.getIndex() + 13);
         }
-        actor.setSprite(atlas.createSprite("hex", actor.getIndex()));
+        actor.setSprite(FRAssetManager.getAtlas().createSprite("hex", actor.getIndex()));
         actor.getActorInfo().setIndex(actor.getIndex());
         if (actor.getInclude() == 1) {
-            actor.setIcon(atlas.createSprite("iconMP"));
+            actor.setIcon(FRAssetManager.getAtlas().createSprite("iconMP"));
         } else if (actor.getInclude() == 2) {
-            actor.setIcon(atlas.createSprite("iconEP"));
+            actor.setIcon(FRAssetManager.getAtlas().createSprite("iconEP"));
         } else if (actor.getInclude() == 3) {
-            actor.setIcon(atlas.createSprite("iconDP"));
+            actor.setIcon(FRAssetManager.getAtlas().createSprite("iconDP"));
         }
     }
 
-    static void setPowerOff(TileActor actor, boolean iconWhite, TextureAtlas atlas) {
+    static void setPowerOff(TileActor actor, boolean iconWhite) {
         actor.setPowerOff();
         if (actor.getIndex() > 12 & actor.getIndex() < 25) {
             actor.setIndex(actor.getIndex() - 12);
         } else if (actor.getIndex() > 37 & actor.getIndex() < 51) {
             actor.setIndex(actor.getIndex() - 13);
         }
-        actor.setSprite(atlas.createSprite("hex", actor.getIndex()));
+        actor.setSprite(FRAssetManager.getAtlas().createSprite("hex", actor.getIndex()));
         actor.getActorInfo().setIndex(actor.getIndex());
         if (actor.getInclude() == 1) {
-            actor.setIcon(atlas.createSprite("iconMP"));
+            actor.setIcon(FRAssetManager.getAtlas().createSprite("iconMP"));
         } else if (actor.getInclude() == 2) {
             if (iconWhite) {
-                actor.setIcon(atlas.createSprite("iconEW"));
+                actor.setIcon(FRAssetManager.getAtlas().createSprite("iconEW"));
             } else {
-                actor.setIcon(atlas.createSprite("iconE"));
+                actor.setIcon(FRAssetManager.getAtlas().createSprite("iconE"));
             }
         } else if (actor.getInclude() == 3) {
-            actor.setIcon(atlas.createSprite("iconD"));
+            actor.setIcon(FRAssetManager.getAtlas().createSprite("iconD"));
         }
     }
 
-    public static void animIcon(TileActor actor, boolean iconWhite, TextureAtlas atlas) {
+    public static void animIcon(TileActor actor, boolean iconWhite) {
         if (iconWhite) {
-            actor.setIcon(atlas.createSprite("iconE"));
+            actor.setIcon(FRAssetManager.getAtlas().createSprite("iconE"));
         } else {
-            actor.setIcon(atlas.createSprite("iconEW"));
+            actor.setIcon(FRAssetManager.getAtlas().createSprite("iconEW"));
         }
     }
 

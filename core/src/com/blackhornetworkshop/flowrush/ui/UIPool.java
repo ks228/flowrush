@@ -14,7 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
-import com.blackhornetworkshop.flowrush.ConstantBase;
+import com.blackhornetworkshop.flowrush.FRAssetManager;
+import com.blackhornetworkshop.flowrush.FRConstants;
 import com.blackhornetworkshop.flowrush.FlowRush;
 import com.blackhornetworkshop.flowrush.initialization.LevelLoader;
 import com.blackhornetworkshop.flowrush.initialization.UiActorCreator;
@@ -25,6 +26,13 @@ import com.blackhornetworkshop.flowrush.screens.GameScreen;
 import com.blackhornetworkshop.flowrush.screens.MenuScreen;
 
 public class UIPool {
+
+    //----------------------- COMMON
+
+    private static Group backgroundAnimation;
+    private static TapOnTileActor tapOnTileActor;
+    private static SmallButtonActor soundButton;
+    private static Label pauseBackground, levelNumberActor;
 
     //------------------------ MENU
 
@@ -94,30 +102,63 @@ public class UIPool {
 
     public static void initialize() {
 
+        //----------------------- COMMON
+
+        levelNumberActor = new Label("", FRAssetManager.getSkin(), "greyfont");
+        levelNumberActor.setSize(FRConstants.C_BUTTON_SIZE, FRConstants.C_BUTTON_SIZE);
+        levelNumberActor.setPosition(Gdx.graphics.getWidth() - levelNumberActor.getWidth(), Gdx.graphics.getHeight()-levelNumberActor.getHeight());
+        levelNumberActor.setAlignment(Align.center);
+
+        pauseBackground = new Label("", FRAssetManager.getSkin(), "alphawhite");
+        pauseBackground.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        pauseBackground.setVisible(false);
+        pauseBackground.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button){
+                if(FlowRush.getInstance().screenType == FRConstants.ScreenType.GAME_PAUSE){
+                    GameScreen.getInstance().resume();
+                }
+            }
+        });
+
+        soundButton = UiActorCreator.getSmallButtonActor(5);
+
+        tapOnTileActor = new TapOnTileActor(FRAssetManager.getAtlas().createSprite("animbackhex"));
+
+        backgroundAnimation = new Group();
+        for (int type = 1; type < 5; type++) {
+            backgroundAnimation.addActor(UiActorCreator.getBackgroundActor(type, false));
+            backgroundAnimation.addActor(UiActorCreator.getBackgroundActor(type, true));
+        }
+
         //------------------------------------- MENU
 
         //Main menu parts
         menuLabel = UiActorCreator.getTextButton(7);
         menuLabel.setText("SUPPORT US");
 
-        innerLayout = new Label("", FlowRush.getInstance().skin, "default");
-        innerLayout.setSize(Gdx.graphics.getWidth() * 0.9f, (((Gdx.graphics.getHeight() * 0.98f - ConstantBase.C_BUTTON_SIZE)) + (ConstantBase.C_BUTTON_SIZE) / 2) - (ConstantBase.C_BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f)); // размеры up и down иннерскрин? высчитываем через высоту textButton любого выше высчитываем через высоту кнопки circle button back
-        innerLayout.setPosition((Gdx.graphics.getWidth() - innerLayout.getWidth()) / 2, ConstantBase.C_BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f);
+        innerLayout = new Label("", FRAssetManager.getSkin(), "default");
+        innerLayout.setSize(Gdx.graphics.getWidth() * 0.9f, (((Gdx.graphics.getHeight() * 0.98f - FRConstants.C_BUTTON_SIZE)) + (FRConstants.C_BUTTON_SIZE) / 2) - (FRConstants.C_BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f)); // размеры up и down иннерскрин? высчитываем через высоту textButton любого выше высчитываем через высоту кнопки circle button back
+        innerLayout.setPosition((Gdx.graphics.getWidth() - innerLayout.getWidth()) / 2, FRConstants.C_BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f);
         innerLayout.setVisible(false);
 
-        messageBackground = new Label("development\nTIMUR SCISSORS\n\ndesign\nSONYA KOVALSKI\n\nmusic\nERIC HOPTON", FlowRush.getInstance().skin, "default");
+        messageBackground = new Label("development\nTIMUR SCISSORS\n\ndesign\nSONYA KOVALSKI\n\nmusic\nERIC HOPTON", FRAssetManager.getSkin(), "default");
         messageBackground.setVisible(false);
         messageBackground.setAlignment(Align.top);
         messageBackground.setWrap(true);
 
         labelContainer = new Container<Label>(messageBackground); //Контейнер нужен для того чтобы сделать перенос строки
         labelContainer.fill();
-        labelContainer.setSize(innerLayout.getWidth() * 0.9f, (innerLayout.getHeight() - ConstantBase.C_BUTTON_SIZE) * 0.95f);
-        labelContainer.setPosition((Gdx.graphics.getWidth() - innerLayout.getWidth() * 0.9f) / 2, innerLayout.getY() + ConstantBase.C_BUTTON_SIZE / 2 + (innerLayout.getHeight() - ConstantBase.C_BUTTON_SIZE) * 0.05f / 2);
+        labelContainer.setSize(innerLayout.getWidth() * 0.9f, (innerLayout.getHeight() - FRConstants.C_BUTTON_SIZE) * 0.95f);
+        labelContainer.setPosition((Gdx.graphics.getWidth() - innerLayout.getWidth() * 0.9f) / 2, innerLayout.getY() + FRConstants.C_BUTTON_SIZE / 2 + (innerLayout.getHeight() - FRConstants.C_BUTTON_SIZE) * 0.05f / 2);
 
-        closeButton = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getSmallButtonActor(6);
+        closeButton = UiActorCreator.getSmallButtonActor(6);
 
-        final Sprite backgroundWhite = FlowRush.getInstance().atlas.createSprite("back_white");
+        final Sprite backgroundWhite = FRAssetManager.getAtlas().createSprite("back_white");
         whiteBackActor = new Image() {
             public void draw(Batch batch, float alpha) {
                 batch.draw(backgroundWhite, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
@@ -145,11 +186,11 @@ public class UIPool {
         exitButton.setVisible(false);
 
         packGroup = new Group();
-        for(int x = 1; x<6; x++){
+        for (int x = 1; x < 6; x++) {
             final int p = x;
             TextButton packButton = UiActorCreator.getPackTextButton(p);
             packButton.addListener(new ButtonScaleListener());
-            if(LevelLoader.getInstance().getLevelPack(p-1).available) {
+            if (LevelLoader.getInstance().getLevelPack(p - 1).available) {
                 packButton.addListener(new ClickListener() {
                     @Override
                     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -213,43 +254,43 @@ public class UIPool {
         quadrant = new Actor() {
             @Override
             public void draw(Batch batch, float alpha) {
-                batch.draw(FlowRush.getInstance().qCircle, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+                batch.draw(FRAssetManager.getqCircle(), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
             }
         };
-        quadrant.setSize(ConstantBase.C_BUTTON_SIZE*2 + Gdx.graphics.getHeight() * 0.1f, ConstantBase.C_BUTTON_SIZE*2 + Gdx.graphics.getHeight() * 0.1f);
+        quadrant.setSize(FRConstants.C_BUTTON_SIZE * 2 + Gdx.graphics.getHeight() * 0.1f, FRConstants.C_BUTTON_SIZE * 2 + Gdx.graphics.getHeight() * 0.1f);
         quadrant.setPosition(0, 0);
 
 
         //Level complete elements
         nextLevelButton = UiActorCreator.getSmallButtonActor(12);
         wellDonehex = UiActorCreator.getSmallButtonActor(11);
-        wellDoneLabel = new Label("WELL DONE!", FlowRush.getInstance().skin, "darkblue");
-        wellDoneLabel.setSize(Gdx.graphics.getWidth() * 0.6f, ConstantBase.C_BUTTON_SIZE * 0.7f);
-        wellDoneLabel.setPosition((Gdx.graphics.getWidth() - wellDoneLabel.getWidth()) / 2, Gdx.graphics.getHeight() - ConstantBase.C_BUTTON_SIZE * 0.85f);
+        wellDoneLabel = new Label("WELL DONE!", FRAssetManager.getSkin(), "darkblue");
+        wellDoneLabel.setSize(Gdx.graphics.getWidth() * 0.6f, FRConstants.C_BUTTON_SIZE * 0.7f);
+        wellDoneLabel.setPosition((Gdx.graphics.getWidth() - wellDoneLabel.getWidth()) / 2, Gdx.graphics.getHeight() - FRConstants.C_BUTTON_SIZE * 0.85f);
         wellDoneLabel.setAlignment(Align.center);
         wellDoneLabel.setVisible(false);
 
         //Pack complete elements
-        packCompleteUpperHex = new PackCompleteActor(FlowRush.getInstance().atlas, FlowRush.getInstance().skin.getFont("fontMid"), FlowRush.getInstance().save.getPackName());
-        packCompleteLowerHex = new PackBackActor(FlowRush.getInstance().atlas);
+        packCompleteUpperHex = new PackCompleteActor(FRAssetManager.getSkin().getFont("fontMid"), FlowRush.getInstance().save.getPackName());
+        packCompleteLowerHex = new PackBackActor(FRAssetManager.getAtlas());
         packCompleteMenuButton = UiActorCreator.getTextButton(9);
         packCompleteNextPackButton = UiActorCreator.getTextButton(12);
         packCompleteNextPackButton.setName("");
 
-        dialogBackground = new Label("ENJOYING  FLOW RUSH?", FlowRush.getInstance().skin, "darkbluesmall");
-        dialogBackground.setSize(Gdx.graphics.getWidth(), ConstantBase.C_BUTTON_SIZE * 1.45f);
+        dialogBackground = new Label("ENJOYING  FLOW RUSH?", FRAssetManager.getSkin(), "darkbluesmall");
+        dialogBackground.setSize(Gdx.graphics.getWidth(), FRConstants.C_BUTTON_SIZE * 1.45f);
         dialogBackground.setPosition(0, 0);
         dialogBackground.setAlignment(Align.top);
 
         leftButton = UiActorCreator.getTextButton(10);
-        leftButton.setStyle(FlowRush.getInstance().skin.get("bordersmall", TextButton.TextButtonStyle.class));
+        leftButton.setStyle(FRAssetManager.getSkin().get("bordersmall", TextButton.TextButtonStyle.class));
         leftButton.setText("NOT SURE");
         leftButton.addListener(new ButtonScaleListener());
         LeftButtonListener leftButtonListener = new LeftButtonListener();
         leftButton.addListener(leftButtonListener);
 
         rightButton = UiActorCreator.getTextButton(10);
-        rightButton.setStyle(FlowRush.getInstance().skin.get("whitesmall", TextButton.TextButtonStyle.class));
+        rightButton.setStyle(FRAssetManager.getSkin().get("whitesmall", TextButton.TextButtonStyle.class));
         rightButton.setText("YES!");
         rightButton.setX((Gdx.graphics.getWidth() - rightButton.getWidth() * 2) / 3 * 2 + rightButton.getWidth());
         rightButton.addListener(new ButtonScaleListener());
@@ -257,8 +298,30 @@ public class UIPool {
 
     }
 
+    //-------------------------------------------------------- COMMON ELEMENTS
 
-    //Main menu elements
+    public static Label getLevelNumberActor() {
+        return levelNumberActor;
+    }
+
+    public static Label getPauseBackground() {
+        return pauseBackground;
+    }
+
+    public static SmallButtonActor getSoundButton() {
+        return soundButton;
+    }
+
+    public static TapOnTileActor getTapOnTileActor() {
+        return tapOnTileActor;
+    }
+
+    public static Group getBackgroundAnimation() {
+        return backgroundAnimation;
+    }
+
+
+    //-----------------------------------------------------------  MAIN MENU ELEMENTS
 
     public static SmallButtonActor getFacebookButton() {
         return facebookButton;
@@ -304,7 +367,9 @@ public class UIPool {
         return playButton;
     }
 
-    public static Actor getWhiteBackActorTop() {return whiteBackActorTop;}
+    public static Actor getWhiteBackActorTop() {
+        return whiteBackActorTop;
+    }
 
     public static Actor getWhiteBackActor() {
         return whiteBackActor;
@@ -354,39 +419,73 @@ public class UIPool {
         return googlePlayButton;
     }
 
-    public static Group getPackGroup() { return packGroup; }
+    public static Group getPackGroup() {
+        return packGroup;
+    }
 
-    public static Group getLevelGroup() { return levelGroup; }
+    public static Group getLevelGroup() {
+        return levelGroup;
+    }
 
-    //Game screen elements
+    //---------------------------------------------- Game screen elements
 
-    public static SmallButtonActor getPauseButton() { return pauseButton; }
+    public static SmallButtonActor getPauseButton() {
+        return pauseButton;
+    }
 
-    public static SmallButtonActor getRestartButton() { return restartButton; }
+    public static SmallButtonActor getRestartButton() {
+        return restartButton;
+    }
 
-    public static SmallButtonActor getMainMenuButton() { return mainMenuButton; }
+    public static SmallButtonActor getMainMenuButton() {
+        return mainMenuButton;
+    }
 
-    public static SmallButtonActor getBackButton() { return backButton; }
+    public static SmallButtonActor getBackButton() {
+        return backButton;
+    }
 
-    public static Actor getQuadrant() { return quadrant; }
+    public static Actor getQuadrant() {
+        return quadrant;
+    }
 
-    public static Label getWellDoneLabel() { return wellDoneLabel; }
+    public static Label getWellDoneLabel() {
+        return wellDoneLabel;
+    }
 
-    public static SmallButtonActor getNextLevelButton() { return nextLevelButton; }
+    public static SmallButtonActor getNextLevelButton() {
+        return nextLevelButton;
+    }
 
-    public static SmallButtonActor getWellDonehex() { return wellDonehex; }
+    public static SmallButtonActor getWellDonehex() {
+        return wellDonehex;
+    }
 
-    public static PackBackActor getPackCompleteLowerHex() { return packCompleteLowerHex; }
+    public static PackBackActor getPackCompleteLowerHex() {
+        return packCompleteLowerHex;
+    }
 
-    public static TextButton getPackCompleteMenuButton() { return packCompleteMenuButton; }
+    public static TextButton getPackCompleteMenuButton() {
+        return packCompleteMenuButton;
+    }
 
-    public static TextButton getPackCompleteNextPackButton() { return packCompleteNextPackButton; }
+    public static TextButton getPackCompleteNextPackButton() {
+        return packCompleteNextPackButton;
+    }
 
-    public static PackCompleteActor getPackCompleteUpperHex() { return packCompleteUpperHex; }
+    public static PackCompleteActor getPackCompleteUpperHex() {
+        return packCompleteUpperHex;
+    }
 
-    public static TextButton getLeftButton() { return leftButton; }
+    public static TextButton getLeftButton() {
+        return leftButton;
+    }
 
-    public static TextButton getRightButton() { return rightButton; }
+    public static TextButton getRightButton() {
+        return rightButton;
+    }
 
-    public static Label getDialogBackground() { return dialogBackground; }
+    public static Label getDialogBackground() {
+        return dialogBackground;
+    }
 }

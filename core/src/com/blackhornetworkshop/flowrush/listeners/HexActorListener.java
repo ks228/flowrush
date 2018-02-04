@@ -6,11 +6,10 @@ import com.badlogic.gdx.scenes.scene2d.actions.RotateToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.blackhornetworkshop.flowrush.FlowRush;
 import com.blackhornetworkshop.flowrush.gameplay.SourceChecker;
 import com.blackhornetworkshop.flowrush.gameplay.TileActor;
 import com.blackhornetworkshop.flowrush.gameplay.TileController;
-import com.blackhornetworkshop.flowrush.screens.GameScreen;
+import com.blackhornetworkshop.flowrush.ui.UIPool;
 
 //Created by TScissors. Класс слушатель классов HexActor, очищает, поворачивает, изменяет тип, запускает анимацию фона клетки
 
@@ -24,10 +23,7 @@ public class HexActorListener extends ClickListener {
     private RotateToAction rotateToAction1, rotateToAction2;
     private SequenceAction sequenceAction;
 
-    final private GameScreen gameScreen;
-
-    public HexActorListener(TileActor actor, GameScreen gameScreen) {
-        this.gameScreen = gameScreen;
+    public HexActorListener(TileActor actor) {
         this.actor = actor;
 
         scaleToAction = new ScaleToAction();
@@ -65,12 +61,12 @@ public class HexActorListener extends ClickListener {
             }
 
         }
-        TileController.setHexbackTouchOn(actor, FlowRush.getInstance().atlas);
+        TileController.setHexbackTouchOn(actor);
         return true;
     }
     @Override
     public void touchUp(InputEvent event, float x, float y, int pointer, int button){
-        TileController.setHexbackTouchOff(actor, FlowRush.getInstance().atlas);
+        TileController.setHexbackTouchOff(actor);
 
         if (actor.isRotable()) {
             scaleToAction.setScale(1f, 1f);
@@ -105,7 +101,7 @@ public class HexActorListener extends ClickListener {
             actor.addAction(sequenceAction);
         }
 
-        FlowRush.getInstance().tapOnTileActor.goAnim(actor.getX(), actor.getY());
+        UIPool.getTapOnTileActor().goAnim(actor.getX(), actor.getY());
     }
 
 }

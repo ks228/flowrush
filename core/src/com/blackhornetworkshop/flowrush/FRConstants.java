@@ -2,20 +2,16 @@ package com.blackhornetworkshop.flowrush;
 
 import com.badlogic.gdx.*;
 
-public class ConstantBase
-{
-    public static final float C_BUTTON_SIZE;
-    public static final float HEX_HEIGHT;
-    public static final float HEX_WIDTH;
+public class FRConstants {
 
-    static {
-        C_BUTTON_SIZE = Gdx.graphics.getHeight() / 12;
-        HEX_WIDTH = Gdx.graphics.getWidth() / 5;
-        HEX_HEIGHT = Gdx.graphics.getWidth() / 5 * 0.86585367f;
-    }
+    public static final String TAG = "FlowRush";
+    public static final boolean IS_DEBUG = true;
 
-    public enum ScreenType
-    {
+    public static final float C_BUTTON_SIZE = Gdx.graphics.getHeight() / 12;
+    public static final float HEX_HEIGHT = Gdx.graphics.getWidth() / 5;
+    public static final float HEX_WIDTH = Gdx.graphics.getWidth() / 5 * 0.86585367f;
+
+    public enum ScreenType {
         GAME,
         GAME_LVL_COMPLETE,
         GAME_LVL_COMPLETE_PAUSE,

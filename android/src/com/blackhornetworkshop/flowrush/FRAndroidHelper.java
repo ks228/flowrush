@@ -2,22 +2,17 @@ package com.blackhornetworkshop.flowrush;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.widget.Toast;
 
 public class FRAndroidHelper implements AndroidHelper {
 
-    private static FRAndroidHelper instance;
+    private static final FRAndroidHelper instance = new FRAndroidHelper();
 
     private AndroidLauncher app;
     private String fbUrl, twUrl, vkUrl, appPackageName;
 
     static FRAndroidHelper getInstance(){
-        if (instance == null) {
-            FRLogger.logDebug("Play Services are initialized. Return new instance");
-            instance = new FRAndroidHelper();
-        } else {
-            FRLogger.logDebug("Play Services are already initialized. Return existing instance");
-        }
         return instance;
     }
 
@@ -75,17 +70,16 @@ public class FRAndroidHelper implements AndroidHelper {
     }
 
     @Override
-    public boolean isDebug() {return FRLogger.isDebug();}
-
-    @Override
     public void logError(String msg, Throwable tr) {
-        FRLogger.logError(msg, tr);
+        Log.e(FRConstants.TAG, msg, tr);
         showToast(msg);
     }
 
     @Override
     public void logDebug(String msg) {
-        FRLogger.logDebug(msg);
+        if(FRConstants.IS_DEBUG) {
+            Log.d(FRConstants.TAG, msg);
+        }
     }
 
     private void showToast(final String msg) {

@@ -5,12 +5,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
-import com.blackhornetworkshop.flowrush.ConstantBase;
+import com.blackhornetworkshop.flowrush.FRAssetManager;
+import com.blackhornetworkshop.flowrush.FRConstants;
 import com.blackhornetworkshop.flowrush.FlowRush;
 import com.blackhornetworkshop.flowrush.gameplay.TileActor;
 import com.blackhornetworkshop.flowrush.gameplay.TileController;
 import com.blackhornetworkshop.flowrush.listeners.HexActorListener;
 import com.blackhornetworkshop.flowrush.screens.GameScreen;
+import com.blackhornetworkshop.flowrush.ui.UIPool;
 
 import java.util.ArrayList;
 
@@ -40,17 +42,17 @@ public class MapCreator {
 
     private MapCreator(){}
 
-    public Group getGroup(ArrayList<ArrayList<ActorInfo>> list, TextureAtlas atlas) {
+    public Group getGroup(ArrayList<ArrayList<ActorInfo>> list) {
         minCoord = Gdx.graphics.getHeight();
         maxCoord = 0;
 
         mapGroup = new Group();
 
-        mapGroup.addActor(FlowRush.getInstance().tapOnTileActor);
+        mapGroup.addActor(UIPool.getTapOnTileActor());
 
         for (int x = 0; x < list.size(); x++) {
             for (int y = 0; y < list.get(0).size(); y++) {
-                createActor(x, y, list, atlas);
+                createActor(x, y, list, FRAssetManager.getAtlas());
             }
         }
 
@@ -63,10 +65,10 @@ public class MapCreator {
             }
         }
 
-        mapGroup.setWidth(list.size() * ConstantBase.HEX_WIDTH - (list.size() - 1) * (ConstantBase.HEX_WIDTH / 4));
+        mapGroup.setWidth(list.size() * FRConstants.HEX_WIDTH - (list.size() - 1) * (FRConstants.HEX_WIDTH / 4));
         mapGroup.setHeight(maxCoord - minCoord);
 
-        float availHeight = (Gdx.graphics.getHeight() - (Gdx.graphics.getWidth() / 10) - FlowRush.getInstance().levelNumberActor.getHeight() * 1.1f - ConstantBase.C_BUTTON_SIZE * 1.1f);
+        float availHeight = (Gdx.graphics.getHeight() - (Gdx.graphics.getWidth() / 10) - UIPool.getLevelNumberActor().getHeight() * 1.1f - FRConstants.C_BUTTON_SIZE * 1.1f);
         float zoom = (Gdx.graphics.getWidth() - (Gdx.graphics.getWidth() / 10)) / mapGroup.getWidth();
 
         if (mapGroup.getHeight() * zoom > availHeight && zoom > availHeight / mapGroup.getHeight()) {
@@ -74,7 +76,7 @@ public class MapCreator {
         }
 
         if (minus) {
-            coefficient = ConstantBase.HEX_HEIGHT * 0.5f * zoom;
+            coefficient = FRConstants.HEX_HEIGHT * 0.5f * zoom;
         }
         mapGroup.setPosition((Gdx.graphics.getWidth() - mapGroup.getWidth()) / 2, ((Gdx.graphics.getHeight() - (mapGroup.getHeight())) / 2) - coefficient);
 
@@ -95,8 +97,8 @@ public class MapCreator {
             if (yPos < minCoord) {
                 minCoord = yPos;
             }
-            if (yPos + ConstantBase.HEX_HEIGHT > maxCoord) {
-                maxCoord = yPos + ConstantBase.HEX_HEIGHT;
+            if (yPos + FRConstants.HEX_HEIGHT > maxCoord) {
+                maxCoord = yPos + FRConstants.HEX_HEIGHT;
             }
 
             TileActor actor = new TileActor(actorInfo);
@@ -108,7 +110,7 @@ public class MapCreator {
                 TileController.moveSources(actor);
             }
 
-            actor.addListener(new HexActorListener(actor, GameScreen.getInstance()));
+            actor.addListener(new HexActorListener(actor));
 
             if (actor.getInclude() == 2) {
                 GameScreen.numOfReceivers += 1;
@@ -123,14 +125,14 @@ public class MapCreator {
             //REFACTOR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
             //REFACTOR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            actor.setBounds(xPos, yPos, ConstantBase.HEX_WIDTH, ConstantBase.HEX_HEIGHT); // ONLY POSITION!
-            actor.setOriginX(ConstantBase.HEX_WIDTH / 2); //DELETE, DO IT IN TILE ACTOR CLASS
-            actor.setOriginY(ConstantBase.HEX_HEIGHT / 2); //DELETE, DO IT IN TILE ACTOR CLASS
+            actor.setBounds(xPos, yPos, FRConstants.HEX_WIDTH, FRConstants.HEX_HEIGHT); // ONLY POSITION!
+            actor.setOriginX(FRConstants.HEX_WIDTH / 2); //DELETE, DO IT IN TILE ACTOR CLASS
+            actor.setOriginY(FRConstants.HEX_HEIGHT / 2); //DELETE, DO IT IN TILE ACTOR CLASS
             //REFACTOR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
             actor.setSprite(atlas.createSprite("hex", actor.getIndex())); //стартовая графика гекса
 
-            TileController.setHexbackTouchOff(actor, atlas);
+            TileController.setHexbackTouchOff(actor);
 
             if (actor.getInclude() == 1) {
                 actor.setIcon(atlas.createSprite("iconMP"));
@@ -159,12 +161,12 @@ public class MapCreator {
 
     private void setPosXY(int x, int y) {
 
-        xPos = x * ConstantBase.HEX_WIDTH - x * (ConstantBase.HEX_WIDTH / 4);
+        xPos = x * FRConstants.HEX_WIDTH - x * (FRConstants.HEX_WIDTH / 4);
 
         if (x % 2 == 0) {
-            yPos = y * ConstantBase.HEX_HEIGHT + ConstantBase.HEX_HEIGHT / 2;
+            yPos = y * FRConstants.HEX_HEIGHT + FRConstants.HEX_HEIGHT / 2;
         } else {
-            yPos = y * ConstantBase.HEX_HEIGHT;
+            yPos = y * FRConstants.HEX_HEIGHT;
         }
     }
 

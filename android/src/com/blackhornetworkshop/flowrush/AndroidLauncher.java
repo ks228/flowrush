@@ -13,16 +13,11 @@ import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 
 public class AndroidLauncher extends AndroidApplication {
 
-    private FRAndroidHelper androidHelper;
-    private FRPlayServices playServices;
-
     private ProgressDialog loadingDialog;
-
-    private FlowRush flowRush;
 
     @Override
     public void onCreate (Bundle savedInstanceState) {
-        FRLogger.logDebug("AndroidLauncher onCreate() method");
+        FRAndroidHelper.getInstance().logDebug("AndroidLauncher onCreate() method");
         super.onCreate(savedInstanceState);
 
         loadingDialog = new ProgressDialog(this, ProgressDialog.THEME_HOLO_LIGHT);
@@ -37,28 +32,25 @@ public class AndroidLauncher extends AndroidApplication {
         boolean isPlayServicesAvailable = FRPlayServices.isPlayServicesAvailable(this);
 
         //AndroidHelper initialization
-        androidHelper = FRAndroidHelper.getInstance();
-        androidHelper.setup(this);
+        FRAndroidHelper.getInstance().setup(this);
 
         //PlayServices initialization
         if(isPlayServicesAvailable) {
-            FRLogger.logDebug("Play Services are available");
-            playServices = FRPlayServices.getInstance();
-            playServices.setup(this);
+            FRAndroidHelper.getInstance().logDebug("Play Services are available");
+            FRPlayServices.getInstance().setup(this);
         }else {
-            FRLogger.logDebug("Play Services are not available");
+            FRAndroidHelper.getInstance().logDebug("Play Services are not available");
         }
 
         //FlowRush initialization
-        flowRush = FlowRush.getInstance();
-        if(isPlayServicesAvailable) flowRush.setup(androidHelper, playServices);
-        else flowRush.setup(androidHelper);
-        FRLogger.logDebug("FlowRush is initialized");
+        if(isPlayServicesAvailable) FlowRush.getInstance().setup(FRAndroidHelper.getInstance(), FRPlayServices.getInstance());
+        else FlowRush.getInstance().setup(FRAndroidHelper.getInstance());
+        FRAndroidHelper.getInstance().logDebug("FlowRush is initialized");
 
 
         //Layouts
         RelativeLayout mainLayout = (RelativeLayout)getLayoutInflater().inflate(R.layout.main_layout, null);
-        View libGDXLayout = initializeForView(flowRush, getConfig());
+        View libGDXLayout = initializeForView(FlowRush.getInstance(), getConfig());
         mainLayout.addView(libGDXLayout);
 
         setContentView(mainLayout);
@@ -72,18 +64,10 @@ public class AndroidLauncher extends AndroidApplication {
         return config;
     }
 
-    AndroidHelper getAndroidHelper(){
-        return androidHelper;
-    }
-
-    FlowRush getGame(){
-        return flowRush;
-    }
-
     @Override
     public void exit() {
         super.exit();
-        FRLogger.logDebug("App exit");
+        FRAndroidHelper.getInstance().logDebug("App exit");
     }
 
     @Override
@@ -91,22 +75,22 @@ public class AndroidLauncher extends AndroidApplication {
         super.onActivityResult(requestCode, resultCode, intent);
 
         if (requestCode == FRPlayServices.RC_SIGN_IN) {
-            playServices.handleSignInResult(intent);
+            FRPlayServices.getInstance().handleSignInResult(intent);
         }else if(requestCode == FRPlayServices.RC_LIST_SAVED_GAMES) {
-            playServices.handleSnapshotSelectResult(intent);
+            FRPlayServices.getInstance().handleSnapshotSelectResult(intent);
         }
     }
 
     void showLoadingDialog(){
         runOnUiThread(new Runnable() {
             public void run() {
-                FRLogger.logDebug("Display loading dialog");
+                FRAndroidHelper.getInstance().logDebug("Display loading dialog");
                 loadingDialog.show();
             }
         });
     }
     void hideLoadingDialog(){
-        FRLogger.logDebug("Dismiss loading dialog");
+        FRAndroidHelper.getInstance().logDebug("Dismiss loading dialog");
         loadingDialog.dismiss();
     }
 

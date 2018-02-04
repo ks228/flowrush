@@ -6,7 +6,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.blackhornetworkshop.flowrush.ConstantBase;
+import com.blackhornetworkshop.flowrush.FRAssetManager;
+import com.blackhornetworkshop.flowrush.FRConstants;
 import com.blackhornetworkshop.flowrush.FlowRush;
 
 //Created by TScissors. Отдельный скрин для отображения лого компании и лого игры
@@ -36,18 +37,18 @@ public class LogoScreen implements Screen {
 
     @Override
     public void show() {
-        this.batch = FlowRush.getInstance().batch;
+        this.batch = FlowRush.getInstance().getBatch();
         Gdx.input.setInputProcessor(FlowRush.getInstance().oneTouchProcessor);
         setBHWlogo();
     }
 
     private void setBHWlogo() {
-        FlowRush.getInstance().screenType = ConstantBase.ScreenType.LOGO_BHW;
+        FlowRush.getInstance().screenType = FRConstants.ScreenType.LOGO_BHW;
         //System.out.println("screen logo type 11");
 
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1f);
 
-        logo = FlowRush.getInstance().atlas.createSprite("h_logo");
+        logo = FRAssetManager.getAtlas().createSprite("h_logo");
         logo.setSize(Gdx.graphics.getWidth() * 0.6f, Gdx.graphics.getWidth() * 0.6f*0.79f);
         logo.setPosition((Gdx.graphics.getWidth() - logo.getWidth()) / 2, (Gdx.graphics.getHeight() - logo.getHeight()) / 2);
 
@@ -55,13 +56,13 @@ public class LogoScreen implements Screen {
     }
 
     private void setFRlogo() {
-        FlowRush.getInstance().screenType = ConstantBase.ScreenType.LOGO_FR;
+        FlowRush.getInstance().screenType = FRConstants.ScreenType.LOGO_FR;
         //System.out.println("screen logo type 12");
 
         Gdx.gl.glClearColor(0.26f, 0.64f, 0.87f, 1);
 
         //logo = new Sprite(new Texture("texture/fr_logo.png"));
-        logo = FlowRush.getInstance().atlas.createSprite("fr_logo");
+        logo = FRAssetManager.getAtlas().createSprite("fr_logo");
         logo.setSize(Gdx.graphics.getWidth() * 0.8f, Gdx.graphics.getWidth() * 0.8f * 0.75f);
 
         logo.setPosition((Gdx.graphics.getWidth() - logo.getWidth()) / 2, (Gdx.graphics.getHeight() - logo.getHeight()*0.9f)/2);
@@ -85,7 +86,7 @@ public class LogoScreen implements Screen {
             FlowRush.logDebug("Set main menu screen");
             FlowRush.getInstance().setMainMenuScreen();
             if(FlowRush.getInstance().prefs.isSoundOn()) {
-                FlowRush.getInstance().backgroundMusic.play();
+                FRAssetManager.getBackgroundMusic().play();
             }
         }
     }

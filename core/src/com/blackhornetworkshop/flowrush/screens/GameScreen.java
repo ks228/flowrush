@@ -13,7 +13,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
-import com.blackhornetworkshop.flowrush.ConstantBase;
+import com.blackhornetworkshop.flowrush.FRAssetManager;
+import com.blackhornetworkshop.flowrush.FRConstants;
 import com.blackhornetworkshop.flowrush.FlowRush;
 import com.blackhornetworkshop.flowrush.gameplay.SourceChecker;
 import com.blackhornetworkshop.flowrush.gameplay.TileActor;
@@ -73,7 +74,7 @@ public class GameScreen implements Screen {
         hudStage = FlowRush.getInstance().getHudStage();
 
         //Батч для фона из точек
-        batchForBack = FlowRush.getInstance().batch;
+        batchForBack = FlowRush.getInstance().getBatch();
 
         //Массивы необходимые для быстрой проверки всех актеров, параллельно с mapGroup !!!!!!!!!!!!!! ПОЧЕМУ НЕ ХВАТАЕТ MAPGROUP???
         groupArray = new ArrayList<TileActor>();
@@ -84,12 +85,12 @@ public class GameScreen implements Screen {
         moveToActionPause.setDuration(0.2f);
 
         //спрайт для отрисовки фона
-        background = FlowRush.getInstance().spriteBack;
+        background = FRAssetManager.getSpriteBack();
 
         FlowRush.logDebug("Game screen show() method called");
 
-        FlowRush.getInstance().soundButton.setPosition(0, ConstantBase.C_BUTTON_SIZE+ Gdx.graphics.getHeight() * 0.05f);
-        FlowRush.getInstance().soundButton.setVisible(true);
+        UIPool.getSoundButton().setPosition(0, FRConstants.C_BUTTON_SIZE+ Gdx.graphics.getHeight() * 0.05f);
+        UIPool.getSoundButton().setVisible(true);
 
         //Группа для актеров паузы
         movePauseGroup = new Group();
@@ -97,17 +98,17 @@ public class GameScreen implements Screen {
         movePauseGroup.addActor(UIPool.getMainMenuButton());
         movePauseGroup.addActor(UIPool.getBackButton());
         movePauseGroup.addActor(UIPool.getRestartButton());
-        movePauseGroup.addActor(FlowRush.getInstance().soundButton);
+        movePauseGroup.addActor(UIPool.getSoundButton());
 
-        hudStage.addActor(FlowRush.getInstance().alphawhiteBack);
+        hudStage.addActor(UIPool.getPauseBackground());
         hudStage.addActor(UIPool.getWellDoneLabel());
         hudStage.addActor(UIPool.getWellDonehex());
         hudStage.addActor(UIPool.getNextLevelButton());
         hudStage.addActor(UIPool.getPauseButton());
-        hudStage.addActor(FlowRush.getInstance().levelNumberActor);
+        hudStage.addActor(UIPool.getLevelNumberActor());
         hudStage.addActor(movePauseGroup);
 
-        mainStage.addActor(FlowRush.getInstance().backGroup);
+        mainStage.addActor(UIPool.getBackgroundAnimation());
 
         inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(0, FlowRush.getInstance().oneTouchProcessor);
@@ -123,7 +124,7 @@ public class GameScreen implements Screen {
             public void run() {
                 for (int x = 0; x < specialActorsArray.size(); x++) {
                     if (specialActorsArray.get(x).getInclude() == 2 && !specialActorsArray.get(x).isPowerOn()) {
-                        TileController.animIcon(specialActorsArray.get(x), iconWhite, FlowRush.getInstance().atlas);
+                        TileController.animIcon(specialActorsArray.get(x), iconWhite);
                     }
                 }
                 iconWhite = !iconWhite;
@@ -151,21 +152,21 @@ public class GameScreen implements Screen {
 
     public void startNewLevel() { //обязательно вместе с startNewLevel или nextlvl (в levelloader)
         //номер уровня
-        FlowRush.getInstance().levelNumberActor.setText("" + LevelLoader.getInstance().getLvl());
+        UIPool.getLevelNumberActor().setText("" + LevelLoader.getInstance().getLvl());
 
         //очистка
         numOfReceivers = 0;
         //mainStage.clear(); // NEED HERE SOME REFACTORING !!!!!!!!!!!!!!!!!!!!! CLEAR AND AGAIN ADD ? CHANGE IT!!!!!!!!!!!!!!
         groupArray.clear();
         specialActorsArray.clear();
-        FlowRush.getInstance().alphawhiteBack.setVisible(false);
+        UIPool.getPauseBackground().setVisible(false);
 
         if(mapGroup != null) {
             mapGroup.clear();
         }
 
         //загружаем группу актеров // DELETED HEX WIDTH & HEIGHT !!!!!!
-        mapGroup = MapCreator.getInstance().getGroup(LevelLoader.getInstance().getActorList(), FlowRush.getInstance().atlas);
+        mapGroup = MapCreator.getInstance().getGroup(LevelLoader.getInstance().getActorList());
         mainStage.addActor(mapGroup);
 
         //обновляем чекер
@@ -235,10 +236,10 @@ public class GameScreen implements Screen {
         checkAchievements();
 
         //level complete отображается в любом случае
-        FlowRush.getInstance().screenType = ConstantBase.ScreenType.GAME_LVL_COMPLETE;
+        FlowRush.getInstance().screenType = FRConstants.ScreenType.GAME_LVL_COMPLETE;
 
         if (FlowRush.getInstance().prefs.isSoundOn()) {
-            FlowRush.getInstance().lvlCompleteSound.play();
+            FRAssetManager.getLvlCompleteSound().play();
         }
 
         UIPool.getNextLevelButton().setVisible(true);
@@ -261,8 +262,8 @@ public class GameScreen implements Screen {
         }
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! REFACTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-        if(FlowRush.isPlayServicesAvailable && FlowRush.getInstance().getPlayServices().isSignedIn()) {
-            FlowRush.getInstance().getPlayServices().saveGame();// Save in Google Play
+        if(FlowRush.isPlayServicesAvailable && FlowRush.getPlayServices().isSignedIn()) {
+            FlowRush.getPlayServices().saveGame();// Save in Google Play
         }
     }
     public void showPackComplete(){
@@ -270,16 +271,16 @@ public class GameScreen implements Screen {
         UIPool.getWellDoneLabel().setVisible(false);
         UIPool.getWellDonehex().setVisible(false);
 
-        FlowRush.getInstance().screenType = ConstantBase.ScreenType.GAME_PACK_COMPLETE;
+        FlowRush.getInstance().screenType = FRConstants.ScreenType.GAME_PACK_COMPLETE;
 
         //System.out.println("screen game packcomplete type 34");
 
         mainStage.getRoot().setVisible(false);
         UIPool.getPauseButton().setVisible(false);
-        FlowRush.getInstance().levelNumberActor.setVisible(false);
+        UIPool.getLevelNumberActor().setVisible(false);
 
         if (FlowRush.getInstance().prefs.isSoundOn()) {
-            FlowRush.getInstance().packCompleteSound.play();
+            FRAssetManager.getPackCompleteSound().play();
         }
         if (UIPool.getPackCompleteNextPackButton().getName().equals("visible")) { //!!!!!!!!!!!!!!!!!!!!!!! VISIBLE ???????????????
             UIPool.getPackCompleteNextPackButton().setVisible(true);
@@ -336,11 +337,11 @@ public class GameScreen implements Screen {
 
     @Override
     public void pause() {
-        if (FlowRush.getInstance().screenType == ConstantBase.ScreenType.GAME_LVL_COMPLETE) {
-            FlowRush.getInstance().screenType = ConstantBase.ScreenType.GAME_LVL_COMPLETE_PAUSE; //lvlcomplete+pause
+        if (FlowRush.getInstance().screenType == FRConstants.ScreenType.GAME_LVL_COMPLETE) {
+            FlowRush.getInstance().screenType = FRConstants.ScreenType.GAME_LVL_COMPLETE_PAUSE; //lvlcomplete+pause
             //System.out.println("screen game pause on type 35");
         }else{
-            FlowRush.getInstance().screenType = ConstantBase.ScreenType.GAME_PAUSE;
+            FlowRush.getInstance().screenType = FRConstants.ScreenType.GAME_PAUSE;
             //System.out.println("screen game pause on type 32");
         }
 
@@ -371,17 +372,17 @@ public class GameScreen implements Screen {
 
     @Override
     public void resume() {
-        if (FlowRush.getInstance().screenType == ConstantBase.ScreenType.GAME_PAUSE) {//Вариант когда нажата пауза
-            FlowRush.getInstance().screenType = ConstantBase.ScreenType.GAME;
-            if (inputMultiplexer.getProcessors().size < 3 && FlowRush.getInstance().screenType != ConstantBase.ScreenType.GAME_LVL_COMPLETE) {
+        if (FlowRush.getInstance().screenType == FRConstants.ScreenType.GAME_PAUSE) {//Вариант когда нажата пауза
+            FlowRush.getInstance().screenType = FRConstants.ScreenType.GAME;
+            if (inputMultiplexer.getProcessors().size < 3 && FlowRush.getInstance().screenType != FRConstants.ScreenType.GAME_LVL_COMPLETE) {
                 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! inputMultiplexer.getProcessors().contains(mainStage, true);
                 inputMultiplexer.addProcessor(mainStage);
             }
             UIPool.getPauseButton().setVisible(true);
-            FlowRush.getInstance().alphawhiteBack.setVisible(false);
+            UIPool.getPauseBackground().setVisible(false);
             movePauseGroupDown();
-        } else if (FlowRush.getInstance().screenType != ConstantBase.ScreenType.GAME_LVL_COMPLETE && FlowRush.getInstance().screenType != ConstantBase.ScreenType.GAME_LVL_COMPLETE_PAUSE) {
-            FlowRush.getInstance().screenType = ConstantBase.ScreenType.GAME;
+        } else if (FlowRush.getInstance().screenType != FRConstants.ScreenType.GAME_LVL_COMPLETE && FlowRush.getInstance().screenType != FRConstants.ScreenType.GAME_LVL_COMPLETE_PAUSE) {
+            FlowRush.getInstance().screenType = FRConstants.ScreenType.GAME;
 
             if (inputMultiplexer.getProcessors().size < 3) {
                 inputMultiplexer.addProcessor(mainStage);
@@ -389,16 +390,16 @@ public class GameScreen implements Screen {
             mainStage.getRoot().setVisible(true);
             movePauseGroupDown();
             UIPool.getPauseButton().setVisible(true);
-            FlowRush.getInstance().levelNumberActor.setVisible(true);
-            FlowRush.getInstance().alphawhiteBack.setVisible(false);
+            UIPool.getLevelNumberActor().setVisible(true);
+            UIPool.getPauseBackground().setVisible(false);
 
             UIPool.getWellDoneLabel().setVisible(false);
             UIPool.getWellDonehex().setVisible(false);
             UIPool.getNextLevelButton().setVisible(false);
-        } else if (FlowRush.getInstance().screenType == ConstantBase.ScreenType.GAME_LVL_COMPLETE_PAUSE) {
+        } else if (FlowRush.getInstance().screenType == FRConstants.ScreenType.GAME_LVL_COMPLETE_PAUSE) {
             UIPool.getPauseButton().setVisible(true);
             movePauseGroupDown();
-            FlowRush.getInstance().screenType = ConstantBase.ScreenType.GAME_LVL_COMPLETE;
+            FlowRush.getInstance().screenType = FRConstants.ScreenType.GAME_LVL_COMPLETE;
         }
     }
 

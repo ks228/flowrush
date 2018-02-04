@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Timer;
-import com.blackhornetworkshop.flowrush.ConstantBase;
+import com.blackhornetworkshop.flowrush.FRConstants;
 import com.blackhornetworkshop.flowrush.FlowRush;
 import com.blackhornetworkshop.flowrush.initialization.LevelLoader;
 import com.blackhornetworkshop.flowrush.ui.UIPool;
@@ -47,18 +47,18 @@ public class MenuScreen implements Screen {
         hudStage = FlowRush.getInstance().getHudStage();
 
         //Common sound button
-        FlowRush.getInstance().soundButton.setPosition(Gdx.graphics.getHeight()*0.02f, Gdx.graphics.getHeight()*0.02f);
-        FlowRush.getInstance().soundButton.setVisible(true);
+        UIPool.getSoundButton().setPosition(Gdx.graphics.getHeight()*0.02f, Gdx.graphics.getHeight()*0.02f);
+        UIPool.getSoundButton().setVisible(true);
 
         //Добавляем всех актеров на сцену
         hudStage.addActor(UIPool.getWhiteBackActor());
         hudStage.addActor(UIPool.getWhiteBackActorTop());
-        hudStage.addActor(FlowRush.getInstance().backGroup);
+        hudStage.addActor(UIPool.getBackgroundAnimation());
         hudStage.addActor(UIPool.getPlayButton());
         hudStage.addActor(UIPool.getLvlButton());
         hudStage.addActor(UIPool.getExitButton());
         hudStage.addActor(UIPool.getAuthorsButton());
-        hudStage.addActor(FlowRush.getInstance().soundButton);
+        hudStage.addActor(UIPool.getSoundButton());
         hudStage.addActor(UIPool.getSupportUsSmallButton());
         hudStage.addActor(UIPool.getInnerLayout());
         hudStage.addActor(UIPool.getLabelContainer());
@@ -104,7 +104,7 @@ public class MenuScreen implements Screen {
     }
 
     public void selectLevelScreen(int pack){
-        FlowRush.getInstance().screenType = ConstantBase.ScreenType.MAIN_MENU_LVL_CHOICE;
+        FlowRush.getInstance().screenType = FRConstants.ScreenType.MAIN_MENU_LVL_CHOICE;
 
         setOnVisibleForInnerScreen();
         UIPool.getMenuLabel().setText("SELECT LEVEL");
@@ -113,7 +113,7 @@ public class MenuScreen implements Screen {
     }
 
     public void setPackChoiseScreen(){
-        FlowRush.getInstance().screenType = ConstantBase.ScreenType.MAIN_MENU_PACK_CHOICE;
+        FlowRush.getInstance().screenType = FRConstants.ScreenType.MAIN_MENU_PACK_CHOICE;
         //System.out.println("screen main menu choose pack screen type 24");
         UIPool.getMenuLabel().setText("SELECT PACK");
 
@@ -122,7 +122,7 @@ public class MenuScreen implements Screen {
     }
 
     public void setSupportUsScreen(){
-        FlowRush.getInstance().screenType = ConstantBase.ScreenType.MAIN_MENU_SUPPORT_US;
+        FlowRush.getInstance().screenType = FRConstants.ScreenType.MAIN_MENU_SUPPORT_US;
        // System.out.println("screen main menu support us type 23");
 
         setOnVisibleForInnerScreen();
@@ -144,7 +144,7 @@ public class MenuScreen implements Screen {
     }
 
     public void setAuthorsScreen(){
-        FlowRush.getInstance().screenType = ConstantBase.ScreenType.MAIN_MENU_AUTHORS;
+        FlowRush.getInstance().screenType = FRConstants.ScreenType.MAIN_MENU_AUTHORS;
         //System.out.println("screen main menu authors type 22");
 
         UIPool.getMessageBackground().setText("development\nTIMUR SCISSORS\n\ndesign\nSONYA KOVALSKI\n\nmusic\nERIC HOPTON");
@@ -158,7 +158,7 @@ public class MenuScreen implements Screen {
     }
 
     public void setSignInScreen(){
-        FlowRush.getInstance().screenType = ConstantBase.ScreenType.MAIN_MENU_GOOGLE_PLAY;
+        FlowRush.getInstance().screenType = FRConstants.ScreenType.MAIN_MENU_GOOGLE_PLAY;
 
         UIPool.getMessageBackground().setText("By signing in your game progress will be saved online " +
                 "with Google Play. Your Google Play Games Achievements will be associated with your" +
@@ -172,7 +172,7 @@ public class MenuScreen implements Screen {
     }
 
     public void setSignedScreen(){
-        FlowRush.getInstance().screenType = ConstantBase.ScreenType.MAIN_MENU_LOAD_SAVED_GAME;
+        FlowRush.getInstance().screenType = FRConstants.ScreenType.MAIN_MENU_LOAD_SAVED_GAME;
 
         UIPool.getMessageBackground().setText("Welcome!\nHere you can see your Flow Rush achievements and manage your saved games");
         UIPool.getMenuLabel().setText("GOOGLE PLAY");
@@ -199,7 +199,7 @@ public class MenuScreen implements Screen {
         UIPool.getLvlButton().setVisible(false);
         UIPool.getExitButton().setVisible(false);
         Timer.instance().clear();
-        FlowRush.getInstance().soundButton.setVisible(false);
+        UIPool.getSoundButton().setVisible(false);
         UIPool.getPackGroup().setVisible(false);
     }
 
@@ -221,7 +221,7 @@ public class MenuScreen implements Screen {
 
     @Override
     public void resume() {
-        FlowRush.getInstance().screenType = ConstantBase.ScreenType.MAIN_MENU;
+        FlowRush.getInstance().screenType = FRConstants.ScreenType.MAIN_MENU;
         //System.out.println("screen main menu type 21");
 
         UIPool.getMenuLabel().setVisible(false);
@@ -249,7 +249,7 @@ public class MenuScreen implements Screen {
 
         UIPool.getPlayButton().setVisible(true);
         UIPool.getLvlButton().setVisible(true);
-        FlowRush.getInstance().soundButton.setVisible(true);
+        UIPool.getSoundButton().setVisible(true);
         UIPool.getAuthorsButton().setVisible(true);
         UIPool.getSupportUsSmallButton().setVisible(true);
     }

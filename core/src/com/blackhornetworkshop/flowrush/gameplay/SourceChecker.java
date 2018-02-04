@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.utils.Timer;
+import com.blackhornetworkshop.flowrush.FRAssetManager;
 import com.blackhornetworkshop.flowrush.FlowRush;
 import com.blackhornetworkshop.flowrush.screens.GameScreen;
 
@@ -75,7 +76,7 @@ public class SourceChecker { //основная логика игры наход
         if (doveIsOn) { // отдельно проверка голубей тем же принципом
             for (int x = 0; x < doveArray.size(); x++) {
                 actor = doveArray.get(x);
-                TileController.setPowerOn(actor, FlowRush.getInstance().atlas);
+                TileController.setPowerOn(actor);
                 tempoHexArray.clear();
                 sourceArrayMain = actor.getSourceArray();
                 tempoHexArray.add(actor);
@@ -103,7 +104,7 @@ public class SourceChecker { //основная логика игры наход
         if (GameScreen.numOfReceivers == numReceiversOn) {
             GameScreen.getInstance().inputMultiplexer.removeProcessor(GameScreen.getInstance().mainStage);//отключает касание к тайлам пока не выскочил lvlCompleteActor
             for (int i = 0; i < GameScreen.getInstance().groupArray.size(); i++) {
-                TileController.setHexbackTouchOn(GameScreen.getInstance().groupArray.get(i), FlowRush.getInstance().atlas);
+                TileController.setHexbackTouchOn(GameScreen.getInstance().groupArray.get(i));
             }
 
             Timer.instance().start();
@@ -134,7 +135,7 @@ public class SourceChecker { //основная логика игры наход
                 boolean[] sourceArrayTempo = actorTempo.getSourceArray();
 
                 if (sourceArrayMain[side] && sourceArrayTempo[side2]) { //сравниваем две стороны основго актера и "соседа"
-                    com.blackhornetworkshop.flowrush.gameplay.TileController.setPowerOn(actorTempo, FlowRush.getInstance().atlas);
+                    com.blackhornetworkshop.flowrush.gameplay.TileController.setPowerOn(actorTempo);
                     tempoHexArray.add(actorTempo);
                     if (actorTempo.getInclude() == 3) {
                         doveIsOn = true;
@@ -187,7 +188,7 @@ public class SourceChecker { //основная логика игры наход
         for (int x = 0; x < GameScreen.getInstance().groupArray.size(); x++) {
             actor = GameScreen.getInstance().groupArray.get(x);
             if (actor.getInclude() != 1) {
-                TileController.setPowerOff(actor, GameScreen.getInstance().iconWhite, FlowRush.getInstance().atlas);
+                TileController.setPowerOff(actor, GameScreen.getInstance().iconWhite);
             }
         }
         doveIsOn = false;

@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
+import com.blackhornetworkshop.flowrush.FRAssetManager;
 
 public class PackCompleteActor extends Actor {
 
@@ -19,12 +20,12 @@ public class PackCompleteActor extends Actor {
     private Container<Label> labelContainer;
 
 
-    public PackCompleteActor(TextureAtlas atlas, BitmapFont font, String string){
+    public PackCompleteActor(BitmapFont font, String string){
         setSize(Gdx.graphics.getHeight()*0.35f*1.117647058823529f, Gdx.graphics.getHeight()*0.35f);
         setOrigin(getWidth()/2, getHeight()/2);
         setPosition((Gdx.graphics.getWidth()-getWidth())/2, (Gdx.graphics.getHeight()-getHeight())/4*3);
 
-        spriteFace = atlas.createSprite("bighex_dark");
+        spriteFace = FRAssetManager.getAtlas().createSprite("bighex_dark");
 
         Color color = new Color(1f, 1f, 1f, 1);
 

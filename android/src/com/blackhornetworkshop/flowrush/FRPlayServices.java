@@ -34,7 +34,7 @@ import static com.google.android.gms.common.api.CommonStatusCodes.SUCCESS;
 
 public class FRPlayServices implements PlayServices {
 
-    private static FRPlayServices instance;
+    private static volatile FRPlayServices instance;
 
     private AndroidLauncher app;
     private GoogleSignInClient googleSignInClient;
@@ -57,10 +57,11 @@ public class FRPlayServices implements PlayServices {
 
     static FRPlayServices getInstance() {
         if (instance == null) {
-            FRLogger.logDebug("Play Services are initialized. Return new instance");
-            instance = new FRPlayServices();
-        } else {
-            FRLogger.logDebug("Play Services are already initialized. Return existing instance");
+            synchronized (FRPlayServices.class) {
+                if (instance == null) {
+                    instance = new FRPlayServices();
+                }
+            }
         }
         return instance;
     }
@@ -75,9 +76,9 @@ public class FRPlayServices implements PlayServices {
             googleAccount = GoogleSignIn.getLastSignedInAccount(app);
             snapshotsClient = Games.getSnapshotsClient(app, googleAccount);
             achievementsClient = Games.getAchievementsClient(app, googleAccount);
-            FRLogger.logDebug("User signed. Google account, snapshot client, achievements client are received");
+            FRAndroidHelper.getInstance().logDebug("User signed. Google account, snapshot client, achievements client are received");
         }
-        FRLogger.logDebug("Play Services are configured");
+        FRAndroidHelper.getInstance().logDebug("Play Services are configured");
     }
 
     @Override
@@ -90,24 +91,24 @@ public class FRPlayServices implements PlayServices {
 
         try {
             googleAccount = task.getResult(ApiException.class);
-            FRLogger.logDebug("Google sign in success");
+            FRAndroidHelper.getInstance().logDebug("Google sign in success");
             onConnected();
         } catch (ApiException apiException) {
-            app.getAndroidHelper().logError("Google sign in failed", apiException);
+            FRAndroidHelper.getInstance().logError("Google sign in failed", apiException);
         }
     }
 
     @Override
     public void signOut() {
-        FRLogger.logDebug("Google sign out started");
+        FRAndroidHelper.getInstance().logDebug("Google sign out started");
         googleSignInClient.signOut().addOnCompleteListener(app,
                 new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            FRLogger.logDebug("Google sign out success");
+                            FRAndroidHelper.getInstance().logDebug("Google sign out success");
                         } else {
-                            app.getAndroidHelper().logError("Google sign out failure", task.getException());
+                            FRAndroidHelper.getInstance().logError("Google sign out failure", task.getException());
                         }
                         onDisconnected();
                     }
@@ -127,7 +128,7 @@ public class FRPlayServices implements PlayServices {
             @Override
             public void onComplete(@NonNull Task<Intent> task) {
                 if (!task.isSuccessful()) {
-                    app.getAndroidHelper().logError("Problem with loading snapshots list", task.getException());
+                    FRAndroidHelper.getInstance().logError("Problem with loading snapshots list", task.getException());
                 } else {
                     app.startActivityForResult(task.getResult(), RC_LIST_SAVED_GAMES);
                 }
@@ -145,8 +146,8 @@ public class FRPlayServices implements PlayServices {
                 loadSnapshot(snapshotMetadata);
             } else if (intent.hasExtra(SnapshotsClient.EXTRA_SNAPSHOT_NEW)) {
                 // Create a new snapshot named with a unique string
-                FRLogger.logDebug("User chooses to save a new game");
-                app.getGame().save.setUniqSaveName();
+                FRAndroidHelper.getInstance().logDebug("User chooses to save a new game");
+                FlowRush.getInstance().save.setUniqSaveName();
                 saveGame();
             }
         }
@@ -154,11 +155,11 @@ public class FRPlayServices implements PlayServices {
 
     @Override
     public void saveGame() {
-        snapshotsClient.open(app.getGame().save.getUniqSnapshotName(), true)
+        snapshotsClient.open(FlowRush.getInstance().save.getUniqSnapshotName(), true)
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        app.getAndroidHelper().logError("Error while opening Snapshot for save.", e);
+                        FRAndroidHelper.getInstance().logError("Error while opening Snapshot for save.", e);
                     }
                 }).continueWith(new Continuation<SnapshotsClient.DataOrConflict<Snapshot>, byte[]>() {
             @Override
@@ -168,7 +169,7 @@ public class FRPlayServices implements PlayServices {
                 if(snapshot != null){
                     writeSnapshot(snapshot);
                 }else {
-                    app.getAndroidHelper().logError("Error with saving snapshot", new NullPointerException());
+                    FRAndroidHelper.getInstance().logError("Error with saving snapshot", new NullPointerException());
                 }
                 return null;
             }
@@ -210,7 +211,7 @@ public class FRPlayServices implements PlayServices {
                                 if (retryCount < MAX_SNAPSHOT_RESOLVE_RETRIES) {
                                     return processSnapshotOpenResult(task.getResult(), retryCount + 1);
                                 } else {
-                                    app.getAndroidHelper().logError("Could not resolve snapshot conflicts", new Exception());
+                                    FRAndroidHelper.getInstance().logError("Could not resolve snapshot conflicts", new Exception());
                                     return null;
                                 }
                             }
@@ -219,10 +220,10 @@ public class FRPlayServices implements PlayServices {
 
     private Snapshot resolveConflict(Snapshot snapshot, Snapshot conflictSnapshot) throws IOException {
         String serverJson = new String(snapshot.getSnapshotContents().readFully());
-        SavedGame serverSavedGame = app.getGame().getGson().fromJson(serverJson, SavedGame.class);
+        SavedGame serverSavedGame = FlowRush.getInstance().getGson().fromJson(serverJson, SavedGame.class);
 
         String conflictJson = new String(conflictSnapshot.getSnapshotContents().readFully());
-        SavedGame conflictSavedGame = app.getGame().getGson().fromJson(conflictJson, SavedGame.class);
+        SavedGame conflictSavedGame = FlowRush.getInstance().getGson().fromJson(conflictJson, SavedGame.class);
 
         boolean isCurrentLevelActual = true;
 
@@ -230,59 +231,59 @@ public class FRPlayServices implements PlayServices {
         for (int x = 0; x < 10; x++) {
             if (serverSavedGame.getAchievements()[x] && !conflictSavedGame.getAchievements()[x]) {
                 conflictSavedGame.unlockAchievement(x);
-                FRLogger.logDebug("Updating achievement " + x + " in conflict save");
+                FRAndroidHelper.getInstance().logDebug("Updating achievement " + x + " in conflict save");
             } else {
-                FRLogger.logDebug("Achievement " + x + " is actual");
+                FRAndroidHelper.getInstance().logDebug("Achievement " + x + " is actual");
             }
         }
         //check level progress
         for (int pack = 0; pack < 5; pack++) {
             if (conflictSavedGame.getLevelsProgress()[pack] < serverSavedGame.getLevelsProgress()[pack]) {
                 conflictSavedGame.setLevelsProgress(pack, serverSavedGame.getLevelsProgress()[pack]);
-                FRLogger.logDebug("Updating level progress in pack " + pack + " in conflict save");
+                FRAndroidHelper.getInstance().logDebug("Updating level progress in pack " + pack + " in conflict save");
                 isCurrentLevelActual = false;
             } else {
-                FRLogger.logDebug("Level progress of pack " + pack + " is actual");
+                FRAndroidHelper.getInstance().logDebug("Level progress of pack " + pack + " is actual");
             }
         }
 
         //check the relevance of the current level
         if (isCurrentLevelActual) {
-            FRLogger.logDebug("Updating current in conflict save");
+            FRAndroidHelper.getInstance().logDebug("Updating current in conflict save");
             conflictSavedGame.setCurrentLvl(serverSavedGame.getCurrentLvl());
             conflictSavedGame.setCurrentPack(serverSavedGame.getCurrentPack());
         } else {
-            FRLogger.logDebug("Current level is actual");
+            FRAndroidHelper.getInstance().logDebug("Current level is actual");
         }
 
         //commit changes
-        conflictSnapshot.getSnapshotContents().writeBytes(app.getGame().getGson().toJson(conflictSavedGame).getBytes());
+        conflictSnapshot.getSnapshotContents().writeBytes(FlowRush.getInstance().getGson().toJson(conflictSavedGame).getBytes());
 
         return conflictSnapshot;
     }
 
     private void loadSnapshot(final SnapshotMetadata snapshotMetadata) {
         app.showLoadingDialog();
-        app.getGame().pause();
+        FlowRush.getInstance().pause();
 
 
-        FRLogger.logDebug("Open the saved game");
+        FRAndroidHelper.getInstance().logDebug("Open the saved game");
         snapshotsClient.open(snapshotMetadata)
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        app.getAndroidHelper().logError("Error while opening Snapshot for load.", e);
+                        FRAndroidHelper.getInstance().logError("Error while opening Snapshot for load.", e);
                     }
                 }).continueWith(new Continuation<SnapshotsClient.DataOrConflict<Snapshot>, byte[]>() {
             @Override
             public byte[] then(@NonNull Task<SnapshotsClient.DataOrConflict<Snapshot>> task) throws IOException {
                 Snapshot snapshot = processSnapshotOpenResult(task.getResult(), MAX_SNAPSHOT_RESOLVE_RETRIES).getResult();
-                FRLogger.logDebug("Opening the snapshot was a success and any conflicts have been resolved.");
+                FRAndroidHelper.getInstance().logDebug("Opening the snapshot was a success and any conflicts have been resolved.");
                 try {
-                    FRLogger.logDebug("Extract the raw data from the snapshot.");
+                    FRAndroidHelper.getInstance().logDebug("Extract the raw data from the snapshot.");
                     return snapshot.getSnapshotContents().readFully();
                 } catch (Exception e) {
-                    app.getAndroidHelper().logError("Error while reading Snapshot.", e);
+                    FRAndroidHelper.getInstance().logError("Error while reading Snapshot.", e);
                 }
 
                 return null;
@@ -290,12 +291,12 @@ public class FRPlayServices implements PlayServices {
         }).addOnCompleteListener(new OnCompleteListener<byte[]>() {
             @Override
             public void onComplete(@NonNull Task<byte[]> task) {
-                FRLogger.logDebug("Downloading a snapshot from the server is complete");
+                FRAndroidHelper.getInstance().logDebug("Downloading a snapshot from the server is complete");
                 String snapshotInJson = new String(task.getResult());
-                app.getGame().save = app.getGame().getGson().fromJson(snapshotInJson, SavedGame.class);
-                FRLogger.logDebug("Snapshot reading from json is completed successfully");
+                FlowRush.getInstance().save = FlowRush.getInstance().getGson().fromJson(snapshotInJson, SavedGame.class);
+                FRAndroidHelper.getInstance().logDebug("Snapshot reading from json is completed successfully");
                 app.hideLoadingDialog();
-                app.getGame().resume();
+                FlowRush.getInstance().resume();
             }
         });
     }
@@ -313,7 +314,7 @@ public class FRPlayServices implements PlayServices {
 
     @Override
     public void unlockAchievement(int num) {
-        FRLogger.logDebug("Unlock achievement number " + num);
+        FRAndroidHelper.getInstance().logDebug("Unlock achievement number " + num);
         String s;
         switch (num) {
             case 1:
@@ -349,12 +350,12 @@ public class FRPlayServices implements PlayServices {
 
     private void onConnected() {
         snapshotsClient = Games.getSnapshotsClient(app, googleAccount);
-        FRLogger.logDebug("SnapshotСlient received successfully");
+        FRAndroidHelper.getInstance().logDebug("SnapshotСlient received successfully");
         saveGame();
     }
 
     private void onDisconnected() {
-        FRLogger.logDebug("Snapshot client is disconnected");
+        FRAndroidHelper.getInstance().logDebug("Snapshot client is disconnected");
         snapshotsClient = null;
     }
 

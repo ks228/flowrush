@@ -8,7 +8,6 @@ public interface AndroidHelper {
     void openTwitter();
     void openVK();
     void openPlaymarket();
-    boolean isDebug();
     void logError(String msg, Throwable tr);
     void logDebug(String msg);
 }

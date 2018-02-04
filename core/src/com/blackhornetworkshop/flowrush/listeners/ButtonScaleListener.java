@@ -3,6 +3,7 @@ package com.blackhornetworkshop.flowrush.listeners;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.blackhornetworkshop.flowrush.FRAssetManager;
 import com.blackhornetworkshop.flowrush.FlowRush;
 
 //Created by TScissors. Класс для ScaleToAction кнопок по нажатию
@@ -20,7 +21,7 @@ public class ButtonScaleListener extends ClickListener{
     @Override
     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
         if(FlowRush.getInstance().prefs.isSoundOn()){
-            FlowRush.getInstance().tapSound.play(1f);
+            FRAssetManager.getTapSound().play(1f);
         }
         buttonScaleToAction.setScale(0.85f, 0.85f);
         if (event.getListenerActor().getActions().contains(buttonScaleToAction, true)) {

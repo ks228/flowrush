@@ -10,7 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.blackhornetworkshop.flowrush.ConstantBase;
+import com.blackhornetworkshop.flowrush.FRAssetManager;
+import com.blackhornetworkshop.flowrush.FRConstants;
 import com.blackhornetworkshop.flowrush.FlowRush;
 import com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener;
 
@@ -47,8 +48,8 @@ public class LevelGroupCreator {
         lvlAvailable = FlowRush.getInstance().save.getLevelsProgress()[pack-1];
         //System.out.println(lvlAvailable+" available level");
 
-        up = (Gdx.graphics.getHeight()*0.98f- ConstantBase.C_BUTTON_SIZE); //верхний отступ
-        down = (ConstantBase.C_BUTTON_SIZE)+Gdx.graphics.getHeight()*0.02f; //нижний отступ
+        up = (Gdx.graphics.getHeight()*0.98f- FRConstants.C_BUTTON_SIZE); //верхний отступ
+        down = (FRConstants.C_BUTTON_SIZE)+Gdx.graphics.getHeight()*0.02f; //нижний отступ
 
         lvlNumSize = (up-down)/12;
 
@@ -58,12 +59,12 @@ public class LevelGroupCreator {
     }
 
     private void createGroup(Group levelGroup){
-        final Sprite greyback = FlowRush.getInstance().atlas.createSprite("lock");
+        final Sprite greyback = FRAssetManager.getAtlas().createSprite("lock");
         for (int x = 1; x < 51; x++) {
             final int i = x;
             setPos(x);
             if(x<=lvlAvailable) {
-                TextButton levelNumberButton = new TextButton(""+x, FlowRush.getInstance().skin, "lightblue");
+                TextButton levelNumberButton = new TextButton(""+x, FRAssetManager.getSkin(), "lightblue");
                 levelNumberButton.setSize(lvlNumSize, lvlNumSize);
                 levelNumberButton.setPosition(xPos, yPos);
                 levelNumberButton.setOrigin(lvlNumSize/2, lvlNumSize/2);
