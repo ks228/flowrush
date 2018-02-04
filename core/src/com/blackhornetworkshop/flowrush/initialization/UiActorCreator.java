@@ -16,6 +16,11 @@ import com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener;
 import com.blackhornetworkshop.flowrush.screens.GameScreen;
 import com.blackhornetworkshop.flowrush.screens.MenuScreen;
 import com.blackhornetworkshop.flowrush.ui.SmallButtonActor;
+import com.blackhornetworkshop.flowrush.ui.background.BackgroundActor;
+import com.blackhornetworkshop.flowrush.ui.background.BottomBackgroundActor;
+import com.blackhornetworkshop.flowrush.ui.background.LeftBackgroundActor;
+import com.blackhornetworkshop.flowrush.ui.background.RightBackgroundActor;
+import com.blackhornetworkshop.flowrush.ui.background.TopBackgroundActor;
 
 //Created by TScissors. Главный класс игрового экрана
 
@@ -603,5 +608,19 @@ public class UiActorCreator {
             default:
                 return null;
         }
+    }
+
+    public static BackgroundActor getBackgroundActor(Sprite sprite, int type, boolean isDuplicate){
+        BackgroundActor backgroundActor;
+        if (type == 1) {// left -> right
+            backgroundActor = new LeftBackgroundActor(sprite, isDuplicate ? 1f : 1.3f);
+        } else if (type == 2) { // down -> top
+            backgroundActor = new BottomBackgroundActor(sprite, isDuplicate ? 2f : 2.6f);
+        } else if (type == 3) { // right -> left
+            backgroundActor = new RightBackgroundActor(sprite, isDuplicate ? 1f : 1.3f);
+        } else { // top -> down
+            backgroundActor = new TopBackgroundActor(sprite, isDuplicate ? 2f : 2.6f);
+        }
+        return backgroundActor;
     }
 }

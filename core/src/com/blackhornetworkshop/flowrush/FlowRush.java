@@ -33,7 +33,6 @@ import com.blackhornetworkshop.flowrush.initialization.UiActorCreator;
 import com.blackhornetworkshop.flowrush.screens.GameScreen;
 import com.blackhornetworkshop.flowrush.screens.LogoScreen;
 import com.blackhornetworkshop.flowrush.screens.MenuScreen;
-import com.blackhornetworkshop.flowrush.ui.BackAnimActor;
 import com.blackhornetworkshop.flowrush.ui.SmallButtonActor;
 import com.blackhornetworkshop.flowrush.ui.TapOnTileActor;
 import com.blackhornetworkshop.flowrush.ui.UIPool;
@@ -65,7 +64,7 @@ public class FlowRush extends Game {
     public TiledDrawable spriteBack;
     public TextureAtlas atlas;
     public Sprite qCircle;
-    private Sprite dotSprite;
+    private Sprite stripe;
     //Audio
     public Sound tapSound, lvlCompleteSound, packCompleteSound;
     public Music backgroundMusic;
@@ -143,9 +142,9 @@ public class FlowRush extends Game {
 
         //анимация фона
         backGroup = new Group();
-        for(int index = 1, type = 1; type<5; type++, index+=0.6f){ /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! FIX BUG INT---FLOAT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-            backGroup.addActor(new BackAnimActor(dotSprite,index ,type));
-            backGroup.addActor(new BackAnimActor(dotSprite,index+0.3f,type));/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! FIX BUG INT---FLOAT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+        for(int type = 1; type<5; type++){
+            backGroup.addActor(UiActorCreator.getBackgroundActor(stripe, type, false));
+            backGroup.addActor(UiActorCreator.getBackgroundActor(stripe, type, true));
         }
 
 
@@ -250,16 +249,16 @@ public class FlowRush extends Game {
         //Фон-точка
         if(Gdx.graphics.getWidth()<500) {
             spriteBack = new TiledDrawable(atlas.findRegion("point"));
-            dotSprite = atlas.createSprite("animation");
+            stripe = atlas.createSprite("animation");
         }else if(Gdx.graphics.getWidth()<900){
             spriteBack = new TiledDrawable(atlas.findRegion("point2"));
-            dotSprite = atlas.createSprite("animation2");
+            stripe = atlas.createSprite("animation2");
         }else if(Gdx.graphics.getWidth()<1300){
             spriteBack = new TiledDrawable(atlas.findRegion("point3"));
-            dotSprite = atlas.createSprite("animation3");
+            stripe = atlas.createSprite("animation3");
         }else{
             spriteBack = new TiledDrawable(atlas.findRegion("point4"));
-            dotSprite = atlas.createSprite("animation4");
+            stripe = atlas.createSprite("animation4");
         }
     }
 
