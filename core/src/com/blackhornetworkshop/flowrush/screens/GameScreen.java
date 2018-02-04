@@ -21,7 +21,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import com.blackhornetworkshop.flowrush.ConstantBase;
 import com.blackhornetworkshop.flowrush.FlowRush;
-import com.blackhornetworkshop.flowrush.ex.FlowRushInitializeException;
 import com.blackhornetworkshop.flowrush.gameplay.TileActor;
 import com.blackhornetworkshop.flowrush.gameplay.TileController;
 import com.blackhornetworkshop.flowrush.initialization.MapActorGroupCreator;
@@ -41,7 +40,6 @@ public class GameScreen implements Screen {
 
     private static GameScreen instance;
 
-    public final com.blackhornetworkshop.flowrush.FlowRush game;
     public final Stage stage;
     private Stage hudStage;
 
@@ -76,57 +74,49 @@ public class GameScreen implements Screen {
     //Other
     private MoveToAction moveToActionPause;
 
-    public static void initialize(FlowRush game){
-        if(instance == null) {
-            instance = new GameScreen(game);
-        }else {
-            throw new FlowRushInitializeException("GameScreen already initialized!");
-        }
-    }
-
     public static GameScreen getInstance(){
-        if(instance != null) {
-            return instance;
+        if(instance == null) {
+            instance = new GameScreen();
+            FlowRush.logDebug("GameScreen is initialized. Return new instance");
         }else {
-            throw new FlowRushInitializeException("GameScreen should be already initialized!");
+            FlowRush.logDebug("GameScreen is already initialized. Return existing instance");
         }
+        return instance;
     }
 
-    private GameScreen(FlowRush gam) {
-        game = gam;
-
+    private GameScreen() {
         //Основная сцена для гексов и сцена для UI
-        stage = new Stage(new ScreenViewport(), game.batch);
-        hudStage = new Stage(new ScreenViewport(), game.batch);
+        stage = FlowRush.getInstance().getMainStage();
+        hudStage = FlowRush.getInstance().getHudStage();
 
         //множитель inputprocessor
         inputMultiplexer = new InputMultiplexer();
 
         //спрайт для отрисовки фона
-        background = game.spriteBack;
+        background = FlowRush.getInstance().spriteBack;
 
         //Массивы необходимые для быстрой проверки всех актеров, параллельно с mapGroup !!!!!!!!!!!!!! ПОЧЕМУ НЕ ХВАТАЕТ MAPGROUP???
         groupArray = new ArrayList<TileActor>();
         specialActorsArray = new ArrayList<TileActor>();
 
         //Батч для фона из точек
-        batchForBack = this.game.batch;
+        batchForBack = FlowRush.getInstance().batch;
 
         //Map creator
-        mapActorGroupCreator = new MapActorGroupCreator(this);
+        mapActorGroupCreator = new MapActorGroupCreator();
 
         //Актеры паузы
-        restartButton = UiActorCreator.getSmallButtonActor(3, game);
-        mmenuButton = UiActorCreator.getSmallButtonActor(4, game);
-        pauseActor = UiActorCreator.getSmallButtonActor(1, game);
-        backButton = UiActorCreator.getSmallButtonActor(2, game);
+        restartButton = UiActorCreator.getSmallButtonActor(3);
+        mmenuButton = UiActorCreator.getSmallButtonActor(4);
+        pauseActor = UiActorCreator.getSmallButtonActor(1);
+        backButton = UiActorCreator.getSmallButtonActor(2);
         //backButton.setPosition(0, 0); /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! NOT EXIST IN 1.04 */
 
         //Фон для актеров паузы
         qCircle = new Actor() {
             @Override
             public void draw(Batch batch, float alpha) {
-                batch.draw(game.qCircle, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+                batch.draw(FlowRush.getInstance().qCircle, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
             }
         };
 
@@ -134,13 +124,13 @@ public class GameScreen implements Screen {
 
         qCircle.setPosition(0, 0);
 
-        wellDone = new Label("WELL DONE!", game.skin, "darkblue");
+        wellDone = new Label("WELL DONE!", FlowRush.getInstance().skin, "darkblue");
         wellDone.setSize(Gdx.graphics.getWidth() * 0.6f, ConstantBase.C_BUTTON_SIZE * 0.7f);
         wellDone.setPosition((Gdx.graphics.getWidth() - wellDone.getWidth()) / 2, Gdx.graphics.getHeight() - ConstantBase.C_BUTTON_SIZE * 0.85f);
         wellDone.setAlignment(Align.center);
         wellDone.setVisible(false);
-        nextButton = UiActorCreator.getSmallButtonActor(12, game);
-        wellDonehex = UiActorCreator.getSmallButtonActor(11, game);
+        nextButton = UiActorCreator.getSmallButtonActor(12);
+        wellDonehex = UiActorCreator.getSmallButtonActor(11);
 
 
         //Экшн для группы актеров паузы
@@ -150,33 +140,10 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-        game.androidSide.logDebug("Game screen show() method called");
-        //Количество получателей на каждой карте уникально
-        //numOfReceivers = 0; // SHOULD IT BE STATIC ????????????????????
+        FlowRush.logDebug("Game screen show() method called");
 
-        //Батч для фона из точек
-        //batchForBack = new SpriteBatch();
-        ///!!!!!!!!!!!!!!!!!!!! CHANGED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        //batchForBack = this.game.batch;
-
-        //номер уровня
-        //game.levelNumberActor.setText("" + game.levelLoader.getLvl());
-
-
-
-        //PackComplete создается только при условии что уровень последний
-        /*if (!game.levelLoader.containsNext()) {
-            createPackCompleteGroup();
-        }*/
-
-        // HEX WIDTH & HEIGHT DELETED!!!
-        //mapGroup = mapActorGroupCreator.getGroup(this, game.levelLoader.getActorList(), game.atlas);
-        //game.checker.initialization(this, mapGroup); //обязательно после создания mapgroup иначе special actors array будет пустым
-
-        //stage.addActor(mapGroup);
-
-        game.soundButton.setPosition(0, ConstantBase.C_BUTTON_SIZE+ Gdx.graphics.getHeight() * 0.05f);
-        game.soundButton.setVisible(true);
+        FlowRush.getInstance().soundButton.setPosition(0, ConstantBase.C_BUTTON_SIZE+ Gdx.graphics.getHeight() * 0.05f);
+        FlowRush.getInstance().soundButton.setVisible(true);
 
         //Группа для актеров паузы
         movePauseGroup = new Group();
@@ -184,21 +151,20 @@ public class GameScreen implements Screen {
         movePauseGroup.addActor(mmenuButton);
         movePauseGroup.addActor(backButton);
         movePauseGroup.addActor(restartButton);
-        movePauseGroup.addActor(game.soundButton);
-        //movePauseGroup.setPosition(-Gdx.graphics.getWidth() * 0.4f, -Gdx.graphics.getWidth() * 0.4f);
+        movePauseGroup.addActor(FlowRush.getInstance().soundButton);
 
-        hudStage.addActor(game.alphawhiteBack);
+        hudStage.addActor(FlowRush.getInstance().alphawhiteBack);
         hudStage.addActor(wellDone);
         hudStage.addActor(wellDonehex);
         hudStage.addActor(nextButton);
         hudStage.addActor(pauseActor);
-        hudStage.addActor(game.levelNumberActor);
+        hudStage.addActor(FlowRush.getInstance().levelNumberActor);
         hudStage.addActor(movePauseGroup);
 
-        stage.addActor(game.backGroup);
+        stage.addActor(FlowRush.getInstance().backGroup);
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        inputMultiplexer.addProcessor(0, game.oneTouchProcessor);
+        inputMultiplexer.addProcessor(0, FlowRush.getInstance().oneTouchProcessor);
         inputMultiplexer.addProcessor(1, hudStage);
         inputMultiplexer.addProcessor(2, stage);
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -213,7 +179,7 @@ public class GameScreen implements Screen {
             public void run() {
                 for (int x = 0; x < specialActorsArray.size(); x++) {
                     if (specialActorsArray.get(x).getInclude() == 2 && !specialActorsArray.get(x).isPowerOn()) {
-                        TileController.animIcon(specialActorsArray.get(x), iconWhite, game.atlas);
+                        TileController.animIcon(specialActorsArray.get(x), iconWhite, FlowRush.getInstance().atlas);
                     }
                 }
                 iconWhite = !iconWhite;
@@ -231,41 +197,40 @@ public class GameScreen implements Screen {
 
     @Override
     public void hide() {
-        game.androidSide.logDebug("Game screen hide() method called");
+        FlowRush.logDebug("Game screen hide() method called");
 
         //inputMultiplexer.clear();
         stage.clear();
+        hudStage.clear();
         movePauseGroup.clear();
         mapGroup.clear();
-        /* DISPOSE ADDED HERE IN 1.04, WHY ???????????????????????????????????????????????????? */
-        //dispose();
     }
 
     public void restart() { //обязательно вместе с restart или nextlvl (в levelloader)
         //номер уровня
-        game.levelNumberActor.setText("" + game.levelLoader.getLvl());
+        FlowRush.getInstance().levelNumberActor.setText("" + FlowRush.getInstance().levelLoader.getLvl());
 
         //очистка
         numOfReceivers = 0;
         //stage.clear(); // NEED HERE SOME REFACTORING !!!!!!!!!!!!!!!!!!!!! CLEAR AND AGAIN ADD ? CHANGE IT!!!!!!!!!!!!!!
         groupArray.clear();
         specialActorsArray.clear();
-        game.alphawhiteBack.setVisible(false);
+        FlowRush.getInstance().alphawhiteBack.setVisible(false);
 
         if(mapGroup != null) {
             mapGroup.clear();
         }
 
         //загружаем группу актеров // DELETED HEX WIDTH & HEIGHT !!!!!!
-        mapGroup = mapActorGroupCreator.getGroup(this, game.levelLoader.getActorList(), game.atlas);
+        mapGroup = mapActorGroupCreator.getGroup(FlowRush.getInstance().levelLoader.getActorList(), FlowRush.getInstance().atlas);
         stage.addActor(mapGroup);
 
         //обновляем чекер
-        game.checker.initialization(this, mapGroup);
-        game.checker.checkAndSetActor();
+        FlowRush.getInstance().checker.initialization(this, mapGroup);
+        FlowRush.getInstance().checker.checkAndSetActor();
 
         //PackComplete создается только при условии что уровень последний
-        if (!game.levelLoader.containsNext()) {
+        if (!FlowRush.getInstance().levelLoader.containsNext()) {
             createPackCompleteGroup();
         }
         resume();
@@ -273,33 +238,50 @@ public class GameScreen implements Screen {
 
     private void checkAchievements() {
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! REFACTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        if (game.levelLoader.getLvl() == 1 && !game.save.getAchievements()[0]) {//прошел первый уровень
-            game.unlockAchievement(1);
+        if (FlowRush.getInstance().levelLoader.getLvl() == 1 && !FlowRush.getInstance().save.getAchievements()[0]) {//прошел первый уровень
+            FlowRush.getInstance().unlockAchievement(1);
         }
 
         // FIRST LEVEL WITH A DOVE
-        if (((game.levelLoader.getLvl() == 10 && game.levelLoader.getPack() == 1) || (game.levelLoader.getLvl() == 1 && (game.levelLoader.getPack() == 2 || game.levelLoader.getPack() == 3 || game.levelLoader.getPack() == 4 || game.levelLoader.getPack() == 5))) && !game.save.getAchievements()[1]) {
-            game.unlockAchievement(2);
+        if (((FlowRush.getInstance().levelLoader.getLvl() == 10 && FlowRush.getInstance().levelLoader.getPack() == 1)
+                || (FlowRush.getInstance().levelLoader.getLvl() == 1 && (FlowRush.getInstance().levelLoader.getPack() == 2 || FlowRush.getInstance().levelLoader.getPack() == 3
+                || FlowRush.getInstance().levelLoader.getPack() == 4 || FlowRush.getInstance().levelLoader.getPack() == 5))) && !FlowRush.getInstance().save.getAchievements()[1]) {
+            FlowRush.getInstance().unlockAchievement(2);
         }
 
-        if (game.levelLoader.getLvl() == 50 && game.levelLoader.getPack() == 1 && !game.save.getAchievements()[2]) { //прошел первый пак
-            game.unlockAchievement(3);
+        if (FlowRush.getInstance().levelLoader.getLvl() == 50
+                && FlowRush.getInstance().levelLoader.getPack() == 1
+                && !FlowRush.getInstance().save.getAchievements()[2]) { //прошел первый пак
+            FlowRush.getInstance().unlockAchievement(3);
         }
-        if (game.levelLoader.getLvl() == 50 && game.levelLoader.getPack() == 2 && !game.save.getAchievements()[3]) { //прошел второй пак
-            game.unlockAchievement(4);
+        if (FlowRush.getInstance().levelLoader.getLvl() == 50
+                && FlowRush.getInstance().levelLoader.getPack() == 2
+                && !FlowRush.getInstance().save.getAchievements()[3]) { //прошел второй пак
+            FlowRush.getInstance().unlockAchievement(4);
         }
-        if (game.levelLoader.getLvl() == 50 && game.levelLoader.getPack() == 3 && !game.save.getAchievements()[4]) { //прошел третий пак
-            game.unlockAchievement(5);
+        if (FlowRush.getInstance().levelLoader.getLvl() == 50
+                && FlowRush.getInstance().levelLoader.getPack() == 3
+                && !FlowRush.getInstance().save.getAchievements()[4]) { //прошел третий пак
+            FlowRush.getInstance().unlockAchievement(5);
         }
-        if (game.levelLoader.getLvl() == 50 && game.levelLoader.getPack() == 4 && !game.save.getAchievements()[5]) { //прошел четвертый пак
-            game.unlockAchievement(6);
+        if (FlowRush.getInstance().levelLoader.getLvl() == 50
+                && FlowRush.getInstance().levelLoader.getPack() == 4
+                && !FlowRush.getInstance().save.getAchievements()[5]) { //прошел четвертый пак
+            FlowRush.getInstance().unlockAchievement(6);
         }
-        if (game.levelLoader.getLvl() == 50 && game.levelLoader.getPack() == 5 && !game.save.getAchievements()[6]) { //прошел пятый пак
-            game.unlockAchievement(7);
+        if (FlowRush.getInstance().levelLoader.getLvl() == 50
+                && FlowRush.getInstance().levelLoader.getPack() == 5
+                && !FlowRush.getInstance().save.getAchievements()[6]) { //прошел пятый пак
+            FlowRush.getInstance().unlockAchievement(7);
         }
 
-        if (game.save.getLevelsProgress()[0] == 50 && game.save.getLevelsProgress()[1] == 50 && game.save.getLevelsProgress()[2] == 50 && game.save.getLevelsProgress()[3] == 50 && game.save.getLevelsProgress()[4] == 50 && !game.save.getAchievements()[7]) { // прошел все уровни
-            game.unlockAchievement(8);
+        if (FlowRush.getInstance().save.getLevelsProgress()[0] == 50
+                && FlowRush.getInstance().save.getLevelsProgress()[1] == 50
+                && FlowRush.getInstance().save.getLevelsProgress()[2] == 50
+                && FlowRush.getInstance().save.getLevelsProgress()[3] == 50
+                && FlowRush.getInstance().save.getLevelsProgress()[4] == 50
+                && !FlowRush.getInstance().save.getAchievements()[7]) { // прошел все уровни
+            FlowRush.getInstance().unlockAchievement(8);
         }
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! REFACTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
@@ -307,10 +289,10 @@ public class GameScreen implements Screen {
         checkAchievements();
 
         //level complete отображается в любом случае
-        game.screenType = ConstantBase.ScreenType.GAME_LVL_COMPLETE;
+        FlowRush.getInstance().screenType = ConstantBase.ScreenType.GAME_LVL_COMPLETE;
 
-        if (game.prefs.isSoundOn()) {
-            game.lvlCompleteSound.play();
+        if (FlowRush.getInstance().prefs.isSoundOn()) {
+            FlowRush.getInstance().lvlCompleteSound.play();
         }
 
         nextButton.setVisible(true);
@@ -319,22 +301,22 @@ public class GameScreen implements Screen {
 
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! REFACTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        if (game.levelLoader.containsNext()) { //если следующий уровень существует в паке то переключаем его тут
-            game.levelLoader.nextLvl();
-            game.save.setCurrentLvl(game.levelLoader.getLvl());
-            game.saveSaveFile();
+        if (FlowRush.getInstance().levelLoader.containsNext()) { //если следующий уровень существует в паке то переключаем его тут
+            FlowRush.getInstance().levelLoader.nextLvl();
+            FlowRush.getInstance().save.setCurrentLvl(FlowRush.getInstance().levelLoader.getLvl());
+            FlowRush.getInstance().saveSaveFile();
         } else { //если уровня нет, проверяем доступность следующего пака и тогда переключаем его
             nextButton.setName("show pack");
-            if (game.levelLoader.getLevelPack(game.levelLoader.getPack()).available) {//next pack available
-                game.levelLoader.nextPack();
-                game.saveSaveFile();
+            if (FlowRush.getInstance().levelLoader.getLevelPack(FlowRush.getInstance().levelLoader.getPack()).available) {//next pack available
+                FlowRush.getInstance().levelLoader.nextPack();
+                FlowRush.getInstance().saveSaveFile();
                 packCompleteNextButton.setName("visible");
             }
         }
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! REFACTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-        if(FlowRush.isPlayServicesAvailable && game.getPlayServices().isSignedIn()) {
-            game.getPlayServices().saveGame();// Save in Google Play
+        if(FlowRush.isPlayServicesAvailable && FlowRush.getInstance().getPlayServices().isSignedIn()) {
+            FlowRush.getInstance().getPlayServices().saveGame();// Save in Google Play
         }
     }
     public void showPackComplete(){
@@ -342,16 +324,16 @@ public class GameScreen implements Screen {
         wellDone.setVisible(false);
         wellDonehex.setVisible(false);
 
-        game.screenType = ConstantBase.ScreenType.GAME_PACK_COMPLETE;
+        FlowRush.getInstance().screenType = ConstantBase.ScreenType.GAME_PACK_COMPLETE;
 
         //System.out.println("screen game packcomplete type 34");
 
         stage.getRoot().setVisible(false);
         pauseActor.setVisible(false);
-        game.levelNumberActor.setVisible(false);
+        FlowRush.getInstance().levelNumberActor.setVisible(false);
 
-        if (game.prefs.isSoundOn()) {
-            game.packCompleteSound.play();
+        if (FlowRush.getInstance().prefs.isSoundOn()) {
+            FlowRush.getInstance().packCompleteSound.play();
         }
         if (packCompleteNextButton.getName().equals("visible")) { //!!!!!!!!!!!!!!!!!!!!!!! VISIBLE ???????????????
             packCompleteNextButton.setVisible(true);
@@ -361,7 +343,7 @@ public class GameScreen implements Screen {
         packBackActor.setVisible(true);
         packCompleteActor.setVisible(true);
         packComplMenuButton.setVisible(true);
-        if (game.prefs.isShowRateDialog()) {
+        if (FlowRush.getInstance().prefs.isShowRateDialog()) {
             dialogBack.setVisible(true);
             leftButton.setVisible(true);
             rightButton.setVisible(true);
@@ -369,30 +351,30 @@ public class GameScreen implements Screen {
     }
 
     private void createPackCompleteGroup() { //Для создания группы актеров PackComplete
-        packCompleteActor = new PackCompleteActor(game.atlas, game.skin.getFont("fontMid"), game.save.getPackName());
-        packBackActor = new PackBackActor(game.atlas);
-        packComplMenuButton = UiActorCreator.getTextButton(9, game);
-        packCompleteNextButton = UiActorCreator.getTextButton(12, game);
+        packCompleteActor = new PackCompleteActor(FlowRush.getInstance().atlas, FlowRush.getInstance().skin.getFont("fontMid"), FlowRush.getInstance().save.getPackName());
+        packBackActor = new PackBackActor(FlowRush.getInstance().atlas);
+        packComplMenuButton = UiActorCreator.getTextButton(9);
+        packCompleteNextButton = UiActorCreator.getTextButton(12);
         packCompleteNextButton.setName("");
 
         //части диалога об оценке/отзыве игры
-        dialogBack = new Label("ENJOYING  FLOW RUSH?", game.skin, "darkbluesmall");
+        dialogBack = new Label("ENJOYING  FLOW RUSH?", FlowRush.getInstance().skin, "darkbluesmall");
         dialogBack.setSize(Gdx.graphics.getWidth(), ConstantBase.C_BUTTON_SIZE * 1.45f);
         dialogBack.setPosition(0, 0);
         dialogBack.setAlignment(Align.top);
 
-        leftButton = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getTextButton(10, game);
-        leftButton.setStyle(game.skin.get("bordersmall", TextButton.TextButtonStyle.class));
+        leftButton = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getTextButton(10);
+        leftButton.setStyle(FlowRush.getInstance().skin.get("bordersmall", TextButton.TextButtonStyle.class));
         leftButton.setText("NOT SURE");
-        leftButton.addListener(new ButtonScaleListener(leftButton, game));
+        leftButton.addListener(new ButtonScaleListener(leftButton));
         LeftButtonListener leftButtonListener = new LeftButtonListener(this);
         leftButton.addListener(leftButtonListener);
 
-        rightButton = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getTextButton(10, game);
-        rightButton.setStyle(game.skin.get("whitesmall", TextButton.TextButtonStyle.class));
+        rightButton = com.blackhornetworkshop.flowrush.initialization.UiActorCreator.getTextButton(10);
+        rightButton.setStyle(FlowRush.getInstance().skin.get("whitesmall", TextButton.TextButtonStyle.class));
         rightButton.setText("YES!");
         rightButton.setX((Gdx.graphics.getWidth() - rightButton.getWidth() * 2) / 3 * 2 + rightButton.getWidth());
-        rightButton.addListener(new ButtonScaleListener(rightButton, game));
+        rightButton.addListener(new ButtonScaleListener(rightButton));
         rightButton.addListener(new RightButtonListener(this, leftButtonListener));
 
 
@@ -437,11 +419,11 @@ public class GameScreen implements Screen {
 
     @Override
     public void pause() {
-        if (game.screenType == ConstantBase.ScreenType.GAME_LVL_COMPLETE) {
-            game.screenType = ConstantBase.ScreenType.GAME_LVL_COMPLETE_PAUSE; //lvlcomplete+pause
+        if (FlowRush.getInstance().screenType == ConstantBase.ScreenType.GAME_LVL_COMPLETE) {
+            FlowRush.getInstance().screenType = ConstantBase.ScreenType.GAME_LVL_COMPLETE_PAUSE; //lvlcomplete+pause
             //System.out.println("screen game pause on type 35");
         }else{
-            game.screenType = ConstantBase.ScreenType.GAME_PAUSE;
+            FlowRush.getInstance().screenType = ConstantBase.ScreenType.GAME_PAUSE;
             //System.out.println("screen game pause on type 32");
         }
 
@@ -472,17 +454,17 @@ public class GameScreen implements Screen {
 
     @Override
     public void resume() {
-        if (game.screenType == ConstantBase.ScreenType.GAME_PAUSE) {//Вариант когда нажата пауза
-            game.screenType = ConstantBase.ScreenType.GAME;
-            if (inputMultiplexer.getProcessors().size < 3 && game.screenType != ConstantBase.ScreenType.GAME_LVL_COMPLETE) {
+        if (FlowRush.getInstance().screenType == ConstantBase.ScreenType.GAME_PAUSE) {//Вариант когда нажата пауза
+            FlowRush.getInstance().screenType = ConstantBase.ScreenType.GAME;
+            if (inputMultiplexer.getProcessors().size < 3 && FlowRush.getInstance().screenType != ConstantBase.ScreenType.GAME_LVL_COMPLETE) {
                 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! inputMultiplexer.getProcessors().contains(stage, true);
                 inputMultiplexer.addProcessor(stage);
             }
             pauseActor.setVisible(true);
-            game.alphawhiteBack.setVisible(false);
+            FlowRush.getInstance().alphawhiteBack.setVisible(false);
             movePauseGroupDown();
-        } else if (game.screenType != ConstantBase.ScreenType.GAME_LVL_COMPLETE && game.screenType != ConstantBase.ScreenType.GAME_LVL_COMPLETE_PAUSE) {
-            game.screenType = ConstantBase.ScreenType.GAME;
+        } else if (FlowRush.getInstance().screenType != ConstantBase.ScreenType.GAME_LVL_COMPLETE && FlowRush.getInstance().screenType != ConstantBase.ScreenType.GAME_LVL_COMPLETE_PAUSE) {
+            FlowRush.getInstance().screenType = ConstantBase.ScreenType.GAME;
 
             if (inputMultiplexer.getProcessors().size < 3) {
                 inputMultiplexer.addProcessor(stage);
@@ -490,27 +472,23 @@ public class GameScreen implements Screen {
             stage.getRoot().setVisible(true);
             movePauseGroupDown();
             pauseActor.setVisible(true);
-            game.levelNumberActor.setVisible(true);
-            game.alphawhiteBack.setVisible(false);
+            FlowRush.getInstance().levelNumberActor.setVisible(true);
+            FlowRush.getInstance().alphawhiteBack.setVisible(false);
 
             wellDone.setVisible(false);
             wellDonehex.setVisible(false);
             nextButton.setVisible(false);
-        } else if (game.screenType == ConstantBase.ScreenType.GAME_LVL_COMPLETE_PAUSE) {
+        } else if (FlowRush.getInstance().screenType == ConstantBase.ScreenType.GAME_LVL_COMPLETE_PAUSE) {
             pauseActor.setVisible(true);
             movePauseGroupDown();
-            game.screenType = ConstantBase.ScreenType.GAME_LVL_COMPLETE;
+            FlowRush.getInstance().screenType = ConstantBase.ScreenType.GAME_LVL_COMPLETE;
         }
     }
 
     @Override
     public void dispose() {
-        stage.dispose();
-        hudStage.dispose();
-
-        //DELETED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
-        //batchForBack.dispose();// DELETE!
-
-        //System.out.println("dispose() был вызван в GameScreen");
+        /*stage.dispose();
+        hudStage.dispose();*/
+        FlowRush.logDebug("GameScreen dispose() called");
     }
 }

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
 import com.blackhornetworkshop.flowrush.ConstantBase;
+import com.blackhornetworkshop.flowrush.FlowRush;
 import com.blackhornetworkshop.flowrush.gameplay.TileActor;
 import com.blackhornetworkshop.flowrush.gameplay.TileController;
 import com.blackhornetworkshop.flowrush.listeners.HexActorListener;
@@ -17,8 +18,6 @@ import java.util.ArrayList;
 
 public class MapActorGroupCreator {
 
-    private final GameScreen gameScreen;
-
     private Group mapGroup;
 
     private float xPos;
@@ -27,17 +26,14 @@ public class MapActorGroupCreator {
     private float minCoord = Gdx.graphics.getHeight();
     private float maxCoord;
 
-    public MapActorGroupCreator(GameScreen gameScreen) {
-        this.gameScreen = gameScreen;
-    }
 
-    public Group getGroup(GameScreen gameScreen, ArrayList<ArrayList<ActorInfo>> list, TextureAtlas atlas) {
+    public Group getGroup(ArrayList<ArrayList<ActorInfo>> list, TextureAtlas atlas) {
         minCoord = Gdx.graphics.getHeight();
         maxCoord = 0;
 
         mapGroup = new Group();
 
-        mapGroup.addActor(gameScreen.game.tapOnTileActor);
+        mapGroup.addActor(FlowRush.getInstance().tapOnTileActor);
 
         for (int x = 0; x < list.size(); x++) {
             for (int y = 0; y < list.get(0).size(); y++) {
@@ -57,7 +53,7 @@ public class MapActorGroupCreator {
         mapGroup.setWidth(list.size() * ConstantBase.HEX_WIDTH - (list.size() - 1) * (ConstantBase.HEX_WIDTH / 4));
         mapGroup.setHeight(maxCoord - minCoord);
 
-        float availHeight = (Gdx.graphics.getHeight() - (Gdx.graphics.getWidth() / 10) - gameScreen.game.levelNumberActor.getHeight() * 1.1f - ConstantBase.C_BUTTON_SIZE * 1.1f);
+        float availHeight = (Gdx.graphics.getHeight() - (Gdx.graphics.getWidth() / 10) - FlowRush.getInstance().levelNumberActor.getHeight() * 1.1f - ConstantBase.C_BUTTON_SIZE * 1.1f);
         float zoom = (Gdx.graphics.getWidth() - (Gdx.graphics.getWidth() / 10)) / mapGroup.getWidth();
 
         if (mapGroup.getHeight() * zoom > availHeight && zoom > availHeight / mapGroup.getHeight()) {
@@ -99,7 +95,7 @@ public class MapActorGroupCreator {
                 TileController.moveSources(actor);
             }
 
-            actor.addListener(new HexActorListener(actor, gameScreen));
+            actor.addListener(new HexActorListener(actor, GameScreen.getInstance()));
 
             if (actor.getInclude() == 2) {
                 GameScreen.numOfReceivers += 1;
@@ -140,10 +136,10 @@ public class MapActorGroupCreator {
 
             mapGroup.addActor(actor);
 
-            gameScreen.groupArray.add(actor);
+            GameScreen.getInstance().groupArray.add(actor);
 
             if (actor.getInclude() != 0) {
-                gameScreen.specialActorsArray.add(actor);
+                GameScreen.getInstance().specialActorsArray.add(actor);
             }
         }
     }

@@ -2,6 +2,7 @@ package com.blackhornetworkshop.flowrush.listeners;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.blackhornetworkshop.flowrush.FlowRush;
 import com.blackhornetworkshop.flowrush.screens.GameScreen;
 
 //Created by TScissors. Слушатель правой диалоговой кнопки
@@ -36,14 +37,13 @@ public class RightButtonListener extends ClickListener {
             gameScreen.firstTap = false;
         }else{
             if(isRateButton){
-                gameScreen.game.androidSide.openPlaymarket();
+                FlowRush.getAndroidHelper().openPlaymarket();
             }else if(!isRateButton){
-                gameScreen.game.androidSide.sendMail();
+                FlowRush.getAndroidHelper().sendMail();
             }
-            gameScreen.game.prefs.setShowRateDialog(false);
-            gameScreen.game.savePrefsFile();
-            //gameScreen.game.getGameScreen().dispose();
-            gameScreen.game.setMainMenuScreen();
+            FlowRush.getInstance().prefs.setShowRateDialog(false);
+            FlowRush.getInstance().savePrefsFile();
+            FlowRush.getInstance().setMainMenuScreen();
         }
     }
 }

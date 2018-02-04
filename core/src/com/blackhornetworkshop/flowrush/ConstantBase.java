@@ -23,10 +23,10 @@ public class ConstantBase
         GAME_PAUSE,
         LOGO_BHW,
         LOGO_FR,
-        MAIN_MENU_LVL_CHOISE,
+        MAIN_MENU_LVL_CHOICE,
         MAIN_MENU,
         MAIN_MENU_AUTHORS,
-        MAIN_MENU_PACK_CHOISE,
+        MAIN_MENU_PACK_CHOICE,
         MAIN_MENU_SUPPORT_US,
         MAIN_MENU_GOOGLE_PLAY,
         MAIN_MENU_LOAD_SAVED_GAME

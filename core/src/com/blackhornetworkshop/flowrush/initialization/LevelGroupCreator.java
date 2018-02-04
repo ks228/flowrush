@@ -66,11 +66,11 @@ public class LevelGroupCreator {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
                         game.levelLoader.setLvl(pack, i);
-                        //game.getMainMenuScr().dispose();
+                        //game.getMenuScreen().dispose();
                         game.setGameScreen();
                     }
                 });
-                levelNumberButton.addListener(new com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener(levelNumberButton, game));
+                levelNumberButton.addListener(new com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener(levelNumberButton));
                 levelGroup.addActor(levelNumberButton);
             }else{
                 Actor levelLock = new Actor(){
@@ -82,7 +82,7 @@ public class LevelGroupCreator {
                 levelLock.setSize(lvlNumSize, lvlNumSize);
                 levelLock.setPosition(xPos, yPos);
                 levelLock.setOrigin(lvlNumSize/2, lvlNumSize/2);
-                levelLock.addListener(new com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener(levelLock, game));
+                levelLock.addListener(new com.blackhornetworkshop.flowrush.listeners.ButtonScaleListener(levelLock));
                 levelGroup.addActor(levelLock);
             }
         }

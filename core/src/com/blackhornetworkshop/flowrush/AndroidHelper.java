@@ -2,7 +2,7 @@ package com.blackhornetworkshop.flowrush;
 
 //Created by TScissors. Интерфейс для поддержки методов AndroidApplication
 
-public interface AndroidSide{
+public interface AndroidHelper {
     void sendMail();
     void openFacebook();
     void openTwitter();
@@ -11,5 +11,4 @@ public interface AndroidSide{
     boolean isDebug();
     void logError(String msg, Throwable tr);
     void logDebug(String msg);
-    void showToast(String details);
 }

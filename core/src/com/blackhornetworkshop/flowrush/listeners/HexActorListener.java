@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.RotateToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.blackhornetworkshop.flowrush.FlowRush;
 import com.blackhornetworkshop.flowrush.gameplay.TileActor;
 import com.blackhornetworkshop.flowrush.gameplay.TileController;
 import com.blackhornetworkshop.flowrush.screens.GameScreen;
@@ -63,12 +64,12 @@ public class HexActorListener extends ClickListener {
             }
 
         }
-        TileController.setHexbackTouchOn(actor, gameScreen.game.atlas);
+        TileController.setHexbackTouchOn(actor, FlowRush.getInstance().atlas);
         return true;
     }
     @Override
     public void touchUp(InputEvent event, float x, float y, int pointer, int button){
-        TileController.setHexbackTouchOff(actor, gameScreen.game.atlas);
+        TileController.setHexbackTouchOff(actor, FlowRush.getInstance().atlas);
 
         if (actor.isRotable()) {
             scaleToAction.setScale(1f, 1f);
@@ -85,7 +86,7 @@ public class HexActorListener extends ClickListener {
             TileController.setAngle(actor, angle);
             TileController.moveSources(actor);
 
-            gameScreen.game.checker.checkAndSetActor();
+            FlowRush.getInstance().checker.checkAndSetActor();
 
             rotateToAction.setRotation(actor.getAngle());
             if (actor.getActions().contains(rotateToAction, true)) {
@@ -103,7 +104,7 @@ public class HexActorListener extends ClickListener {
             actor.addAction(sequenceAction);
         }
 
-        gameScreen.game.tapOnTileActor.goAnim(actor.getX(), actor.getY());
+        FlowRush.getInstance().tapOnTileActor.goAnim(actor.getX(), actor.getY());
     }
 
 }

@@ -13,7 +13,7 @@ import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 
 public class AndroidLauncher extends AndroidApplication {
 
-    private AndroidSide androidSide;
+    private FRAndroidHelper androidHelper;
     private FRPlayServices playServices;
 
     private ProgressDialog loadingDialog;
@@ -25,7 +25,7 @@ public class AndroidLauncher extends AndroidApplication {
         FRLogger.logDebug("AndroidLauncher onCreate() method");
         super.onCreate(savedInstanceState);
 
-        boolean isPlayServicesAvailable = FRPlayServices.isPlayServicesAvailable(this);
+
 
         loadingDialog = new ProgressDialog(this, ProgressDialog.THEME_HOLO_LIGHT);
         loadingDialog.setMessage("Loading...");
@@ -36,19 +36,27 @@ public class AndroidLauncher extends AndroidApplication {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+        boolean isPlayServicesAvailable = FRPlayServices.isPlayServicesAvailable(this);
 
-        //FlowRush initialization
-        androidSide = new AndroidSideConcrete(this);
+        //AndroidHelper initialization
+        androidHelper = FRAndroidHelper.getInstance();
+        androidHelper.setup(this);
+
+        //PlayServices initialization
         if(isPlayServicesAvailable) {
             FRLogger.logDebug("Play Services are available");
-            FRPlayServices.initialize(this);
             playServices = FRPlayServices.getInstance();
-            FlowRush.initialize(androidSide, playServices);
+            playServices.setup(this);
         }else {
             FRLogger.logDebug("Play Services are not available");
-            FlowRush.initialize(androidSide);
         }
+
+        //FlowRush initialization
         flowRush = FlowRush.getInstance();
+        if(isPlayServicesAvailable) flowRush.setup(androidHelper, playServices);
+        else flowRush.setup(androidHelper);
+        FRLogger.logDebug("FlowRush is initialized");
+
 
         //Layouts
         RelativeLayout mainLayout = (RelativeLayout)getLayoutInflater().inflate(R.layout.main_layout, null);
@@ -66,8 +74,8 @@ public class AndroidLauncher extends AndroidApplication {
         return config;
     }
 
-    AndroidSide getAndroidSide(){
-        return androidSide;
+    AndroidHelper getAndroidHelper(){
+        return androidHelper;
     }
 
     FlowRush getGame(){

@@ -4,6 +4,7 @@ package com.blackhornetworkshop.flowrush.listeners;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.blackhornetworkshop.flowrush.FlowRush;
 import com.blackhornetworkshop.flowrush.screens.GameScreen;
 
 public class LeftButtonListener extends ClickListener{
@@ -34,11 +35,10 @@ public class LeftButtonListener extends ClickListener{
             gameScreen.firstTap = false;
         }else{
             if(!isCancelRateButton){
-                gameScreen.game.prefs.setShowRateDialog(false);
-                gameScreen.game.savePrefsFile();
+                FlowRush.getInstance().prefs.setShowRateDialog(false);
+                FlowRush.getInstance().savePrefsFile();
             }
-            //gameScreen.game.getGameScreen().dispose();
-            gameScreen.game.setMainMenuScreen();
+            FlowRush.getInstance().setMainMenuScreen();
         }
     }
 }

@@ -11,12 +11,10 @@ import com.blackhornetworkshop.flowrush.FlowRush;
 public class ButtonScaleListener extends ClickListener{
 
     private final Actor actor;
-    private final FlowRush game;
 
     private ScaleToAction buttonScaleToAction;
-    public ButtonScaleListener(Actor actr, FlowRush gam){
+    public ButtonScaleListener(Actor actr){
         actor = actr;
-        game = gam;
 
         buttonScaleToAction = new ScaleToAction();
         buttonScaleToAction.setDuration(0.05f);
@@ -29,8 +27,8 @@ public class ButtonScaleListener extends ClickListener{
     }
     @Override
     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-        if(game.prefs.isSoundOn()){
-            game.tapSound.play(1f);
+        if(FlowRush.getInstance().prefs.isSoundOn()){
+            FlowRush.getInstance().tapSound.play(1f);
         }
         buttonScaleToAction.setScale(0.85f, 0.85f);
         if (actor.getActions().contains(buttonScaleToAction, true)) {

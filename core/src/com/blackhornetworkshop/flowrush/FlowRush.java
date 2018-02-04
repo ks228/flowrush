@@ -17,12 +17,14 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.blackhornetworkshop.flowrush.ex.FlowRushInitializeException;
 import com.blackhornetworkshop.flowrush.gameplay.SourceChecker;
 import com.blackhornetworkshop.flowrush.initialization.GamePreferences;
@@ -32,7 +34,7 @@ import com.blackhornetworkshop.flowrush.initialization.SavedGame;
 import com.blackhornetworkshop.flowrush.initialization.UiActorCreator;
 import com.blackhornetworkshop.flowrush.screens.GameScreen;
 import com.blackhornetworkshop.flowrush.screens.LogoScreen;
-import com.blackhornetworkshop.flowrush.screens.MainMenuScr;
+import com.blackhornetworkshop.flowrush.screens.MenuScreen;
 import com.blackhornetworkshop.flowrush.ui.SmallButtonActor;
 import com.blackhornetworkshop.flowrush.ui.TapOnTileActor;
 import com.google.gson.Gson;
@@ -40,7 +42,12 @@ import com.google.gson.Gson;
 
 public class FlowRush extends Game {
 
-    private static FlowRush flowRush;
+    private static FlowRush instance;
+    private static AndroidHelper androidHelper;
+    private static PlayServices playServices;
+
+    //Stages
+    private Stage mainStage, hudStage;
 
     //Data
     public GamePreferences prefs;
@@ -48,8 +55,6 @@ public class FlowRush extends Game {
 
     //Screens
     private LogoScreen logoScreen;
-    private GameScreen gameScreen;
-    private MainMenuScr mainMenuScr;
 
     //Actors
     public Group backGroup;
@@ -71,60 +76,49 @@ public class FlowRush extends Game {
     //Utils
     private Gson gson;
     private AssetManager manager;
-    public PlayServices playServices;
     public OneTouchProcessor oneTouchProcessor;
     public LevelLoader levelLoader;
     public SourceChecker checker;
-    public AndroidSide androidSide;
 
     //Primitives
     public ConstantBase.ScreenType screenType;
     public static boolean isPlayServicesAvailable;
 
-
-    static void initialize(AndroidSide androidSide, PlayServices playServices) throws FlowRushInitializeException{
-        if(flowRush == null) {
-            isPlayServicesAvailable = true;
-            flowRush = new FlowRush(androidSide, playServices);
-            androidSide.logDebug("FlowRush initialized, play services are available");
-        }else {
-            throw new FlowRushInitializeException("FlowRush is already initialized!");
-        }
+    public static FlowRush getInstance() throws FlowRushInitializeException{
+        if(instance == null) instance = new FlowRush();
+        return instance;
     }
 
-    static void initialize(AndroidSide androidSide) throws FlowRushInitializeException{
-        if(flowRush == null) {
-            flowRush = new FlowRush(androidSide);
-            androidSide.logDebug("FlowRush initialized, play services are not available");
-        }else {
-            throw new FlowRushInitializeException("FlowRush is already initialized!");
-        }
+    private FlowRush(){}
+
+    void setup(AndroidHelper androidHelper) {
+        FlowRush.androidHelper = androidHelper;
+        isPlayServicesAvailable = false;
+        logDebug("FlowRush is configured. Without Play Services");
     }
 
-    static FlowRush getInstance() throws FlowRushInitializeException{
-        if(flowRush != null) {
-            return flowRush;
-        }else {
-            throw new FlowRushInitializeException("FlowRush is not initialized!");
-        }
+    void setup(AndroidHelper androidHelper, PlayServices playServices) {
+        FlowRush.androidHelper = androidHelper;
+        FlowRush.playServices = playServices;
+        isPlayServicesAvailable = true;
+        logDebug("FlowRush is configured. With Play Services");
     }
 
-    private FlowRush(AndroidSide androidSide, PlayServices playServices){
-        this(androidSide);
-        this.playServices = playServices;
-    }
-
-    private FlowRush(AndroidSide androidSide){
-        this.androidSide = androidSide;
-    }
     public void create() {
+        logDebug("FlowRush onCreate() called");
+
         batch = new SpriteBatch();
+        ScreenViewport screenViewport = new ScreenViewport();
+
+        //Creating stages
+        mainStage = new Stage(screenViewport, batch);
+        hudStage = new Stage(screenViewport, batch);
 
         //Отлавливаем кнопку BACK
         Gdx.input.setCatchBackKey(true);
 
         //Создаем процеесор ввода, необходим чтобы отключить мультитач и отлавливать кнопку BACK
-        oneTouchProcessor = new OneTouchProcessor(this);
+        oneTouchProcessor = new OneTouchProcessor();
 
         //Загружаем все ресурсы в AssetManager
         manager = new AssetManager();
@@ -206,10 +200,10 @@ public class FlowRush extends Game {
 
         //Файл настроек
         if(Gdx.files.local("prefs.json").exists()){
-            androidSide.logDebug("load exist prefs");
+            logDebug("Load existing prefs.json");
             prefs = gson.fromJson(Gdx.files.local("prefs.json").reader(), GamePreferences.class);
         }else{
-            androidSide.logDebug("create new prefs");
+            androidHelper.logDebug("create new prefs");
             prefs = new GamePreferences();
         }
         //Файл сохранения
@@ -255,36 +249,21 @@ public class FlowRush extends Game {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button){
                 if(screenType == ConstantBase.ScreenType.GAME_PAUSE){
-                    getGameScreen().resume();
+                    GameScreen.getInstance().resume();
                 }
             }
         });
 
         //Кнопка звука одна для всех экранов
-        soundButton = UiActorCreator.getSmallButtonActor(5, this);
+        soundButton = UiActorCreator.getSmallButtonActor(5);
 
         //Актер отображающий анимацию при касании тайла
         tapOnTileActor = new TapOnTileActor(atlas.createSprite("animbackhex"));
 
-        //Creating screens
-        mainMenuScr = new MainMenuScr(this);
-        GameScreen.initialize(this);
-        gameScreen = GameScreen.getInstance();
+        UIPool.initialize();
 
         //Start a game
         setLogoScreen();
-    }
-
-    public void dispose() {
-        logoScreen.dispose();
-        mainMenuScr.dispose();
-        gameScreen.dispose();
-
-        batch.dispose();
-        skin.remove("fontLarge", BitmapFont.class);// выгружаем шрифты из скина, так как manager делает их dispose() а затем повторяет эту же процедуру для скина. при второй попытке exception
-        skin.remove("fontMid", BitmapFont.class);
-        skin.remove("fontSmall", BitmapFont.class);
-        manager.dispose();
     }
 
     public void unlockAchievement(int num){
@@ -294,7 +273,7 @@ public class FlowRush extends Game {
                 playServices.unlockAchievement(num);
             }
         }else{
-            androidSide.logError("No such achievement!", new IllegalArgumentException());
+            androidHelper.logError("No such achievement!", new IllegalArgumentException());
         }
     }
 
@@ -311,25 +290,29 @@ public class FlowRush extends Game {
         System.out.println("Saved progress on local");
     }
 
+    public static AndroidHelper getAndroidHelper(){return androidHelper;}
     public Gson getGson(){return gson;}
     public PlayServices getPlayServices(){return playServices;}
     private void setLogoScreen(){
         logoScreen = new LogoScreen(this);
         setScreen(logoScreen);
     }
+
+    public Stage getMainStage(){
+        return mainStage;
+    }
+
+    public Stage getHudStage(){
+        return hudStage;
+    }
+
     public void setMainMenuScreen(){
-        setScreen(mainMenuScr);
+        setScreen(MenuScreen.getInstance());
     }
     public void setGameScreen(){
-        if(gameScreen == null){
-            GameScreen.initialize(this);
-            gameScreen = GameScreen.getInstance();
-        }
-        //gameScreen = new GameScreen(this);
-        setScreen(gameScreen);
+        setScreen(GameScreen.getInstance());
     }
-    public MainMenuScr getMainMenuScr(){return mainMenuScr;}
-    public GameScreen getGameScreen(){return gameScreen;}
+
     public void pause(){
         getScreen().pause();
         backgroundMusic.pause();
@@ -342,6 +325,24 @@ public class FlowRush extends Game {
         super.render(); // important!
     }
 
-    public void logError(String msg, Throwable tr) { androidSide.logError(msg, tr);}
+    public void logError(String msg, Throwable tr) { androidHelper.logError(msg, tr);}
+
+    public static void logDebug(String msg) { androidHelper.logDebug(msg);}
+
+    public void dispose() {
+        logoScreen.dispose();
+        mainStage.dispose();
+        hudStage.dispose();
+        MenuScreen.getInstance().dispose();
+        GameScreen.getInstance().dispose();
+
+        batch.dispose();
+        skin.remove("fontLarge", BitmapFont.class);// выгружаем шрифты из скина, так как manager делает их dispose() а затем повторяет эту же процедуру для скина. при второй попытке exception
+        skin.remove("fontMid", BitmapFont.class);
+        skin.remove("fontSmall", BitmapFont.class);
+        manager.dispose();
+
+        logDebug("FlowRush dispose() called");
+    }
 }
 

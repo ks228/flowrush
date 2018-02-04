@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
-import com.blackhornetworkshop.flowrush.ex.FlowRushInitializeException;
 import com.blackhornetworkshop.flowrush.initialization.SavedGame;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -35,7 +34,7 @@ import static com.google.android.gms.common.api.CommonStatusCodes.SUCCESS;
 
 public class FRPlayServices implements PlayServices {
 
-    private static FRPlayServices playServices;
+    private static FRPlayServices instance;
 
     private AndroidLauncher app;
     private GoogleSignInClient googleSignInClient;
@@ -50,7 +49,23 @@ public class FRPlayServices implements PlayServices {
 
     final private static int MAX_SNAPSHOT_RESOLVE_RETRIES = 20;
 
-    private FRPlayServices(AndroidLauncher app) {
+    private FRPlayServices(){}
+
+    static boolean isPlayServicesAvailable(Context context) {
+        return GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context) == SUCCESS;
+    }
+
+    static FRPlayServices getInstance() {
+        if (instance == null) {
+            FRLogger.logDebug("Play Services are initialized. Return new instance");
+            instance = new FRPlayServices();
+        } else {
+            FRLogger.logDebug("Play Services are already initialized. Return existing instance");
+        }
+        return instance;
+    }
+
+    void setup(AndroidLauncher app) {
         this.app = app;
         googleSignInClient = GoogleSignIn.getClient(app,
                 new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
@@ -62,27 +77,7 @@ public class FRPlayServices implements PlayServices {
             achievementsClient = Games.getAchievementsClient(app, googleAccount);
             FRLogger.logDebug("User signed. Google account, snapshot client, achievements client are received");
         }
-    }
-
-    static void initialize(AndroidLauncher androidLauncher) {
-        if (playServices == null) {
-            playServices = new FRPlayServices(androidLauncher);
-            FRLogger.logDebug("Play Services are initialized");
-        } else {
-            throw new FlowRushInitializeException("FRPlayServices is already initialized!");
-        }
-    }
-
-    static FRPlayServices getInstance() {
-        if (playServices != null) {
-            return playServices;
-        } else {
-            throw new FlowRushInitializeException("FRPlayServices is not initialized!");
-        }
-    }
-
-    static boolean isPlayServicesAvailable(Context context) {
-        return GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context) == SUCCESS;
+        FRLogger.logDebug("Play Services are configured");
     }
 
     @Override
@@ -98,7 +93,7 @@ public class FRPlayServices implements PlayServices {
             FRLogger.logDebug("Google sign in success");
             onConnected();
         } catch (ApiException apiException) {
-            app.getAndroidSide().logError("Google sign in failed", apiException);
+            app.getAndroidHelper().logError("Google sign in failed", apiException);
         }
     }
 
@@ -112,7 +107,7 @@ public class FRPlayServices implements PlayServices {
                         if (task.isSuccessful()) {
                             FRLogger.logDebug("Google sign out success");
                         } else {
-                            app.getAndroidSide().logError("Google sign out failure", task.getException());
+                            app.getAndroidHelper().logError("Google sign out failure", task.getException());
                         }
                         onDisconnected();
                     }
@@ -132,7 +127,7 @@ public class FRPlayServices implements PlayServices {
             @Override
             public void onComplete(@NonNull Task<Intent> task) {
                 if (!task.isSuccessful()) {
-                    app.getAndroidSide().logError("Problem with loading snapshots list", task.getException());
+                    app.getAndroidHelper().logError("Problem with loading snapshots list", task.getException());
                 } else {
                     app.startActivityForResult(task.getResult(), RC_LIST_SAVED_GAMES);
                 }
@@ -163,7 +158,7 @@ public class FRPlayServices implements PlayServices {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        app.getAndroidSide().logError("Error while opening Snapshot for save.", e);
+                        app.getAndroidHelper().logError("Error while opening Snapshot for save.", e);
                     }
                 }).continueWith(new Continuation<SnapshotsClient.DataOrConflict<Snapshot>, byte[]>() {
             @Override
@@ -173,7 +168,7 @@ public class FRPlayServices implements PlayServices {
                 if(snapshot != null){
                     writeSnapshot(snapshot);
                 }else {
-                    app.getAndroidSide().logError("Error with saving snapshot", new NullPointerException());
+                    app.getAndroidHelper().logError("Error with saving snapshot", new NullPointerException());
                 }
                 return null;
             }
@@ -215,7 +210,7 @@ public class FRPlayServices implements PlayServices {
                                 if (retryCount < MAX_SNAPSHOT_RESOLVE_RETRIES) {
                                     return processSnapshotOpenResult(task.getResult(), retryCount + 1);
                                 } else {
-                                    app.getAndroidSide().logError("Could not resolve snapshot conflicts", new Exception());
+                                    app.getAndroidHelper().logError("Could not resolve snapshot conflicts", new Exception());
                                     return null;
                                 }
                             }
@@ -276,7 +271,7 @@ public class FRPlayServices implements PlayServices {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        app.getAndroidSide().logError("Error while opening Snapshot for load.", e);
+                        app.getAndroidHelper().logError("Error while opening Snapshot for load.", e);
                     }
                 }).continueWith(new Continuation<SnapshotsClient.DataOrConflict<Snapshot>, byte[]>() {
             @Override
@@ -287,7 +282,7 @@ public class FRPlayServices implements PlayServices {
                     FRLogger.logDebug("Extract the raw data from the snapshot.");
                     return snapshot.getSnapshotContents().readFully();
                 } catch (Exception e) {
-                    app.getAndroidSide().logError("Error while reading Snapshot.", e);
+                    app.getAndroidHelper().logError("Error while reading Snapshot.", e);
                 }
 
                 return null;
