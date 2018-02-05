@@ -2,7 +2,7 @@ package com.blackhornetworkshop.flowrush.initialization;
 
 public class GamePreferences{
     private boolean soundIsOn = true;
-    private boolean showRateDialog = true; //показывать диалог каждый раз при выполнении пака пока пройдя по схеме человек не отключит это (нажмет не нравится или поставит рейтинг)
+    private boolean showRateDialog = true; //while user not disable by "rate" or "no thanks"
     private boolean adsIsRemoved = false;
 
     public boolean isAdsIsRemoved(){return adsIsRemoved;}
@@ -16,7 +16,6 @@ public class GamePreferences{
     public boolean isShowRateDialog(){return showRateDialog;}
 
     public void setShowRateDialog(boolean value){
-        //System.out.println("show rate dialog "+value);
         showRateDialog = value;
     }
 }

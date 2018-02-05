@@ -68,7 +68,7 @@ public class MapCreator {
         mapGroup.setWidth(list.size() * FRConstants.HEX_WIDTH - (list.size() - 1) * (FRConstants.HEX_WIDTH / 4));
         mapGroup.setHeight(maxCoord - minCoord);
 
-        float availHeight = (Gdx.graphics.getHeight() - (Gdx.graphics.getWidth() / 10) - UIPool.getLevelNumberActor().getHeight() * 1.1f - FRConstants.C_BUTTON_SIZE * 1.1f);
+        float availHeight = (Gdx.graphics.getHeight() - (Gdx.graphics.getWidth() / 10) - UIPool.getLevelNumberActor().getHeight() * 1.1f - FRConstants.BUTTON_SIZE * 1.1f);
         float zoom = (Gdx.graphics.getWidth() - (Gdx.graphics.getWidth() / 10)) / mapGroup.getWidth();
 
         if (mapGroup.getHeight() * zoom > availHeight && zoom > availHeight / mapGroup.getHeight()) {

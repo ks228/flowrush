@@ -89,7 +89,7 @@ public class GameScreen implements Screen {
 
         FlowRush.logDebug("Game screen show() method called");
 
-        UIPool.getSoundButton().setPosition(0, FRConstants.C_BUTTON_SIZE+ Gdx.graphics.getHeight() * 0.05f);
+        UIPool.getSoundButton().setPosition(0, FRConstants.BUTTON_SIZE + Gdx.graphics.getHeight() * 0.05f);
         UIPool.getSoundButton().setVisible(true);
 
         //Группа для актеров паузы
@@ -177,6 +177,7 @@ public class GameScreen implements Screen {
         if (!LevelLoader.getInstance().containsNext()) {
             createPackCompleteGroup();
         }
+
         resume();
     }
 

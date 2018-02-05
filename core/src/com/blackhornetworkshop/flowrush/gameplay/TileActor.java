@@ -10,11 +10,11 @@ import com.blackhornetworkshop.flowrush.initialization.ActorInfo;
 
 public class TileActor extends Actor{
     private int index;
-    private int position; // одна из 0-5 шести позиций вращения
-    private float angle; //в массив не сохраняется, используется конкретно при ротации
-    private int include; //наличие иконки 1. источник, всегда включен 2. приемник всегда выключен при старте 3. передатчик всегда выключен при старте
-    private boolean rotable; // поворачиваемся?
-    private int type; // один из 12-13 типов в зависимости от класса трубы?
+    private int position; // 0-5 rotation range
+    private float angle; // not loading from file
+    private int include; // 1 - source. 2 - receiver. 3 - dove
+    private boolean rotable;
+    private int type; // 13 types
     private int xIndex;
     private int yIndex;
 
@@ -26,10 +26,9 @@ public class TileActor extends Actor{
 
     private Sprite hexback, sprite, icon;
 
-    public TileActor(ActorInfo actorInfo){ //конструктор класса
+    public TileActor(ActorInfo actorInfo){
         this.actorInfo = actorInfo;
 
-        //Инициализируем основные Fields класса
         position = actorInfo.getPosition();
         index = actorInfo.getIndex();
         include = actorInfo.getInclude();
@@ -44,7 +43,6 @@ public class TileActor extends Actor{
         }
     }
 
-
     @Override
     public void draw(Batch batch, float alpha) {
         batch.draw(hexback, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
@@ -58,35 +56,35 @@ public class TileActor extends Actor{
         super.act(delta);
     }
 
-    public void setAngle(float angle){this.angle = angle;}
+    void setAngle(float angle){this.angle = angle;}
     public float getAngle(){return angle;}
 
     public void setIcon(Sprite sprite){icon = sprite;}
-    public void setHexback(Sprite sprite){hexback = sprite;}
+    void setHexback(Sprite sprite){hexback = sprite;}
     public void setSprite(Sprite sprite){this.sprite = sprite;}
 
     public void setSources(boolean[] sourceArray){this.sourceArray = sourceArray;}
-    public boolean[] getSourceArray(){return sourceArray;}
+    boolean[] getSourceArray(){return sourceArray;}
 
     public int getRotatePosition(){return position;}
-    public void setRotatePosition(int position){this.position = position;}
+    void setRotatePosition(int position){this.position = position;}
 
-    public void setPowerOn(){powerOn = true;}
+    void setPowerOn(){powerOn = true;}
     public boolean isPowerOn(){return powerOn;}
-    public void setPowerOff(){powerOn = false;}
+    void setPowerOff(){powerOn = false;}
 
     public void setxIndex(int xIndex){this.xIndex = xIndex;}
-    public int getxIndex(){return xIndex;}
+    int getxIndex(){return xIndex;}
     public void setyIndex(int yIndex){this.yIndex = yIndex;}
-    public int getyIndex(){return yIndex;}
+    int getyIndex(){return yIndex;}
 
     public int getIndex(){return index;}
-    public void setIndex(int index){this.index = index;}
+    void setIndex(int index){this.index = index;}
 
     public int getType() {
         return type;
     }
-    public void setType(int type){this.type = type;}
+    void setType(int type){this.type = type;}
 
     public boolean isRotable() {
         return rotable;
@@ -94,5 +92,5 @@ public class TileActor extends Actor{
 
     public int getInclude(){return include;}
 
-    public ActorInfo getActorInfo(){return actorInfo;}
+    ActorInfo getActorInfo(){return actorInfo;}
 }

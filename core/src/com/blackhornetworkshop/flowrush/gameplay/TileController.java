@@ -1,9 +1,8 @@
 package com.blackhornetworkshop.flowrush.gameplay;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.blackhornetworkshop.flowrush.FRAssetManager;
 
-//Created by TScissors. Класс с методами для управления тайлами
+//Created by TScissors.
 
 public class TileController {
     public static void setType(TileActor actor) {

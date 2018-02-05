@@ -5,7 +5,6 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.utils.Timer;
-import com.blackhornetworkshop.flowrush.FRAssetManager;
 import com.blackhornetworkshop.flowrush.FlowRush;
 import com.blackhornetworkshop.flowrush.screens.GameScreen;
 
@@ -47,7 +46,7 @@ public class SourceChecker { //основная логика игры наход
         }
     }
 
-    private void clearFields() {//при перезапуске очищаем все нахрен
+    private void clearFields() {//при перезапуске очищаем все
         doveArray.clear();
         tempoHexArray.clear();
         sourceArrayMain = null;

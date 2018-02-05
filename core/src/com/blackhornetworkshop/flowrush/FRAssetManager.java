@@ -20,14 +20,13 @@ import com.badlogic.gdx.utils.ObjectMap;
 
 public class FRAssetManager {
     private static AssetManager manager;
-    //private static AsyncExecutor executor;
     static void dispose(){ manager.dispose();}
 
     //Graphics
     private static Skin skin;
     private static TiledDrawable spriteBack;
     private static Sprite qCircle;
-    private static Sprite stripe;
+    private static Sprite stripe, soundOn, soundOff;
     private static TextureAtlas atlas;
 
     //Audio
@@ -74,10 +73,12 @@ public class FRAssetManager {
             }
         });
         backgroundMusic.setVolume(0.7f);
+
+        soundOff = atlas.createSprite("soundOff_icon");
+        soundOn = atlas.createSprite("soundOn_icon");
     }
 
     private static void assetManagerLoad(){
-        //Загружаем все ресурсы в AssetManager
         manager = new AssetManager();
         InternalFileHandleResolver resolver = new InternalFileHandleResolver();
 
@@ -87,18 +88,18 @@ public class FRAssetManager {
 
         FreetypeFontLoader.FreeTypeFontLoaderParameter param = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
         param.fontFileName = "ui/Iceberg-Regular.ttf";
-        param.fontParameters.size = (int)(FRConstants.C_BUTTON_SIZE);
-        manager.load("fontLarge.ttf", BitmapFont.class, param);     //Загружаем шрифт первого размера
+        param.fontParameters.size = (int)(FRConstants.FONT_SIZE_XXL);
+        manager.load("fontLarge.ttf", BitmapFont.class, param);
 
         FreetypeFontLoader.FreeTypeFontLoaderParameter param2 = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
         param2.fontFileName = "ui/Iceberg-Regular.ttf";
-        param2.fontParameters.size = (int)(FRConstants.C_BUTTON_SIZE*0.5f);
-        manager.load("fontMid.ttf", BitmapFont.class, param2);     //Загружаем шрифт второго размера
+        param2.fontParameters.size = (int)(FRConstants.FONT_SIZE_XL);
+        manager.load("fontMid.ttf", BitmapFont.class, param2);
 
         FreetypeFontLoader.FreeTypeFontLoaderParameter param3 = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
         param3.fontFileName = "ui/Iceberg-Regular.ttf";
-        param3.fontParameters.size = (int)(FRConstants.C_BUTTON_SIZE*0.43);
-        manager.load("fontSmall.ttf", BitmapFont.class, param3);     //Загружаем шрифт третьего размера
+        param3.fontParameters.size = (int)(FRConstants.FONT_SIZE_X);
+        manager.load("fontSmall.ttf", BitmapFont.class, param3);
 
         manager.finishLoadingAsset("fontLarge.ttf");
         manager.finishLoadingAsset("fontMid.ttf");
@@ -116,20 +117,17 @@ public class FRAssetManager {
         manager.load("sound/lvlcomplete.ogg", Sound.class); //Звук лвлкомплет
         manager.load("sound/background.ogg", Music.class); //Загружаем фоновую музыку
         manager.load("sound/packcomplete.ogg", Sound.class); //Звук паккомплит
+
         manager.finishLoading();
+    }
 
-        /*executor = new AsyncExecutor(20);
+    public static Sprite getSoundOff() {
+        return soundOff;
+    }
 
-        executor.submit(new AsyncTask<Object>() {
-            @Override
-            public Object call() throws Exception {
-                while (manager.update()) {
-                    FlowRush.logDebug("Loading "+manager.getProgress());
-                }
-                return null;
-            }
-        });*/
+    public static Sprite getSoundOn() {
 
+        return soundOn;
     }
 
     public static Music getBackgroundMusic() {
@@ -137,17 +135,14 @@ public class FRAssetManager {
     }
 
     public static Sound getPackCompleteSound() {
-
         return packCompleteSound;
     }
 
     public static Sound getLvlCompleteSound() {
-
         return lvlCompleteSound;
     }
 
     public static Sound getTapSound() {
-
         return tapSound;
     }
 

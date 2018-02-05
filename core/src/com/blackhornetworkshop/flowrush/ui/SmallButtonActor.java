@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class SmallButtonActor extends Actor{
 
-    public Sprite sprite;
+    private Sprite sprite;
 
     public void setSprite(Sprite sprite){
         this.sprite = sprite;

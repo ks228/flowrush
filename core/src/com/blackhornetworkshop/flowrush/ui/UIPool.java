@@ -105,7 +105,7 @@ public class UIPool {
         //----------------------- COMMON
 
         levelNumberActor = new Label("", FRAssetManager.getSkin(), "greyfont");
-        levelNumberActor.setSize(FRConstants.C_BUTTON_SIZE, FRConstants.C_BUTTON_SIZE);
+        levelNumberActor.setSize(FRConstants.BUTTON_SIZE, FRConstants.BUTTON_SIZE);
         levelNumberActor.setPosition(Gdx.graphics.getWidth() - levelNumberActor.getWidth(), Gdx.graphics.getHeight()-levelNumberActor.getHeight());
         levelNumberActor.setAlignment(Align.center);
 
@@ -142,8 +142,8 @@ public class UIPool {
         menuLabel.setText("SUPPORT US");
 
         innerLayout = new Label("", FRAssetManager.getSkin(), "default");
-        innerLayout.setSize(Gdx.graphics.getWidth() * 0.9f, (((Gdx.graphics.getHeight() * 0.98f - FRConstants.C_BUTTON_SIZE)) + (FRConstants.C_BUTTON_SIZE) / 2) - (FRConstants.C_BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f)); // размеры up и down иннерскрин? высчитываем через высоту textButton любого выше высчитываем через высоту кнопки circle button back
-        innerLayout.setPosition((Gdx.graphics.getWidth() - innerLayout.getWidth()) / 2, FRConstants.C_BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f);
+        innerLayout.setSize(Gdx.graphics.getWidth() * 0.9f, (((Gdx.graphics.getHeight() * 0.98f - FRConstants.BUTTON_SIZE)) + (FRConstants.BUTTON_SIZE) / 2) - (FRConstants.BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f)); // размеры up и down иннерскрин? высчитываем через высоту textButton любого выше высчитываем через высоту кнопки circle button back
+        innerLayout.setPosition((Gdx.graphics.getWidth() - innerLayout.getWidth()) / 2, FRConstants.BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f);
         innerLayout.setVisible(false);
 
         messageBackground = new Label("development\nTIMUR SCISSORS\n\ndesign\nSONYA KOVALSKI\n\nmusic\nERIC HOPTON", FRAssetManager.getSkin(), "default");
@@ -153,8 +153,8 @@ public class UIPool {
 
         labelContainer = new Container<Label>(messageBackground); //Контейнер нужен для того чтобы сделать перенос строки
         labelContainer.fill();
-        labelContainer.setSize(innerLayout.getWidth() * 0.9f, (innerLayout.getHeight() - FRConstants.C_BUTTON_SIZE) * 0.95f);
-        labelContainer.setPosition((Gdx.graphics.getWidth() - innerLayout.getWidth() * 0.9f) / 2, innerLayout.getY() + FRConstants.C_BUTTON_SIZE / 2 + (innerLayout.getHeight() - FRConstants.C_BUTTON_SIZE) * 0.05f / 2);
+        labelContainer.setSize(innerLayout.getWidth() * 0.9f, (innerLayout.getHeight() - FRConstants.BUTTON_SIZE) * 0.95f);
+        labelContainer.setPosition((Gdx.graphics.getWidth() - innerLayout.getWidth() * 0.9f) / 2, innerLayout.getY() + FRConstants.BUTTON_SIZE / 2 + (innerLayout.getHeight() - FRConstants.BUTTON_SIZE) * 0.05f / 2);
 
         closeButton = UiActorCreator.getSmallButtonActor(6);
 
@@ -183,7 +183,6 @@ public class UIPool {
         lvlButton = UiActorCreator.getTextButton(2);
         lvlButton.addListener(new ButtonScaleListener());
         exitButton = UiActorCreator.getTextButton(13);
-        exitButton.setVisible(false);
 
         packGroup = new Group();
         for (int x = 1; x < 6; x++) {
@@ -257,7 +256,7 @@ public class UIPool {
                 batch.draw(FRAssetManager.getqCircle(), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
             }
         };
-        quadrant.setSize(FRConstants.C_BUTTON_SIZE * 2 + Gdx.graphics.getHeight() * 0.1f, FRConstants.C_BUTTON_SIZE * 2 + Gdx.graphics.getHeight() * 0.1f);
+        quadrant.setSize(FRConstants.BUTTON_SIZE * 2 + Gdx.graphics.getHeight() * 0.1f, FRConstants.BUTTON_SIZE * 2 + Gdx.graphics.getHeight() * 0.1f);
         quadrant.setPosition(0, 0);
 
 
@@ -265,8 +264,8 @@ public class UIPool {
         nextLevelButton = UiActorCreator.getSmallButtonActor(12);
         wellDonehex = UiActorCreator.getSmallButtonActor(11);
         wellDoneLabel = new Label("WELL DONE!", FRAssetManager.getSkin(), "darkblue");
-        wellDoneLabel.setSize(Gdx.graphics.getWidth() * 0.6f, FRConstants.C_BUTTON_SIZE * 0.7f);
-        wellDoneLabel.setPosition((Gdx.graphics.getWidth() - wellDoneLabel.getWidth()) / 2, Gdx.graphics.getHeight() - FRConstants.C_BUTTON_SIZE * 0.85f);
+        wellDoneLabel.setSize(Gdx.graphics.getWidth() * 0.6f, FRConstants.BUTTON_SIZE * 0.7f);
+        wellDoneLabel.setPosition((Gdx.graphics.getWidth() - wellDoneLabel.getWidth()) / 2, Gdx.graphics.getHeight() - FRConstants.BUTTON_SIZE * 0.85f);
         wellDoneLabel.setAlignment(Align.center);
         wellDoneLabel.setVisible(false);
 
@@ -278,21 +277,16 @@ public class UIPool {
         packCompleteNextPackButton.setName("");
 
         dialogBackground = new Label("ENJOYING  FLOW RUSH?", FRAssetManager.getSkin(), "darkbluesmall");
-        dialogBackground.setSize(Gdx.graphics.getWidth(), FRConstants.C_BUTTON_SIZE * 1.45f);
+        dialogBackground.setSize(Gdx.graphics.getWidth(), FRConstants.BUTTON_SIZE * 1.45f);
         dialogBackground.setPosition(0, 0);
         dialogBackground.setAlignment(Align.top);
 
-        leftButton = UiActorCreator.getTextButton(10);
-        leftButton.setStyle(FRAssetManager.getSkin().get("bordersmall", TextButton.TextButtonStyle.class));
-        leftButton.setText("NOT SURE");
+        leftButton = UiActorCreator.getTextButton(11);
         leftButton.addListener(new ButtonScaleListener());
         LeftButtonListener leftButtonListener = new LeftButtonListener();
         leftButton.addListener(leftButtonListener);
 
         rightButton = UiActorCreator.getTextButton(10);
-        rightButton.setStyle(FRAssetManager.getSkin().get("whitesmall", TextButton.TextButtonStyle.class));
-        rightButton.setText("YES!");
-        rightButton.setX((Gdx.graphics.getWidth() - rightButton.getWidth() * 2) / 3 * 2 + rightButton.getWidth());
         rightButton.addListener(new ButtonScaleListener());
         rightButton.addListener(new RightButtonListener(leftButtonListener));
 
