@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.blackhornetworkshop.flowrush.view.FlowRush;
 
 public class AndroidLauncher extends AndroidApplication {
 

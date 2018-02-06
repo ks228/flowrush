@@ -5,6 +5,9 @@ import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.blackhornetworkshop.flowrush.controller.AndroidHelper;
+import com.blackhornetworkshop.flowrush.model.FRConstants;
+
 public class FRAndroidHelper implements AndroidHelper {
 
     private static final FRAndroidHelper instance = new FRAndroidHelper();

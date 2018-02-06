@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
-import com.blackhornetworkshop.flowrush.initialization.SavedGame;
+import com.blackhornetworkshop.flowrush.controller.PlayServices;
+import com.blackhornetworkshop.flowrush.model.SavedGame;
+import com.blackhornetworkshop.flowrush.view.FlowRush;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
