@@ -24,12 +24,7 @@ public class MenuScreen implements Screen, FRScreen {
     private boolean isActive;
 
     public static MenuScreen getInstance(){
-        if(instance == null) {
-            instance = new MenuScreen();
-            FlowRush.logDebug("MenuScreen is initialized. Return new instance");
-        }else{
-            FlowRush.logDebug("MenuScreen is already initialized. Return existing instance");
-        }
+        if(instance == null) instance = new MenuScreen();
         return instance;
     }
 

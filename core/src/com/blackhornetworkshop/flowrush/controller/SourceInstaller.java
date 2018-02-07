@@ -2,11 +2,11 @@ package com.blackhornetworkshop.flowrush.controller;
 
 //Created by TScissors. Кдасс для обработки типов и установки первоначального состояния источников.
 
-import com.blackhornetworkshop.flowrush.model.TileActor;
+import com.blackhornetworkshop.flowrush.model.HexActor;
 
 class SourceInstaller {
 
-    static boolean[] getSourceArray(TileActor actor) {
+    static boolean[] getSourceArray(HexActor actor) {
         boolean[] sourceArray;
         switch(actor.getType()){
             case 1:

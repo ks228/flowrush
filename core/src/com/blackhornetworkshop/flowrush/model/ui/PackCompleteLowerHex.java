@@ -10,10 +10,10 @@ import com.badlogic.gdx.scenes.scene2d.actions.RotateByAction;
 
 //Created by TScissors. Актер отображающий нижний гекс и pack complete
 
-public class PackBackActor extends Actor {
+public class PackCompleteLowerHex extends Actor {
     private Sprite spriteBack;
 
-    public PackBackActor(TextureAtlas atlas){
+    public PackCompleteLowerHex(TextureAtlas atlas){
         setSize(Gdx.graphics.getHeight()*0.35f*1.117647058823529f, Gdx.graphics.getHeight()*0.35f);
         setOrigin(getWidth()/2, getHeight()/2);
         setPosition((Gdx.graphics.getWidth()-getWidth())/2, (Gdx.graphics.getHeight()-getHeight())/4*3);

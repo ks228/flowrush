@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class TileActor extends Actor{
+public class HexActor extends Actor{
     private int index;
     private int position; // 0-5 rotation range
     private float angle; // not loading from file
@@ -25,7 +25,7 @@ public class TileActor extends Actor{
 
     private Sprite hexback, sprite, icon;
 
-    public TileActor(ActorInfo actorInfo){
+    public HexActor(ActorInfo actorInfo){
         this.actorInfo = actorInfo;
 
         position = actorInfo.getPosition();

@@ -29,7 +29,7 @@ public class UIPool {
     //----------------------- COMMON
 
     private static Group backgroundAnimation;
-    private static TapOnTileActor tapOnTileActor;
+    private static HexBackgroundActor hexBackgroundActor;
     private static SmallButtonActor soundButton;
     private static Label pauseBackground, levelNumberActor;
 
@@ -91,8 +91,8 @@ public class UIPool {
     private static SmallButtonActor wellDonehex;
 
     // Pack complete elements
-    private static PackBackActor packCompleteLowerHex;
-    private static PackCompleteActor packCompleteUpperHex;
+    private static PackCompleteLowerHex packCompleteLowerHex;
+    private static PackCompleteTopHex packCompleteUpperHex;
     private static TextButton packCompleteMenuButton;
     private static TextButton packCompleteNextPackButton;
     private static TextButton leftButton, rightButton;
@@ -126,7 +126,7 @@ public class UIPool {
 
         soundButton = UiActorCreator.getSmallButtonActor(5);
 
-        tapOnTileActor = new TapOnTileActor(FRAssetManager.getAtlas().createSprite("animbackhex"));
+        hexBackgroundActor = new HexBackgroundActor(FRAssetManager.getAtlas().createSprite("animbackhex"));
 
         backgroundAnimation = new Group();
         for (int type = 1; type < 5; type++) {
@@ -269,8 +269,8 @@ public class UIPool {
         wellDoneLabel.setVisible(false);
 
         //Pack complete elements
-        packCompleteUpperHex = new PackCompleteActor(FRAssetManager.getSkin().getFont("fontMid"), FlowRush.getInstance().save.getPackName());
-        packCompleteLowerHex = new PackBackActor(FRAssetManager.getAtlas());
+        packCompleteUpperHex = new PackCompleteTopHex(FRAssetManager.getSkin().getFont("fontMid"), FlowRush.getInstance().save.getPackName());
+        packCompleteLowerHex = new PackCompleteLowerHex(FRAssetManager.getAtlas());
         packCompleteMenuButton = UiActorCreator.getTextButton(9);
         packCompleteNextPackButton = UiActorCreator.getTextButton(12);
         packCompleteNextPackButton.setName("");
@@ -281,13 +281,10 @@ public class UIPool {
         dialogBackground.setAlignment(Align.top);
 
         leftButton = UiActorCreator.getTextButton(11);
-        leftButton.addListener(new ButtonScaleListener());
-        LeftButtonListener leftButtonListener = new LeftButtonListener();
-        leftButton.addListener(leftButtonListener);
+        leftButton.addListener(new LeftButtonListener());
 
         rightButton = UiActorCreator.getTextButton(10);
-        rightButton.addListener(new ButtonScaleListener());
-        rightButton.addListener(new RightButtonListener(leftButtonListener));
+        rightButton.addListener(new RightButtonListener());
 
     }
 
@@ -305,8 +302,8 @@ public class UIPool {
         return soundButton;
     }
 
-    public static TapOnTileActor getTapOnTileActor() {
-        return tapOnTileActor;
+    public static HexBackgroundActor getHexBackgroundActor() {
+        return hexBackgroundActor;
     }
 
     public static Group getBackgroundAnimation() {
@@ -454,7 +451,7 @@ public class UIPool {
         return wellDonehex;
     }
 
-    public static PackBackActor getPackCompleteLowerHex() {
+    public static PackCompleteLowerHex getPackCompleteLowerHex() {
         return packCompleteLowerHex;
     }
 
@@ -466,7 +463,7 @@ public class UIPool {
         return packCompleteNextPackButton;
     }
 
-    public static PackCompleteActor getPackCompleteUpperHex() {
+    public static PackCompleteTopHex getPackCompleteUpperHex() {
         return packCompleteUpperHex;
     }
 

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 
 import com.blackhornetworkshop.flowrush.controller.PlayServices;
+import com.blackhornetworkshop.flowrush.controller.ScreenManager;
 import com.blackhornetworkshop.flowrush.model.SavedGame;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -298,7 +299,7 @@ public class FRPlayServices implements PlayServices {
                 FlowRush.getInstance().save = FlowRush.getInstance().getGson().fromJson(snapshotInJson, SavedGame.class);
                 FRAndroidHelper.getInstance().logDebug("Snapshot reading from json is completed successfully");
                 app.hideLoadingDialog();
-                FlowRush.getInstance().resume();
+                ScreenManager.setMenuMainScreen();
             }
         });
     }

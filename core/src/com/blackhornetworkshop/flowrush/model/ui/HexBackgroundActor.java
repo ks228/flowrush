@@ -11,14 +11,14 @@ import com.badlogic.gdx.utils.Align;
 import com.blackhornetworkshop.flowrush.model.FRConstants;
 
 
-public class TapOnTileActor extends Actor {
+public class HexBackgroundActor extends Actor {
 
     private Sprite tapEffect;
     private ScaleToAction scale1;
     private ScaleToAction scale2;
     private SequenceAction sequenceAction;
 
-    TapOnTileActor(Sprite sprite){
+    HexBackgroundActor(Sprite sprite){
         setPosition(-1000, -1000);
         setSize(FRConstants.HEX_WIDTH, FRConstants.HEX_HEIGHT);
         setOrigin(Align.center);
@@ -26,7 +26,7 @@ public class TapOnTileActor extends Actor {
         tapEffect = sprite;
 
         scale1 = new ScaleToAction();
-        scale1.setScale(1.3f, 1.3f);
+        scale1.setScale(1f, 1f);
         scale1.setDuration(0.2f);
 
         scale2 = new ScaleToAction();

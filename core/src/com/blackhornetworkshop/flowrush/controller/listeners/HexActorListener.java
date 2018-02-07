@@ -1,24 +1,21 @@
 package com.blackhornetworkshop.flowrush.controller.listeners;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.RotateToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.blackhornetworkshop.flowrush.controller.SourceChecker;
-import com.blackhornetworkshop.flowrush.model.TileActor;
-import com.blackhornetworkshop.flowrush.controller.TileController;
+import com.blackhornetworkshop.flowrush.model.HexActor;
+import com.blackhornetworkshop.flowrush.controller.HexController;
 import com.blackhornetworkshop.flowrush.model.ui.UIPool;
-import com.blackhornetworkshop.flowrush.view.FlowRush;
-import com.blackhornetworkshop.flowrush.view.screens.GameScreen;
 
 //Created by TScissors. Класс слушатель классов HexActor, очищает, поворачивает, изменяет тип, запускает анимацию фона клетки
 
 public class HexActorListener extends ClickListener {
 
-    private TileActor actor;
+    private HexActor actor;
     private float angle;
     private RotateToAction rotateToAction;
     private ScaleToAction scaleToAction;
@@ -26,7 +23,7 @@ public class HexActorListener extends ClickListener {
     private RotateToAction rotateToAction1, rotateToAction2;
     private SequenceAction sequenceAction;
 
-    public HexActorListener(TileActor actor) {
+    public HexActorListener(HexActor actor) {
         this.actor = actor;
 
         scaleToAction = new ScaleToAction();
@@ -64,12 +61,12 @@ public class HexActorListener extends ClickListener {
             }
 
         }
-        TileController.setHexbackTouchOn(actor);
+        HexController.setHexbackTouchOn(actor);
         return true;
     }
     @Override
     public void touchUp(InputEvent event, float x, float y, int pointer, int button){
-        TileController.setHexbackTouchOff(actor);
+        HexController.setHexbackTouchOff(actor);
 
         if (actor.isRotable()) {
             scaleToAction.setScale(1f, 1f);
@@ -83,8 +80,8 @@ public class HexActorListener extends ClickListener {
 
             angle = actor.getAngle() - 60;
 
-            TileController.setAngle(actor, angle);
-            TileController.moveSources(actor);
+            HexController.setAngle(actor, angle);
+            HexController.moveSources(actor);
 
             SourceChecker.getInstance().checkAndSetActor();
 
@@ -103,9 +100,8 @@ public class HexActorListener extends ClickListener {
             rotateToAction2.reset();
             actor.addAction(sequenceAction);
         }
-        FlowRush.logDebug("touchX: "+x+" touchY: "+y);
 
-        UIPool.getTapOnTileActor().goAnim(actor.getX(),actor.getY());
+        UIPool.getHexBackgroundActor().goAnim(actor.getX(),actor.getY());
     }
 
 }

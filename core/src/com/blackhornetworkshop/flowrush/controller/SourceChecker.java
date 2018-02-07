@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.utils.Timer;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
-import com.blackhornetworkshop.flowrush.model.TileActor;
+import com.blackhornetworkshop.flowrush.model.HexActor;
 import com.blackhornetworkshop.flowrush.view.screens.GameScreen;
 
 //Created by TScissors. Класс для проверки соединения между гексами. основная логика игры находится тут
@@ -15,11 +15,11 @@ public class SourceChecker { //основная логика игры наход
 
     private static SourceChecker instance;
 
-    private TileActor actor;
+    private HexActor actor;
     private Group group;
     private boolean[] sourceArrayMain;
-    private ArrayList<TileActor> tempoHexArray = new ArrayList<TileActor>();
-    private ArrayList<TileActor> doveArray = new ArrayList<TileActor>(); //для постоянного хранения голубей
+    private ArrayList<HexActor> tempoHexArray = new ArrayList<HexActor>();
+    private ArrayList<HexActor> doveArray = new ArrayList<HexActor>(); //для постоянного хранения голубей
 
     private boolean doveIsOn;
     private int numReceiversOn = 0;
@@ -71,7 +71,7 @@ public class SourceChecker { //основная логика игры наход
         if (doveIsOn) { // отдельно проверка голубей тем же принципом
             for (int x = 0; x < doveArray.size(); x++) {
                 actor = doveArray.get(x);
-                TileController.setPowerOn(actor);
+                HexController.setPowerOn(actor);
                 tempoHexArray.clear();
                 sourceArrayMain = actor.getSourceArray();
                 tempoHexArray.add(actor);
@@ -99,7 +99,7 @@ public class SourceChecker { //основная логика игры наход
         if (MapController.getNumOfReceivers() == numReceiversOn) {
             GameScreen.getInstance().inputMultiplexer.removeProcessor(FlowRush.getInstance().getHexesStage());//отключает касание к тайлам пока не выскочил lvlCompleteActor
             for (int i = 0; i < MapController.getHexGroupSize(); i++) {
-                TileController.setHexbackTouchOn(MapController.getHexGroupChildren(i));
+                HexController.setHexbackTouchOn(MapController.getHexGroupChildren(i));
             }
 
             Timer.instance().start();
@@ -125,12 +125,12 @@ public class SourceChecker { //основная логика игры наход
         }
 
         if (group.findActor(name) != null) {
-            TileActor actorTempo = group.findActor(name);
+            HexActor actorTempo = group.findActor(name);
             if (!actorTempo.isPowerOn()) {
                 boolean[] sourceArrayTempo = actorTempo.getSourceArray();
 
                 if (sourceArrayMain[side] && sourceArrayTempo[side2]) { //сравниваем две стороны основго актера и "соседа"
-                    TileController.setPowerOn(actorTempo);
+                    HexController.setPowerOn(actorTempo);
                     tempoHexArray.add(actorTempo);
                     if (actorTempo.getInclude() == 3) {
                         doveIsOn = true;
@@ -140,7 +140,7 @@ public class SourceChecker { //основная логика игры наход
         }
     }
 
-    private void checkActor(TileActor actor) { //проверяет конкретно оддного актера по всем соседним позициям
+    private void checkActor(HexActor actor) { //проверяет конкретно оддного актера по всем соседним позициям
 
         int x, y;
 
@@ -183,7 +183,7 @@ public class SourceChecker { //основная логика игры наход
         for (int x = 0; x < MapController.getHexGroupSize(); x++) {
             actor = MapController.getHexGroupChildren(x);
             if (actor.getInclude() != 1) {
-                TileController.setPowerOff(actor, GameScreen.getInstance().iconWhite);
+                HexController.setPowerOff(actor, GameScreen.getInstance().isIconWhite);
             }
         }
         doveIsOn = false;

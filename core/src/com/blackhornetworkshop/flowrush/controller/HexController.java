@@ -1,11 +1,11 @@
 package com.blackhornetworkshop.flowrush.controller;
 
-import com.blackhornetworkshop.flowrush.model.TileActor;
+import com.blackhornetworkshop.flowrush.model.HexActor;
 
 //Created by TScissors.
 
-public class TileController {
-    public static void setType(TileActor actor) {
+public class HexController {
+    public static void setType(HexActor actor) {
         if (actor.getIndex() < 13) {
             actor.setType(actor.getIndex());
         } else if (actor.getIndex() >= 13 && actor.getIndex() < 25) {
@@ -17,7 +17,7 @@ public class TileController {
         }
     }
 
-    public static void moveSources(TileActor actor) {
+    public static void moveSources(HexActor actor) {
         boolean[] sourceArray = actor.getSourceArray();
         boolean val = sourceArray[0];
         sourceArray[0] = sourceArray[sourceArray.length - 1];
@@ -29,7 +29,7 @@ public class TileController {
         actor.setSources(sourceArray);
     }
 
-    public static void setHexbackTouchOff(TileActor actor) {
+    public static void setHexbackTouchOff(HexActor actor) {
         if (actor.getIndex() < 25) {
             actor.setHexback(FRAssetManager.getAtlas().createSprite("backhex"));
         } else if (actor.getIndex() > 24) {
@@ -37,7 +37,7 @@ public class TileController {
         }
     }
 
-    public static void setHexbackTouchOn(TileActor actor) {
+    public static void setHexbackTouchOn(HexActor actor) {
         if (actor.getIndex() < 25) {
             actor.setHexback(FRAssetManager.getAtlas().createSprite("backhex_touched"));
         } else if (actor.getIndex() > 24) {
@@ -45,7 +45,7 @@ public class TileController {
         }
     }
 
-    static void setPowerOn(TileActor actor) {
+    static void setPowerOn(HexActor actor) {
         actor.setPowerOn();
         if (actor.getIndex() < 13) {
             actor.setIndex(actor.getIndex() + 12);
@@ -63,7 +63,7 @@ public class TileController {
         }
     }
 
-    static void setPowerOff(TileActor actor, boolean iconWhite) {
+    static void setPowerOff(HexActor actor, boolean iconWhite) {
         actor.setPowerOff();
         if (actor.getIndex() > 12 & actor.getIndex() < 25) {
             actor.setIndex(actor.getIndex() - 12);
@@ -85,7 +85,7 @@ public class TileController {
         }
     }
 
-    public static void animIcon(TileActor actor, boolean iconWhite) {
+    public static void animIcon(HexActor actor, boolean iconWhite) {
         if (iconWhite) {
             actor.setIcon(FRAssetManager.getAtlas().createSprite("iconE"));
         } else {
@@ -93,7 +93,7 @@ public class TileController {
         }
     }
 
-    public static void setAngle(TileActor actor, float angle) {
+    public static void setAngle(HexActor actor, float angle) {
         actor.setAngle(angle);
         actor.setRotatePosition(actor.getRotatePosition() + 1);
         if (actor.getRotatePosition() == 6) {

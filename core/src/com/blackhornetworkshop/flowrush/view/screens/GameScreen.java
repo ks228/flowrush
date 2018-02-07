@@ -13,14 +13,15 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
+import com.blackhornetworkshop.flowrush.controller.RateDialogController;
 import com.blackhornetworkshop.flowrush.controller.FRAssetManager;
 import com.blackhornetworkshop.flowrush.controller.MapController;
 import com.blackhornetworkshop.flowrush.model.FRConstants;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
 import com.blackhornetworkshop.flowrush.controller.ScreenManager;
 import com.blackhornetworkshop.flowrush.controller.SourceChecker;
-import com.blackhornetworkshop.flowrush.model.TileActor;
-import com.blackhornetworkshop.flowrush.controller.TileController;
+import com.blackhornetworkshop.flowrush.model.HexActor;
+import com.blackhornetworkshop.flowrush.controller.HexController;
 import com.blackhornetworkshop.flowrush.controller.LevelLoader;
 import com.blackhornetworkshop.flowrush.model.ui.UIPool;
 
@@ -42,8 +43,7 @@ public class GameScreen implements Screen, FRScreen {
 
 
     //Primitives
-    public boolean firstTap;
-    public boolean iconWhite;
+    public boolean isIconWhite;
 
     //Other
     private MoveToAction moveToActionPause;
@@ -111,12 +111,12 @@ public class GameScreen implements Screen, FRScreen {
             @Override
             public void run() {
                 for (int x = 0; x < MapController.getSpecialActorsArraySize(); x++) {
-                    TileActor specialActor = MapController.getSpecialActorsArrayChildren(x);
+                    HexActor specialActor = MapController.getSpecialActorsArrayChildren(x);
                     if (specialActor.getInclude() == 2 && !specialActor.isPowerOn()) {
-                        TileController.animIcon(specialActor, iconWhite);
+                        HexController.animIcon(specialActor, isIconWhite);
                     }
                 }
-                iconWhite = !iconWhite;
+                isIconWhite = !isIconWhite;
             }
         }, 0.6f, 0.6f);
 
@@ -229,6 +229,12 @@ public class GameScreen implements Screen, FRScreen {
         hudStage.addActor(UIPool.getRightButton());
     }
 
+    public static void hideRateDialog(){
+        UIPool.getDialogBackground().setVisible(false);
+        UIPool.getLeftButton().setVisible(false);
+        UIPool.getRightButton().setVisible(false);
+    }
+
 
     @Override
     public void render(float delta) {
@@ -288,6 +294,7 @@ public class GameScreen implements Screen, FRScreen {
         UIPool.getPackCompleteUpperHex().setVisible(true);
         UIPool.getPackCompleteMenuButton().setVisible(true);
         if (FlowRush.getInstance().prefs.isShowRateDialog()) {
+            RateDialogController.reset();
             UIPool.getDialogBackground().setVisible(true);
             UIPool.getLeftButton().setVisible(true);
             UIPool.getRightButton().setVisible(true);

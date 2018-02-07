@@ -13,13 +13,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.blackhornetworkshop.flowrush.controller.FRAssetManager;
 
-public class PackCompleteActor extends Actor {
+public class PackCompleteTopHex extends Actor {
 
     private Sprite spriteFace;
     private Container<Label> labelContainer;
 
 
-    public PackCompleteActor(BitmapFont font, String string){
+    public PackCompleteTopHex(BitmapFont font, String string){
         setSize(Gdx.graphics.getHeight()*0.35f*1.117647058823529f, Gdx.graphics.getHeight()*0.35f);
         setOrigin(getWidth()/2, getHeight()/2);
         setPosition((Gdx.graphics.getWidth()-getWidth())/2, (Gdx.graphics.getHeight()-getHeight())/4*3);

@@ -23,12 +23,7 @@ public class LevelLoader {
     private int lvl;
 
     public static LevelLoader getInstance(){
-        if(instance == null){
-            instance = new LevelLoader();
-            FlowRush.logDebug("LevelLoader is initialized. Return new instance");
-        }else{
-            FlowRush.logDebug("LevelLoader is already initialized. Return existing instance");
-        }
+        if(instance == null) instance = new LevelLoader();
         return instance;
     }
 

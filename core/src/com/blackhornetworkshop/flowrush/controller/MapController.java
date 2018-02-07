@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.Align;
 import com.blackhornetworkshop.flowrush.model.FRConstants;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
 import com.blackhornetworkshop.flowrush.model.ActorInfo;
-import com.blackhornetworkshop.flowrush.model.TileActor;
+import com.blackhornetworkshop.flowrush.model.HexActor;
 import com.blackhornetworkshop.flowrush.controller.listeners.HexActorListener;
 import com.blackhornetworkshop.flowrush.model.ui.UIPool;
 
@@ -31,15 +31,15 @@ public class MapController {
 
     private static final Group mapGroup = new Group();
     private static final Group hexGroup = new Group();
-    private static final ArrayList<TileActor> specialActors = new ArrayList<TileActor>();
+    private static final ArrayList<HexActor> specialActors = new ArrayList<HexActor>();
 
     private static int numOfReceivers = 0;
 
     static int getNumOfReceivers(){return numOfReceivers;}
     static int getHexGroupSize(){return hexGroup.getChildren().size;}
-    static TileActor getHexGroupChildren(int x){return (TileActor) hexGroup.getChildren().get(x);}
+    static HexActor getHexGroupChildren(int x){return (HexActor) hexGroup.getChildren().get(x);}
     public static int getSpecialActorsArraySize(){return specialActors.size();}
-    public static TileActor getSpecialActorsArrayChildren(int x){return specialActors.get(x);}
+    public static HexActor getSpecialActorsArrayChildren(int x){return specialActors.get(x);}
     public static MapController getInstance(){
         if(instance == null){
             instance = new MapController();
@@ -65,7 +65,7 @@ public class MapController {
         minCoord = Gdx.graphics.getHeight();
         maxCoord = 0;
 
-        mapGroup.addActor(UIPool.getTapOnTileActor());
+        mapGroup.addActor(UIPool.getHexBackgroundActor());
 
         for (int x = 0; x < list.size(); x++) {
             for (int y = 0; y < list.get(0).size(); y++) {
@@ -118,13 +118,13 @@ public class MapController {
                 maxCoord = yPos + FRConstants.HEX_HEIGHT;
             }
 
-            TileActor actor = new TileActor(actorInfo);
-            TileController.setType(actor);
+            HexActor actor = new HexActor(actorInfo);
+            HexController.setType(actor);
 
             actor.setSources(SourceInstaller.getSourceArray(actor));
 
             for (int a = 0; a < actor.getRotatePosition(); a++) { //смещаем sources на количество поворотов "position"
-                TileController.moveSources(actor);
+                HexController.moveSources(actor);
             }
 
             actor.addListener(new HexActorListener(actor));
@@ -149,7 +149,7 @@ public class MapController {
 
             actor.setSprite(atlas.createSprite("hex", actor.getIndex())); //стартовая графика гекса
 
-            TileController.setHexbackTouchOff(actor);
+            HexController.setHexbackTouchOff(actor);
 
             if (actor.getInclude() == 1) {
                 actor.setIcon(atlas.createSprite("iconMP"));
