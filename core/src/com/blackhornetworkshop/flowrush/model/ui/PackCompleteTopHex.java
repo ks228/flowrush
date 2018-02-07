@@ -15,7 +15,7 @@ import com.blackhornetworkshop.flowrush.controller.FRAssetManager;
 
 public class PackCompleteTopHex extends Actor {
 
-    private Sprite spriteFace;
+    private Sprite sprite;
     private Container<Label> labelContainer;
 
 
@@ -24,7 +24,7 @@ public class PackCompleteTopHex extends Actor {
         setOrigin(getWidth()/2, getHeight()/2);
         setPosition((Gdx.graphics.getWidth()-getWidth())/2, (Gdx.graphics.getHeight()-getHeight())/4*3);
 
-        spriteFace = FRAssetManager.getAtlas().createSprite("bighex_dark");
+        sprite = FRAssetManager.getAtlas().createSprite("bighex_dark");
 
         Color color = new Color(1f, 1f, 1f, 1);
 
@@ -40,7 +40,7 @@ public class PackCompleteTopHex extends Actor {
 
     @Override
     public void draw(Batch batch, float alpha) {
-        batch.draw(spriteFace, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+        batch.draw(sprite, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
         labelContainer.setScale(getScaleX(), getScaleY());
         labelContainer.setPosition(getX()+getWidth()/2, getY()+getHeight()/2);
         labelContainer.draw(batch, 1);

@@ -9,17 +9,17 @@ import com.blackhornetworkshop.flowrush.view.FlowRush;
 import com.blackhornetworkshop.flowrush.model.HexActor;
 import com.blackhornetworkshop.flowrush.view.screens.GameScreen;
 
-//Created by TScissors. Класс для проверки соединения между гексами. основная логика игры находится тут
+//Created by TScissors.
 
-public class SourceChecker { //основная логика игры находится тут
+public class SourceChecker {
 
     private static SourceChecker instance;
 
     private HexActor actor;
     private Group group;
     private boolean[] sourceArrayMain;
-    private ArrayList<HexActor> tempoHexArray = new ArrayList<HexActor>();
-    private ArrayList<HexActor> doveArray = new ArrayList<HexActor>(); //для постоянного хранения голубей
+    private ArrayList<HexActor> tempoHexArray = new ArrayList<>();
+    private ArrayList<HexActor> doveArray = new ArrayList<>();
 
     private boolean doveIsOn;
     private int numReceiversOn = 0;
@@ -99,7 +99,7 @@ public class SourceChecker { //основная логика игры наход
         if (MapController.getNumOfReceivers() == numReceiversOn) {
             GameScreen.getInputMultiplexer().removeProcessor(FlowRush.getInstance().getHexesStage());//отключает касание к тайлам пока не выскочил lvlCompleteActor
             for (int i = 0; i < MapController.getHexGroupSize(); i++) {
-                HexController.setHexbackTouchOn(MapController.getHexGroupChildren(i));
+                HexController.setHexBackgroundOn(MapController.getHexGroupChildren(i));
             }
 
             Timer.instance().clear();
@@ -144,8 +144,8 @@ public class SourceChecker { //основная логика игры наход
 
         int x, y;
 
-        x = actor.getxIndex();
-        y = actor.getyIndex();
+        x = actor.getXIndex();
+        y = actor.getYIndex();
 
         if (x == 0 || x % 2 == 0) {
             String nameTempo = "" + (x - 1) + "" + y; //позиция слева снизу (0)

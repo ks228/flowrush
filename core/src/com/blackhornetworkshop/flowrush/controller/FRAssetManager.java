@@ -18,6 +18,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.blackhornetworkshop.flowrush.model.FRConstants;
+import com.blackhornetworkshop.flowrush.model.ex.FlowRushException;
+import com.blackhornetworkshop.flowrush.view.FlowRush;
+
+import java.util.ArrayList;
 
 import static com.blackhornetworkshop.flowrush.model.FRConstants.SCREEN_HEIGHT;
 import static com.blackhornetworkshop.flowrush.model.FRConstants.SCREEN_WIDTH;
@@ -26,17 +30,26 @@ public class FRAssetManager {
     private static AssetManager manager;
     public static void dispose(){ manager.dispose();}
 
-    //Graphics
     private static Skin skin;
-    private static TiledDrawable spriteBack;
-    private static Sprite quadrantSprite;
-    private static Sprite stripe, soundOn, soundOff;
     private static TextureAtlas atlas;
-    private static Sprite logoBHW;
-    private static Sprite logoFR;
+
     //Audio
     private static Sound tapSound, lvlCompleteSound, packCompleteSound;
     private static Music backgroundMusic;
+
+    //Sprites
+    private static TiledDrawable spriteBack;
+    private static Sprite logoBHW;
+    private static Sprite logoFR;
+    private static Sprite quadrantSprite;
+    private static Sprite stripe, soundOn, soundOff;
+    private static Sprite hexBackgroundOffWithSource, hexBackgroundOn;
+    private static Sprite hexBackgroundOff, hexBackgroundOnWithSource;
+    private static Sprite iconSource;
+    private static Sprite iconDoveOn, iconDoveOff;
+    private static Sprite iconPointOn, iconPointOff, iconPointWhite;
+    private static Sprite lockSprite;
+    private static ArrayList<Sprite> hexes;
 
     private FRAssetManager(){}
 
@@ -45,20 +58,36 @@ public class FRAssetManager {
 
         skin = manager.get("ui/skin.json");
         atlas = skin.getAtlas();
-        tapSound = manager.get("sound/tap.ogg");
-        packCompleteSound = manager.get("sound/packcomplete.ogg");
-        lvlCompleteSound = manager.get("sound/lvlcomplete.ogg");
-        backgroundMusic = manager.get("sound/background.ogg");
 
-        logoBHW = FRAssetManager.getAtlas().createSprite("h_logo");
-        logoBHW.setSize(SCREEN_WIDTH * 0.6f, SCREEN_WIDTH * 0.6f*0.79f);
-        logoBHW.setPosition((SCREEN_WIDTH - logoBHW.getWidth()) / 2, (SCREEN_HEIGHT - logoBHW.getHeight()) / 2);
+        createSounds();
+        createSprites();
+    }
 
-        logoFR = FRAssetManager.getAtlas().createSprite("fr_logo");
-        logoFR.setSize(SCREEN_WIDTH * 0.8f, SCREEN_WIDTH * 0.8f * 0.75f);
-        logoFR.setPosition((SCREEN_WIDTH - logoFR.getWidth()) / 2, (SCREEN_HEIGHT - logoFR.getHeight()*0.9f)/2);
+    private static void createSprites(){
+        //Game
+        hexBackgroundOff = atlas.createSprite("backhex");
+        hexBackgroundOffWithSource = atlas.createSprite("backhexS");
+        hexBackgroundOn = atlas.createSprite("backhex_touched");
+        hexBackgroundOnWithSource = atlas.createSprite("backhex_touchedS");
+
+        iconSource = atlas.createSprite("iconMP");
+        iconDoveOff = atlas.createSprite("iconD");
+        iconDoveOn = atlas.createSprite("iconDP");
+        iconPointOff = atlas.createSprite("iconE");
+        iconPointWhite = atlas.createSprite("iconEW");
+        iconPointOn = atlas.createSprite("iconEP");
+        hexes = new ArrayList<>();
+        for(int x = 1; x < 51; x++){
+            hexes.add(atlas.createSprite("hex", x));
+        }
+
+        //UI
+        soundOff = atlas.createSprite("soundOff_icon");
+        soundOn = atlas.createSprite("soundOn_icon");
 
         quadrantSprite = atlas.createSprite("q_circle");
+
+        lockSprite = atlas.createSprite("lock");
 
         if(Gdx.graphics.getWidth()<500) {
             spriteBack = new TiledDrawable(atlas.findRegion("point"));
@@ -74,6 +103,21 @@ public class FRAssetManager {
             stripe = atlas.createSprite("animation4");
         }
 
+        logoBHW = atlas.createSprite("h_logo");
+        logoBHW.setSize(SCREEN_WIDTH * 0.6f, SCREEN_WIDTH * 0.6f*0.79f);
+        logoBHW.setPosition((SCREEN_WIDTH - logoBHW.getWidth()) / 2, (SCREEN_HEIGHT - logoBHW.getHeight()) / 2);
+
+        logoFR = atlas.createSprite("fr_logo");
+        logoFR.setSize(SCREEN_WIDTH * 0.8f, SCREEN_WIDTH * 0.8f * 0.75f);
+        logoFR.setPosition((SCREEN_WIDTH - logoFR.getWidth()) / 2, (SCREEN_HEIGHT - logoFR.getHeight()*0.9f)/2);
+    }
+
+    private static void createSounds(){
+        tapSound = manager.get("sound/tap.ogg");
+        packCompleteSound = manager.get("sound/packcomplete.ogg");
+        lvlCompleteSound = manager.get("sound/lvlcomplete.ogg");
+        backgroundMusic = manager.get("sound/background.ogg");
+
         backgroundMusic.setOnCompletionListener(new Music.OnCompletionListener(){
             @Override
             public void onCompletion(Music music) {
@@ -82,9 +126,6 @@ public class FRAssetManager {
             }
         });
         backgroundMusic.setVolume(0.7f);
-
-        soundOff = atlas.createSprite("soundOff_icon");
-        soundOn = atlas.createSprite("soundOn_icon");
     }
 
     private static void assetManagerLoad(){
@@ -130,23 +171,16 @@ public class FRAssetManager {
         manager.finishLoading();
     }
 
-    public static Sprite getLogoFR() {
-        return logoFR;
+    public static TextureAtlas getAtlas() {
+        return atlas;
     }
 
-    public static Sprite getLogoBHW() {
-
-        return logoBHW;
+    public static Skin getSkin() {
+        return skin;
     }
 
-    public static Sprite getSoundOff() {
-        return soundOff;
-    }
 
-    public static Sprite getSoundOn() {
-
-        return soundOn;
-    }
+    //Sounds
 
     public static Music getBackgroundMusic() {
         return backgroundMusic;
@@ -164,8 +198,62 @@ public class FRAssetManager {
         return tapSound;
     }
 
-    public static TextureAtlas getAtlas() {
-        return atlas;
+
+    //Sprites
+
+    public static Sprite getSoundOff() {
+        return soundOff;
+    }
+
+    public static Sprite getSoundOn() {
+        return soundOn;
+    }
+
+    public static TiledDrawable getSpriteBack() {
+        return spriteBack;
+    }
+
+    public static Sprite getHexBackgroundOffWithSource() {
+        return hexBackgroundOffWithSource;
+    }
+
+    public static Sprite getHexBackgroundOff() {
+        return hexBackgroundOff;
+    }
+    public static Sprite getHexBackgroundOnWithSource() {
+        return hexBackgroundOnWithSource;
+    }
+
+    public static Sprite getHexBackgroundOn() {
+        return hexBackgroundOn;
+    }
+
+    public static Sprite getIconSource() {
+        return iconSource;
+    }
+
+    public static Sprite getIconDoveOn() {
+        return iconDoveOn;
+    }
+
+    public static Sprite getIconDoveOff() {
+        return iconDoveOff;
+    }
+
+    public static Sprite getIconPointOn() {
+        return iconPointOn;
+    }
+
+    public static Sprite getIconPointOff() {
+        return iconPointOff;
+    }
+
+    public static Sprite getIconPointWhite() {
+        return iconPointWhite;
+    }
+
+    public static Sprite getLockSprite() {
+        return lockSprite;
     }
 
     public static Sprite getStripe() {
@@ -176,15 +264,16 @@ public class FRAssetManager {
         return quadrantSprite;
     }
 
-    public static TiledDrawable getSpriteBack() {
-        return spriteBack;
+    public static Sprite getLogoFR() {
+        return logoFR;
     }
 
-    public static Skin getSkin() {
-        return skin;
+    public static Sprite getLogoBHW() {
+        return logoBHW;
     }
 
-    public static AssetManager getManager() {
-        return manager;
+    public static Sprite getHexSprite(int index) throws FlowRushException{
+        if( index < 1 || index > 50) FlowRush.logError("Asset manager error",new FlowRushException("Wrong index!"));
+        return hexes.get(index - 1);
     }
 }

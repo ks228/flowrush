@@ -57,7 +57,6 @@ public class LevelGroupCreator {
     }
 
     private void createGroup(Group levelGroup){
-        final Sprite greyback = FRAssetManager.getAtlas().createSprite("lock");
         for (int x = 1; x < 51; x++) {
             final int i = x;
             setPos(x);
@@ -80,7 +79,7 @@ public class LevelGroupCreator {
                 Actor levelLock = new Actor(){
                     @Override
                     public void draw(Batch batch, float alpha) {
-                            batch.draw(greyback, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+                            batch.draw(FRAssetManager.getLockSprite(), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
                     }
                 };
                 levelLock.setSize(lvlNumSize, lvlNumSize);

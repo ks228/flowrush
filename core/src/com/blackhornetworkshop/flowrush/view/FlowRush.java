@@ -162,7 +162,7 @@ public class FlowRush extends Game {
 
     public void render() { super.render(); }
 
-    public void logError(String msg, Throwable tr) {
+    public static void logError(String msg, Throwable tr) {
         androidHelper.logError(msg, tr);
     }
 

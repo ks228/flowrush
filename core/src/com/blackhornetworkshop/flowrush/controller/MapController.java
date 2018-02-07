@@ -1,7 +1,7 @@
 package com.blackhornetworkshop.flowrush.controller;
 
-
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 import static com.blackhornetworkshop.flowrush.model.FRConstants.SCREEN_HEIGHT;
 
-//Created by TScissors. Класс Group создает группу актеров HexActor на основании данных ActorInfo из массива ActorList
+//Created by TScissors.
 
 public class MapController {
 
@@ -69,7 +69,7 @@ public class MapController {
 
         for (int x = 0; x < list.size(); x++) {
             for (int y = 0; y < list.get(0).size(); y++) {
-                fillHexGroup(x, y, list, FRAssetManager.getAtlas());
+                createActor(x, y, list);
             }
         }
 
@@ -103,25 +103,42 @@ public class MapController {
         mapGroup.addActor(hexGroup);
     }
 
-    private static void fillHexGroup(int x, int y, ArrayList<ArrayList<ActorInfo>> list, TextureAtlas atlas) {
-
-
+    private static void createActor(int x, int y, ArrayList<ArrayList<ActorInfo>> list) {
         ActorInfo actorInfo = list.get(x).get(y);
 
         //Если индекс из actorInfo XY будет равен 0 актер не будет создан
         if (actorInfo.getIndex() != 0) {
             setPosXY(x, y);
+
             if (yPos < minCoord) {
                 minCoord = yPos;
             }
+
             if (yPos + FRConstants.HEX_HEIGHT > maxCoord) {
                 maxCoord = yPos + FRConstants.HEX_HEIGHT;
             }
 
-            HexActor actor = new HexActor(actorInfo);
-            HexController.setType(actor);
+            int indexSpriteOff = 0;
+            int indexSpriteOn = 0;
 
-            actor.setSources(SourceInstaller.getSourceArray(actor));
+            if (actorInfo.getIndex() < 13) {
+                indexSpriteOff = actorInfo.getIndex();
+                indexSpriteOn = actorInfo.getIndex() + 12;
+            } else if (actorInfo.getIndex() > 12 & actorInfo.getIndex() < 25) {
+                indexSpriteOn = actorInfo.getIndex();
+                indexSpriteOff = actorInfo.getIndex() - 12;
+            } else if (actorInfo.getIndex() > 24 & actorInfo.getIndex() < 38) {
+                indexSpriteOff = actorInfo.getIndex();
+                indexSpriteOn = actorInfo.getIndex() + 13;
+            } else if (actorInfo.getIndex() > 37 & actorInfo.getIndex() < 51) {
+                indexSpriteOn = actorInfo.getIndex();
+                indexSpriteOff = actorInfo.getIndex() - 13;
+            }
+
+            Sprite spriteOff = FRAssetManager.getHexSprite(indexSpriteOff);
+            Sprite spriteOn = FRAssetManager.getHexSprite(indexSpriteOn);
+
+            HexActor actor = new HexActor(actorInfo.getIndex(), actorInfo.getInclude(), spriteOff, spriteOn, actorInfo.getPosition(), x, y, createSourceArray(actorInfo.getIndex()));
 
             for (int a = 0; a < actor.getRotatePosition(); a++) { //смещаем sources на количество поворотов "position"
                 HexController.moveSources(actor);
@@ -134,29 +151,22 @@ public class MapController {
             }
 
             actor.setRotation(actorInfo.getPosition() * (-60));
-            actor.setxIndex(x);
-            actor.setyIndex(y);
 
             //REFACTOR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            actor.setName(x + "" + y); //имя необходимо для точного вычисления "координат" сетки из шестиугольников, в SourceChecker // CREATE ANOTHER METHOD!
+            actor.setName(x + "" + y); //имя необходимо для точного вычисления "координат" сетки из шестиугольников, в SourceChecker // FIND ANOTHER METHOD!
             //REFACTOR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-            //REFACTOR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            actor.setBounds(xPos, yPos, FRConstants.HEX_WIDTH, FRConstants.HEX_HEIGHT); // ONLY POSITION!
-            actor.setOriginX(FRConstants.HEX_WIDTH / 2); //DELETE, DO IT IN TILE ACTOR CLASS
-            actor.setOriginY(FRConstants.HEX_HEIGHT / 2); //DELETE, DO IT IN TILE ACTOR CLASS
-            //REFACTOR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-            actor.setSprite(atlas.createSprite("hex", actor.getIndex())); //стартовая графика гекса
+            actor.setBounds(xPos, yPos, FRConstants.HEX_WIDTH, FRConstants.HEX_HEIGHT);
+            actor.setOrigin(Align.center);
 
             HexController.setHexbackTouchOff(actor);
 
             if (actor.getInclude() == 1) {
-                actor.setIcon(atlas.createSprite("iconMP"));
+                actor.setIcon(FRAssetManager.getIconSource());
             } else if (actor.getInclude() == 2) {
-                actor.setIcon(atlas.createSprite("iconE"));
+                actor.setIcon(FRAssetManager.getIconPointOff());
             } else if (actor.getInclude() == 3) {
-                actor.setIcon(atlas.createSprite("iconD"));
+                actor.setIcon(FRAssetManager.getIconDoveOff());
             }
 
             ScaleToAction scale = new ScaleToAction();
@@ -164,14 +174,11 @@ public class MapController {
             scale.setDuration(0.25f);
 
             actor.setScale(0f, 0f);
-            actor.addAction(scale); //добавляем стартовую анимацию
+            actor.addAction(scale);
 
             hexGroup.addActor(actor);
 
-            //GameScreen.getInstance().hexesArray.add(actor);
-
             if (actor.getInclude() != 0) {
-                //GameScreen.getInstance().specialActorsArray.add(actor);
                 specialActors.add(actor);
             }
         }
@@ -188,4 +195,62 @@ public class MapController {
         }
     }
 
+    private static boolean[] createSourceArray(int index) {
+        int type = 0;
+        if (index < 13) {
+            type = index;
+        } else if (index > 12 && index < 25) {
+            type = index-12;
+        } else if (index > 24 && index < 38) {
+            type = index - 24;
+        } else if (index > 37 && index < 51) {
+            type = index - 37;
+        }
+        boolean[] sourceArray;
+        switch(type){
+            case 1:
+                sourceArray  = new boolean[] {false,false,true,false,false,true}; // 1
+                break;
+            case 2:
+                sourceArray  = new boolean[] {false,false,true,false,true,false}; // 2
+                break;
+            case 3:
+                sourceArray  = new boolean[] {true,false,true,false,true,false}; // 3
+                break;
+            case 4:
+                sourceArray  = new boolean[] {false,false,true,true,false,true}; // 4
+                break;
+            case 5:
+                sourceArray  = new boolean[] {false,true,true,false,false,true}; // 5
+                break;
+            case 6:
+                sourceArray  = new boolean[] {true,true,true,true,true,true}; // 6
+                break;
+            case 7:
+                sourceArray  = new boolean[] {false,false,true,true,true,true}; // 7
+                break;
+            case 8:
+                sourceArray  = new boolean[] {true,false,true,true,true,false}; // 8
+                break;
+            case 9:
+                sourceArray  = new boolean[] {false,false,true,true,false,false}; // 9
+                break;
+            case 10:
+                sourceArray  = new boolean[] {false,false,true,true,true,false}; // 10
+                break;
+            case 11:
+                sourceArray  = new boolean[] {true,true,false,true,true,false}; // 11
+                break;
+            case 12:
+                sourceArray  = new boolean[] {true,true,true,true,true,false}; // 12
+                break;
+            case 13:
+                sourceArray  = new boolean[] {false,false,true,false,false,false}; // 13
+                break;
+            default:
+                sourceArray = null;
+                break;
+        }
+        return sourceArray;
+    }
 }

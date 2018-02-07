@@ -6,17 +6,6 @@ import com.blackhornetworkshop.flowrush.view.screens.GameScreen;
 //Created by TScissors.
 
 public class HexController {
-    public static void setType(HexActor actor) {
-        if (actor.getIndex() < 13) {
-            actor.setType(actor.getIndex());
-        } else if (actor.getIndex() >= 13 && actor.getIndex() < 25) {
-            actor.setType(actor.getIndex() - 12);
-        } else if (actor.getIndex() >= 25 && actor.getIndex() < 38) {
-            actor.setType(actor.getIndex() - 24);
-        } else if (actor.getIndex() >= 38 && actor.getIndex() < 51) {
-            actor.setType(actor.getIndex() - 37);
-        }
-    }
 
     public static void moveSources(HexActor actor) {
         boolean[] sourceArray = actor.getSourceArray();
@@ -32,65 +21,47 @@ public class HexController {
 
     public static void setHexbackTouchOff(HexActor actor) {
         if (actor.getIndex() < 25) {
-            actor.setHexback(FRAssetManager.getAtlas().createSprite("backhex"));
-        } else if (actor.getIndex() > 24) {
-            actor.setHexback(FRAssetManager.getAtlas().createSprite("backhexS"));
+            actor.setBackground(FRAssetManager.getHexBackgroundOff());
+        } else {
+            actor.setBackground(FRAssetManager.getHexBackgroundOffWithSource());
         }
     }
 
-    public static void setHexbackTouchOn(HexActor actor) {
+    public static void setHexBackgroundOn(HexActor actor) {
         if (actor.getIndex() < 25) {
-            actor.setHexback(FRAssetManager.getAtlas().createSprite("backhex_touched"));
-        } else if (actor.getIndex() > 24) {
-            actor.setHexback(FRAssetManager.getAtlas().createSprite("backhex_touchedS"));
+            actor.setBackground(FRAssetManager.getHexBackgroundOn());
+        } else {
+            actor.setBackground(FRAssetManager.getHexBackgroundOnWithSource());
         }
     }
 
     static void setPowerOn(HexActor actor) {
         actor.setPowerOn();
-        if (actor.getIndex() < 13) {
-            actor.setIndex(actor.getIndex() + 12);
-        } else if (actor.getIndex() > 24 & actor.getIndex() < 38) {
-            actor.setIndex(actor.getIndex() + 13);
-        }
-        actor.setSprite(FRAssetManager.getAtlas().createSprite("hex", actor.getIndex()));
-        actor.getActorInfo().setIndex(actor.getIndex());
-        if (actor.getInclude() == 1) {
-            actor.setIcon(FRAssetManager.getAtlas().createSprite("iconMP"));
-        } else if (actor.getInclude() == 2) {
-            actor.setIcon(FRAssetManager.getAtlas().createSprite("iconEP"));
+        if (actor.getInclude() == 2) {
+            actor.setIcon(FRAssetManager.getIconPointOn());
         } else if (actor.getInclude() == 3) {
-            actor.setIcon(FRAssetManager.getAtlas().createSprite("iconDP"));
+            actor.setIcon(FRAssetManager.getIconDoveOn());
         }
     }
 
     static void setPowerOff(HexActor actor) {
         actor.setPowerOff();
-        if (actor.getIndex() > 12 & actor.getIndex() < 25) {
-            actor.setIndex(actor.getIndex() - 12);
-        } else if (actor.getIndex() > 37 & actor.getIndex() < 51) {
-            actor.setIndex(actor.getIndex() - 13);
-        }
-        actor.setSprite(FRAssetManager.getAtlas().createSprite("hex", actor.getIndex()));
-        actor.getActorInfo().setIndex(actor.getIndex());
-        if (actor.getInclude() == 1) {
-            actor.setIcon(FRAssetManager.getAtlas().createSprite("iconMP"));
-        } else if (actor.getInclude() == 2) {
+        if (actor.getInclude() == 2) {
             if (GameScreen.isSpecialIconsAnimationWhite()) {
-                actor.setIcon(FRAssetManager.getAtlas().createSprite("iconEW"));
+                actor.setIcon(FRAssetManager.getIconPointWhite());
             } else {
-                actor.setIcon(FRAssetManager.getAtlas().createSprite("iconE"));
+                actor.setIcon(FRAssetManager.getIconPointOff());
             }
         } else if (actor.getInclude() == 3) {
-            actor.setIcon(FRAssetManager.getAtlas().createSprite("iconD"));
+            actor.setIcon(FRAssetManager.getIconDoveOff());
         }
     }
 
     public static void animIcon(HexActor actor) {
         if (GameScreen.isSpecialIconsAnimationWhite()) {
-            actor.setIcon(FRAssetManager.getAtlas().createSprite("iconE"));
+            actor.setIcon(FRAssetManager.getIconPointOff());
         } else {
-            actor.setIcon(FRAssetManager.getAtlas().createSprite("iconEW"));
+            actor.setIcon(FRAssetManager.getIconPointWhite());
         }
     }
 
@@ -100,6 +71,5 @@ public class HexController {
         if (actor.getRotatePosition() == 6) {
             actor.setRotatePosition(0);
         }
-        actor.getActorInfo().setPosition(actor.getRotatePosition());
     }
 }

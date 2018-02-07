@@ -61,7 +61,7 @@ public class HexActorListener extends ClickListener {
             }
 
         }
-        HexController.setHexbackTouchOn(actor);
+        HexController.setHexBackgroundOn(actor);
         return true;
     }
     @Override
