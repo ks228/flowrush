@@ -1,6 +1,7 @@
 package com.blackhornetworkshop.flowrush.controller.listeners;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.RotateToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
@@ -9,7 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.blackhornetworkshop.flowrush.controller.SourceChecker;
 import com.blackhornetworkshop.flowrush.model.TileActor;
 import com.blackhornetworkshop.flowrush.controller.TileController;
-import com.blackhornetworkshop.flowrush.view.ui.UIPool;
+import com.blackhornetworkshop.flowrush.model.ui.UIPool;
+import com.blackhornetworkshop.flowrush.view.FlowRush;
+import com.blackhornetworkshop.flowrush.view.screens.GameScreen;
 
 //Created by TScissors. Класс слушатель классов HexActor, очищает, поворачивает, изменяет тип, запускает анимацию фона клетки
 
@@ -100,8 +103,9 @@ public class HexActorListener extends ClickListener {
             rotateToAction2.reset();
             actor.addAction(sequenceAction);
         }
+        FlowRush.logDebug("touchX: "+x+" touchY: "+y);
 
-        UIPool.getTapOnTileActor().goAnim(actor.getX(), actor.getY());
+        UIPool.getTapOnTileActor().goAnim(actor.getX(),actor.getY());
     }
 
 }

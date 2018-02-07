@@ -25,12 +25,7 @@ public class SourceChecker { //основная логика игры наход
     private int numReceiversOn = 0;
 
     public static SourceChecker getInstance(){
-        if(instance == null){
-            instance = new SourceChecker();
-            FlowRush.logDebug("SourceChecker is initialized. Return new instance");
-        }else{
-            FlowRush.logDebug("SourceChecker is already initialized. Return existing instance");
-        }
+        if(instance == null) instance = new SourceChecker();
         return instance;
     }
 
@@ -39,8 +34,8 @@ public class SourceChecker { //основная логика игры наход
     public void initialization(Group mapGroup) {
         group = mapGroup;
         clearFields();
-        for (int x = 0; x < GameScreen.getInstance().specialActorsArray.size(); x++) {
-            actor = GameScreen.getInstance().specialActorsArray.get(x);
+        for (int x = 0; x < MapController.getSpecialActorsArraySize(); x++) {
+            actor = MapController.getSpecialActorsArrayChildren(x);
             if (actor.getInclude() == 3) {
                 doveArray.add(actor); //заполняем массив голубей
             }
@@ -58,8 +53,8 @@ public class SourceChecker { //основная логика игры наход
     public void checkAndSetActor() {
         disconnectAll();
 
-        for (int x = 0; x < GameScreen.getInstance().groupArray.size(); x++) {
-            actor = GameScreen.getInstance().groupArray.get(x);
+        for (int x = 0; x < MapController.getHexGroupSize(); x++) {
+            actor = MapController.getHexGroupChildren(x);
             if (actor.getInclude() == 1) {
                 sourceArrayMain = actor.getSourceArray();
                 tempoHexArray.add(actor); //первый член в массиве
@@ -95,16 +90,16 @@ public class SourceChecker { //основная логика игры наход
                 }
             }
         }
-        for (int x = 0; x < GameScreen.getInstance().specialActorsArray.size(); x++) { //тут и ниже проверка на победу
-            actor = GameScreen.getInstance().specialActorsArray.get(x);
+        for (int x = 0; x < MapController.getSpecialActorsArraySize(); x++) { //тут и ниже проверка на победу
+            actor = MapController.getSpecialActorsArrayChildren(x);
             if (actor.getInclude() == 2 && actor.isPowerOn()) {
                 numReceiversOn += 1;
             }
         }
-        if (GameScreen.numOfReceivers == numReceiversOn) {
-            GameScreen.getInstance().inputMultiplexer.removeProcessor(GameScreen.getInstance().mainStage);//отключает касание к тайлам пока не выскочил lvlCompleteActor
-            for (int i = 0; i < GameScreen.getInstance().groupArray.size(); i++) {
-                TileController.setHexbackTouchOn(GameScreen.getInstance().groupArray.get(i));
+        if (MapController.getNumOfReceivers() == numReceiversOn) {
+            GameScreen.getInstance().inputMultiplexer.removeProcessor(FlowRush.getInstance().getHexesStage());//отключает касание к тайлам пока не выскочил lvlCompleteActor
+            for (int i = 0; i < MapController.getHexGroupSize(); i++) {
+                TileController.setHexbackTouchOn(MapController.getHexGroupChildren(i));
             }
 
             Timer.instance().start();
@@ -185,8 +180,8 @@ public class SourceChecker { //основная логика игры наход
     private void disconnectAll() { //все отрубает
         tempoHexArray.clear();
         numReceiversOn = 0;
-        for (int x = 0; x < GameScreen.getInstance().groupArray.size(); x++) {
-            actor = GameScreen.getInstance().groupArray.get(x);
+        for (int x = 0; x < MapController.getHexGroupSize(); x++) {
+            actor = MapController.getHexGroupChildren(x);
             if (actor.getInclude() != 1) {
                 TileController.setPowerOff(actor, GameScreen.getInstance().iconWhite);
             }

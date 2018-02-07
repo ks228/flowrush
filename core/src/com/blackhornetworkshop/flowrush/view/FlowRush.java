@@ -17,7 +17,7 @@ import com.blackhornetworkshop.flowrush.model.SavedGame;
 import com.blackhornetworkshop.flowrush.view.screens.GameScreen;
 import com.blackhornetworkshop.flowrush.view.screens.LogoScreen;
 import com.blackhornetworkshop.flowrush.view.screens.MenuScreen;
-import com.blackhornetworkshop.flowrush.view.ui.UIPool;
+import com.blackhornetworkshop.flowrush.model.ui.UIPool;
 import com.google.gson.Gson;
 
 
@@ -29,7 +29,7 @@ public class FlowRush extends Game {
 
     //Stages
     private SpriteBatch batch;
-    private Stage mainStage, hudStage;
+    private Stage hexesStage, hudStage;
 
     //Data
     public GamePreferences prefs;
@@ -71,7 +71,7 @@ public class FlowRush extends Game {
 
         //Stages
         ScreenViewport screenViewport = new ScreenViewport();
-        mainStage = new Stage(screenViewport, batch);
+        hexesStage = new Stage(screenViewport, batch);
         hudStage = new Stage(screenViewport, batch);
 
         //Input
@@ -146,7 +146,7 @@ public class FlowRush extends Game {
     public SpriteBatch getBatch() {
         return batch;
     }
-    public Stage getMainStage() { return mainStage; }
+    public Stage getHexesStage() { return hexesStage; }
     public Stage getHudStage() {
         return hudStage;
     }
@@ -172,7 +172,7 @@ public class FlowRush extends Game {
     }
 
     public void dispose() {
-        mainStage.dispose();
+        hexesStage.dispose();
         hudStage.dispose();
         batch.dispose();
 

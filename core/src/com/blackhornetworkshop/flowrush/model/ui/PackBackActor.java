@@ -1,4 +1,4 @@
-package com.blackhornetworkshop.flowrush.view.ui;
+package com.blackhornetworkshop.flowrush.model.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;

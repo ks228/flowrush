@@ -1,4 +1,4 @@
-package com.blackhornetworkshop.flowrush.view.ui;
+package com.blackhornetworkshop.flowrush.model.ui;
 
 //Created by TScissors.
 

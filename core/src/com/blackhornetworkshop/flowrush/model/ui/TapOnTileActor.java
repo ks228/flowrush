@@ -1,4 +1,4 @@
-package com.blackhornetworkshop.flowrush.view.ui;
+package com.blackhornetworkshop.flowrush.model.ui;
 
 //Created by TScissors. Актер фоновой анимации клетки
 
@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+import com.badlogic.gdx.utils.Align;
 import com.blackhornetworkshop.flowrush.model.FRConstants;
 
 
@@ -17,10 +18,10 @@ public class TapOnTileActor extends Actor {
     private ScaleToAction scale2;
     private SequenceAction sequenceAction;
 
-    public TapOnTileActor(Sprite sprite){
+    TapOnTileActor(Sprite sprite){
         setPosition(-1000, -1000);
         setSize(FRConstants.HEX_WIDTH, FRConstants.HEX_HEIGHT);
-        setOrigin(getWidth()/2, getHeight()/2);
+        setOrigin(Align.center);
 
         tapEffect = sprite;
 
@@ -36,15 +37,22 @@ public class TapOnTileActor extends Actor {
     }
 
     public void goAnim(float xPos, float yPos){
-
         setX(xPos);
         setY(yPos);
-        
-        sequenceAction.restart();
 
-        scale1.reset();
-        scale2.reset();
-        addAction(sequenceAction);
+        if (getActions().contains(sequenceAction, true)) {
+            setScale(0);
+            sequenceAction.restart();
+            scale1.restart();
+            scale2.restart();
+            sequenceAction.addAction(scale1);
+            sequenceAction.addAction(scale2);
+        } else {
+            sequenceAction.restart();
+            scale1.reset();
+            scale2.reset();
+            addAction(sequenceAction);
+        }
     }
 
     @Override

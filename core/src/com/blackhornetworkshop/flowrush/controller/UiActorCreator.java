@@ -14,13 +14,13 @@ import com.badlogic.gdx.utils.Align;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
 import com.blackhornetworkshop.flowrush.controller.listeners.ButtonScaleListener;
 import com.blackhornetworkshop.flowrush.view.screens.GameScreen;
-import com.blackhornetworkshop.flowrush.view.ui.SmallButtonActor;
-import com.blackhornetworkshop.flowrush.view.ui.UIPool;
-import com.blackhornetworkshop.flowrush.view.ui.background.BackgroundActor;
-import com.blackhornetworkshop.flowrush.view.ui.background.BottomBackgroundActor;
-import com.blackhornetworkshop.flowrush.view.ui.background.LeftBackgroundActor;
-import com.blackhornetworkshop.flowrush.view.ui.background.RightBackgroundActor;
-import com.blackhornetworkshop.flowrush.view.ui.background.TopBackgroundActor;
+import com.blackhornetworkshop.flowrush.model.ui.SmallButtonActor;
+import com.blackhornetworkshop.flowrush.model.ui.UIPool;
+import com.blackhornetworkshop.flowrush.model.ui.background.BackgroundActor;
+import com.blackhornetworkshop.flowrush.model.ui.background.BottomBackgroundActor;
+import com.blackhornetworkshop.flowrush.model.ui.background.LeftBackgroundActor;
+import com.blackhornetworkshop.flowrush.model.ui.background.RightBackgroundActor;
+import com.blackhornetworkshop.flowrush.model.ui.background.TopBackgroundActor;
 
 import static com.blackhornetworkshop.flowrush.model.FRConstants.*;
 

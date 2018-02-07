@@ -5,53 +5,71 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
+import com.badlogic.gdx.utils.Align;
 import com.blackhornetworkshop.flowrush.model.FRConstants;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
 import com.blackhornetworkshop.flowrush.model.ActorInfo;
 import com.blackhornetworkshop.flowrush.model.TileActor;
 import com.blackhornetworkshop.flowrush.controller.listeners.HexActorListener;
-import com.blackhornetworkshop.flowrush.view.screens.GameScreen;
-import com.blackhornetworkshop.flowrush.view.ui.UIPool;
+import com.blackhornetworkshop.flowrush.model.ui.UIPool;
 
 import java.util.ArrayList;
 
+import static com.blackhornetworkshop.flowrush.model.FRConstants.SCREEN_HEIGHT;
+
 //Created by TScissors. Класс Group создает группу актеров HexActor на основании данных ActorInfo из массива ActorList
 
-public class MapCreator {
+public class MapController {
 
-    private static MapCreator instance;
+    private static MapController instance;
 
-    private Group mapGroup;
+    private static float xPos = 0;
+    private static float yPos = 0;
 
-    private float xPos;
-    private float yPos;
+    private static float minCoord = SCREEN_HEIGHT;
+    private static float maxCoord = 0;
 
-    private float minCoord = Gdx.graphics.getHeight();
-    private float maxCoord;
+    private static final Group mapGroup = new Group();
+    private static final Group hexGroup = new Group();
+    private static final ArrayList<TileActor> specialActors = new ArrayList<TileActor>();
 
-    public static MapCreator getInstance(){
+    private static int numOfReceivers = 0;
+
+    static int getNumOfReceivers(){return numOfReceivers;}
+    static int getHexGroupSize(){return hexGroup.getChildren().size;}
+    static TileActor getHexGroupChildren(int x){return (TileActor) hexGroup.getChildren().get(x);}
+    public static int getSpecialActorsArraySize(){return specialActors.size();}
+    public static TileActor getSpecialActorsArrayChildren(int x){return specialActors.get(x);}
+    public static MapController getInstance(){
         if(instance == null){
-            instance = new MapCreator();
-            FlowRush.logDebug("MapCreator is initialized. Return new instance");
+            instance = new MapController();
+            FlowRush.logDebug("MapController is initialized. Return new instance");
         }else{
-            FlowRush.logDebug("MapCreator is already initialized. Return existing instance");
+            FlowRush.logDebug("MapController is already initialized. Return existing instance");
         }
         return instance;
     }
 
-    private MapCreator(){}
+    private MapController(){}
 
-    public Group getGroup(ArrayList<ArrayList<ActorInfo>> list) {
+    public static Group getMapGroup(){
+        return mapGroup;
+    }
+
+    public static void createNewMapGroup(ArrayList<ArrayList<ActorInfo>> list) {
+        mapGroup.clear();
+        hexGroup.clear();
+        specialActors.clear();
+        numOfReceivers = 0;
+
         minCoord = Gdx.graphics.getHeight();
         maxCoord = 0;
-
-        mapGroup = new Group();
 
         mapGroup.addActor(UIPool.getTapOnTileActor());
 
         for (int x = 0; x < list.size(); x++) {
             for (int y = 0; y < list.get(0).size(); y++) {
-                createActor(x, y, list, FRAssetManager.getAtlas());
+                fillHexGroup(x, y, list, FRAssetManager.getAtlas());
             }
         }
 
@@ -79,13 +97,13 @@ public class MapCreator {
         }
         mapGroup.setPosition((Gdx.graphics.getWidth() - mapGroup.getWidth()) / 2, ((Gdx.graphics.getHeight() - (mapGroup.getHeight())) / 2) - coefficient);
 
-        mapGroup.setOrigin(mapGroup.getWidth() / 2, mapGroup.getHeight() / 2);
+        mapGroup.setOrigin(Align.center);
         mapGroup.setScale(zoom);
 
-        return mapGroup;
+        mapGroup.addActor(hexGroup);
     }
 
-    private void createActor(int x, int y, ArrayList<ArrayList<ActorInfo>> list, TextureAtlas atlas) {
+    private static void fillHexGroup(int x, int y, ArrayList<ArrayList<ActorInfo>> list, TextureAtlas atlas) {
 
 
         ActorInfo actorInfo = list.get(x).get(y);
@@ -112,7 +130,7 @@ public class MapCreator {
             actor.addListener(new HexActorListener(actor));
 
             if (actor.getInclude() == 2) {
-                GameScreen.numOfReceivers += 1;
+                MapController.numOfReceivers += 1;
             }
 
             actor.setRotation(actorInfo.getPosition() * (-60));
@@ -148,17 +166,18 @@ public class MapCreator {
             actor.setScale(0f, 0f);
             actor.addAction(scale); //добавляем стартовую анимацию
 
-            mapGroup.addActor(actor);
+            hexGroup.addActor(actor);
 
-            GameScreen.getInstance().groupArray.add(actor);
+            //GameScreen.getInstance().hexesArray.add(actor);
 
             if (actor.getInclude() != 0) {
-                GameScreen.getInstance().specialActorsArray.add(actor);
+                //GameScreen.getInstance().specialActorsArray.add(actor);
+                specialActors.add(actor);
             }
         }
     }
 
-    private void setPosXY(int x, int y) {
+    private static void setPosXY(int x, int y) {
 
         xPos = x * FRConstants.HEX_WIDTH - x * (FRConstants.HEX_WIDTH / 4);
 

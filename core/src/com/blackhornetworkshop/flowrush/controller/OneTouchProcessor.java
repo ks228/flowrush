@@ -5,7 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.utils.Timer;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
-import com.blackhornetworkshop.flowrush.view.ui.UIPool;
+import com.blackhornetworkshop.flowrush.model.ui.UIPool;
 
 //Created by TScissors. Disables multitouch, intercepts back key
 

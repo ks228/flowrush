@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Timer;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
 import com.blackhornetworkshop.flowrush.controller.LevelLoader;
-import com.blackhornetworkshop.flowrush.view.ui.UIPool;
+import com.blackhornetworkshop.flowrush.model.ui.UIPool;
 import com.blackhornetworkshop.flowrush.controller.LevelGroupCreator;
 
 //Created by TScissors. Экран меню игры

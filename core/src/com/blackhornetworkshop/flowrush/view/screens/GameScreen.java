@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import com.blackhornetworkshop.flowrush.controller.FRAssetManager;
+import com.blackhornetworkshop.flowrush.controller.MapController;
 import com.blackhornetworkshop.flowrush.model.FRConstants;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
 import com.blackhornetworkshop.flowrush.controller.ScreenManager;
@@ -21,10 +22,7 @@ import com.blackhornetworkshop.flowrush.controller.SourceChecker;
 import com.blackhornetworkshop.flowrush.model.TileActor;
 import com.blackhornetworkshop.flowrush.controller.TileController;
 import com.blackhornetworkshop.flowrush.controller.LevelLoader;
-import com.blackhornetworkshop.flowrush.controller.MapCreator;
-import com.blackhornetworkshop.flowrush.view.ui.UIPool;
-
-import java.util.ArrayList;
+import com.blackhornetworkshop.flowrush.model.ui.UIPool;
 
 //Created by TScissors. Главный класс игрового экрана
 
@@ -32,14 +30,11 @@ public class GameScreen implements Screen, FRScreen {
 
     private static GameScreen instance;
 
-    public Stage mainStage;
+    private Stage mainStage;
     private Stage hudStage;
 
     //Actors
-    public ArrayList<TileActor> groupArray;
-    private Group mapGroup;
     private Group movePauseGroup;
-    public ArrayList<TileActor> specialActorsArray;
 
     //Graphics
     private TiledDrawable background;
@@ -47,7 +42,6 @@ public class GameScreen implements Screen, FRScreen {
 
 
     //Primitives
-    public static int numOfReceivers;
     public boolean firstTap;
     public boolean iconWhite;
 
@@ -63,23 +57,18 @@ public class GameScreen implements Screen, FRScreen {
         return instance;
     }
 
-    private GameScreen() {
-    }
+    private GameScreen() {}
 
     @Override
     public void show() {
         isActive = true;
 
         //Основная сцена для гексов и сцена для UI
-        mainStage = FlowRush.getInstance().getMainStage();
+        mainStage = FlowRush.getInstance().getHexesStage();
         hudStage = FlowRush.getInstance().getHudStage();
 
         //Батч для фона из точек
         batchForBack = FlowRush.getInstance().getBatch();
-
-        //Массивы необходимые для быстрой проверки всех актеров, параллельно с mapGroup !!!!!!!!!!!!!! ПОЧЕМУ НЕ ХВАТАЕТ MAPGROUP???
-        groupArray = new ArrayList<TileActor>();
-        specialActorsArray = new ArrayList<TileActor>();
 
         //Экшн для группы актеров паузы
         moveToActionPause = new MoveToAction();
@@ -121,9 +110,10 @@ public class GameScreen implements Screen, FRScreen {
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
-                for (int x = 0; x < specialActorsArray.size(); x++) {
-                    if (specialActorsArray.get(x).getInclude() == 2 && !specialActorsArray.get(x).isPowerOn()) {
-                        TileController.animIcon(specialActorsArray.get(x), iconWhite);
+                for (int x = 0; x < MapController.getSpecialActorsArraySize(); x++) {
+                    TileActor specialActor = MapController.getSpecialActorsArrayChildren(x);
+                    if (specialActor.getInclude() == 2 && !specialActor.isPowerOn()) {
+                        TileController.animIcon(specialActor, iconWhite);
                     }
                 }
                 iconWhite = !iconWhite;
@@ -145,7 +135,6 @@ public class GameScreen implements Screen, FRScreen {
         mainStage.clear();
         hudStage.clear();
         movePauseGroup.clear();
-        mapGroup.clear();
 
         isActive = false;
     }
@@ -153,30 +142,20 @@ public class GameScreen implements Screen, FRScreen {
     public void startNewLevel() { //обязательно вместе с startNewLevel или nextlvl (в levelloader)
         //номер уровня
         UIPool.getLevelNumberActor().setText("" + LevelLoader.getInstance().getLvl());
+        //UIPool.getPauseBackground().setVisible(false);
 
-        //очистка
-        numOfReceivers = 0;
-        //mainStage.clear(); // NEED HERE SOME REFACTORING !!!!!!!!!!!!!!!!!!!!! CLEAR AND AGAIN ADD ? CHANGE IT!!!!!!!!!!!!!!
-        groupArray.clear();
-        specialActorsArray.clear();
-        UIPool.getPauseBackground().setVisible(false);
-
-        if (mapGroup != null) {
-            mapGroup.clear();
-        }
-
-        //загружаем группу актеров // DELETED HEX WIDTH & HEIGHT !!!!!!
-        mapGroup = MapCreator.getInstance().getGroup(LevelLoader.getInstance().getActorList());
-        mainStage.addActor(mapGroup);
+        MapController.createNewMapGroup(LevelLoader.getInstance().getActorList());
 
         //обновляем чекер
-        SourceChecker.getInstance().initialization(mapGroup);
+        SourceChecker.getInstance().initialization(MapController.getMapGroup());
         SourceChecker.getInstance().checkAndSetActor();
 
         //PackComplete создается только при условии что уровень последний
         if (!LevelLoader.getInstance().containsNext()) {
             enablePackCompleteGroup();
         }
+
+        mainStage.addActor(MapController.getMapGroup());
     }
 
     private void checkAchievements() {
@@ -370,7 +349,9 @@ public class GameScreen implements Screen, FRScreen {
     }
 
     public void setGameMainScreen() {
-
+        if (!inputMultiplexer.getProcessors().contains(mainStage, true)) {
+            inputMultiplexer.addProcessor(mainStage);
+        }
 
         mainStage.getRoot().setVisible(true);
         UIPool.getPauseButton().setVisible(true);

@@ -1,4 +1,4 @@
-package com.blackhornetworkshop.flowrush.view.ui.background;
+package com.blackhornetworkshop.flowrush.model.ui.background;
 
 //Created by TScissors
 
