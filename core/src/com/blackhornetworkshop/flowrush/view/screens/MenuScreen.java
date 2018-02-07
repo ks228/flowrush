@@ -18,9 +18,7 @@ import com.blackhornetworkshop.flowrush.controller.LevelGroupCreator;
 public class MenuScreen implements Screen, FRScreen {
 
     private static MenuScreen instance;
-
     private Stage hudStage;
-
     private boolean isActive;
 
     public static MenuScreen getInstance(){
@@ -36,7 +34,7 @@ public class MenuScreen implements Screen, FRScreen {
         FlowRush.logDebug("Main menu screen show() method called");
 
         //Начальный уровень берем из файла сохранения
-        LevelLoader.getInstance().setLvl(FlowRush.getInstance().save.getCurrentPack(), FlowRush.getInstance().save.getCurrentLvl());
+        LevelLoader.getInstance().setLvl(FlowRush.getSave().getCurrentPack(), FlowRush.getSave().getCurrentLvl());
 
         //Создаем сцену каждый раз при переключении на экран
         hudStage = FlowRush.getInstance().getHudStage();
@@ -71,7 +69,7 @@ public class MenuScreen implements Screen, FRScreen {
         hudStage.addActor(UIPool.getMenuLabel());
 
         //Google Play
-        if(FlowRush.isPlayServicesAvailable) {
+        if(FlowRush.isPlayServicesAvailable()) {
             hudStage.addActor(UIPool.getGooglePlayButton());
             hudStage.addActor(UIPool.getSignInButton());
             hudStage.addActor(UIPool.getSignOutButton());
@@ -84,7 +82,7 @@ public class MenuScreen implements Screen, FRScreen {
 
 
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
-        inputMultiplexer.addProcessor(0, FlowRush.getInstance().oneTouchProcessor);
+        inputMultiplexer.addProcessor(0, FlowRush.getOneTouchProcessor());
         inputMultiplexer.addProcessor(1, FlowRush.getInstance().getHudStage());
         Gdx.input.setInputProcessor(inputMultiplexer);
     }
@@ -169,7 +167,7 @@ public class MenuScreen implements Screen, FRScreen {
         UIPool.getCloseButton().setVisible(true);
         UIPool.getMenuLabel().setVisible(true);
 
-        if(FlowRush.isPlayServicesAvailable) {
+        if(FlowRush.isPlayServicesAvailable()) {
             UIPool.getGooglePlayButton().setVisible(false);
         }
         UIPool.getAuthorsButton().setVisible(false);
@@ -219,7 +217,7 @@ public class MenuScreen implements Screen, FRScreen {
         UIPool.getFacebookButton().setVisible(false);
         UIPool.getVkButton().setVisible(false);
 
-        if(FlowRush.isPlayServicesAvailable) {
+        if(FlowRush.isPlayServicesAvailable()) {
             UIPool.getGooglePlayButton().setVisible(true);
             UIPool.getSignInButton().setVisible(false);
             UIPool.getShowSnapshotsButton().setVisible(false);

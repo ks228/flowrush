@@ -31,26 +31,22 @@ public class GameScreen implements Screen, FRScreen {
 
     private static GameScreen instance;
 
+    //Graphics
     private Stage mainStage;
     private Stage hudStage;
-
-    //Actors
-    private Group movePauseGroup;
-
-    //Graphics
     private TiledDrawable background;
     private SpriteBatch batchForBack;
 
-
-    //Primitives
-    public boolean isIconWhite;
-
-    //Other
+    //Pause group
+    private Group movePauseGroup;
     private MoveToAction moveToActionPause;
 
-    public InputMultiplexer inputMultiplexer;
-
+    //Primitives
+    private static boolean isSpecialIconsAnimationWhite = false;
     private boolean isActive;
+
+    //Input control
+    private static InputMultiplexer inputMultiplexer;
 
     public static GameScreen getInstance() {
         if (instance == null) instance = new GameScreen();
@@ -101,22 +97,23 @@ public class GameScreen implements Screen, FRScreen {
         mainStage.addActor(UIPool.getBackgroundAnimation());
 
         inputMultiplexer = new InputMultiplexer();
-        inputMultiplexer.addProcessor(0, FlowRush.getInstance().oneTouchProcessor);
+        inputMultiplexer.addProcessor(0, FlowRush.getOneTouchProcessor());
         inputMultiplexer.addProcessor(1, hudStage);
         inputMultiplexer.addProcessor(2, mainStage);
         Gdx.input.setInputProcessor(inputMultiplexer);
 
-        //таймер для анимации иконок
+        //Icon animation
+        Timer.instance().clear();
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
                 for (int x = 0; x < MapController.getSpecialActorsArraySize(); x++) {
                     HexActor specialActor = MapController.getSpecialActorsArrayChildren(x);
                     if (specialActor.getInclude() == 2 && !specialActor.isPowerOn()) {
-                        HexController.animIcon(specialActor, isIconWhite);
+                        HexController.animIcon(specialActor);
                     }
                 }
-                isIconWhite = !isIconWhite;
+                isSpecialIconsAnimationWhite = !isSpecialIconsAnimationWhite;
             }
         }, 0.6f, 0.6f);
 
@@ -163,49 +160,49 @@ public class GameScreen implements Screen, FRScreen {
         int currentPack = LevelLoader.getInstance().getPack();
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! REFACTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        if (currentLevel == 1 && !FlowRush.getInstance().save.getAchievements()[0]) {//прошел первый уровень
+        if (currentLevel == 1 && !FlowRush.getSave().getAchievements()[0]) {//прошел первый уровень
             FlowRush.getInstance().unlockAchievement(1);
         }
 
         // FIRST LEVEL WITH A DOVE
         if (((currentLevel == 10 && currentPack == 1)
                 || (currentLevel == 1 && (currentPack == 2 || currentPack == 3
-                || currentPack == 4 || currentPack == 5))) && !FlowRush.getInstance().save.getAchievements()[1]) {
+                || currentPack == 4 || currentPack == 5))) && !FlowRush.getSave().getAchievements()[1]) {
             FlowRush.getInstance().unlockAchievement(2);
         }
 
         if (currentLevel == 50
                 && currentPack == 1
-                && !FlowRush.getInstance().save.getAchievements()[2]) { //прошел первый пак
+                && !FlowRush.getSave().getAchievements()[2]) { //прошел первый пак
             FlowRush.getInstance().unlockAchievement(3);
         }
         if (currentLevel == 50
                 && currentPack == 2
-                && !FlowRush.getInstance().save.getAchievements()[3]) { //прошел второй пак
+                && !FlowRush.getSave().getAchievements()[3]) { //прошел второй пак
             FlowRush.getInstance().unlockAchievement(4);
         }
         if (currentLevel == 50
                 && currentPack == 3
-                && !FlowRush.getInstance().save.getAchievements()[4]) { //прошел третий пак
+                && !FlowRush.getSave().getAchievements()[4]) { //прошел третий пак
             FlowRush.getInstance().unlockAchievement(5);
         }
         if (currentLevel == 50
                 && currentPack == 4
-                && !FlowRush.getInstance().save.getAchievements()[5]) { //прошел четвертый пак
+                && !FlowRush.getSave().getAchievements()[5]) { //прошел четвертый пак
             FlowRush.getInstance().unlockAchievement(6);
         }
         if (currentLevel == 50
                 && currentPack == 5
-                && !FlowRush.getInstance().save.getAchievements()[6]) { //прошел пятый пак
+                && !FlowRush.getSave().getAchievements()[6]) { //прошел пятый пак
             FlowRush.getInstance().unlockAchievement(7);
         }
 
-        if (FlowRush.getInstance().save.getLevelsProgress()[0] == 50
-                && FlowRush.getInstance().save.getLevelsProgress()[1] == 50
-                && FlowRush.getInstance().save.getLevelsProgress()[2] == 50
-                && FlowRush.getInstance().save.getLevelsProgress()[3] == 50
-                && FlowRush.getInstance().save.getLevelsProgress()[4] == 50
-                && !FlowRush.getInstance().save.getAchievements()[7]) { // прошел все уровни
+        if (FlowRush.getSave().getLevelsProgress()[0] == 50
+                && FlowRush.getSave().getLevelsProgress()[1] == 50
+                && FlowRush.getSave().getLevelsProgress()[2] == 50
+                && FlowRush.getSave().getLevelsProgress()[3] == 50
+                && FlowRush.getSave().getLevelsProgress()[4] == 50
+                && !FlowRush.getSave().getAchievements()[7]) { // прошел все уровни
             FlowRush.getInstance().unlockAchievement(8);
         }
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! REFACTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -282,7 +279,7 @@ public class GameScreen implements Screen, FRScreen {
         UIPool.getPauseButton().setVisible(false);
         UIPool.getLevelNumberActor().setVisible(false);
 
-        if (FlowRush.getInstance().prefs.isSoundOn()) {
+        if (FlowRush.getPreferences().isSoundOn()) {
             FRAssetManager.getPackCompleteSound().play();
         }
         if (UIPool.getPackCompleteNextPackButton().getName().equals("visible")) { //!!!!!!!!!!!!!!!!!!!!!!! VISIBLE ???????????????
@@ -293,7 +290,7 @@ public class GameScreen implements Screen, FRScreen {
         UIPool.getPackCompleteLowerHex().setVisible(true);
         UIPool.getPackCompleteUpperHex().setVisible(true);
         UIPool.getPackCompleteMenuButton().setVisible(true);
-        if (FlowRush.getInstance().prefs.isShowRateDialog()) {
+        if (FlowRush.getPreferences().isShowRateDialog()) {
             RateDialogController.reset();
             UIPool.getDialogBackground().setVisible(true);
             UIPool.getLeftButton().setVisible(true);
@@ -333,7 +330,7 @@ public class GameScreen implements Screen, FRScreen {
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! REFACTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         if (LevelLoader.getInstance().containsNext()) { //если следующий уровень существует в паке то переключаем его тут
             LevelLoader.getInstance().nextLvl();
-            FlowRush.getInstance().save.setCurrentLvl(LevelLoader.getInstance().getLvl());
+            FlowRush.getSave().setCurrentLvl(LevelLoader.getInstance().getLvl());
             FlowRush.getInstance().saveSaveFile();
         } else { //если уровня нет, проверяем доступность следующего пака и тогда переключаем его
             if (LevelLoader.getInstance().getLevelPack(LevelLoader.getInstance().getPack()).available) {//next pack available
@@ -344,11 +341,11 @@ public class GameScreen implements Screen, FRScreen {
         }
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! REFACTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-        if (FlowRush.isPlayServicesAvailable && FlowRush.getPlayServices().isSignedIn()) {
+        if (FlowRush.isPlayServicesAvailable() && FlowRush.getPlayServices().isSignedIn()) {
             FlowRush.getPlayServices().saveGame();// Save in Google Play
         }
 
-        if (FlowRush.getInstance().prefs.isSoundOn()) {
+        if (FlowRush.getPreferences().isSoundOn()) {
             FRAssetManager.getLvlCompleteSound().play();
         }
 
@@ -359,6 +356,8 @@ public class GameScreen implements Screen, FRScreen {
         if (!inputMultiplexer.getProcessors().contains(mainStage, true)) {
             inputMultiplexer.addProcessor(mainStage);
         }
+
+        isSpecialIconsAnimationWhite = false;
 
         mainStage.getRoot().setVisible(true);
         UIPool.getPauseButton().setVisible(true);
@@ -390,5 +389,13 @@ public class GameScreen implements Screen, FRScreen {
     @Override
     public boolean isActive() {
         return isActive;
+    }
+
+    public static InputMultiplexer getInputMultiplexer() {
+        return inputMultiplexer;
+    }
+
+    public static boolean isSpecialIconsAnimationWhite() {
+        return isSpecialIconsAnimationWhite;
     }
 }

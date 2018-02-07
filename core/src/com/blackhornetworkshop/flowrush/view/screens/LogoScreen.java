@@ -1,6 +1,7 @@
 package com.blackhornetworkshop.flowrush.view.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -38,7 +39,7 @@ public class LogoScreen implements Screen, FRScreen {
         batch = FlowRush.getInstance().getBatch();
         logoBHW = FRAssetManager.getLogoBHW();
         logoFR = FRAssetManager.getLogoFR();
-        Gdx.input.setInputProcessor(FlowRush.getInstance().oneTouchProcessor);
+        Gdx.input.setInputProcessor(FlowRush.getOneTouchProcessor());
         isActive = true;
     }
 
@@ -66,7 +67,7 @@ public class LogoScreen implements Screen, FRScreen {
             ScreenManager.setLogoFRScreen();
         }else if (TimeUtils.nanoTime()-startTime>3000000000L && isFRlogo) {
             ScreenManager.setMenuMainScreen();
-            if(FlowRush.getInstance().prefs.isSoundOn()) {
+            if(FlowRush.getPreferences().isSoundOn()) {
                 FRAssetManager.getBackgroundMusic().play();
             }
         }

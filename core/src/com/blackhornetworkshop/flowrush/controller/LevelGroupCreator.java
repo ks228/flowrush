@@ -43,7 +43,7 @@ public class LevelGroupCreator {
     public Group setupLevelGroup(Group levelGroup, int pack){
         levelGroup.clear();
         this.pack = pack;
-        lvlAvailable = FlowRush.getInstance().save.getLevelsProgress()[pack-1];
+        lvlAvailable = FlowRush.getSave().getLevelsProgress()[pack-1];
         //System.out.println(lvlAvailable+" available level");
 
         up = (Gdx.graphics.getHeight()*0.98f- FRConstants.BUTTON_SIZE); //верхний отступ

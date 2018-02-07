@@ -32,18 +32,17 @@ public class FlowRush extends Game {
     private Stage hexesStage, hudStage;
 
     //Data
-    public GamePreferences prefs;
-    public SavedGame save;
+    private static GamePreferences preferences;
+    private static SavedGame save;
 
     // Input
-    public OneTouchProcessor oneTouchProcessor;
+    private static OneTouchProcessor oneTouchProcessor;
 
     //Utils
-    private Gson gson;
-    //private AssetManager manager;
+    private static Gson gson;
 
     //Primitives
-    public static boolean isPlayServicesAvailable;
+    private static boolean isPlayServicesAvailable;
 
     public static FlowRush getInstance(){
         return instance;
@@ -82,12 +81,12 @@ public class FlowRush extends Game {
         gson = new Gson();
 
         //Preferences
-        if (Gdx.files.local("prefs.json").exists()) {
-            logDebug("Load an existing file prefs.json");
-            prefs = gson.fromJson(Gdx.files.local("prefs.json").reader(), GamePreferences.class);
+        if (Gdx.files.local("preferences.json").exists()) {
+            logDebug("Load an existing file preferences.json");
+            preferences = gson.fromJson(Gdx.files.local("preferences.json").reader(), GamePreferences.class);
         } else {
-            logDebug("A new file prefs.json was created");
-            prefs = new GamePreferences();
+            logDebug("A new file preferences.json was created");
+            preferences = new GamePreferences();
         }
 
         //Save file
@@ -110,7 +109,7 @@ public class FlowRush extends Game {
     public void unlockAchievement(int num) {
         if (num > 0 && num < 9) {
             save.unlockAchievement(num - 1);
-            if (FlowRush.isPlayServicesAvailable && playServices.isSignedIn()) {
+            if (FlowRush.isPlayServicesAvailable() && playServices.isSignedIn()) {
                 playServices.unlockAchievement(num);
             }
         } else {
@@ -119,10 +118,10 @@ public class FlowRush extends Game {
     }
 
     public void savePrefsFile() {
-        String string = gson.toJson(prefs);
-        FileHandle file = Gdx.files.local("prefs.json");
+        String string = gson.toJson(preferences);
+        FileHandle file = Gdx.files.local("preferences.json");
         file.writeString(string, false);
-        //System.out.println("Saved prefs");
+        //System.out.println("Saved preferences");
     }
 
     public void saveSaveFile() {
@@ -132,7 +131,7 @@ public class FlowRush extends Game {
         System.out.println("Saved progress on local");
     }
 
-    public Gson getGson() {
+    public static Gson getGson() {
         return gson;
     }
 
@@ -158,7 +157,7 @@ public class FlowRush extends Game {
 
     public void resume() {
         getScreen().resume();
-        if (prefs.isSoundOn()) FRAssetManager.getBackgroundMusic().play();
+        if (preferences.isSoundOn()) FRAssetManager.getBackgroundMusic().play();
     }
 
     public void render() { super.render(); }
@@ -187,5 +186,10 @@ public class FlowRush extends Game {
 
         logDebug("FlowRush dispose() called");
     }
+    public static OneTouchProcessor getOneTouchProcessor(){return oneTouchProcessor;}
+    public static GamePreferences getPreferences(){return preferences;}
+    public static SavedGame getSave(){return save;}
+    public static void loadSave(SavedGame save){ FlowRush.save = save;}
+    public static boolean isPlayServicesAvailable(){return isPlayServicesAvailable;}
 }
 

@@ -1,6 +1,7 @@
 package com.blackhornetworkshop.flowrush.controller;
 
 import com.blackhornetworkshop.flowrush.model.HexActor;
+import com.blackhornetworkshop.flowrush.view.screens.GameScreen;
 
 //Created by TScissors.
 
@@ -63,7 +64,7 @@ public class HexController {
         }
     }
 
-    static void setPowerOff(HexActor actor, boolean iconWhite) {
+    static void setPowerOff(HexActor actor) {
         actor.setPowerOff();
         if (actor.getIndex() > 12 & actor.getIndex() < 25) {
             actor.setIndex(actor.getIndex() - 12);
@@ -75,7 +76,7 @@ public class HexController {
         if (actor.getInclude() == 1) {
             actor.setIcon(FRAssetManager.getAtlas().createSprite("iconMP"));
         } else if (actor.getInclude() == 2) {
-            if (iconWhite) {
+            if (GameScreen.isSpecialIconsAnimationWhite()) {
                 actor.setIcon(FRAssetManager.getAtlas().createSprite("iconEW"));
             } else {
                 actor.setIcon(FRAssetManager.getAtlas().createSprite("iconE"));
@@ -85,8 +86,8 @@ public class HexController {
         }
     }
 
-    public static void animIcon(HexActor actor, boolean iconWhite) {
-        if (iconWhite) {
+    public static void animIcon(HexActor actor) {
+        if (GameScreen.isSpecialIconsAnimationWhite()) {
             actor.setIcon(FRAssetManager.getAtlas().createSprite("iconE"));
         } else {
             actor.setIcon(FRAssetManager.getAtlas().createSprite("iconEW"));

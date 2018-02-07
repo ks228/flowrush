@@ -1,8 +1,9 @@
 package com.blackhornetworkshop.flowrush.model;
 
 public class GamePreferences{
+
     private boolean soundIsOn = true;
-    private boolean showRateDialog = true; //while user not disable by "rate" or "no thanks"
+    private boolean showRateDialog = true;
     private boolean adsIsRemoved = false;
 
     public boolean isAdsIsRemoved(){return adsIsRemoved;}

@@ -27,11 +27,8 @@ public class OneTouchProcessor implements InputProcessor {
                 case MAIN_MENU:
                     msg = msg + "Show exit button";
                     Timer.instance().clear();
-                    if (Timer.instance().isEmpty()) {
-                        UIPool.getExitButton().setVisible(true);
-                        Timer.schedule(new Task(), 3);
-                        Timer.instance().start();
-                    }
+                    UIPool.getExitButton().setVisible(true);
+                    Timer.schedule(new Task(), 3);
                     break;
                 case MAIN_MENU_AUTHORS:
                     msg = msg + "To main menu from authors screen";
@@ -78,7 +75,7 @@ public class OneTouchProcessor implements InputProcessor {
                     break;
             }
         }
-        if(FlowRush.getInstance().prefs.isSoundOn()) {
+        if(FlowRush.getPreferences().isSoundOn()) {
             FRAssetManager.getTapSound().play();
         }
         FlowRush.logDebug(msg);

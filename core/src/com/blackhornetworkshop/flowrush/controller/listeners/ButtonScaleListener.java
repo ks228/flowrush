@@ -27,7 +27,7 @@ public class ButtonScaleListener extends ClickListener {
 
     @Override
     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-        if (FlowRush.getInstance().prefs.isSoundOn()) {
+        if (FlowRush.getPreferences().isSoundOn()) {
             FRAssetManager.getTapSound().play();
         }
         if (event.getListenerActor().getActions().contains(buttonScale1, true)) {

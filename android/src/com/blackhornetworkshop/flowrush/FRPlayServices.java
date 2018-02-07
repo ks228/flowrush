@@ -150,7 +150,7 @@ public class FRPlayServices implements PlayServices {
             } else if (intent.hasExtra(SnapshotsClient.EXTRA_SNAPSHOT_NEW)) {
                 // Create a new snapshot named with a unique string
                 FRAndroidHelper.getInstance().logDebug("User chooses to save a new game");
-                FlowRush.getInstance().save.setUniqSaveName();
+                FlowRush.getSave().setUniqSaveName();
                 saveGame();
             }
         }
@@ -158,7 +158,7 @@ public class FRPlayServices implements PlayServices {
 
     @Override
     public void saveGame() {
-        snapshotsClient.open(FlowRush.getInstance().save.getUniqSnapshotName(), true)
+        snapshotsClient.open(FlowRush.getSave().getUniqSnapshotName(), true)
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
@@ -223,10 +223,10 @@ public class FRPlayServices implements PlayServices {
 
     private Snapshot resolveConflict(Snapshot snapshot, Snapshot conflictSnapshot) throws IOException {
         String serverJson = new String(snapshot.getSnapshotContents().readFully());
-        SavedGame serverSavedGame = FlowRush.getInstance().getGson().fromJson(serverJson, SavedGame.class);
+        SavedGame serverSavedGame = FlowRush.getGson().fromJson(serverJson, SavedGame.class);
 
         String conflictJson = new String(conflictSnapshot.getSnapshotContents().readFully());
-        SavedGame conflictSavedGame = FlowRush.getInstance().getGson().fromJson(conflictJson, SavedGame.class);
+        SavedGame conflictSavedGame = FlowRush.getGson().fromJson(conflictJson, SavedGame.class);
 
         boolean isCurrentLevelActual = true;
 
@@ -260,7 +260,7 @@ public class FRPlayServices implements PlayServices {
         }
 
         //commit changes
-        conflictSnapshot.getSnapshotContents().writeBytes(FlowRush.getInstance().getGson().toJson(conflictSavedGame).getBytes());
+        conflictSnapshot.getSnapshotContents().writeBytes(FlowRush.getGson().toJson(conflictSavedGame).getBytes());
 
         return conflictSnapshot;
     }
@@ -268,7 +268,6 @@ public class FRPlayServices implements PlayServices {
     private void loadSnapshot(final SnapshotMetadata snapshotMetadata) {
         app.showLoadingDialog();
         FlowRush.getInstance().pause();
-
 
         FRAndroidHelper.getInstance().logDebug("Open the saved game");
         snapshotsClient.open(snapshotMetadata)
@@ -296,7 +295,7 @@ public class FRPlayServices implements PlayServices {
             public void onComplete(@NonNull Task<byte[]> task) {
                 FRAndroidHelper.getInstance().logDebug("Downloading a snapshot from the server is complete");
                 String snapshotInJson = new String(task.getResult());
-                FlowRush.getInstance().save = FlowRush.getInstance().getGson().fromJson(snapshotInJson, SavedGame.class);
+                FlowRush.loadSave(FlowRush.getGson().fromJson(snapshotInJson, SavedGame.class));
                 FRAndroidHelper.getInstance().logDebug("Snapshot reading from json is completed successfully");
                 app.hideLoadingDialog();
                 ScreenManager.setMenuMainScreen();

@@ -103,7 +103,7 @@ public class UiActorCreator {
                         GameScreen.hideRateDialog();
                         if (RateDialogController.isFirstAnswer()) {
                             FlowRush.getAndroidHelper().openPlaymarket();
-                            FlowRush.getInstance().prefs.setShowRateDialog(false);
+                            FlowRush.getPreferences().setShowRateDialog(false);
                             FlowRush.getInstance().savePrefsFile();
                         } else {
                             FlowRush.getAndroidHelper().sendMail();
@@ -122,7 +122,7 @@ public class UiActorCreator {
                             UIPool.getRightButton().setText("OK");
                             RateDialogController.setIsFirstAnswer(false);
                         } else {
-                            FlowRush.getInstance().prefs.setShowRateDialog(false);
+                            FlowRush.getPreferences().setShowRateDialog(false);
                             FlowRush.getInstance().savePrefsFile();
 
                             GameScreen.hideRateDialog();
@@ -285,7 +285,7 @@ public class UiActorCreator {
         return mainMenuButton;
         case 5://SOUND button
         SmallButtonActor soundButton;
-        if (FlowRush.getInstance().prefs.isSoundOn()) {
+        if (FlowRush.getPreferences().isSoundOn()) {
             soundButton = createSmallButtonActor(0.0f, 0.0f, BUTTON_SIZE, BUTTON_SIZE, true, FRAssetManager.getSoundOn());
         } else {
             soundButton = createSmallButtonActor(0.0f, 0.0f, BUTTON_SIZE, BUTTON_SIZE, true, FRAssetManager.getSoundOff());
@@ -293,15 +293,15 @@ public class UiActorCreator {
         soundButton.addListener(new ButtonScaleListener(false) {
             @Override
             public void action(InputEvent event) {
-                if (FlowRush.getInstance().prefs.isSoundOn()) {
+                if (FlowRush.getPreferences().isSoundOn()) {
                     ((SmallButtonActor) event.getListenerActor()).setSprite(FRAssetManager.getSoundOff());
-                    FlowRush.getInstance().prefs.setSound(false);
+                    FlowRush.getPreferences().setSound(false);
                     FRAssetManager.getBackgroundMusic().pause();
                     FlowRush.getInstance().savePrefsFile();
                     FlowRush.logDebug("Sound is off");
-                } else if (!FlowRush.getInstance().prefs.isSoundOn()) {
+                } else {
                     ((SmallButtonActor) event.getListenerActor()).setSprite(FRAssetManager.getSoundOn());
-                    FlowRush.getInstance().prefs.setSound(true);
+                    FlowRush.getPreferences().setSound(true);
                     FRAssetManager.getBackgroundMusic().play();
                     FlowRush.getInstance().savePrefsFile();
                     FlowRush.logDebug("Sound is on");

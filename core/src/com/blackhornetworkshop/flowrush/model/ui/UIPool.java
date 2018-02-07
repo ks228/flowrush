@@ -204,7 +204,7 @@ public class UIPool {
         /**removeAds = com.blackhornetworkshop.flowrush.controller.UiActorCreator.getTextButton(6, game);
          removeAds.addListener(new com.blackhornetworkshop.flowrush.controller.listeners.ButtonScaleListener(removeAds, game));*/
 
-        if (FlowRush.isPlayServicesAvailable) {
+        if (FlowRush.isPlayServicesAvailable()) {
             googlePlayButton = UiActorCreator.getSmallButtonActor(14);
             signInButton = UiActorCreator.getTextButton(14);
             showSnapshotsButton = UiActorCreator.getTextButton(15);
@@ -239,7 +239,7 @@ public class UIPool {
         wellDoneLabel.setVisible(false);
 
         //Pack complete elements
-        packCompleteUpperHex = new PackCompleteTopHex(FRAssetManager.getSkin().getFont("fontMid"), LevelLoader.getPackName(FlowRush.getInstance().save.getCurrentPack()));
+        packCompleteUpperHex = new PackCompleteTopHex(FRAssetManager.getSkin().getFont("fontMid"), LevelLoader.getPackName(FlowRush.getSave().getCurrentPack()));
         packCompleteLowerHex = new PackCompleteLowerHex(FRAssetManager.getAtlas());
         packCompleteMenuButton = UiActorCreator.getTextButton(9);
         packCompleteNextPackButton = UiActorCreator.getTextButton(12);

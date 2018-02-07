@@ -74,8 +74,8 @@ public class LevelLoader {
     }
 
     private void saveToPrefs() {
-        FlowRush.getInstance().save.setCurrentPack(getPack());
-        FlowRush.getInstance().save.setCurrentLvl(getLvl());
+        FlowRush.getSave().setCurrentPack(getPack());
+        FlowRush.getSave().setCurrentLvl(getLvl());
     }
 
     public boolean containsNext() {
@@ -87,7 +87,7 @@ public class LevelLoader {
     }
 
     void reloadActorList() { //startNewLevel если отдельно взять метод
-        actorList = FlowRush.getInstance().getGson().fromJson(level.actorListJson, new TypeToken<ArrayList<ArrayList<ActorInfo>>>() {
+        actorList = FlowRush.getGson().fromJson(level.actorListJson, new TypeToken<ArrayList<ArrayList<ActorInfo>>>() {
         }.getType());
     }
 
@@ -100,9 +100,9 @@ public class LevelLoader {
     }
 
     private void checkPackProgress() {
-        if (FlowRush.getInstance().save.getLevelsProgress()[getPack() - 1] < FlowRush.getInstance().save.getCurrentLvl()) { //здесь мы обновляем прогресс пака
+        if (FlowRush.getSave().getLevelsProgress()[getPack() - 1] < FlowRush.getSave().getCurrentLvl()) { //здесь мы обновляем прогресс пака
             //System.out.println("pack progress saved");
-            FlowRush.getInstance().save.setLevelsProgress(getPack() - 1, getLvl());
+            FlowRush.getSave().setLevelsProgress(getPack() - 1, getLvl());
         }
     }
 

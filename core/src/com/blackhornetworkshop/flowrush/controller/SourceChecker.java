@@ -97,12 +97,12 @@ public class SourceChecker { //основная логика игры наход
             }
         }
         if (MapController.getNumOfReceivers() == numReceiversOn) {
-            GameScreen.getInstance().inputMultiplexer.removeProcessor(FlowRush.getInstance().getHexesStage());//отключает касание к тайлам пока не выскочил lvlCompleteActor
+            GameScreen.getInputMultiplexer().removeProcessor(FlowRush.getInstance().getHexesStage());//отключает касание к тайлам пока не выскочил lvlCompleteActor
             for (int i = 0; i < MapController.getHexGroupSize(); i++) {
                 HexController.setHexbackTouchOn(MapController.getHexGroupChildren(i));
             }
 
-            Timer.instance().start();
+            Timer.instance().clear();
             Timer.schedule(new Timer.Task() { //ждем посде сборки перед переходом на след уровень
                 @Override
                 public void run() {
@@ -183,7 +183,7 @@ public class SourceChecker { //основная логика игры наход
         for (int x = 0; x < MapController.getHexGroupSize(); x++) {
             actor = MapController.getHexGroupChildren(x);
             if (actor.getInclude() != 1) {
-                HexController.setPowerOff(actor, GameScreen.getInstance().isIconWhite);
+                HexController.setPowerOff(actor);
             }
         }
         doveIsOn = false;
