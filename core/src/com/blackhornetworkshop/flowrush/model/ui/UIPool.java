@@ -20,9 +20,6 @@ import com.blackhornetworkshop.flowrush.view.FlowRush;
 import com.blackhornetworkshop.flowrush.controller.ScreenManager;
 import com.blackhornetworkshop.flowrush.controller.LevelLoader;
 import com.blackhornetworkshop.flowrush.controller.UiActorCreator;
-import com.blackhornetworkshop.flowrush.controller.listeners.ButtonScaleListener;
-import com.blackhornetworkshop.flowrush.controller.listeners.LeftButtonListener;
-import com.blackhornetworkshop.flowrush.controller.listeners.RightButtonListener;
 
 public class UIPool {
 
@@ -69,7 +66,7 @@ public class UIPool {
     //Main buttons
     private static TextButton playButton;
     private static TextButton exitButton;
-    private static TextButton lvlButton;
+    private static TextButton levelsButton;
     private static Group packGroup;
     private static Group levelGroup;
     /**
@@ -112,10 +109,6 @@ public class UIPool {
         pauseBackground.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         pauseBackground.setVisible(false);
         pauseBackground.addListener(new ClickListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                return true;
-            }
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button){
                 if(ScreenManager.getCurrentScreen() == FRConstants.ScreenType.GAME_PAUSE){
@@ -178,29 +171,13 @@ public class UIPool {
 
         //Main buttons
         playButton = UiActorCreator.getTextButton(1);
-        playButton.addListener(new ButtonScaleListener());
-        lvlButton = UiActorCreator.getTextButton(2);
-        lvlButton.addListener(new ButtonScaleListener());
+        levelsButton = UiActorCreator.getTextButton(2);
         exitButton = UiActorCreator.getTextButton(13);
 
         packGroup = new Group();
         for (int x = 1; x < 6; x++) {
             final int p = x;
             TextButton packButton = UiActorCreator.getPackTextButton(p);
-            packButton.addListener(new ButtonScaleListener());
-            if (LevelLoader.getInstance().getLevelPack(p - 1).available) {
-                packButton.addListener(new ClickListener() {
-                    @Override
-                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        return true;
-                    }
-
-                    @Override
-                    public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                        ScreenManager.setMenuLevelChoiceScreen(p);
-                    }
-                });
-            }
             packGroup.addActor(packButton);
         }
         packGroup.setVisible(false);
@@ -217,11 +194,8 @@ public class UIPool {
         //Support us
         supportUsSmallButton = UiActorCreator.getSmallButtonActor(13);
         supportUsButton = UiActorCreator.getTextButton(5);
-        supportUsButton.addListener(new ButtonScaleListener());
         rateUsButton = UiActorCreator.getTextButton(4);
-        rateUsButton.addListener(new ButtonScaleListener());
         feedButton = UiActorCreator.getTextButton(3);
-        feedButton.addListener(new ButtonScaleListener());
 
         //Authors
         authorsButton = UiActorCreator.getSmallButtonActor(7);
@@ -233,13 +207,9 @@ public class UIPool {
         if (FlowRush.isPlayServicesAvailable) {
             googlePlayButton = UiActorCreator.getSmallButtonActor(14);
             signInButton = UiActorCreator.getTextButton(14);
-            signInButton.addListener(new ButtonScaleListener());
             showSnapshotsButton = UiActorCreator.getTextButton(15);
-            showSnapshotsButton.addListener(new ButtonScaleListener());
             showAchievementsButton = UiActorCreator.getTextButton(16);
-            showAchievementsButton.addListener(new ButtonScaleListener());
             signOutButton = UiActorCreator.getTextButton(17);
-            signOutButton.addListener(new ButtonScaleListener());
         }
 
         //---------------------------------- GAME
@@ -269,7 +239,7 @@ public class UIPool {
         wellDoneLabel.setVisible(false);
 
         //Pack complete elements
-        packCompleteUpperHex = new PackCompleteTopHex(FRAssetManager.getSkin().getFont("fontMid"), FlowRush.getInstance().save.getPackName());
+        packCompleteUpperHex = new PackCompleteTopHex(FRAssetManager.getSkin().getFont("fontMid"), LevelLoader.getPackName(FlowRush.getInstance().save.getCurrentPack()));
         packCompleteLowerHex = new PackCompleteLowerHex(FRAssetManager.getAtlas());
         packCompleteMenuButton = UiActorCreator.getTextButton(9);
         packCompleteNextPackButton = UiActorCreator.getTextButton(12);
@@ -281,10 +251,10 @@ public class UIPool {
         dialogBackground.setAlignment(Align.top);
 
         leftButton = UiActorCreator.getTextButton(11);
-        leftButton.addListener(new LeftButtonListener());
+        //leftButton.addListener(new LeftButtonListener());
 
         rightButton = UiActorCreator.getTextButton(10);
-        rightButton.addListener(new RightButtonListener());
+        //rightButton.addListener(new RightButtonListener());
 
     }
 
@@ -345,8 +315,8 @@ public class UIPool {
         return signInButton;
     }
 
-    public static TextButton getLvlButton() {
-        return lvlButton;
+    public static TextButton getLevelsButton() {
+        return levelsButton;
     }
 
     public static TextButton getExitButton() {

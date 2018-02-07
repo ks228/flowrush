@@ -119,4 +119,21 @@ public class LevelLoader {
     public Packs.LevelPack getLevelPack(int x) {
         return packs.packsArray.get(x);
     }
+
+    public static String getPackName(int pack){
+        switch (pack) {
+            case 1:
+                return "QUESTION";
+            case 2:
+                return "IDEA";
+            case 3:
+                return "MISSION";
+            case 4:
+                return "FLYING";
+            case 5:
+                return "SOURCE\ncoming soon";
+            default:
+                return "";
+        }
+    }
 }

@@ -78,7 +78,9 @@ public class OneTouchProcessor implements InputProcessor {
                     break;
             }
         }
-        FRAssetManager.getTapSound().play();
+        if(FlowRush.getInstance().prefs.isSoundOn()) {
+            FRAssetManager.getTapSound().play();
+        }
         FlowRush.logDebug(msg);
         return false;
     }

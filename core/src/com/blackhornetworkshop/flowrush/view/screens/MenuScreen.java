@@ -50,7 +50,7 @@ public class MenuScreen implements Screen, FRScreen {
         hudStage.addActor(UIPool.getWhiteBackActorTop());
         hudStage.addActor(UIPool.getBackgroundAnimation());
         hudStage.addActor(UIPool.getPlayButton());
-        hudStage.addActor(UIPool.getLvlButton());
+        hudStage.addActor(UIPool.getLevelsButton());
         hudStage.addActor(UIPool.getExitButton());
         hudStage.addActor(UIPool.getAuthorsButton());
         hudStage.addActor(UIPool.getSoundButton());
@@ -175,7 +175,7 @@ public class MenuScreen implements Screen, FRScreen {
         UIPool.getAuthorsButton().setVisible(false);
         UIPool.getSupportUsSmallButton().setVisible(false);
         UIPool.getPlayButton().setVisible(false);
-        UIPool.getLvlButton().setVisible(false);
+        UIPool.getLevelsButton().setVisible(false);
         UIPool.getExitButton().setVisible(false);
         Timer.instance().clear();
         UIPool.getSoundButton().setVisible(false);
@@ -228,7 +228,7 @@ public class MenuScreen implements Screen, FRScreen {
         }
 
         UIPool.getPlayButton().setVisible(true);
-        UIPool.getLvlButton().setVisible(true);
+        UIPool.getLevelsButton().setVisible(true);
         UIPool.getSoundButton().setVisible(true);
         UIPool.getAuthorsButton().setVisible(true);
         UIPool.getSupportUsSmallButton().setVisible(true);

@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.blackhornetworkshop.flowrush.model.FRConstants;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
 import com.blackhornetworkshop.flowrush.controller.listeners.ButtonScaleListener;
@@ -68,15 +67,14 @@ public class LevelGroupCreator {
                 levelNumberButton.setPosition(xPos, yPos);
                 levelNumberButton.setOrigin(lvlNumSize/2, lvlNumSize/2);
                 levelNumberButton.setTransform(true);
-
-                levelNumberButton.addListener(new ClickListener() {
+                levelNumberButton.addListener(new ButtonScaleListener(true) {
                     @Override
-                    public void clicked(InputEvent event, float x, float y) {
+                    public void action(InputEvent event) {
                         LevelLoader.getInstance().setLvl(pack, i);
                         ScreenManager.setGameMainScreen();
                     }
                 });
-                levelNumberButton.addListener(new ButtonScaleListener());
+                levelNumberButton.addListener(new ButtonScaleListener(false));
                 levelGroup.addActor(levelNumberButton);
             }else{
                 Actor levelLock = new Actor(){
@@ -88,7 +86,7 @@ public class LevelGroupCreator {
                 levelLock.setSize(lvlNumSize, lvlNumSize);
                 levelLock.setPosition(xPos, yPos);
                 levelLock.setOrigin(lvlNumSize/2, lvlNumSize/2);
-                levelLock.addListener(new ButtonScaleListener());
+                levelLock.addListener(new ButtonScaleListener(false));
                 levelGroup.addActor(levelLock);
             }
         }
