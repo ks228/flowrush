@@ -45,8 +45,5 @@ public class PackCompleteTopHex extends Actor {
         labelContainer.setPosition(getX()+getWidth()/2, getY()+getHeight()/2);
         labelContainer.draw(batch, 1);
     }
-    @Override
-    public void act(float delta) {
-        super.act(delta);
-    }
+
 }

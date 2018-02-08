@@ -160,8 +160,6 @@ public class FlowRush extends Game {
         if (preferences.isSoundOn()) FRAssetManager.getBackgroundMusic().play();
     }
 
-    public void render() { super.render(); }
-
     public static void logError(String msg, Throwable tr) {
         androidHelper.logError(msg, tr);
     }

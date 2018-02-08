@@ -150,10 +150,9 @@ public class UIPool {
 
         closeButton = UiActorCreator.getSmallButtonActor(6);
 
-        final Sprite backgroundWhite = FRAssetManager.getAtlas().createSprite("back_white");
         whiteBackActor = new Image() {
             public void draw(Batch batch, float alpha) {
-                batch.draw(backgroundWhite, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+                batch.draw(FRAssetManager.getBackgroundWhite(), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
             }
         };
         whiteBackActor.setSize(Gdx.graphics.getWidth() * 0.65f, Gdx.graphics.getWidth() * 0.65f * 1.71358024691358f);
@@ -161,7 +160,7 @@ public class UIPool {
 
         whiteBackActorTop = new Actor() {
             public void draw(Batch batch, float alpha) {
-                batch.draw(backgroundWhite, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+                batch.draw(FRAssetManager.getBackgroundWhite(), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
             }
         };
         whiteBackActorTop.setSize(Gdx.graphics.getWidth() * 0.65f, Gdx.graphics.getWidth() * 0.65f * 1.71358024691358f);

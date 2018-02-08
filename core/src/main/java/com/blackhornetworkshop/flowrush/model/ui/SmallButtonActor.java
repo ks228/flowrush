@@ -18,8 +18,5 @@ public class SmallButtonActor extends Actor{
     public void draw(Batch batch, float alpha) {
         batch.draw(sprite, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
     }
-    @Override
-    public void act(float delta) {
-            super.act(delta);
-    }
+
 }

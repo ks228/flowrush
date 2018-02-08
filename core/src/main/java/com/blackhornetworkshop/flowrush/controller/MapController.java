@@ -14,6 +14,7 @@ import com.blackhornetworkshop.flowrush.controller.listeners.HexActorListener;
 import com.blackhornetworkshop.flowrush.model.ui.UIPool;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static com.blackhornetworkshop.flowrush.model.FRConstants.SCREEN_HEIGHT;
 
@@ -34,6 +35,8 @@ public class MapController {
     private static final ArrayList<HexActor> specialActors = new ArrayList<HexActor>();
 
     private static int numOfReceivers = 0;
+
+    private static HashMap<Integer, HexActor> hexHashMap= new HashMap<>();
 
     static int getNumOfReceivers(){return numOfReceivers;}
     static int getHexGroupSize(){return hexGroup.getChildren().size;}
@@ -59,6 +62,7 @@ public class MapController {
     public static void createNewMapGroup(ArrayList<ArrayList<ActorInfo>> list) {
         mapGroup.clear();
         hexGroup.clear();
+        hexHashMap.clear();
         specialActors.clear();
         numOfReceivers = 0;
 
@@ -141,7 +145,7 @@ public class MapController {
             HexActor actor = new HexActor(actorInfo.getIndex(), actorInfo.getInclude(), spriteOff, spriteOn, actorInfo.getPosition(), x, y, createSourceArray(actorInfo.getIndex()));
 
             for (int a = 0; a < actor.getRotatePosition(); a++) { //смещаем sources на количество поворотов "position"
-                HexController.moveSources(actor);
+                actor.moveSources();
             }
 
             actor.addListener(new HexActorListener(actor));
@@ -176,6 +180,8 @@ public class MapController {
             actor.setScale(0f, 0f);
             actor.addAction(scale);
 
+            int index = x*10+y;
+            hexHashMap.put(index, actor);
             hexGroup.addActor(actor);
 
             if (actor.getInclude() != 0) {
@@ -193,6 +199,10 @@ public class MapController {
         } else {
             yPos = y * FRConstants.HEX_HEIGHT;
         }
+    }
+
+    public static HexActor findActor(int index) {
+        return hexHashMap.get(index);
     }
 
     private static boolean[] createSourceArray(int index) {

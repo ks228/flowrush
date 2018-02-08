@@ -25,7 +25,7 @@ import com.blackhornetworkshop.flowrush.controller.HexController;
 import com.blackhornetworkshop.flowrush.controller.LevelLoader;
 import com.blackhornetworkshop.flowrush.model.ui.UIPool;
 
-//Created by TScissors. Главный класс игрового экрана
+//Created by TScissors.
 
 public class GameScreen implements Screen, FRScreen {
 
@@ -57,6 +57,7 @@ public class GameScreen implements Screen, FRScreen {
 
     @Override
     public void show() {
+        FlowRush.logDebug("Game screen show() method called");
         isActive = true;
 
         //Основная сцена для гексов и сцена для UI
@@ -72,8 +73,6 @@ public class GameScreen implements Screen, FRScreen {
 
         //спрайт для отрисовки фона
         background = FRAssetManager.getSpriteBack();
-
-        FlowRush.logDebug("Game screen show() method called");
 
         UIPool.getSoundButton().setPosition(0, FRConstants.BUTTON_SIZE + Gdx.graphics.getHeight() * 0.05f);
         UIPool.getSoundButton().setVisible(true);
@@ -136,16 +135,16 @@ public class GameScreen implements Screen, FRScreen {
         isActive = false;
     }
 
-    public void startNewLevel() { //обязательно вместе с startNewLevel или nextlvl (в levelloader)
-        //номер уровня
+    public void startNewLevel() {
+
         UIPool.getLevelNumberActor().setText("" + LevelLoader.getInstance().getLvl());
         //UIPool.getPauseBackground().setVisible(false);
 
         MapController.createNewMapGroup(LevelLoader.getInstance().getActorList());
 
         //обновляем чекер
-        SourceChecker.getInstance().initialization(MapController.getMapGroup());
-        SourceChecker.getInstance().checkAndSetActor();
+        SourceChecker.getInstance().initialization();
+        SourceChecker.getInstance().update();
 
         //PackComplete создается только при условии что уровень последний
         if (!LevelLoader.getInstance().containsNext()) {

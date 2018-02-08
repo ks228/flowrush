@@ -36,8 +36,5 @@ public class PackCompleteLowerHex extends Actor {
     public void draw(Batch batch, float alpha) {
         batch.draw(spriteBack, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
     }
-    @Override
-    public void act(float delta) {
-        super.act(delta);
-    }
+
 }

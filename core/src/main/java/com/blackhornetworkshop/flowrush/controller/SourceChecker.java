@@ -1,7 +1,5 @@
 package com.blackhornetworkshop.flowrush.controller;
 
-import com.badlogic.gdx.scenes.scene2d.Group;
-
 import java.util.ArrayList;
 
 import com.badlogic.gdx.utils.Timer;
@@ -16,9 +14,8 @@ public class SourceChecker {
     private static SourceChecker instance;
 
     private HexActor actor;
-    private Group group;
     private boolean[] sourceArrayMain;
-    private ArrayList<HexActor> tempoHexArray = new ArrayList<>();
+    private ArrayList<HexActor> tempHexArray = new ArrayList<>();
     private ArrayList<HexActor> doveArray = new ArrayList<>();
 
     private boolean doveIsOn;
@@ -31,8 +28,7 @@ public class SourceChecker {
 
     private SourceChecker(){}
 
-    public void initialization(Group mapGroup) {
-        group = mapGroup;
+    public void initialization() {
         clearFields();
         for (int x = 0; x < MapController.getSpecialActorsArraySize(); x++) {
             actor = MapController.getSpecialActorsArrayChildren(x);
@@ -44,26 +40,26 @@ public class SourceChecker {
 
     private void clearFields() {//при перезапуске очищаем все
         doveArray.clear();
-        tempoHexArray.clear();
+        tempHexArray.clear();
         sourceArrayMain = null;
         actor = null;
     }
 
 
-    public void checkAndSetActor() {
+    public void update() {
         disconnectAll();
 
         for (int x = 0; x < MapController.getHexGroupSize(); x++) {
             actor = MapController.getHexGroupChildren(x);
             if (actor.getInclude() == 1) {
                 sourceArrayMain = actor.getSourceArray();
-                tempoHexArray.add(actor); //первый член в массиве
-                for (int i = 0; i < tempoHexArray.size(); i++) { // переборка массива, в самой переборке постоянно массив пополняется пока не будут перебраны все подключенные клетки одна за одной
+                tempHexArray.add(actor); //первый член в массиве
+                for (int i = 0; i < tempHexArray.size(); i++) { // переборка массива, в самой переборке постоянно массив пополняется пока не будут перебраны все подключенные клетки одна за одной
 
-                    actor = tempoHexArray.get(i);
+                    actor = tempHexArray.get(i);
                     sourceArrayMain = actor.getSourceArray();
 
-                    checkActor(actor);
+                    checkActorNew(actor);
                 }
             }
         }
@@ -72,21 +68,16 @@ public class SourceChecker {
             for (int x = 0; x < doveArray.size(); x++) {
                 actor = doveArray.get(x);
                 HexController.setPowerOn(actor);
-                tempoHexArray.clear();
+                tempHexArray.clear();
                 sourceArrayMain = actor.getSourceArray();
-                tempoHexArray.add(actor);
+                tempHexArray.add(actor);
 
-                try {
-                    for (int i = 0; i < tempoHexArray.size(); i++) { // переборка массива, в самой переборке постоянно массив пополняется пока не будут перебраны все подключенные клетки одна за одной
+                for (int i = 0; i < tempHexArray.size(); i++) { // переборка массива, в самой переборке постоянно массив пополняется пока не будут перебраны все подключенные клетки одна за одной
 
-                        actor = tempoHexArray.get(i);
-                        sourceArrayMain = actor.getSourceArray();
+                    actor = tempHexArray.get(i);
+                    sourceArrayMain = actor.getSourceArray();
 
-                        checkActor(actor);
-                    }
-
-                } catch (Exception ex) {
-                    ex.getStackTrace();
+                    checkActorNew(actor);
                 }
             }
         }
@@ -112,7 +103,32 @@ public class SourceChecker {
         }
     }
 
-    private void checkTool(String name, int side) { //чекает соседний для главного актер по переданному имени XY, добавляет подключенные актеры в ArrayList для проверки
+    private void checkActorNew(HexActor actor) { //проверяет конкретно оддного актера по всем соседним позициям
+
+        int x, y;
+
+        x = actor.getXIndex();
+        y = actor.getYIndex();
+
+        if (x == 0 || x % 2 == 0) {
+            checkTool((x-1)*10+y, 0);//позиция слева снизу (0)
+            checkTool((x-1)*10+y+1, 1);// позиция сдева сверху (1)
+            checkTool(x*10+y+1, 2);// позиция сверху (2)
+            checkTool((x+1)*10+y+1, 3);// позиция справа сверху (3)
+            checkTool((x+1)*10+y, 4);// позиция справа снизу(4)
+            checkTool(x*10+y-1, 5);// позиция снизу (5)
+        } else {
+            checkTool((x-1)*10+y-1, 0);
+            checkTool((x-1)*10+y, 1);
+            checkTool(x*10+y+1, 2);
+            checkTool((x+1)*10+y, 3);
+            checkTool((x+1)*10+y-1, 4);
+            checkTool(x*10+y-1, 5);
+        }
+
+    }
+
+    private void checkTool(int index, int side) { //чекает соседний для главного актер по переданному имени XY, добавляет подключенные актеры в ArrayList для проверки
 
         int side2 = side + 3; //сторона для проверки
 
@@ -124,14 +140,14 @@ public class SourceChecker {
             side2 = 2;
         }
 
-        if (group.findActor(name) != null) {
-            HexActor actorTempo = group.findActor(name);
+        HexActor actorTempo = MapController.findActor(index);
+        if (actorTempo != null) {
             if (!actorTempo.isPowerOn()) {
                 boolean[] sourceArrayTempo = actorTempo.getSourceArray();
 
                 if (sourceArrayMain[side] && sourceArrayTempo[side2]) { //сравниваем две стороны основго актера и "соседа"
                     HexController.setPowerOn(actorTempo);
-                    tempoHexArray.add(actorTempo);
+                    tempHexArray.add(actorTempo);
                     if (actorTempo.getInclude() == 3) {
                         doveIsOn = true;
                     }
@@ -140,45 +156,8 @@ public class SourceChecker {
         }
     }
 
-    private void checkActor(HexActor actor) { //проверяет конкретно оддного актера по всем соседним позициям
-
-        int x, y;
-
-        x = actor.getXIndex();
-        y = actor.getYIndex();
-
-        if (x == 0 || x % 2 == 0) {
-            String nameTempo = "" + (x - 1) + "" + y; //позиция слева снизу (0)
-            checkTool(nameTempo, 0);
-            nameTempo = "" + (x - 1) + "" + (y + 1); // позиция сдева сверху (1)
-            checkTool(nameTempo, 1);
-            nameTempo = "" + x + "" + (y + 1); // позиция сверху (2)
-            checkTool(nameTempo, 2);
-            nameTempo = "" + (x + 1) + "" + (y + 1); // позиция справа сверху (3)
-            checkTool(nameTempo, 3);
-            nameTempo = "" + (x + 1) + "" + y; // позиция справа снизу(4)
-            checkTool(nameTempo, 4);
-            nameTempo = "" + x + "" + (y - 1); // позиция снизу (5)
-            checkTool(nameTempo, 5);
-        } else {
-            String nameTempo = "" + (x - 1) + "" + (y - 1); //позиция слева снизу (0)
-            checkTool(nameTempo, 0);
-            nameTempo = "" + (x - 1) + "" + y; // позиция сдева сверху (1)
-            checkTool(nameTempo, 1);
-            nameTempo = "" + x + "" + (y + 1); // позиция сверху (2)
-            checkTool(nameTempo, 2);
-            nameTempo = "" + (x + 1) + "" + y; // позиция справа сверху (3)
-            checkTool(nameTempo, 3);
-            nameTempo = "" + (x + 1) + "" + (y - 1); // позиция справа снизу(4)
-            checkTool(nameTempo, 4);
-            nameTempo = "" + x + "" + (y - 1); // позиция снизу (5)
-            checkTool(nameTempo, 5);
-        }
-
-    }
-
     private void disconnectAll() { //все отрубает
-        tempoHexArray.clear();
+        tempHexArray.clear();
         numReceiversOn = 0;
         for (int x = 0; x < MapController.getHexGroupSize(); x++) {
             actor = MapController.getHexGroupChildren(x);

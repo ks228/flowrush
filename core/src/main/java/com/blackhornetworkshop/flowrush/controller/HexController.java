@@ -6,19 +6,6 @@ import com.blackhornetworkshop.flowrush.view.screens.GameScreen;
 //Created by TScissors.
 
 public class HexController {
-
-    public static void moveSources(HexActor actor) {
-        boolean[] sourceArray = actor.getSourceArray();
-        boolean val = sourceArray[0];
-        sourceArray[0] = sourceArray[sourceArray.length - 1];
-        for (int j = 0; j < sourceArray.length - 1; ++j) {
-            boolean val2 = sourceArray[j + 1];
-            sourceArray[j + 1] = val;
-            val = val2;
-        }
-        actor.setSources(sourceArray);
-    }
-
     public static void setHexbackTouchOff(HexActor actor) {
         if (actor.getIndex() < 25) {
             actor.setBackground(FRAssetManager.getHexBackgroundOff());

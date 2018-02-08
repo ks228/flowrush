@@ -50,7 +50,7 @@ public class FRAssetManager {
     private static Sprite iconPointOn, iconPointOff, iconPointWhite;
     private static Sprite lockSprite;
     private static ArrayList<Sprite> hexes;
-
+    private static Sprite backgroundWhite;
     private FRAssetManager(){}
 
     public static void loadAssets(){
@@ -88,6 +88,8 @@ public class FRAssetManager {
         quadrantSprite = atlas.createSprite("q_circle");
 
         lockSprite = atlas.createSprite("lock");
+
+        backgroundWhite = atlas.createSprite("back_white");
 
         if(Gdx.graphics.getWidth()<500) {
             spriteBack = new TiledDrawable(atlas.findRegion("point"));
@@ -275,5 +277,9 @@ public class FRAssetManager {
     public static Sprite getHexSprite(int index) throws FlowRushException{
         if( index < 1 || index > 50) FlowRush.logError("Asset manager error",new FlowRushException("Wrong index!"));
         return hexes.get(index - 1);
+    }
+
+    public static Sprite getBackgroundWhite() {
+        return backgroundWhite;
     }
 }

@@ -50,10 +50,7 @@ public class HexActor extends Actor{
             batch.draw(icon, (getX() + (getWidth() - Gdx.graphics.getWidth() / 5) / 2), (getY() + (getHeight() - Gdx.graphics.getWidth() / 5 * 0.8658536585365854f) / 2), getOriginX(), getOriginY(), Gdx.graphics.getWidth() / 5, Gdx.graphics.getWidth() / 5 * 0.8658536585365854f, getScaleX(), getScaleY(), 0);
         }
     }
-    @Override
-    public void act(float delta) {
-        super.act(delta);
-    }
+
 
     public void setAngle(float angle){this.angle = angle;}
     public float getAngle(){return angle;}
@@ -62,7 +59,6 @@ public class HexActor extends Actor{
     public void setBackground(Sprite sprite){
         background = sprite;}
 
-    public void setSources(boolean[] sourceArray){this.sourceArray = sourceArray;}
     public boolean[] getSourceArray(){return sourceArray;}
 
     public int getRotatePosition(){return rotatePosition;}
@@ -83,7 +79,13 @@ public class HexActor extends Actor{
 
     public int getInclude(){return include;}
 
-    public void setInclude(int include) {
-        this.include = include;
+    public void moveSources() {
+        boolean val = sourceArray[0];
+        sourceArray[0] = sourceArray[sourceArray.length - 1];
+        for (int j = 0; j < sourceArray.length - 1; ++j) {
+            boolean val2 = sourceArray[j + 1];
+            sourceArray[j + 1] = val;
+            val = val2;
+        }
     }
 }

@@ -81,9 +81,9 @@ public class HexActorListener extends ClickListener {
             angle = actor.getAngle() - 60;
 
             HexController.setAngle(actor, angle);
-            HexController.moveSources(actor);
+            actor.moveSources();
 
-            SourceChecker.getInstance().checkAndSetActor();
+            SourceChecker.getInstance().update();
 
             rotateToAction.setRotation(actor.getAngle());
             if (actor.getActions().contains(rotateToAction, true)) {
