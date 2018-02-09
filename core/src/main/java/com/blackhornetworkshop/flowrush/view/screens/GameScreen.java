@@ -79,7 +79,7 @@ public class GameScreen implements Screen, FRScreen {
 
         //Группа для актеров паузы
         movePauseGroup = new Group();
-        movePauseGroup.addActor(UIPool.getQuadrant());
+        movePauseGroup.addActor(UIPool.getQuadrantPauseBackground());
         movePauseGroup.addActor(UIPool.getMainMenuButton());
         movePauseGroup.addActor(UIPool.getBackButton());
         movePauseGroup.addActor(UIPool.getRestartButton());
@@ -138,7 +138,6 @@ public class GameScreen implements Screen, FRScreen {
     public void startNewLevel() {
 
         UIPool.getLevelNumberActor().setText("" + LevelLoader.getInstance().getLvl());
-        //UIPool.getPauseBackground().setVisible(false);
 
         MapController.createNewMapGroup(LevelLoader.getInstance().getActorList());
 
@@ -196,11 +195,11 @@ public class GameScreen implements Screen, FRScreen {
             FlowRush.getInstance().unlockAchievement(7);
         }
 
-        if (FlowRush.getSave().getLevelsProgress()[0] == 50
-                && FlowRush.getSave().getLevelsProgress()[1] == 50
-                && FlowRush.getSave().getLevelsProgress()[2] == 50
-                && FlowRush.getSave().getLevelsProgress()[3] == 50
-                && FlowRush.getSave().getLevelsProgress()[4] == 50
+        if (FlowRush.getSave().getLevelsProgress(0) == 50
+                && FlowRush.getSave().getLevelsProgress(1) == 50
+                && FlowRush.getSave().getLevelsProgress(2) == 50
+                && FlowRush.getSave().getLevelsProgress(3) == 50
+                && FlowRush.getSave().getLevelsProgress(4) == 50
                 && !FlowRush.getSave().getAchievements()[7]) { // прошел все уровни
             FlowRush.getInstance().unlockAchievement(8);
         }
@@ -260,7 +259,7 @@ public class GameScreen implements Screen, FRScreen {
     }
 
     private void movePauseGroupDown() {
-        moveToActionPause.setPosition(-UIPool.getQuadrant().getWidth(), -UIPool.getQuadrant().getWidth());
+        moveToActionPause.setPosition(-UIPool.getQuadrantPauseBackground().getWidth(), -UIPool.getQuadrantPauseBackground().getWidth());
         if (movePauseGroup.getActions().contains(moveToActionPause, true)) {
             moveToActionPause.restart();
         } else {

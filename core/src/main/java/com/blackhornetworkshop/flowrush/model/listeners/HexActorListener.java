@@ -1,4 +1,4 @@
-package com.blackhornetworkshop.flowrush.controller.listeners;
+package com.blackhornetworkshop.flowrush.model.listeners;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;

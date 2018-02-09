@@ -24,75 +24,87 @@ public class ScreenManager {
         checkScreen(LogoScreen.getInstance());
         currentScreen = LOGO_BHW;
         LogoScreen.setBHWLogo();
+        FlowRush.logDebug("BHW LOGO screen");
     }
 
     public static void setLogoFRScreen() {
         checkScreen(LogoScreen.getInstance());
         currentScreen = LOGO_FR;
         LogoScreen.setFRLogo();
+        FlowRush.logDebug("FR LOGO screen");
     }
 
     // MENU SCREEN
 
     public static void setMenuMainScreen() {
         checkScreen(MenuScreen.getInstance());
-        currentScreen = MAIN_MENU;
+        currentScreen = MENU_MAIN;
         MenuScreen.getInstance().setMainMenuScreen();
+        FlowRush.logDebug("MAIN MENU screen");
     }
 
     public static void setMenuAuthorsScreen() {
         checkScreen(MenuScreen.getInstance());
-        currentScreen = MAIN_MENU_AUTHORS;
+        currentScreen = MENU_AUTHORS;
         MenuScreen.getInstance().setAuthorsScreen();
+        FlowRush.logDebug("MENU AUTHORS screen");
     }
 
     public static void setMenuSupportScreen() {
         checkScreen(MenuScreen.getInstance());
-        currentScreen = MAIN_MENU_SUPPORT_US;
+        currentScreen = MENU_SUPPORT_US;
         MenuScreen.getInstance().setSupportUsScreen();
+        FlowRush.logDebug("MENU SUPPORT US screen");
     }
 
     public static void setMenuGoogleSignInScreen() {
         checkScreen(MenuScreen.getInstance());
-        currentScreen = MAIN_MENU_GOOGLE_PLAY;
+        currentScreen = MENU_GOOGLE_PLAY;
         MenuScreen.getInstance().setSignInScreen();
+        FlowRush.logDebug("MENU GOOGLE PLAY screen (sign in)");
     }
 
     public static void setMenuGoogleSignedScreen() {
         checkScreen(MenuScreen.getInstance());
-        currentScreen = MAIN_MENU_GOOGLE_PLAY;
+        currentScreen = MENU_GOOGLE_PLAY;
         MenuScreen.getInstance().setSignedScreen();
+        FlowRush.logDebug("MENU GOOGLE PLAY screen (signed)");
     }
 
     public static void setMenuPackChoiceScreen() {
         checkScreen(MenuScreen.getInstance());
-        currentScreen = MAIN_MENU_PACK_CHOICE;
+        currentScreen = MENU_PACK_CHOICE;
         MenuScreen.getInstance().setPackChoiceScreen();
+        FlowRush.logDebug("MENU PACK CHOICE screen");
     }
 
     public static void setMenuLevelChoiceScreen(int pack) {
         checkScreen(MenuScreen.getInstance());
-        currentScreen = MAIN_MENU_LVL_CHOICE;
+        currentScreen = MENU_LVL_CHOICE;
         MenuScreen.getInstance().setLevelChoiceScreen(pack);
+        FlowRush.logDebug("MENU LVL CHOICE screen");
     }
 
-    // GAME SCREEN
+    // GAME_MAIN SCREEN
 
     public static void setGameMainScreen() {
         checkScreen(GameScreen.getInstance());
         if(currentScreen == GAME_PAUSE || currentScreen == GAME_LVL_COMPLETE_PAUSE){
             GameScreen.getInstance().removePause();
         }
-        currentScreen = GAME;
+        currentScreen = GAME_MAIN;
         GameScreen.getInstance().setGameMainScreen();
+        FlowRush.logDebug("GAME MAIN screen");
     }
 
     public static void setGamePauseScreen() {
         checkScreen(GameScreen.getInstance());
         if(currentScreen != GAME_LVL_COMPLETE) {
             currentScreen = GAME_PAUSE;
+            FlowRush.logDebug("GAME PAUSE screen");
         }else {
             currentScreen = GAME_LVL_COMPLETE_PAUSE;
+            FlowRush.logDebug("GAME LVL COMPLETE PAUSE screen");
         }
         GameScreen.getInstance().setPauseScreen();
     }
@@ -104,12 +116,14 @@ public class ScreenManager {
         }
         currentScreen = GAME_LVL_COMPLETE;
         GameScreen.getInstance().setGameLevelCompleteScreen();
+        FlowRush.logDebug("GAME LVL COMPLETE screen");
     }
 
     public static void setGamePackCompleteScreen() {
         checkScreen(GameScreen.getInstance());
         currentScreen = GAME_PACK_COMPLETE;
         GameScreen.getInstance().setPackCompleteScreen();
+        FlowRush.logDebug("GAME PACK COMPLETE screen");
     }
 
     private static void checkScreen(FRScreen screen) {

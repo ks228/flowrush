@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.blackhornetworkshop.flowrush.model.FRConstants;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
 
 public class AndroidLauncher extends AndroidApplication {
@@ -75,9 +76,9 @@ public class AndroidLauncher extends AndroidApplication {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
 
-        if (requestCode == FRPlayServices.RC_SIGN_IN) {
+        if (requestCode == FRConstants.RC_SIGN_IN) {
             FRPlayServices.getInstance().handleSignInResult(intent);
-        }else if(requestCode == FRPlayServices.RC_LIST_SAVED_GAMES) {
+        }else if(requestCode == FRConstants.RC_LIST_SAVED_GAMES) {
             FRPlayServices.getInstance().handleSnapshotSelectResult(intent);
         }
     }

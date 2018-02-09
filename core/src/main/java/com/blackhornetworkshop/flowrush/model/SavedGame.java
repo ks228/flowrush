@@ -41,8 +41,9 @@ public class SavedGame {
         currentPack = pack;
     }
 
-    public int[] getLevelsProgress() {
-        return levelsProgress;
+    public int getLevelsProgress(int pack) {
+
+        return levelsProgress[pack];
     }
 
     public void setLevelsProgress(int pack, int value) {

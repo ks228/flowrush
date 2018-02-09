@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 
 import com.blackhornetworkshop.flowrush.controller.PlayServices;
 import com.blackhornetworkshop.flowrush.controller.ScreenManager;
+import com.blackhornetworkshop.flowrush.model.FRConstants;
 import com.blackhornetworkshop.flowrush.model.SavedGame;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -46,12 +47,6 @@ public class FRPlayServices implements PlayServices {
     private SnapshotsClient snapshotsClient;
     private AchievementsClient achievementsClient;
 
-    static final int RC_SIGN_IN = 9001;
-    static final int RC_LIST_SAVED_GAMES = 9002;
-    private static final int RC_ACHIEVEMENT_UI = 9003;
-
-    final private static int MAX_SNAPSHOT_RESOLVE_RETRIES = 20;
-
     private FRPlayServices(){}
 
     static boolean isPlayServicesAvailable(Context context) {
@@ -86,7 +81,7 @@ public class FRPlayServices implements PlayServices {
 
     @Override
     public void signIn() {
-        app.startActivityForResult(googleSignInClient.getSignInIntent(), RC_SIGN_IN);
+        app.startActivityForResult(googleSignInClient.getSignInIntent(), FRConstants.RC_SIGN_IN);
     }
 
     void handleSignInResult(Intent intent) {
@@ -133,7 +128,7 @@ public class FRPlayServices implements PlayServices {
                 if (!task.isSuccessful()) {
                     FRAndroidHelper.getInstance().logError("Problem with loading snapshots list", task.getException());
                 } else {
-                    app.startActivityForResult(task.getResult(), RC_LIST_SAVED_GAMES);
+                    app.startActivityForResult(task.getResult(), FRConstants.RC_LIST_SAVED_GAMES);
                 }
             }
         });
@@ -167,7 +162,7 @@ public class FRPlayServices implements PlayServices {
                 }).continueWith(new Continuation<SnapshotsClient.DataOrConflict<Snapshot>, byte[]>() {
             @Override
             public byte[] then(@NonNull Task<SnapshotsClient.DataOrConflict<Snapshot>> task) throws Exception {
-                Snapshot snapshot = processSnapshotOpenResult(task.getResult(), MAX_SNAPSHOT_RESOLVE_RETRIES).getResult();
+                Snapshot snapshot = processSnapshotOpenResult(task.getResult(), FRConstants.MAX_SNAPSHOT_RESOLVE_RETRIES).getResult();
                 // Opening the snapshot was a success and any conflicts have been resolved.
                 if(snapshot != null){
                     writeSnapshot(snapshot);
@@ -211,7 +206,7 @@ public class FRPlayServices implements PlayServices {
                                     @NonNull Task<SnapshotsClient.DataOrConflict<Snapshot>> task)
                                     throws IOException {
                                 // Resolving the conflict may cause another conflict, so recurse and try another resolution.
-                                if (retryCount < MAX_SNAPSHOT_RESOLVE_RETRIES) {
+                                if (retryCount < FRConstants.MAX_SNAPSHOT_RESOLVE_RETRIES) {
                                     return processSnapshotOpenResult(task.getResult(), retryCount + 1);
                                 } else {
                                     FRAndroidHelper.getInstance().logError("Could not resolve snapshot conflicts", new Exception());
@@ -241,8 +236,8 @@ public class FRPlayServices implements PlayServices {
         }
         //check level progress
         for (int pack = 0; pack < 5; pack++) {
-            if (conflictSavedGame.getLevelsProgress()[pack] < serverSavedGame.getLevelsProgress()[pack]) {
-                conflictSavedGame.setLevelsProgress(pack, serverSavedGame.getLevelsProgress()[pack]);
+            if (conflictSavedGame.getLevelsProgress(pack)< serverSavedGame.getLevelsProgress(pack)) {
+                conflictSavedGame.setLevelsProgress(pack, serverSavedGame.getLevelsProgress(pack));
                 FRAndroidHelper.getInstance().logDebug("Updating level progress in pack " + pack + " in conflict save");
                 isCurrentLevelActual = false;
             } else {
@@ -279,7 +274,7 @@ public class FRPlayServices implements PlayServices {
                 }).continueWith(new Continuation<SnapshotsClient.DataOrConflict<Snapshot>, byte[]>() {
             @Override
             public byte[] then(@NonNull Task<SnapshotsClient.DataOrConflict<Snapshot>> task) throws IOException {
-                Snapshot snapshot = processSnapshotOpenResult(task.getResult(), MAX_SNAPSHOT_RESOLVE_RETRIES).getResult();
+                Snapshot snapshot = processSnapshotOpenResult(task.getResult(), FRConstants.MAX_SNAPSHOT_RESOLVE_RETRIES).getResult();
                 FRAndroidHelper.getInstance().logDebug("Opening the snapshot was a success and any conflicts have been resolved.");
                 try {
                     FRAndroidHelper.getInstance().logDebug("Extract the raw data from the snapshot.");
@@ -309,7 +304,7 @@ public class FRPlayServices implements PlayServices {
                 .addOnSuccessListener(new OnSuccessListener<Intent>() {
                     @Override
                     public void onSuccess(Intent intent) {
-                        app.startActivityForResult(intent, RC_ACHIEVEMENT_UI);
+                        app.startActivityForResult(intent, FRConstants.RC_ACHIEVEMENT_UI);
                     }
                 });
     }

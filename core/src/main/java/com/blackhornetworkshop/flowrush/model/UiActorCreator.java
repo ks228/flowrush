@@ -1,4 +1,4 @@
-package com.blackhornetworkshop.flowrush.controller;
+package com.blackhornetworkshop.flowrush.model;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,8 +10,12 @@ import com.badlogic.gdx.scenes.scene2d.actions.RotateByAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
+import com.blackhornetworkshop.flowrush.controller.FRAssetManager;
+import com.blackhornetworkshop.flowrush.controller.LevelLoader;
+import com.blackhornetworkshop.flowrush.controller.RateDialogController;
+import com.blackhornetworkshop.flowrush.controller.ScreenManager;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
-import com.blackhornetworkshop.flowrush.controller.listeners.ButtonScaleListener;
+import com.blackhornetworkshop.flowrush.model.listeners.ButtonScaleListener;
 import com.blackhornetworkshop.flowrush.view.screens.GameScreen;
 import com.blackhornetworkshop.flowrush.model.ui.SmallButtonActor;
 import com.blackhornetworkshop.flowrush.model.ui.UIPool;
@@ -100,13 +104,17 @@ public class UiActorCreator {
                 textButton.addListener(new ButtonScaleListener(true) {
                     @Override
                     public void action(InputEvent event) {
-                        GameScreen.hideRateDialog();
                         if (RateDialogController.isFirstAnswer()) {
-                            FlowRush.getAndroidHelper().openPlaymarket();
-                            FlowRush.getPreferences().setShowRateDialog(false);
-                            FlowRush.getInstance().savePrefsFile();
+                            RateDialogController.setIsFirstAnswerWasYes(true);
                         } else {
-                            FlowRush.getAndroidHelper().sendMail();
+                            GameScreen.hideRateDialog();
+                            if(RateDialogController.isIsFirstAnswerWasYes()){
+                                FlowRush.getAndroidHelper().openPlaymarket();
+                                FlowRush.getPreferences().setShowRateDialog(false);
+                                FlowRush.getInstance().savePrefsFile();
+                            }else{
+                                FlowRush.getAndroidHelper().sendMail();
+                            }
                         }
                     }
                 });
@@ -117,14 +125,12 @@ public class UiActorCreator {
                     @Override
                     public void action(InputEvent event) {
                         if (RateDialogController.isFirstAnswer()) {
-                            UIPool.getDialogBackground().setText("SEND US FEEDBACK, PLEASE");
-                            UIPool.getLeftButton().setText("NO, THANKS");
-                            UIPool.getRightButton().setText("OK");
-                            RateDialogController.setIsFirstAnswer(false);
+                            RateDialogController.setIsFirstAnswerWasYes(false);
                         } else {
-                            FlowRush.getPreferences().setShowRateDialog(false);
-                            FlowRush.getInstance().savePrefsFile();
-
+                            if(!RateDialogController.isIsFirstAnswerWasYes()){
+                                FlowRush.getPreferences().setShowRateDialog(false);
+                                FlowRush.getInstance().savePrefsFile();
+                            }
                             GameScreen.hideRateDialog();
                         }
                     }

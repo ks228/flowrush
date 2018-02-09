@@ -11,7 +11,6 @@ import com.badlogic.gdx.utils.Timer;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
 import com.blackhornetworkshop.flowrush.controller.LevelLoader;
 import com.blackhornetworkshop.flowrush.model.ui.UIPool;
-import com.blackhornetworkshop.flowrush.controller.LevelGroupCreator;
 
 //Created by TScissors. Экран меню игры
 
@@ -44,8 +43,8 @@ public class MenuScreen implements Screen, FRScreen {
         UIPool.getSoundButton().setVisible(true);
 
         //Добавляем всех актеров на сцену
-        hudStage.addActor(UIPool.getWhiteBackActor());
-        hudStage.addActor(UIPool.getWhiteBackActorTop());
+        hudStage.addActor(UIPool.getTriangleBackground());
+        hudStage.addActor(UIPool.getTriangleBackgroundTop());
         hudStage.addActor(UIPool.getBackgroundAnimation());
         hudStage.addActor(UIPool.getPlayButton());
         hudStage.addActor(UIPool.getLevelsButton());
@@ -64,7 +63,7 @@ public class MenuScreen implements Screen, FRScreen {
         hudStage.addActor(UIPool.getTwitterButton());
         hudStage.addActor(UIPool.getFacebookButton());
         hudStage.addActor(UIPool.getVkButton());
-        hudStage.addActor(UIPool.getLevelGroup());
+        hudStage.addActor(UIPool.getLevelNumbersGroup());
         hudStage.addActor(UIPool.getCloseButton());
         hudStage.addActor(UIPool.getMenuLabel());
 
@@ -98,8 +97,8 @@ public class MenuScreen implements Screen, FRScreen {
     public void setLevelChoiceScreen(int pack){
         setOnVisibleForInnerScreen();
         UIPool.getMenuLabel().setText("SELECT LEVEL");
-        LevelGroupCreator.getInstance().setupLevelGroup(UIPool.getLevelGroup(), pack);
-        UIPool.getLevelGroup().setVisible(true);
+        UIPool.getLevelNumbersGroup(pack);
+        UIPool.getLevelNumbersGroup().setVisible(true);
     }
 
     public void setPackChoiceScreen(){
@@ -203,7 +202,7 @@ public class MenuScreen implements Screen, FRScreen {
 
     public void setMainMenuScreen(){
         UIPool.getMenuLabel().setVisible(false);
-        UIPool.getLevelGroup().setVisible(false);
+        UIPool.getLevelNumbersGroup().setVisible(false);
         UIPool.getInnerLayout().setVisible(false);
         UIPool.getCloseButton().setVisible(false);
         UIPool.getMessageBackground().setVisible(false);

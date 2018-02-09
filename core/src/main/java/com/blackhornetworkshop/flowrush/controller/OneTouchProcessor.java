@@ -24,30 +24,30 @@ public class OneTouchProcessor implements InputProcessor {
                     msg = msg + "App exit";
                     Gdx.app.exit();
                     break;
-                case MAIN_MENU:
+                case MENU_MAIN:
                     msg = msg + "Show exit button";
                     Timer.instance().clear();
                     UIPool.getExitButton().setVisible(true);
                     Timer.schedule(new Task(), 3);
                     break;
-                case MAIN_MENU_AUTHORS:
+                case MENU_AUTHORS:
                     msg = msg + "To main menu from authors screen";
                     ScreenManager.setMenuMainScreen();
                     break;
-                case MAIN_MENU_SUPPORT_US:
+                case MENU_SUPPORT_US:
                     msg = msg + "To main menu from support us screen";
                     ScreenManager.setMenuMainScreen();
                     break;
-                case MAIN_MENU_PACK_CHOICE:
+                case MENU_PACK_CHOICE:
                     msg = msg + "To main menu from pack choice us screen";
                     ScreenManager.setMenuMainScreen();
                     break;
-                case MAIN_MENU_LVL_CHOICE:
+                case MENU_LVL_CHOICE:
                     msg = msg + "To pack choice us screen from level choice screen";
                     ScreenManager.setMenuMainScreen();
                     ScreenManager.setMenuPackChoiceScreen();
                     break;
-                case GAME:
+                case GAME_MAIN:
                     msg = msg + "To main menu from game screen";
                     ScreenManager.setMenuMainScreen();
                     break;
@@ -67,7 +67,7 @@ public class OneTouchProcessor implements InputProcessor {
                     msg = msg + "To main menu from game lvl complete pause screen";
                     ScreenManager.setGameMainScreen();
                     break;
-                case MAIN_MENU_GOOGLE_PLAY:
+                case MENU_GOOGLE_PLAY:
                     msg = msg + "Back to main menu from google play screen";
                     ScreenManager.setMenuMainScreen();
                 default:

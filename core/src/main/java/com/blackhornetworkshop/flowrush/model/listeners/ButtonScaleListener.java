@@ -1,4 +1,4 @@
-package com.blackhornetworkshop.flowrush.controller.listeners;
+package com.blackhornetworkshop.flowrush.model.listeners;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
@@ -19,14 +19,15 @@ public class ButtonScaleListener extends ClickListener {
         buttonScale2 = new ScaleToAction();
         buttonScale2.setScale(1f, 1f);
         if(disableScaleAnimationBack){
-            buttonScale2.setDuration(0);
+            disableAnimationBack();
         }else{
-            buttonScale2.setDuration(0.05f);
+            enableAnimationBack();
         }
     }
 
     @Override
     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+        super.touchDown(event,x,y,pointer,button);
         if (FlowRush.getPreferences().isSoundOn()) {
             FRAssetManager.getTapSound().play();
         }
@@ -41,6 +42,7 @@ public class ButtonScaleListener extends ClickListener {
 
     @Override
     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+        super.touchUp(event, x, y, pointer, button);
         buttonScale1.finish();
         if (event.getListenerActor().getActions().contains(buttonScale2, true)) {
             buttonScale2.restart();
@@ -52,5 +54,13 @@ public class ButtonScaleListener extends ClickListener {
     }
 
     public void action(InputEvent event) {
+    }
+
+    protected void enableAnimationBack(){
+        buttonScale2.setDuration(0.05f);
+    }
+
+    protected void disableAnimationBack(){
+        buttonScale2.setDuration(0);
     }
 }

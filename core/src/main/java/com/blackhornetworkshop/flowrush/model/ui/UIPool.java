@@ -4,7 +4,6 @@ package com.blackhornetworkshop.flowrush.model.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -15,11 +14,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.blackhornetworkshop.flowrush.controller.FRAssetManager;
+import com.blackhornetworkshop.flowrush.model.listeners.ButtonScaleListener;
 import com.blackhornetworkshop.flowrush.model.FRConstants;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
 import com.blackhornetworkshop.flowrush.controller.ScreenManager;
 import com.blackhornetworkshop.flowrush.controller.LevelLoader;
-import com.blackhornetworkshop.flowrush.controller.UiActorCreator;
+import com.blackhornetworkshop.flowrush.model.UiActorCreator;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import static com.blackhornetworkshop.flowrush.model.FRConstants.LEVEL_NUMBER_GROUP_MARGIN_LEFT;
+import static com.blackhornetworkshop.flowrush.model.FRConstants.LEVEL_NUMBER_GROUP_TOP_MARGIN;
+import static com.blackhornetworkshop.flowrush.model.FRConstants.LEVEL_NUMBER_PADDING;
+import static com.blackhornetworkshop.flowrush.model.FRConstants.LEVEL_NUMBER_SIZE;
 
 public class UIPool {
 
@@ -60,8 +68,10 @@ public class UIPool {
     private static Label messageBackground;
     private static Container<Label> labelContainer;
     private static SmallButtonActor closeButton;
-    private static Actor whiteBackActorTop;
-    private static Actor whiteBackActor;
+    private static Actor triangleBackgroundTop;
+    private static Actor triangleBackground;
+    private static Group levelNumbersGroup;
+    private static ArrayList<LevelNumberButton> levelNumbersGroupArray;
 
     //Main buttons
     private static TextButton playButton;
@@ -73,14 +83,14 @@ public class UIPool {
      * private TextButton removeAds;
      */
 
-    //--------------------- GAME
+    //--------------------- GAME_MAIN
 
     // Pause menu elements
     private static SmallButtonActor pauseButton;
     private static SmallButtonActor restartButton;
     private static SmallButtonActor mainMenuButton;
     private static SmallButtonActor backButton;
-    private static Actor quadrant;
+    private static Actor quadrantPauseBackground;
 
     // Level complete elements
     private static Label wellDoneLabel;
@@ -104,18 +114,6 @@ public class UIPool {
         levelNumberActor.setSize(FRConstants.BUTTON_SIZE, FRConstants.BUTTON_SIZE);
         levelNumberActor.setPosition(Gdx.graphics.getWidth() - levelNumberActor.getWidth(), Gdx.graphics.getHeight()-levelNumberActor.getHeight());
         levelNumberActor.setAlignment(Align.center);
-
-        pauseBackground = new Label("", FRAssetManager.getSkin(), "alphawhite");
-        pauseBackground.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        pauseBackground.setVisible(false);
-        pauseBackground.addListener(new ClickListener() {
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button){
-                if(ScreenManager.getCurrentScreen() == FRConstants.ScreenType.GAME_PAUSE){
-                    ScreenManager.setGameMainScreen();
-                }
-            }
-        });
 
         soundButton = UiActorCreator.getSmallButtonActor(5);
 
@@ -150,23 +148,23 @@ public class UIPool {
 
         closeButton = UiActorCreator.getSmallButtonActor(6);
 
-        whiteBackActor = new Image() {
+        triangleBackground = new Image() {
             public void draw(Batch batch, float alpha) {
                 batch.draw(FRAssetManager.getBackgroundWhite(), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
             }
         };
-        whiteBackActor.setSize(Gdx.graphics.getWidth() * 0.65f, Gdx.graphics.getWidth() * 0.65f * 1.71358024691358f);
-        whiteBackActor.setPosition(Gdx.graphics.getWidth() - whiteBackActor.getWidth(), 0);
+        triangleBackground.setSize(Gdx.graphics.getWidth() * 0.65f, Gdx.graphics.getWidth() * 0.65f * 1.71358024691358f);
+        triangleBackground.setPosition(Gdx.graphics.getWidth() - triangleBackground.getWidth(), 0);
 
-        whiteBackActorTop = new Actor() {
+        triangleBackgroundTop = new Actor() {
             public void draw(Batch batch, float alpha) {
                 batch.draw(FRAssetManager.getBackgroundWhite(), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
             }
         };
-        whiteBackActorTop.setSize(Gdx.graphics.getWidth() * 0.65f, Gdx.graphics.getWidth() * 0.65f * 1.71358024691358f);
-        whiteBackActorTop.setOrigin(whiteBackActorTop.getWidth() / 2, whiteBackActorTop.getHeight() / 2);
-        whiteBackActorTop.setRotation(180);
-        whiteBackActorTop.setPosition(0, Gdx.graphics.getHeight() - whiteBackActorTop.getHeight());
+        triangleBackgroundTop.setSize(Gdx.graphics.getWidth() * 0.65f, Gdx.graphics.getWidth() * 0.65f * 1.71358024691358f);
+        triangleBackgroundTop.setOrigin(triangleBackgroundTop.getWidth() / 2, triangleBackgroundTop.getHeight() / 2);
+        triangleBackgroundTop.setRotation(180);
+        triangleBackgroundTop.setPosition(0, Gdx.graphics.getHeight() - triangleBackgroundTop.getHeight());
 
         //Main buttons
         playButton = UiActorCreator.getTextButton(1);
@@ -181,8 +179,18 @@ public class UIPool {
         }
         packGroup.setVisible(false);
 
-        levelGroup = new Group(); //класс пустышка, так оптимальней чтобы сразу он там был в случае нескольких кликов по пакам оправдано, сразу есть что удалять в слушателе ниже
-        levelGroup.setVisible(false);
+        levelNumbersGroup = new Group();
+        levelNumbersGroupArray = new ArrayList();
+        levelNumbersGroup.setVisible(false);
+
+        for (int x = 1; x < 51; x++) {
+            LevelNumberButton levelNumberButton = new LevelNumberButton("" + x, FRAssetManager.getSkin(), "lightblue", x);
+            setLevelNumberPosition(x, levelNumberButton);
+            levelNumberButton.setSize(LEVEL_NUMBER_SIZE, LEVEL_NUMBER_SIZE);
+            levelNumberButton.setOrigin(Align.center);
+            levelNumbersGroup.addActor(levelNumberButton);
+            levelNumbersGroupArray.add(levelNumberButton);
+        }
 
         //Social networks
         socialNetworkBackground = UiActorCreator.getTextButton(8);
@@ -200,8 +208,8 @@ public class UIPool {
         authorsButton = UiActorCreator.getSmallButtonActor(7);
 
         //!!!!!!!!!!! НЕ УДАЛИТЬ СЛУЧАЙНО
-        /**removeAds = com.blackhornetworkshop.flowrush.controller.UiActorCreator.getTextButton(6, game);
-         removeAds.addListener(new com.blackhornetworkshop.flowrush.controller.listeners.ButtonScaleListener(removeAds, game));*/
+        /**removeAds = com.blackhornetworkshop.flowrush.model.UiActorCreator.getTextButton(6, game);
+         removeAds.addListener(new com.blackhornetworkshop.flowrush.model.listeners.ButtonScaleListener(removeAds, game));*/
 
         if (FlowRush.isPlayServicesAvailable()) {
             googlePlayButton = UiActorCreator.getSmallButtonActor(14);
@@ -211,22 +219,35 @@ public class UIPool {
             signOutButton = UiActorCreator.getTextButton(17);
         }
 
-        //---------------------------------- GAME
+        //---------------------------------- GAME_MAIN
 
         //Pause menu elements
         restartButton = UiActorCreator.getSmallButtonActor(3);
         mainMenuButton = UiActorCreator.getSmallButtonActor(4);
         pauseButton = UiActorCreator.getSmallButtonActor(1);
         backButton = UiActorCreator.getSmallButtonActor(2);
-        quadrant = new Actor() {
+
+        quadrantPauseBackground = new Actor() {
             @Override
             public void draw(Batch batch, float alpha) {
                 batch.draw(FRAssetManager.getQuadrantSprite(), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
             }
         };
-        quadrant.setSize(FRConstants.BUTTON_SIZE * 2 + Gdx.graphics.getHeight() * 0.1f, FRConstants.BUTTON_SIZE * 2 + Gdx.graphics.getHeight() * 0.1f);
-        quadrant.setPosition(0, 0);
+        quadrantPauseBackground.setSize(FRConstants.BUTTON_SIZE * 2 + Gdx.graphics.getHeight() * 0.1f, FRConstants.BUTTON_SIZE * 2 + Gdx.graphics.getHeight() * 0.1f);
+        quadrantPauseBackground.setPosition(0, 0);
 
+        pauseBackground = new Label("", FRAssetManager.getSkin(), "alphawhite");
+        pauseBackground.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        pauseBackground.setVisible(false);
+        pauseBackground.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if(ScreenManager.getCurrentScreen() == FRConstants.ScreenType.GAME_PAUSE){
+                    ScreenManager.setGameMainScreen();
+                }
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
 
         //Level complete elements
         nextLevelButton = UiActorCreator.getSmallButtonActor(12);
@@ -250,11 +271,24 @@ public class UIPool {
         dialogBackground.setAlignment(Align.top);
 
         leftButton = UiActorCreator.getTextButton(11);
-        //leftButton.addListener(new LeftButtonListener());
-
         rightButton = UiActorCreator.getTextButton(10);
-        //rightButton.addListener(new RightButtonListener());
+    }
 
+    public static void getLevelNumbersGroup(int pack){
+        for (LevelNumberButton levelNumberButton: levelNumbersGroupArray){
+            levelNumberButton.setIsAvailable(levelNumberButton.getLevel() <= FlowRush.getSave().getLevelsProgress(pack - 1));
+            levelNumberButton.setPack(pack);
+        }
+    }
+
+    private static void setLevelNumberPosition(int number, Actor actor) {
+        int b = (int) Math.ceil(number/5.0);
+        int a = number - 1 - 5 * (b - 1);
+
+        float xPos = LEVEL_NUMBER_GROUP_MARGIN_LEFT + LEVEL_NUMBER_PADDING * a + LEVEL_NUMBER_SIZE * a;
+        float yPos = LEVEL_NUMBER_GROUP_TOP_MARGIN - LEVEL_NUMBER_PADDING * b - LEVEL_NUMBER_SIZE * b;
+
+        actor.setPosition(xPos, yPos);
     }
 
     //-------------------------------------------------------- COMMON ELEMENTS
@@ -326,12 +360,12 @@ public class UIPool {
         return playButton;
     }
 
-    public static Actor getWhiteBackActorTop() {
-        return whiteBackActorTop;
+    public static Actor getTriangleBackgroundTop() {
+        return triangleBackgroundTop;
     }
 
-    public static Actor getWhiteBackActor() {
-        return whiteBackActor;
+    public static Actor getTriangleBackground() {
+        return triangleBackground;
     }
 
     public static SmallButtonActor getCloseButton() {
@@ -382,8 +416,8 @@ public class UIPool {
         return packGroup;
     }
 
-    public static Group getLevelGroup() {
-        return levelGroup;
+    public static Group getLevelNumbersGroup() {
+        return levelNumbersGroup;
     }
 
     //---------------------------------------------- Game screen elements
@@ -404,8 +438,8 @@ public class UIPool {
         return backButton;
     }
 
-    public static Actor getQuadrant() {
-        return quadrant;
+    public static Actor getQuadrantPauseBackground() {
+        return quadrantPauseBackground;
     }
 
     public static Label getWellDoneLabel() {

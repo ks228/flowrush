@@ -65,19 +65,37 @@ public class FRConstants {
             (BUTTON_SIZE) / 2) - (BUTTON_SIZE / 2 + SCREEN_HEIGHT * 0.02f) - BUTTON_SIZE) * 0.05f / 2 + BUTTON_SIZE * 2.5f;
 
     public enum ScreenType {
-        GAME,
+        GAME_MAIN,
         GAME_LVL_COMPLETE,
         GAME_LVL_COMPLETE_PAUSE,
         GAME_PACK_COMPLETE,
         GAME_PAUSE,
         LOGO_BHW,
         LOGO_FR,
-        MAIN_MENU_LVL_CHOICE,
-        MAIN_MENU,
-        MAIN_MENU_AUTHORS,
-        MAIN_MENU_PACK_CHOICE,
-        MAIN_MENU_SUPPORT_US,
-        MAIN_MENU_GOOGLE_PLAY
+        MENU_LVL_CHOICE,
+        MENU_MAIN,
+        MENU_AUTHORS,
+        MENU_PACK_CHOICE,
+        MENU_SUPPORT_US,
+        MENU_GOOGLE_PLAY
     }
+
+    // Level choice screen
+
+    public final static float LEVEL_NUMBER_GROUP_TOP_MARGIN = (SCREEN_HEIGHT*0.98f- BUTTON_SIZE);
+    private final static float LEVEL_NUMBER_GROUP_BOTTOM_MARGIN = (BUTTON_SIZE)+SCREEN_HEIGHT*0.02f;
+    public final static float LEVEL_NUMBER_SIZE = (LEVEL_NUMBER_GROUP_TOP_MARGIN - LEVEL_NUMBER_GROUP_BOTTOM_MARGIN)/12;
+
+    private final static float LEVEL_NUMBER_Y_PADDING = ((LEVEL_NUMBER_GROUP_TOP_MARGIN - LEVEL_NUMBER_GROUP_BOTTOM_MARGIN)- LEVEL_NUMBER_SIZE *10)/11;
+    private final static float LEVEL_NUMBER_X_PADDING = (SCREEN_WIDTH*0.9f- LEVEL_NUMBER_SIZE *5)/6;
+    public final static float LEVEL_NUMBER_PADDING = LEVEL_NUMBER_X_PADDING > LEVEL_NUMBER_Y_PADDING ? LEVEL_NUMBER_Y_PADDING : LEVEL_NUMBER_X_PADDING;
+    public final static float LEVEL_NUMBER_GROUP_MARGIN_LEFT = (SCREEN_WIDTH-SCREEN_WIDTH*0.9f)/2+(SCREEN_WIDTH*0.9f- LEVEL_NUMBER_PADDING *4- LEVEL_NUMBER_SIZE *5)/2;
+
+    // Android
+
+    public final static int RC_SIGN_IN = 9001;
+    public final static int RC_LIST_SAVED_GAMES = 9002;
+    public final static int RC_ACHIEVEMENT_UI = 9003;
+    public final static int MAX_SNAPSHOT_RESOLVE_RETRIES = 20;
 }
 

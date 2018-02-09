@@ -9,7 +9,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 
-//Created by TScissors. Класс для загрузки и смены actorList через pack и lvl
+//Created by TScissors.
 
 public class LevelLoader {
 
@@ -30,9 +30,7 @@ public class LevelLoader {
     private LevelLoader() {
         try {
             packs = new Gson().fromJson(Gdx.files.internal("lvls/levels.json").reader(), Packs.class);
-            //System.out.println("Packs loaded!");
         } catch (Exception ex) {
-            //System.out.println("File levels.json not found!");
 
         }
     }
@@ -86,7 +84,7 @@ public class LevelLoader {
         return actorList;
     }
 
-    void reloadActorList() { //startNewLevel если отдельно взять метод
+    public void reloadActorList() { //startNewLevel если отдельно взять метод
         actorList = FlowRush.getGson().fromJson(level.actorListJson, new TypeToken<ArrayList<ArrayList<ActorInfo>>>() {
         }.getType());
     }
@@ -100,19 +98,15 @@ public class LevelLoader {
     }
 
     private void checkPackProgress() {
-        if (FlowRush.getSave().getLevelsProgress()[getPack() - 1] < FlowRush.getSave().getCurrentLvl()) { //здесь мы обновляем прогресс пака
-            //System.out.println("pack progress saved");
-            FlowRush.getSave().setLevelsProgress(getPack() - 1, getLvl());
+        if (FlowRush.getSave().getLevelsProgress(pack-1) < FlowRush.getSave().getCurrentLvl()) { //здесь мы обновляем прогресс пака
+            FlowRush.getSave().setLevelsProgress(pack - 1, getLvl());
         }
     }
 
-    void prevLvl() {
+    public void prevLvl() {
         lvl--;
-        //System.out.println("previous "+pack+"-pack, "+lvl+"-lvl.");
         level = levelPack.levels.get(lvl - 1);
-
         reloadActorList();
-
         saveToPrefs();
     }
 
