@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Timer;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
-import com.blackhornetworkshop.flowrush.model.LevelController;
+import com.blackhornetworkshop.flowrush.controller.LevelController;
 import com.blackhornetworkshop.flowrush.model.ui.UIPool;
 
 //Created by TScissors.

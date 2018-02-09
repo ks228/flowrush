@@ -22,7 +22,7 @@ import com.blackhornetworkshop.flowrush.controller.ScreenManager;
 import com.blackhornetworkshop.flowrush.controller.SourceChecker;
 import com.blackhornetworkshop.flowrush.model.HexActor;
 import com.blackhornetworkshop.flowrush.controller.HexController;
-import com.blackhornetworkshop.flowrush.model.LevelController;
+import com.blackhornetworkshop.flowrush.controller.LevelController;
 import com.blackhornetworkshop.flowrush.model.ui.UIPool;
 
 //Created by TScissors.

@@ -1,5 +1,7 @@
-package com.blackhornetworkshop.flowrush.model;
+package com.blackhornetworkshop.flowrush.controller;
 
+import com.blackhornetworkshop.flowrush.model.ActorInfo;
+import com.blackhornetworkshop.flowrush.model.Packs;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
 import com.google.gson.reflect.TypeToken;
 
@@ -72,7 +74,7 @@ public class LevelController {
         return actorList;
     }
 
-    static void reloadActorList() {
+    public static void reloadActorList() {
         FlowRush.logDebug("LevelController reloadActorList() method called");
         actorList = FlowRush.getGson().fromJson(level.actorListJson, new TypeToken<ArrayList<ArrayList<ActorInfo>>>() {}.getType());
     }
@@ -91,7 +93,7 @@ public class LevelController {
         }
     }
 
-    static void prevLvl() {
+    public static void prevLvl() {
         currentLevel--;
         level = levelPack.levels.get(currentLevel - 1);
         reloadActorList();

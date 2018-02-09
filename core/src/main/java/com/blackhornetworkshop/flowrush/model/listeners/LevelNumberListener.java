@@ -1,7 +1,7 @@
 package com.blackhornetworkshop.flowrush.model.listeners;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.blackhornetworkshop.flowrush.model.LevelController;
+import com.blackhornetworkshop.flowrush.controller.LevelController;
 import com.blackhornetworkshop.flowrush.controller.ScreenManager;
 
 //Created by TScissors

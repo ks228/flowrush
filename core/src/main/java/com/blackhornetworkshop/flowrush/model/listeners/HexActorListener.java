@@ -23,6 +23,7 @@ public class HexActorListener extends ClickListener {
     private RotateToAction rotateToAction1, rotateToAction2;
     private SequenceAction sequenceAction;
 
+
     public HexActorListener(HexActor actor) {
         this.actor = actor;
 
@@ -39,8 +40,8 @@ public class HexActorListener extends ClickListener {
         rotateToAction2 = new RotateToAction();
         rotateToAction2.setDuration(0.05f);
 
-        rotateToAction1.setRotation(actor.getAngle() - 10);
-        rotateToAction2.setRotation(actor.getAngle());
+        rotateToAction1.setRotation(angle - 10);
+        rotateToAction2.setRotation(angle);
 
         sequenceAction = new SequenceAction(rotateToAction1, rotateToAction2);
     }
@@ -93,12 +94,20 @@ public class HexActorListener extends ClickListener {
                 actor.addAction(rotateToAction);
 
             }
-
         }else{
-            sequenceAction.restart();
-            rotateToAction1.reset();
-            rotateToAction2.reset();
-            actor.addAction(sequenceAction);
+            if (actor.getActions().contains(sequenceAction, true)) {
+                actor.setRotation(angle);
+                sequenceAction.restart();
+                rotateToAction1.restart();
+                rotateToAction2.restart();
+                sequenceAction.addAction(rotateToAction1);
+                sequenceAction.addAction(rotateToAction2);
+            } else {
+                sequenceAction.restart();
+                rotateToAction1.restart();
+                rotateToAction2.restart();
+                actor.addAction(sequenceAction);
+            }
         }
 
         UIPool.getHexBackgroundActor().goAnim(actor.getX(),actor.getY());
