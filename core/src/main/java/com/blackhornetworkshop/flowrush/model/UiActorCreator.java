@@ -29,7 +29,7 @@ import static com.blackhornetworkshop.flowrush.model.FRConstants.*;
 
 public class UiActorCreator {
 
-    public static TextButton getTextButton(int type) { //актеры кнопки с текстом
+    public static TextButton getTextButton(int type) {
         TextButton textButton;
         switch (type) {
             case 1: //PLAY button
@@ -64,7 +64,7 @@ public class UiActorCreator {
                 textButton.addListener(new ButtonScaleListener(false) {
                     @Override
                     public void action(InputEvent event) {
-                        FlowRush.getAndroidHelper().openPlaymarket();
+                        FlowRush.getAndroidHelper().openPlayMarket();
                     }
                 });
                 return textButton;
@@ -107,7 +107,7 @@ public class UiActorCreator {
                         } else {
                             GameScreen.hideRateDialog();
                             if(RateDialogController.isIsFirstAnswerWasYes()){
-                                FlowRush.getAndroidHelper().openPlaymarket();
+                                FlowRush.getAndroidHelper().openPlayMarket();
                                 FlowRush.getPreferences().setShowRateDialog(false);
                                 FRFileHandler.savePreferences();
                             }else{
@@ -204,7 +204,7 @@ public class UiActorCreator {
         return textButton;
     }
 
-    public static TextButton getPackTextButton(int pack) { //актеры отвечающие за переход на нужный пак
+    public static TextButton getPackButton(int pack) {
         TextButton textButton;
 
         if (LevelController.getLevelPack(pack - 1).available) {
@@ -222,13 +222,11 @@ public class UiActorCreator {
 
         String packName = LevelController.getPackName(pack);
 
-        float up = SCREEN_HEIGHT * 0.98f - BUTTON_SIZE; //top margin
-        float down = BUTTON_SIZE + SCREEN_HEIGHT * 0.02f; //bottom margin
-        float packButtonHeight = (up - down) / 6;
-
         textButton.setText(packName);
-        textButton.setSize(SCREEN_WIDTH * 0.8f, packButtonHeight);
-        textButton.setPosition((SCREEN_WIDTH - textButton.getWidth()) / 2, up - ((up - down) - textButton.getHeight() * 5 - textButton.getHeight() * 0.1f * 4) / 2 - textButton.getHeight() * 0.1f * (pack - 1) - textButton.getHeight() * pack);
+        textButton.setSize(SCREEN_WIDTH * 0.8f, PACK_BUTTON_HEIGHT);
+        textButton.setPosition((SCREEN_WIDTH - textButton.getWidth()) / 2, PACK_GROUP_TOP_MARGIN -
+                ((PACK_GROUP_TOP_MARGIN - PACK_GROUP_BOTTOM_MARGIN) - PACK_BUTTON_HEIGHT * 5 - PACK_BUTTON_HEIGHT * 0.1f * 4) / 2 -
+                PACK_BUTTON_HEIGHT * 0.1f * (pack - 1) - PACK_BUTTON_HEIGHT * pack);
         textButton.setOrigin(Align.center);
         textButton.setTransform(true);
 
@@ -378,7 +376,7 @@ public class UiActorCreator {
         nextButton.addListener(new ButtonScaleListener(true) {
             @Override
             public void action(InputEvent event) {
-                if (LevelController.containsNext()) {
+                if (LevelController.nextLevelExist()) {
                     GameScreen.getInstance().startNewLevel();
                     ScreenManager.setGameMainScreen();
                 } else {
@@ -443,13 +441,13 @@ public class UiActorCreator {
     public static BackgroundActor getBackgroundActor(int type, boolean isDuplicate) {
         BackgroundActor backgroundActor;
         if (type == 1) {// left -> right
-            backgroundActor = new LeftBackgroundActor(FRAssetManager.getStripe(), isDuplicate ? 1f : 1.3f);
+            backgroundActor = new LeftBackgroundActor(FRAssetManager.getBackgroundStripe(), isDuplicate ? 1f : 1.3f);
         } else if (type == 2) { // down -> top
-            backgroundActor = new BottomBackgroundActor(FRAssetManager.getStripe(), isDuplicate ? 2f : 2.6f);
+            backgroundActor = new BottomBackgroundActor(FRAssetManager.getBackgroundStripe(), isDuplicate ? 2f : 2.6f);
         } else if (type == 3) { // right -> left
-            backgroundActor = new RightBackgroundActor(FRAssetManager.getStripe(), isDuplicate ? 1f : 1.3f);
+            backgroundActor = new RightBackgroundActor(FRAssetManager.getBackgroundStripe(), isDuplicate ? 1f : 1.3f);
         } else { // top -> down
-            backgroundActor = new TopBackgroundActor(FRAssetManager.getStripe(), isDuplicate ? 2f : 2.6f);
+            backgroundActor = new TopBackgroundActor(FRAssetManager.getBackgroundStripe(), isDuplicate ? 2f : 2.6f);
         }
         return backgroundActor;
     }

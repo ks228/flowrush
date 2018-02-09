@@ -31,6 +31,7 @@ public class FRAndroidHelper implements AndroidHelper {
 
     @Override
     public void sendMail(){
+        logDebug("AndroidHelper sendMail() method called");
         Intent intent = new Intent(Intent.ACTION_VIEW);
         Uri data = Uri.parse("mailto:blackhornet.w@gmail.com?subject=FlowRushFeedBack&body=");
         intent.setData(data);
@@ -38,6 +39,7 @@ public class FRAndroidHelper implements AndroidHelper {
     }
     @Override
     public void openFacebook(){
+        logDebug("AndroidHelper openFacebook() method called");
         try {
             app.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("fb://facewebmodal/f?href=" + fbUrl)));
         } catch (Exception e) {
@@ -47,6 +49,7 @@ public class FRAndroidHelper implements AndroidHelper {
 
     @Override
     public void openTwitter() {
+        logDebug("AndroidHelper openTwitter() method called");
         try {
             app.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("twitter://user?screen_name=blackhornet_w")));
         }catch (Exception e) {
@@ -56,6 +59,7 @@ public class FRAndroidHelper implements AndroidHelper {
 
     @Override
     public void openVK() {
+        logDebug("AndroidHelper openVK() method called");
         try {
             app.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("vkontakte://profile/-112124312")));
         } catch (Exception e) {
@@ -64,7 +68,8 @@ public class FRAndroidHelper implements AndroidHelper {
     }
 
     @Override
-    public void openPlaymarket() {
+    public void openPlayMarket() {
+        logDebug("AndroidHelper openPlayMarket() method called");
         try {
             app.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
         } catch (Exception e) {

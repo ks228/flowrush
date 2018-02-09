@@ -21,8 +21,7 @@ public class LevelController {
     }
 
     public static void setCurrentLevel(int currentPack, int currentLevel) {
-        //System.out.println(pck+" currentPack");
-        //System.out.println(lv+" currentLevel");
+        FlowRush.logDebug("LevelController.setCurrentLevel: pack-"+currentPack+" level-"+currentLevel);
         LevelController.currentPack = currentPack;
         LevelController.currentLevel = currentLevel;
 
@@ -30,51 +29,55 @@ public class LevelController {
         level = levelPack.levels.get(currentLevel - 1);
 
         reloadActorList();
-        saveToPrefs();
-        checkPackProgress();
+        saveProgress();
+        updatePackProgress();
     }
 
     public static void nextLvl() {
         currentLevel++;
-        //System.out.println("next "+currentPack+"-currentPack, "+currentLevel+"-currentLevel.");
         level = levelPack.levels.get(currentLevel - 1);
 
+        FlowRush.logDebug("LevelController.nextLevel: "+currentPack);
 
         reloadActorList();
-        saveToPrefs();
-        checkPackProgress();
+        saveProgress();
+        updatePackProgress();
     }
 
     public static void nextPack() {
         currentLevel = 1;
         currentPack++;
-        //System.out.println("next "+currentPack+"-currentPack, "+currentLevel+"-currentLevel.");
         levelPack = packs.packsArray.get(currentPack - 1);
         level = levelPack.levels.get(currentLevel - 1);
 
+        FlowRush.logDebug("LevelController.nextPack: "+currentPack);
+
         reloadActorList();
-        saveToPrefs();
+        saveProgress();
     }
 
-    private static void saveToPrefs() {
-        FlowRush.getSave().setCurrentPack(getPack());
+    private static void saveProgress() {
+        FlowRush.logDebug("LevelController saveProgress() method called");
+        FlowRush.getSave().setCurrentPack(getCurrentPack());
         FlowRush.getSave().setCurrentLvl(getCurrentLevel());
     }
 
-    public static boolean containsNext() {
+    public static boolean nextLevelExist() {
         return levelPack.levels.size() > currentLevel;
     }
+
+    public static boolean nextPackExist(){ return currentPack < 4;}
 
     public static ArrayList<ArrayList<ActorInfo>> getActorList() {
         return actorList;
     }
 
-    public static void reloadActorList() { //startNewLevel если отдельно взять метод
-        actorList = FlowRush.getGson().fromJson(level.actorListJson, new TypeToken<ArrayList<ArrayList<ActorInfo>>>() {
-        }.getType());
+    static void reloadActorList() {
+        FlowRush.logDebug("LevelController reloadActorList() method called");
+        actorList = FlowRush.getGson().fromJson(level.actorListJson, new TypeToken<ArrayList<ArrayList<ActorInfo>>>() {}.getType());
     }
 
-    public static int getPack() {
+    public static int getCurrentPack() {
         return currentPack;
     }
 
@@ -82,17 +85,18 @@ public class LevelController {
         return currentLevel;
     }
 
-    private static void checkPackProgress() {
-        if (FlowRush.getSave().getLevelsProgress(currentPack -1) < FlowRush.getSave().getCurrentLvl()) { //здесь мы обновляем прогресс пака
+    private static void updatePackProgress() {
+        if (FlowRush.getSave().getLevelsProgress(currentPack -1) < FlowRush.getSave().getCurrentLvl()) {
             FlowRush.getSave().setLevelsProgress(currentPack - 1, getCurrentLevel());
         }
     }
 
-    public static void prevLvl() {
+    static void prevLvl() {
         currentLevel--;
         level = levelPack.levels.get(currentLevel - 1);
         reloadActorList();
-        saveToPrefs();
+        saveProgress();
+        FlowRush.logDebug("LevelController.prevLvl: "+currentLevel);
     }
 
     public static Packs.LevelPack getLevelPack(int x) {

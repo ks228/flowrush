@@ -56,11 +56,11 @@ public class ButtonScaleListener extends ClickListener {
     public void action(InputEvent event) {
     }
 
-    protected void enableAnimationBack(){
+    void enableAnimationBack(){
         buttonScale2.setDuration(0.05f);
     }
 
-    protected void disableAnimationBack(){
+    void disableAnimationBack(){
         buttonScale2.setDuration(0);
     }
 }

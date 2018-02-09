@@ -1,6 +1,6 @@
 package com.blackhornetworkshop.flowrush.model.ui;
 
-//Created by TScissors. Актер фоновой анимации клетки
+//Created by TScissors.
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;

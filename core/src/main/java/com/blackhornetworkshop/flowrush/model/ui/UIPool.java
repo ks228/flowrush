@@ -76,7 +76,7 @@ public class UIPool {
     private static TextButton exitButton;
     private static TextButton levelsButton;
     private static Group packGroup;
-    private static Group levelGroup;
+
     /**
      * private TextButton removeAds;
      */
@@ -84,10 +84,8 @@ public class UIPool {
     //--------------------- GAME_MAIN
 
     // Pause menu elements
+    private static Group pauseGroup;
     private static SmallButtonActor pauseButton;
-    private static SmallButtonActor restartButton;
-    private static SmallButtonActor mainMenuButton;
-    private static SmallButtonActor backButton;
     private static Actor quadrantPauseBackground;
 
     // Level complete elements
@@ -110,7 +108,7 @@ public class UIPool {
 
         levelNumberActor = new Label("", FRAssetManager.getSkin(), "greyfont");
         levelNumberActor.setSize(FRConstants.BUTTON_SIZE, FRConstants.BUTTON_SIZE);
-        levelNumberActor.setPosition(Gdx.graphics.getWidth() - levelNumberActor.getWidth(), Gdx.graphics.getHeight()-levelNumberActor.getHeight());
+        levelNumberActor.setPosition(Gdx.graphics.getWidth() - levelNumberActor.getWidth(), Gdx.graphics.getHeight() - levelNumberActor.getHeight());
         levelNumberActor.setAlignment(Align.center);
 
         soundButton = UiActorCreator.getSmallButtonActor(5);
@@ -130,7 +128,7 @@ public class UIPool {
         menuLabel.setText("SUPPORT US");
 
         innerLayout = new Label("", FRAssetManager.getSkin(), "default");
-        innerLayout.setSize(Gdx.graphics.getWidth() * 0.9f, (((Gdx.graphics.getHeight() * 0.98f - FRConstants.BUTTON_SIZE)) + (FRConstants.BUTTON_SIZE) / 2) - (FRConstants.BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f)); // размеры up и down иннерскрин? высчитываем через высоту textButton любого выше высчитываем через высоту кнопки circle button back
+        innerLayout.setSize(Gdx.graphics.getWidth() * 0.9f, (((Gdx.graphics.getHeight() * 0.98f - FRConstants.BUTTON_SIZE)) + (FRConstants.BUTTON_SIZE) / 2) - (FRConstants.BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f)); // размеры PACK_GROUP_TOP_MARGIN и PACK_GROUP_BOTTOM_MARGIN иннерскрин? высчитываем через высоту textButton любого выше высчитываем через высоту кнопки circle button back
         innerLayout.setPosition((Gdx.graphics.getWidth() - innerLayout.getWidth()) / 2, FRConstants.BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f);
         innerLayout.setVisible(false);
 
@@ -139,7 +137,7 @@ public class UIPool {
         messageBackground.setAlignment(Align.top);
         messageBackground.setWrap(true);
 
-        labelContainer = new Container<Label>(messageBackground); //Контейнер нужен для того чтобы сделать перенос строки
+        labelContainer = new Container<>(messageBackground); //Контейнер нужен для того чтобы сделать перенос строки
         labelContainer.fill();
         labelContainer.setSize(innerLayout.getWidth() * 0.9f, (innerLayout.getHeight() - FRConstants.BUTTON_SIZE) * 0.95f);
         labelContainer.setPosition((Gdx.graphics.getWidth() - innerLayout.getWidth() * 0.9f) / 2, innerLayout.getY() + FRConstants.BUTTON_SIZE / 2 + (innerLayout.getHeight() - FRConstants.BUTTON_SIZE) * 0.05f / 2);
@@ -171,14 +169,13 @@ public class UIPool {
 
         packGroup = new Group();
         for (int x = 1; x < 6; x++) {
-            final int p = x;
-            TextButton packButton = UiActorCreator.getPackTextButton(p);
+            TextButton packButton = UiActorCreator.getPackButton(x);
             packGroup.addActor(packButton);
         }
         packGroup.setVisible(false);
 
         levelNumbersGroup = new Group();
-        levelNumbersGroupArray = new ArrayList();
+        levelNumbersGroupArray = new ArrayList<>();
         levelNumbersGroup.setVisible(false);
 
         for (int x = 1; x < 51; x++) {
@@ -220,10 +217,9 @@ public class UIPool {
         //---------------------------------- GAME_MAIN
 
         //Pause menu elements
-        restartButton = UiActorCreator.getSmallButtonActor(3);
-        mainMenuButton = UiActorCreator.getSmallButtonActor(4);
+        pauseGroup = new Group();
+
         pauseButton = UiActorCreator.getSmallButtonActor(1);
-        backButton = UiActorCreator.getSmallButtonActor(2);
 
         quadrantPauseBackground = new Actor() {
             @Override
@@ -240,12 +236,18 @@ public class UIPool {
         pauseBackground.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(ScreenManager.getCurrentScreen() == FRConstants.ScreenType.GAME_PAUSE){
+                if (ScreenManager.getCurrentScreen() == FRConstants.ScreenType.GAME_PAUSE) {
                     ScreenManager.setGameMainScreen();
                 }
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
+
+        pauseGroup.addActor(quadrantPauseBackground);
+        pauseGroup.addActor(UiActorCreator.getSmallButtonActor(4));
+        pauseGroup.addActor(UiActorCreator.getSmallButtonActor(2));
+        pauseGroup.addActor(UiActorCreator.getSmallButtonActor(3));
+        pauseGroup.addActor(soundButton);
 
         //Level complete elements
         nextLevelButton = UiActorCreator.getSmallButtonActor(12);
@@ -272,15 +274,15 @@ public class UIPool {
         rightButton = UiActorCreator.getTextButton(10);
     }
 
-    public static void getLevelNumbersGroup(int pack){
-        for (LevelNumberButton levelNumberButton: levelNumbersGroupArray){
+    public static void getLevelNumbersGroup(int pack) {
+        for (LevelNumberButton levelNumberButton : levelNumbersGroupArray) {
             levelNumberButton.setIsAvailable(levelNumberButton.getLevel() <= FlowRush.getSave().getLevelsProgress(pack - 1));
             levelNumberButton.setPack(pack);
         }
     }
 
     private static void setLevelNumberPosition(int number, Actor actor) {
-        int b = (int) Math.ceil(number/5.0);
+        int b = (int) Math.ceil(number / 5.0);
         int a = number - 1 - 5 * (b - 1);
 
         float xPos = LEVEL_NUMBER_GROUP_MARGIN_LEFT + LEVEL_NUMBER_PADDING * a + LEVEL_NUMBER_SIZE * a;
@@ -420,20 +422,13 @@ public class UIPool {
 
     //---------------------------------------------- Game screen elements
 
+
+    public static Group getPauseGroup() {
+        return pauseGroup;
+    }
+
     public static SmallButtonActor getPauseButton() {
         return pauseButton;
-    }
-
-    public static SmallButtonActor getRestartButton() {
-        return restartButton;
-    }
-
-    public static SmallButtonActor getMainMenuButton() {
-        return mainMenuButton;
-    }
-
-    public static SmallButtonActor getBackButton() {
-        return backButton;
     }
 
     public static Actor getQuadrantPauseBackground() {

@@ -2,7 +2,6 @@ package com.blackhornetworkshop.flowrush.view;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -26,24 +25,18 @@ import com.google.gson.Gson;
 public class FlowRush extends Game {
 
     private static final FlowRush instance = new FlowRush();
+
     private static AndroidHelper androidHelper;
     private static PlayServices playServices;
+    private static OneTouchProcessor oneTouchProcessor;
+    private static Gson gson;
 
-    //Stages
-    private SpriteBatch batch;
-    private Stage hexesStage, hudStage;
-
-    //Data
     private static GamePreferences preferences;
     private static SavedGame save;
 
-    // Input
-    private static OneTouchProcessor oneTouchProcessor;
+    private static SpriteBatch batch;
+    private static Stage hexesStage, hudStage;
 
-    //Utils
-    private static Gson gson;
-
-    //Primitives
     private static boolean isPlayServicesAvailable;
 
     public static FlowRush getInstance(){
@@ -65,27 +58,23 @@ public class FlowRush extends Game {
         logDebug("FlowRush is configured. With Play Services");
     }
 
+    @Override
     public void create() {
         logDebug("FlowRush onCreate() called");
 
         batch = new SpriteBatch();
 
-        //Stages
         ScreenViewport screenViewport = new ScreenViewport();
         hexesStage = new Stage(screenViewport, batch);
         hudStage = new Stage(screenViewport, batch);
 
-        //Input
         Gdx.input.setCatchBackKey(true);
         oneTouchProcessor = new OneTouchProcessor();
 
-        //Json
         gson = new Gson();
 
-        //Levels
         LevelController.setPacks(FRFileHandler.loadPacks());
 
-        //Preferences
         if (Gdx.files.local("preferences.json").exists()) {
             logDebug("Load an existing file preferences.json");
             preferences = FRFileHandler.loadPreferences();
@@ -94,7 +83,6 @@ public class FlowRush extends Game {
             preferences = new GamePreferences();
         }
 
-        //Save file
         if (Gdx.files.local("save.json").exists()) {
             androidHelper.logDebug("Load an existing file save.json");
             save = FRFileHandler.loadSavedGame();
@@ -111,9 +99,37 @@ public class FlowRush extends Game {
         ScreenManager.setLogoBHWScreen();
     }
 
-    public void unlockAchievement(int num) {
+    public static void checkAchievements() {
+        logDebug("FlowRush checkAchievements() method called");
+        for (int x = 0; x < 5; x++) {
+            if (!FlowRush.getSave().getAchievements(0) && FlowRush.getSave().getLevelsProgress(x) > 1) {
+                FlowRush.getInstance().unlockAchievement(1); // FIRST LEVEL IS DONE
+            }
+            if (!FlowRush.getSave().getAchievements(1) && ((x == 0 && FlowRush.getSave().getLevelsProgress(x) > 10) ||
+                    (x != 0 && FlowRush.getSave().getLevelsProgress(x) > 1))) {
+                FlowRush.getInstance().unlockAchievement(2); // FIRST LEVEL WITH A DOVE IS DONE
+            }
+        }
+
+        boolean isAllPacksDone = true;
+
+        for (int x = 0; x < 5; x++) { // CHECK PACKS PROGRESS
+            if (!FlowRush.getSave().isPackFinished(x)) {
+                isAllPacksDone = false;
+            } else {
+                if (!FlowRush.getSave().getAchievements(x + 2))
+                    FlowRush.getInstance().unlockAchievement(x + 3);
+            }
+        }
+
+        if (!FlowRush.getSave().getAchievements(7) & isAllPacksDone)
+            FlowRush.getInstance().unlockAchievement(8); // ALL PACKS ARE DONE
+    }
+
+    private void unlockAchievement(int num) {
         if (num > 0 && num < 9) {
             save.unlockAchievement(num - 1);
+            FlowRush.logDebug("Unlock achievement local: "+num);
             if (FlowRush.isPlayServicesAvailable() && playServices.isSignedIn()) {
                 playServices.unlockAchievement(num);
             }
@@ -133,7 +149,7 @@ public class FlowRush extends Game {
         return playServices;
     }
 
-    public SpriteBatch getBatch() {
+    public static SpriteBatch getBatch() {
         return batch;
     }
     public Stage getHexesStage() { return hexesStage; }
@@ -142,11 +158,13 @@ public class FlowRush extends Game {
     }
 
     public void pause() {
+        logDebug("FlowRush pause() method called");
         getScreen().pause();
         FRAssetManager.getBackgroundMusic().pause();
     }
 
     public void resume() {
+        logDebug("FlowRush resume() method called");
         getScreen().resume();
         if (preferences.isSoundOn()) FRAssetManager.getBackgroundMusic().play();
     }
@@ -160,6 +178,7 @@ public class FlowRush extends Game {
     }
 
     public void dispose() {
+        logDebug("FlowRush dispose() called");
         hexesStage.dispose();
         hudStage.dispose();
         batch.dispose();
@@ -172,8 +191,6 @@ public class FlowRush extends Game {
         FRAssetManager.getSkin().remove("fontMid", BitmapFont.class);
         FRAssetManager.getSkin().remove("fontSmall", BitmapFont.class);
         FRAssetManager.dispose();
-
-        logDebug("FlowRush dispose() called");
     }
     public static OneTouchProcessor getOneTouchProcessor(){return oneTouchProcessor;}
     public static GamePreferences getPreferences(){return preferences;}

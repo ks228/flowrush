@@ -10,6 +10,7 @@ import com.blackhornetworkshop.flowrush.model.PlayServices;
 import com.blackhornetworkshop.flowrush.controller.ScreenManager;
 import com.blackhornetworkshop.flowrush.model.FRConstants;
 import com.blackhornetworkshop.flowrush.model.SavedGame;
+import com.blackhornetworkshop.flowrush.model.ex.FlowRushException;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -76,11 +77,11 @@ public class FRPlayServices implements PlayServices {
             achievementsClient = Games.getAchievementsClient(app, googleAccount);
             FRAndroidHelper.getInstance().logDebug("User signed. Google account, snapshot client, achievements client are received");
         }
-        FRAndroidHelper.getInstance().logDebug("Play Services are configured");
     }
 
     @Override
     public void signIn() {
+        FRAndroidHelper.getInstance().logDebug("FRPlayServices signIn() method called");
         app.startActivityForResult(googleSignInClient.getSignInIntent(), FRConstants.RC_SIGN_IN);
     }
 
@@ -98,7 +99,7 @@ public class FRPlayServices implements PlayServices {
 
     @Override
     public void signOut() {
-        FRAndroidHelper.getInstance().logDebug("Google sign out started");
+        FRAndroidHelper.getInstance().logDebug("FRPlayServices signOut() method called");
         googleSignInClient.signOut().addOnCompleteListener(app,
                 new OnCompleteListener<Void>() {
                     @Override
@@ -120,6 +121,7 @@ public class FRPlayServices implements PlayServices {
 
     @Override
     public void showSavedSnapshots() {
+        FRAndroidHelper.getInstance().logDebug("FRPlayServices showSavedSnapshots() method called");
         if (snapshotsClient == null)
             snapshotsClient = Games.getSnapshotsClient(app, googleAccount);
         snapshotsClient.getSelectSnapshotIntent("Flow Rush saved games", true, true, 5).addOnCompleteListener(new OnCompleteListener<Intent>() {
@@ -227,7 +229,7 @@ public class FRPlayServices implements PlayServices {
 
         //check achievements
         for (int x = 0; x < 10; x++) {
-            if (serverSavedGame.getAchievements()[x] && !conflictSavedGame.getAchievements()[x]) {
+            if (serverSavedGame.getAchievements(x) && !conflictSavedGame.getAchievements(x)) {
                 conflictSavedGame.unlockAchievement(x);
                 FRAndroidHelper.getInstance().logDebug("Updating achievement " + x + " in conflict save");
             } else {
@@ -300,6 +302,7 @@ public class FRPlayServices implements PlayServices {
 
     @Override
     public void showAchievements() {
+        FRAndroidHelper.getInstance().logDebug("FRPlayServices showAchievements() method called");
         achievementsClient.getAchievementsIntent()
                 .addOnSuccessListener(new OnSuccessListener<Intent>() {
                     @Override
@@ -311,7 +314,7 @@ public class FRPlayServices implements PlayServices {
 
     @Override
     public void unlockAchievement(int num) {
-        FRAndroidHelper.getInstance().logDebug("Unlock achievement number " + num);
+        FRAndroidHelper.getInstance().logDebug("Unlock Play Services achievement: " + num);
         String s;
         switch (num) {
             case 1:
@@ -339,8 +342,7 @@ public class FRPlayServices implements PlayServices {
                 s = app.getString(R.string.achievement_the_end);
                 break;
             default:
-                s = null;
-                break;
+                throw new FlowRushException("No such achievement!");
         }
         achievementsClient.unlock(s);
     }

@@ -3,25 +3,17 @@ package com.blackhornetworkshop.flowrush.view.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.blackhornetworkshop.flowrush.model.FRAssetManager;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
 import com.blackhornetworkshop.flowrush.controller.ScreenManager;
 
-//Created by TScissors. Отдельный скрин для отображения лого компании и лого игры
+//Created by TScissors.
 
 public class LogoScreen implements Screen, FRScreen {
 
     private static LogoScreen instance;
 
-    //Graphics
-    private Sprite logoBHW;
-    private Sprite logoFR;
-    private SpriteBatch batch;
-
-    //Primitives
     private static long startTime;
     private static boolean isFRlogo;
     private boolean isActive;
@@ -35,9 +27,7 @@ public class LogoScreen implements Screen, FRScreen {
 
     @Override
     public void show() {
-        batch = FlowRush.getInstance().getBatch();
-        logoBHW = FRAssetManager.getLogoBHW();
-        logoFR = FRAssetManager.getLogoFR();
+        FlowRush.logDebug("LogoScreen show() method called");
         Gdx.input.setInputProcessor(FlowRush.getOneTouchProcessor());
         isActive = true;
     }
@@ -57,10 +47,10 @@ public class LogoScreen implements Screen, FRScreen {
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        batch.begin();
-        if(isFRlogo) logoFR.draw(batch);
-        else logoBHW.draw(batch);
-        batch.end();
+        FlowRush.getBatch().begin();
+        if(isFRlogo) FRAssetManager.getLogoFR().draw(FlowRush.getBatch());
+        else FRAssetManager.getLogoBHW().draw(FlowRush.getBatch());
+        FlowRush.getBatch().end();
 
         if (TimeUtils.nanoTime()-startTime > 1500000000L && !isFRlogo) {
             ScreenManager.setLogoFRScreen();
@@ -78,19 +68,23 @@ public class LogoScreen implements Screen, FRScreen {
 
     @Override
     public void pause() {
+        FlowRush.logDebug("LogoScreen pause() method called");
     }
 
     @Override
     public void resume() {
+        FlowRush.logDebug("LogoScreen resume() method called");
     }
 
     @Override
     public void hide() {
+        FlowRush.logDebug("LogoScreen hide() method called");
         isActive = false;
     }
 
     @Override
     public void dispose() {
+        FlowRush.logDebug("LogoScreen dispose() method called");
     }
 
     @Override

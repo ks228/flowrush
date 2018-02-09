@@ -4,8 +4,8 @@ package com.blackhornetworkshop.flowrush.model;
 
 public class ActorInfo {
 
-    private int index; //порядковый индекс текстуры
-    private int position; // позиция для выставления angle
+    private int index; //texture index
+    private int position; // angle
     private int include; // 1 - source. 2 - receiver. 3 - dove
 
     public void setIndex(int index){

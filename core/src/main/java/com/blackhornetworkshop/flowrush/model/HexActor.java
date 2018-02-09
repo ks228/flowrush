@@ -1,6 +1,6 @@
 package com.blackhornetworkshop.flowrush.model;
 
-//Created by TScissors. Actor клетки
+//Created by TScissors.
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;

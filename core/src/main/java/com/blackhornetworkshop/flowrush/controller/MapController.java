@@ -32,7 +32,7 @@ public class MapController {
 
     private static final Group mapGroup = new Group();
     private static final Group hexGroup = new Group();
-    private static final ArrayList<HexActor> specialActors = new ArrayList<HexActor>();
+    private static final ArrayList<HexActor> specialActors = new ArrayList<>();
 
     private static int numOfReceivers = 0;
 
@@ -60,6 +60,8 @@ public class MapController {
     }
 
     public static void createNewMapGroup(ArrayList<ArrayList<ActorInfo>> list) {
+        FlowRush.logDebug("MapController createNewMapGroup() method called");
+
         mapGroup.clear();
         hexGroup.clear();
         hexHashMap.clear();
@@ -77,10 +79,9 @@ public class MapController {
             }
         }
 
-        //блок нужен для вычисления размеров поля и правильной его верстки
         float coefficient = 0;
         boolean minus = true;
-        for (int x = 0; x < list.size(); x++) {//проверяем нет ли в первом ряду пустышек, и если первый ряд полностью состоит из них - спускаемся на пол???? гекса.
+        for (int x = 0; x < list.size(); x++) {
             if (list.get(x).get(0).getIndex() != 0 && x % 2 != 0) {
                 minus = false;
             }
@@ -110,7 +111,6 @@ public class MapController {
     private static void createActor(int x, int y, ArrayList<ArrayList<ActorInfo>> list) {
         ActorInfo actorInfo = list.get(x).get(y);
 
-        //Если индекс из actorInfo XY будет равен 0 актер не будет создан
         if (actorInfo.getIndex() != 0) {
             setPosXY(x, y);
 
@@ -144,7 +144,7 @@ public class MapController {
 
             HexActor actor = new HexActor(actorInfo.getIndex(), actorInfo.getInclude(), spriteOff, spriteOn, actorInfo.getPosition(), x, y, createSourceArray(actorInfo.getIndex()));
 
-            for (int a = 0; a < actor.getRotatePosition(); a++) { //смещаем sources на количество поворотов "position"
+            for (int a = 0; a < actor.getRotatePosition(); a++) {
                 actor.moveSources();
             }
 
@@ -156,10 +156,7 @@ public class MapController {
 
             actor.setRotation(actorInfo.getPosition() * (-60));
 
-            //REFACTOR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            actor.setName(x + "" + y); //имя необходимо для точного вычисления "координат" сетки из шестиугольников, в SourceChecker // FIND ANOTHER METHOD!
-            //REFACTOR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
+            actor.getName();
             actor.setBounds(xPos, yPos, FRConstants.HEX_WIDTH, FRConstants.HEX_HEIGHT);
             actor.setOrigin(Align.center);
 
@@ -201,7 +198,7 @@ public class MapController {
         }
     }
 
-    public static HexActor findActor(int index) {
+    static HexActor findActor(int index) {
         return hexHashMap.get(index);
     }
 

@@ -11,7 +11,7 @@ import com.blackhornetworkshop.flowrush.model.HexActor;
 import com.blackhornetworkshop.flowrush.controller.HexController;
 import com.blackhornetworkshop.flowrush.model.ui.UIPool;
 
-//Created by TScissors. Класс слушатель классов HexActor, очищает, поворачивает, изменяет тип, запускает анимацию фона клетки
+//Created by TScissors.
 
 public class HexActorListener extends ClickListener {
 

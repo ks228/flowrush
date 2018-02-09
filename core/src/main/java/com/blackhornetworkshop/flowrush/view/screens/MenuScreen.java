@@ -12,7 +12,7 @@ import com.blackhornetworkshop.flowrush.view.FlowRush;
 import com.blackhornetworkshop.flowrush.model.LevelController;
 import com.blackhornetworkshop.flowrush.model.ui.UIPool;
 
-//Created by TScissors. Экран меню игры
+//Created by TScissors.
 
 public class MenuScreen implements Screen, FRScreen {
 
@@ -29,20 +29,19 @@ public class MenuScreen implements Screen, FRScreen {
 
     @Override
     public void show() {
-        isActive = true;
         FlowRush.logDebug("Main menu screen show() method called");
 
-        //Начальный уровень берем из файла сохранения
-        LevelController.setCurrentLevel(FlowRush.getSave().getCurrentPack(), FlowRush.getSave().getCurrentLvl());
+        isActive = true;
 
-        //Создаем сцену каждый раз при переключении на экран
+        Gdx.gl.glClearColor(0.26f, 0.64f, 0.87f, 1);
+
         hudStage = FlowRush.getInstance().getHudStage();
 
-        //Common sound button
+        LevelController.setCurrentLevel(FlowRush.getSave().getCurrentPack(), FlowRush.getSave().getCurrentLvl());
+
         UIPool.getSoundButton().setPosition(Gdx.graphics.getHeight()*0.02f, Gdx.graphics.getHeight()*0.02f);
         UIPool.getSoundButton().setVisible(true);
 
-        //Добавляем всех актеров на сцену
         hudStage.addActor(UIPool.getTriangleBackground());
         hudStage.addActor(UIPool.getTriangleBackgroundTop());
         hudStage.addActor(UIPool.getBackgroundAnimation());
@@ -67,7 +66,6 @@ public class MenuScreen implements Screen, FRScreen {
         hudStage.addActor(UIPool.getCloseButton());
         hudStage.addActor(UIPool.getMenuLabel());
 
-        //Google Play
         if(FlowRush.isPlayServicesAvailable()) {
             hudStage.addActor(UIPool.getGooglePlayButton());
             hudStage.addActor(UIPool.getSignInButton());
@@ -75,10 +73,6 @@ public class MenuScreen implements Screen, FRScreen {
             hudStage.addActor(UIPool.getShowSnapshotsButton());
             hudStage.addActor(UIPool.getShowAchievementsButton());
         }
-
-        //Заливаем фон
-        Gdx.gl.glClearColor(0.26f, 0.64f, 0.87f, 1);
-
 
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(0, FlowRush.getOneTouchProcessor());
@@ -92,6 +86,37 @@ public class MenuScreen implements Screen, FRScreen {
         FlowRush.logDebug("Main menu screen hide() method called");
         hudStage.clear();
         isActive = false;
+    }
+
+    public void setMainMenuScreen(){
+        UIPool.getMenuLabel().setVisible(false);
+        UIPool.getLevelNumbersGroup().setVisible(false);
+        UIPool.getInnerLayout().setVisible(false);
+        UIPool.getCloseButton().setVisible(false);
+        UIPool.getMessageBackground().setVisible(false);
+        UIPool.getPackGroup().setVisible(false);
+        UIPool.getSupportUsButton().setVisible(false);
+        UIPool.getRateUsButton().setVisible(false);
+        UIPool.getFeedButton().setVisible(false);
+        UIPool.getSocialNetworkBackground().setVisible(false);
+        /**removeAds.setVisible(false);*/
+        UIPool.getTwitterButton().setVisible(false);
+        UIPool.getFacebookButton().setVisible(false);
+        UIPool.getVkButton().setVisible(false);
+
+        if(FlowRush.isPlayServicesAvailable()) {
+            UIPool.getGooglePlayButton().setVisible(true);
+            UIPool.getSignInButton().setVisible(false);
+            UIPool.getShowSnapshotsButton().setVisible(false);
+            UIPool.getShowAchievementsButton().setVisible(false);
+            UIPool.getSignOutButton().setVisible(false);
+        }
+
+        UIPool.getPlayButton().setVisible(true);
+        UIPool.getLevelsButton().setVisible(true);
+        UIPool.getSoundButton().setVisible(true);
+        UIPool.getAuthorsButton().setVisible(true);
+        UIPool.getSupportUsSmallButton().setVisible(true);
     }
 
     public void setLevelChoiceScreen(int pack){
@@ -118,7 +143,6 @@ public class MenuScreen implements Screen, FRScreen {
         UIPool.getMenuLabel().setText("SUPPORT US");
 
         UIPool.getMessageBackground().setVisible(true);
-        //supportUsLabel.setVisible(true);
         UIPool.getSocialNetworkBackground().setVisible(true);
         /**removeAds.setVisible(true);*/
         UIPool.getTwitterButton().setVisible(true);
@@ -193,42 +217,12 @@ public class MenuScreen implements Screen, FRScreen {
 
     @Override
     public void pause() {
+        FlowRush.logDebug("Main screen pause() method called");
     }
 
     @Override
     public void resume() {
-
-    }
-
-    public void setMainMenuScreen(){
-        UIPool.getMenuLabel().setVisible(false);
-        UIPool.getLevelNumbersGroup().setVisible(false);
-        UIPool.getInnerLayout().setVisible(false);
-        UIPool.getCloseButton().setVisible(false);
-        UIPool.getMessageBackground().setVisible(false);
-        UIPool.getPackGroup().setVisible(false);
-        UIPool.getSupportUsButton().setVisible(false);
-        UIPool.getRateUsButton().setVisible(false);
-        UIPool.getFeedButton().setVisible(false);
-        UIPool.getSocialNetworkBackground().setVisible(false);
-        /**removeAds.setVisible(false);*/
-        UIPool.getTwitterButton().setVisible(false);
-        UIPool.getFacebookButton().setVisible(false);
-        UIPool.getVkButton().setVisible(false);
-
-        if(FlowRush.isPlayServicesAvailable()) {
-            UIPool.getGooglePlayButton().setVisible(true);
-            UIPool.getSignInButton().setVisible(false);
-            UIPool.getShowSnapshotsButton().setVisible(false);
-            UIPool.getShowAchievementsButton().setVisible(false);
-            UIPool.getSignOutButton().setVisible(false);
-        }
-
-        UIPool.getPlayButton().setVisible(true);
-        UIPool.getLevelsButton().setVisible(true);
-        UIPool.getSoundButton().setVisible(true);
-        UIPool.getAuthorsButton().setVisible(true);
-        UIPool.getSupportUsSmallButton().setVisible(true);
+        FlowRush.logDebug("Main screen resume() method called");
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.blackhornetworkshop.flowrush.model.ui;
 
-//Created by TScissors. Актер отображающий верхний гекс и надпись пак пройден
+//Created by TScissors.
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;

@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RotateByAction;
 
-//Created by TScissors. Актер отображающий нижний гекс и pack complete
+//Created by TScissors.
 
 public class PackCompleteLowerHex extends Actor {
     private Sprite spriteBack;

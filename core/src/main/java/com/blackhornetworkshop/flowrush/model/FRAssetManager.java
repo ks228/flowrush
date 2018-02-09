@@ -17,7 +17,6 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.blackhornetworkshop.flowrush.model.FRConstants;
 import com.blackhornetworkshop.flowrush.model.ex.FlowRushException;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
 
@@ -38,11 +37,11 @@ public class FRAssetManager {
     private static Music backgroundMusic;
 
     //Sprites
-    private static TiledDrawable spriteBack;
+    private static TiledDrawable backgroundDot;
     private static Sprite logoBHW;
     private static Sprite logoFR;
     private static Sprite quadrantSprite;
-    private static Sprite stripe, soundOn, soundOff;
+    private static Sprite backgroundStripe, soundOn, soundOff;
     private static Sprite hexBackgroundOffWithSource, hexBackgroundOn;
     private static Sprite hexBackgroundOff, hexBackgroundOnWithSource;
     private static Sprite iconSource;
@@ -54,6 +53,8 @@ public class FRAssetManager {
     private FRAssetManager(){}
 
     public static void loadAssets(){
+        FlowRush.logDebug("FRAssetManager loadAssets() method called");
+
         assetManagerLoad();
 
         skin = manager.get("ui/skin.json");
@@ -92,17 +93,17 @@ public class FRAssetManager {
         backgroundWhite = atlas.createSprite("back_white");
 
         if(Gdx.graphics.getWidth()<500) {
-            spriteBack = new TiledDrawable(atlas.findRegion("point"));
-            stripe = atlas.createSprite("animation");
+            backgroundDot = new TiledDrawable(atlas.findRegion("point"));
+            backgroundStripe = atlas.createSprite("animation");
         }else if(Gdx.graphics.getWidth()<900){
-            spriteBack = new TiledDrawable(atlas.findRegion("point2"));
-            stripe = atlas.createSprite("animation2");
+            backgroundDot = new TiledDrawable(atlas.findRegion("point2"));
+            backgroundStripe = atlas.createSprite("animation2");
         }else if(Gdx.graphics.getWidth()<1300){
-            spriteBack = new TiledDrawable(atlas.findRegion("point3"));
-            stripe = atlas.createSprite("animation3");
+            backgroundDot = new TiledDrawable(atlas.findRegion("point3"));
+            backgroundStripe = atlas.createSprite("animation3");
         }else{
-            spriteBack = new TiledDrawable(atlas.findRegion("point4"));
-            stripe = atlas.createSprite("animation4");
+            backgroundDot = new TiledDrawable(atlas.findRegion("point4"));
+            backgroundStripe = atlas.createSprite("animation4");
         }
 
         logoBHW = atlas.createSprite("h_logo");
@@ -159,16 +160,16 @@ public class FRAssetManager {
         BitmapFont fontLarge = manager.get("fontLarge.ttf");
         BitmapFont fontMid = manager.get("fontMid.ttf");
         BitmapFont fontSmall = manager.get("fontSmall.ttf");
-        ObjectMap<String, Object> oMap = new ObjectMap<String, Object>();
+        ObjectMap<String, Object> oMap = new ObjectMap<>();
         oMap.put("fontLarge", fontLarge);
         oMap.put("fontMid", fontMid);
         oMap.put("fontSmall", fontSmall);
-        manager.load("ui/skin.json", Skin.class, new SkinLoader.SkinParameter("texture/atlas.atlas", oMap));      //Загружаем СКИН и с ним атлас интерфейса
+        manager.load("ui/skin.json", Skin.class, new SkinLoader.SkinParameter("texture/atlas.atlas", oMap));
 
-        manager.load("sound/tap.ogg", Sound.class); //Загружаем звук тапа
-        manager.load("sound/lvlcomplete.ogg", Sound.class); //Звук лвлкомплет
-        manager.load("sound/background.ogg", Music.class); //Загружаем фоновую музыку
-        manager.load("sound/packcomplete.ogg", Sound.class); //Звук паккомплит
+        manager.load("sound/tap.ogg", Sound.class);
+        manager.load("sound/lvlcomplete.ogg", Sound.class);
+        manager.load("sound/background.ogg", Music.class);
+        manager.load("sound/packcomplete.ogg", Sound.class);
 
         manager.finishLoading();
     }
@@ -203,16 +204,16 @@ public class FRAssetManager {
 
     //Sprites
 
-    public static Sprite getSoundOff() {
+    static Sprite getSoundOff() {
         return soundOff;
     }
 
-    public static Sprite getSoundOn() {
+    static Sprite getSoundOn() {
         return soundOn;
     }
 
-    public static TiledDrawable getSpriteBack() {
-        return spriteBack;
+    public static TiledDrawable getBackgroundDot() {
+        return backgroundDot;
     }
 
     public static Sprite getHexBackgroundOffWithSource() {
@@ -258,8 +259,8 @@ public class FRAssetManager {
         return lockSprite;
     }
 
-    public static Sprite getStripe() {
-        return stripe;
+    static Sprite getBackgroundStripe() {
+        return backgroundStripe;
     }
 
     public static Sprite getQuadrantSprite() {

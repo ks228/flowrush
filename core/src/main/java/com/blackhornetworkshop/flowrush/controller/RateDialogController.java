@@ -3,6 +3,7 @@ package com.blackhornetworkshop.flowrush.controller;
 //Created by TScissors.
 
 import com.blackhornetworkshop.flowrush.model.ui.UIPool;
+import com.blackhornetworkshop.flowrush.view.FlowRush;
 
 public class RateDialogController {
 
@@ -10,6 +11,7 @@ public class RateDialogController {
     private static boolean isFirstAnswerWasYes = true;
 
     public static void reset(){
+        FlowRush.logDebug("RateDialogController reset() method called");
         isFirstAnswer = true;
         isFirstAnswer = true;
         UIPool.getDialogBackground().setText("ENJOYING  FLOW RUSH?");

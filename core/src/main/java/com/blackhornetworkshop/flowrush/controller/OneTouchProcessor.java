@@ -8,7 +8,7 @@ import com.blackhornetworkshop.flowrush.model.FRAssetManager;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
 import com.blackhornetworkshop.flowrush.model.ui.UIPool;
 
-//Created by TScissors. Disables multitouch, intercepts back key
+//Created by TScissors.
 
 public class OneTouchProcessor implements InputProcessor {
 

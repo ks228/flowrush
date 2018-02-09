@@ -2,17 +2,17 @@ package com.blackhornetworkshop.flowrush.model;
 
 import java.util.ArrayList;
 
-//Created by TScissors. Класс для хранения всех паков и информации о них.
+//Created by TScissors.
 
 public class Packs {
-    public ArrayList<LevelPack> packsArray = new ArrayList(); //хранит паки
+    public ArrayList<LevelPack> packsArray = new ArrayList<>();
 
-    public class LevelPack { //хранит уровни пака
+    public class LevelPack {
         public float price;
         public boolean available;
         public ArrayList<Packs.Level> levels;
     }
-    public class Level { //хранит ActorList и номер уровня
+    public class Level {
         public String actorListJson;
     }
 }

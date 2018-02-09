@@ -1,13 +1,13 @@
 package com.blackhornetworkshop.flowrush.model;
 
-//Created by TScissors. Интерфейс для поддержки методов AndroidApplication
+//Created by TScissors.
 
 public interface AndroidHelper {
     void sendMail();
     void openFacebook();
     void openTwitter();
     void openVK();
-    void openPlaymarket();
+    void openPlayMarket();
     void logError(String msg, Throwable tr);
     void logDebug(String msg);
 }

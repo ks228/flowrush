@@ -27,16 +27,13 @@ public class AndroidLauncher extends AndroidApplication {
         loadingDialog.setCancelable(false);
         loadingDialog.setCanceledOnTouchOutside(false);
 
-        //Prepare app
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
         boolean isPlayServicesAvailable = FRPlayServices.isPlayServicesAvailable(this);
 
-        //AndroidHelper initialization
         FRAndroidHelper.getInstance().setup(this);
 
-        //PlayServices initialization
         if(isPlayServicesAvailable) {
             FRAndroidHelper.getInstance().logDebug("Play Services are available");
             FRPlayServices.getInstance().setup(this);
@@ -44,13 +41,10 @@ public class AndroidLauncher extends AndroidApplication {
             FRAndroidHelper.getInstance().logDebug("Play Services are not available");
         }
 
-        //FlowRush initialization
         if(isPlayServicesAvailable) FlowRush.getInstance().setup(FRAndroidHelper.getInstance(), FRPlayServices.getInstance());
         else FlowRush.getInstance().setup(FRAndroidHelper.getInstance());
         FRAndroidHelper.getInstance().logDebug("FlowRush is initialized");
 
-
-        //Layouts
         RelativeLayout mainLayout = (RelativeLayout)getLayoutInflater().inflate(R.layout.main_layout, null);
         View libGDXLayout = initializeForView(FlowRush.getInstance(), getConfig());
         mainLayout.addView(libGDXLayout);
