@@ -1,7 +1,7 @@
 package com.blackhornetworkshop.flowrush.model.listeners;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.blackhornetworkshop.flowrush.controller.LevelLoader;
+import com.blackhornetworkshop.flowrush.model.LevelController;
 import com.blackhornetworkshop.flowrush.controller.ScreenManager;
 
 //Created by TScissors
@@ -19,7 +19,7 @@ public class LevelNumberListener extends ButtonScaleListener {
     @Override
     public void action(InputEvent event) {
         if(isAvailable){
-            LevelLoader.getInstance().setLvl(pack, level);
+            LevelController.setCurrentLevel(pack, level);
             ScreenManager.setGameMainScreen();
         }
     }

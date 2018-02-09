@@ -1,4 +1,4 @@
-package com.blackhornetworkshop.flowrush.controller;
+package com.blackhornetworkshop.flowrush.model;
 
 //Created by TScissors. Интерфейс для поддержки методов AndroidApplication
 

@@ -3,7 +3,7 @@ package com.blackhornetworkshop.flowrush.model.ui;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.blackhornetworkshop.flowrush.controller.FRAssetManager;
+import com.blackhornetworkshop.flowrush.model.FRAssetManager;
 import com.blackhornetworkshop.flowrush.model.listeners.LevelNumberListener;
 
 //Created by TScissors

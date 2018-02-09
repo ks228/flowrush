@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
-import com.blackhornetworkshop.flowrush.controller.PlayServices;
+import com.blackhornetworkshop.flowrush.model.PlayServices;
 import com.blackhornetworkshop.flowrush.controller.ScreenManager;
 import com.blackhornetworkshop.flowrush.model.FRConstants;
 import com.blackhornetworkshop.flowrush.model.SavedGame;

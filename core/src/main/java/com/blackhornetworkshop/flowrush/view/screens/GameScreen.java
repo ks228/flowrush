@@ -14,15 +14,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import com.blackhornetworkshop.flowrush.controller.RateDialogController;
-import com.blackhornetworkshop.flowrush.controller.FRAssetManager;
+import com.blackhornetworkshop.flowrush.model.FRAssetManager;
 import com.blackhornetworkshop.flowrush.controller.MapController;
 import com.blackhornetworkshop.flowrush.model.FRConstants;
+import com.blackhornetworkshop.flowrush.model.FRFileHandler;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
 import com.blackhornetworkshop.flowrush.controller.ScreenManager;
 import com.blackhornetworkshop.flowrush.controller.SourceChecker;
 import com.blackhornetworkshop.flowrush.model.HexActor;
 import com.blackhornetworkshop.flowrush.controller.HexController;
-import com.blackhornetworkshop.flowrush.controller.LevelLoader;
+import com.blackhornetworkshop.flowrush.model.LevelController;
 import com.blackhornetworkshop.flowrush.model.ui.UIPool;
 
 //Created by TScissors.
@@ -137,16 +138,16 @@ public class GameScreen implements Screen, FRScreen {
 
     public void startNewLevel() {
 
-        UIPool.getLevelNumberActor().setText("" + LevelLoader.getInstance().getLvl());
+        UIPool.getLevelNumberActor().setText("" + LevelController.getCurrentLevel());
 
-        MapController.createNewMapGroup(LevelLoader.getInstance().getActorList());
+        MapController.createNewMapGroup(LevelController.getActorList());
 
         //обновляем чекер
         SourceChecker.getInstance().initialization();
         SourceChecker.getInstance().update();
 
         //PackComplete создается только при условии что уровень последний
-        if (!LevelLoader.getInstance().containsNext()) {
+        if (!LevelController.containsNext()) {
             enablePackCompleteGroup();
         }
 
@@ -154,8 +155,8 @@ public class GameScreen implements Screen, FRScreen {
     }
 
     private void checkAchievements() {
-        int currentLevel = LevelLoader.getInstance().getLvl();
-        int currentPack = LevelLoader.getInstance().getPack();
+        int currentLevel = LevelController.getCurrentLevel();
+        int currentPack = LevelController.getPack();
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! REFACTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         if (currentLevel == 1 && !FlowRush.getSave().getAchievements()[0]) {//прошел первый уровень
@@ -326,14 +327,14 @@ public class GameScreen implements Screen, FRScreen {
         checkAchievements();
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! REFACTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        if (LevelLoader.getInstance().containsNext()) { //если следующий уровень существует в паке то переключаем его тут
-            LevelLoader.getInstance().nextLvl();
-            FlowRush.getSave().setCurrentLvl(LevelLoader.getInstance().getLvl());
-            FlowRush.getInstance().saveSaveFile();
+        if (LevelController.containsNext()) { //если следующий уровень существует в паке то переключаем его тут
+            LevelController.nextLvl();
+            FlowRush.getSave().setCurrentLvl(LevelController.getCurrentLevel());
+            FRFileHandler.saveGame();
         } else { //если уровня нет, проверяем доступность следующего пака и тогда переключаем его
-            if (LevelLoader.getInstance().getLevelPack(LevelLoader.getInstance().getPack()).available) {//next pack available
-                LevelLoader.getInstance().nextPack();
-                FlowRush.getInstance().saveSaveFile();
+            if (LevelController.getLevelPack(LevelController.getPack()).available) {//next pack available
+                LevelController.nextPack();
+                FRFileHandler.saveGame();
                 UIPool.getPackCompleteNextPackButton().setName("visible");
             }
         }

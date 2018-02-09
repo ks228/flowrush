@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Timer;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
-import com.blackhornetworkshop.flowrush.controller.LevelLoader;
+import com.blackhornetworkshop.flowrush.model.LevelController;
 import com.blackhornetworkshop.flowrush.model.ui.UIPool;
 
 //Created by TScissors. Экран меню игры
@@ -33,7 +33,7 @@ public class MenuScreen implements Screen, FRScreen {
         FlowRush.logDebug("Main menu screen show() method called");
 
         //Начальный уровень берем из файла сохранения
-        LevelLoader.getInstance().setLvl(FlowRush.getSave().getCurrentPack(), FlowRush.getSave().getCurrentLvl());
+        LevelController.setCurrentLevel(FlowRush.getSave().getCurrentPack(), FlowRush.getSave().getCurrentLvl());
 
         //Создаем сцену каждый раз при переключении на экран
         hudStage = FlowRush.getInstance().getHudStage();

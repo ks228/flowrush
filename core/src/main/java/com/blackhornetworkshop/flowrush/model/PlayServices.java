@@ -1,9 +1,8 @@
-package com.blackhornetworkshop.flowrush.controller;
+package com.blackhornetworkshop.flowrush.model;
 
 //Created by TScissors.
 
-public interface PlayServices
-{
+public interface PlayServices {
     void signIn();
     void signOut();
     boolean isSignedIn();

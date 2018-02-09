@@ -10,8 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.RotateByAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
-import com.blackhornetworkshop.flowrush.controller.FRAssetManager;
-import com.blackhornetworkshop.flowrush.controller.LevelLoader;
 import com.blackhornetworkshop.flowrush.controller.RateDialogController;
 import com.blackhornetworkshop.flowrush.controller.ScreenManager;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
@@ -111,7 +109,7 @@ public class UiActorCreator {
                             if(RateDialogController.isIsFirstAnswerWasYes()){
                                 FlowRush.getAndroidHelper().openPlaymarket();
                                 FlowRush.getPreferences().setShowRateDialog(false);
-                                FlowRush.getInstance().savePrefsFile();
+                                FRFileHandler.savePreferences();
                             }else{
                                 FlowRush.getAndroidHelper().sendMail();
                             }
@@ -129,7 +127,7 @@ public class UiActorCreator {
                         } else {
                             if(!RateDialogController.isIsFirstAnswerWasYes()){
                                 FlowRush.getPreferences().setShowRateDialog(false);
-                                FlowRush.getInstance().savePrefsFile();
+                                FRFileHandler.savePreferences();
                             }
                             GameScreen.hideRateDialog();
                         }
@@ -209,7 +207,7 @@ public class UiActorCreator {
     public static TextButton getPackTextButton(int pack) { //актеры отвечающие за переход на нужный пак
         TextButton textButton;
 
-        if (LevelLoader.getInstance().getLevelPack(pack - 1).available) {
+        if (LevelController.getLevelPack(pack - 1).available) {
             textButton = new TextButton("", FRAssetManager.getSkin(), "darkblue");
             textButton.addListener(new ButtonScaleListener(true) {
                 @Override
@@ -222,7 +220,7 @@ public class UiActorCreator {
             textButton.addListener(new ButtonScaleListener(false));
         }
 
-        String packName = LevelLoader.getPackName(pack);
+        String packName = LevelController.getPackName(pack);
 
         float up = SCREEN_HEIGHT * 0.98f - BUTTON_SIZE; //top margin
         float down = BUTTON_SIZE + SCREEN_HEIGHT * 0.02f; //bottom margin
@@ -270,9 +268,9 @@ public class UiActorCreator {
                     @Override
                     public void action(InputEvent event) {
                         if (ScreenManager.getCurrentScreen() == ScreenType.GAME_LVL_COMPLETE_PAUSE) {
-                            LevelLoader.getInstance().prevLvl();
+                            LevelController.prevLvl();
                         } else {
-                            LevelLoader.getInstance().reloadActorList();
+                            LevelController.reloadActorList();
                         }
                         GameScreen.getInstance().startNewLevel();
                         ScreenManager.setGameMainScreen();
@@ -303,13 +301,13 @@ public class UiActorCreator {
                     ((SmallButtonActor) event.getListenerActor()).setSprite(FRAssetManager.getSoundOff());
                     FlowRush.getPreferences().setSound(false);
                     FRAssetManager.getBackgroundMusic().pause();
-                    FlowRush.getInstance().savePrefsFile();
+                    FRFileHandler.savePreferences();
                     FlowRush.logDebug("Sound is off");
                 } else {
                     ((SmallButtonActor) event.getListenerActor()).setSprite(FRAssetManager.getSoundOn());
                     FlowRush.getPreferences().setSound(true);
                     FRAssetManager.getBackgroundMusic().play();
-                    FlowRush.getInstance().savePrefsFile();
+                    FRFileHandler.savePreferences();
                     FlowRush.logDebug("Sound is on");
                 }
             }
@@ -380,7 +378,7 @@ public class UiActorCreator {
         nextButton.addListener(new ButtonScaleListener(true) {
             @Override
             public void action(InputEvent event) {
-                if (LevelLoader.getInstance().containsNext()) {
+                if (LevelController.containsNext()) {
                     GameScreen.getInstance().startNewLevel();
                     ScreenManager.setGameMainScreen();
                 } else {

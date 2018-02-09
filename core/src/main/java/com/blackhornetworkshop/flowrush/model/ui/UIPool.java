@@ -13,16 +13,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
-import com.blackhornetworkshop.flowrush.controller.FRAssetManager;
-import com.blackhornetworkshop.flowrush.model.listeners.ButtonScaleListener;
+import com.blackhornetworkshop.flowrush.model.FRAssetManager;
 import com.blackhornetworkshop.flowrush.model.FRConstants;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
 import com.blackhornetworkshop.flowrush.controller.ScreenManager;
-import com.blackhornetworkshop.flowrush.controller.LevelLoader;
+import com.blackhornetworkshop.flowrush.model.LevelController;
 import com.blackhornetworkshop.flowrush.model.UiActorCreator;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import static com.blackhornetworkshop.flowrush.model.FRConstants.LEVEL_NUMBER_GROUP_MARGIN_LEFT;
 import static com.blackhornetworkshop.flowrush.model.FRConstants.LEVEL_NUMBER_GROUP_TOP_MARGIN;
@@ -259,7 +257,7 @@ public class UIPool {
         wellDoneLabel.setVisible(false);
 
         //Pack complete elements
-        packCompleteUpperHex = new PackCompleteTopHex(FRAssetManager.getSkin().getFont("fontMid"), LevelLoader.getPackName(FlowRush.getSave().getCurrentPack()));
+        packCompleteUpperHex = new PackCompleteTopHex(FRAssetManager.getSkin().getFont("fontMid"), LevelController.getPackName(FlowRush.getSave().getCurrentPack()));
         packCompleteLowerHex = new PackCompleteLowerHex(FRAssetManager.getAtlas());
         packCompleteMenuButton = UiActorCreator.getTextButton(9);
         packCompleteNextPackButton = UiActorCreator.getTextButton(12);

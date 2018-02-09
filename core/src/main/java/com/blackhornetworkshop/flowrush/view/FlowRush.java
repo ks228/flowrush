@@ -7,9 +7,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.blackhornetworkshop.flowrush.controller.AndroidHelper;
-import com.blackhornetworkshop.flowrush.controller.FRAssetManager;
-import com.blackhornetworkshop.flowrush.controller.PlayServices;
+import com.blackhornetworkshop.flowrush.model.AndroidHelper;
+import com.blackhornetworkshop.flowrush.model.FRAssetManager;
+import com.blackhornetworkshop.flowrush.model.FRFileHandler;
+import com.blackhornetworkshop.flowrush.model.LevelController;
+import com.blackhornetworkshop.flowrush.model.PlayServices;
 import com.blackhornetworkshop.flowrush.controller.ScreenManager;
 import com.blackhornetworkshop.flowrush.model.GamePreferences;
 import com.blackhornetworkshop.flowrush.controller.OneTouchProcessor;
@@ -80,10 +82,13 @@ public class FlowRush extends Game {
         //Json
         gson = new Gson();
 
+        //Levels
+        LevelController.setPacks(FRFileHandler.loadPacks());
+
         //Preferences
         if (Gdx.files.local("preferences.json").exists()) {
             logDebug("Load an existing file preferences.json");
-            preferences = gson.fromJson(Gdx.files.local("preferences.json").reader(), GamePreferences.class);
+            preferences = FRFileHandler.loadPreferences();
         } else {
             logDebug("A new file preferences.json was created");
             preferences = new GamePreferences();
@@ -92,7 +97,7 @@ public class FlowRush extends Game {
         //Save file
         if (Gdx.files.local("save.json").exists()) {
             androidHelper.logDebug("Load an existing file save.json");
-            save = gson.fromJson(Gdx.files.local("save.json").reader(), SavedGame.class);
+            save = FRFileHandler.loadSavedGame();
         } else {
             save = new SavedGame();
             save.setUniqSaveName();
@@ -115,20 +120,6 @@ public class FlowRush extends Game {
         } else {
             androidHelper.logError("No such achievement!", new IllegalArgumentException());
         }
-    }
-
-    public void savePrefsFile() {
-        String string = gson.toJson(preferences);
-        FileHandle file = Gdx.files.local("preferences.json");
-        file.writeString(string, false);
-        //System.out.println("Saved preferences");
-    }
-
-    public void saveSaveFile() {
-        String string = gson.toJson(save);
-        FileHandle file = Gdx.files.local("save.json");
-        file.writeString(string, false);
-        System.out.println("Saved progress on local");
     }
 
     public static Gson getGson() {

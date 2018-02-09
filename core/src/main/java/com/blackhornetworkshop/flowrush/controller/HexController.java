@@ -1,5 +1,6 @@
 package com.blackhornetworkshop.flowrush.controller;
 
+import com.blackhornetworkshop.flowrush.model.FRAssetManager;
 import com.blackhornetworkshop.flowrush.model.HexActor;
 import com.blackhornetworkshop.flowrush.view.screens.GameScreen;
 
