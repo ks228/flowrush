@@ -107,11 +107,11 @@ public class UiActorCreator {
                             RateDialogController.setIsFirstAnswerWasYes(true);
                         } else {
                             GameScreen.hideRateDialog();
-                            if(RateDialogController.isIsFirstAnswerWasYes()){
+                            if (RateDialogController.isIsFirstAnswerWasYes()) {
                                 FlowRush.getAndroidHelper().openPlayMarket();
                                 FlowRush.getPreferences().setShowRateDialog(false);
                                 FRFileHandler.savePreferences();
-                            }else{
+                            } else {
                                 FlowRush.getAndroidHelper().sendMail();
                             }
                         }
@@ -126,7 +126,7 @@ public class UiActorCreator {
                         if (RateDialogController.isFirstAnswer()) {
                             RateDialogController.setIsFirstAnswerWasYes(false);
                         } else {
-                            if(!RateDialogController.isIsFirstAnswerWasYes()){
+                            if (!RateDialogController.isIsFirstAnswerWasYes()) {
                                 FlowRush.getPreferences().setShowRateDialog(false);
                                 FRFileHandler.savePreferences();
                             }
@@ -273,162 +273,176 @@ public class UiActorCreator {
                         }
                         GameScreen.getInstance().startNewLevel();
                         ScreenManager.setGameMainScreen();
-                }
-        });
+                    }
+                });
 
-        return restartButton;
-        case 4://MENU button (pause group)
-        SmallButtonActor mainMenuButton = createSmallButtonActor(BUTTON_SIZE, BUTTON_SIZE, BUTTON_SIZE, BUTTON_SIZE, true, FRAssetManager.getAtlas().createSprite("mmenu_icon"));
-        mainMenuButton.addListener(new ButtonScaleListener(true) {
-            @Override
-            public void action(InputEvent event) {
-                ScreenManager.setMenuMainScreen();
-            }
-        });
-        return mainMenuButton;
-        case 5://SOUND button
-        SmallButtonActor soundButton;
-        if (FlowRush.getPreferences().isSoundOn()) {
-            soundButton = createSmallButtonActor(0.0f, 0.0f, BUTTON_SIZE, BUTTON_SIZE, true, FRAssetManager.getSoundOn());
-        } else {
-            soundButton = createSmallButtonActor(0.0f, 0.0f, BUTTON_SIZE, BUTTON_SIZE, true, FRAssetManager.getSoundOff());
-        }
-        soundButton.addListener(new ButtonScaleListener(false) {
-            @Override
-            public void action(InputEvent event) {
+                return restartButton;
+            case 4://MENU button (pause group)
+                SmallButtonActor mainMenuButton = createSmallButtonActor(BUTTON_SIZE, BUTTON_SIZE, BUTTON_SIZE, BUTTON_SIZE, true, FRAssetManager.getAtlas().createSprite("mmenu_icon"));
+                mainMenuButton.addListener(new ButtonScaleListener(true) {
+                    @Override
+                    public void action(InputEvent event) {
+                        ScreenManager.setMenuMainScreen();
+                    }
+                });
+                return mainMenuButton;
+            case 5://SOUND button
+                SmallButtonActor soundButton;
                 if (FlowRush.getPreferences().isSoundOn()) {
-                    ((SmallButtonActor) event.getListenerActor()).setSprite(FRAssetManager.getSoundOff());
-                    FlowRush.getPreferences().setSound(false);
-                    FRAssetManager.getBackgroundMusic().pause();
-                    FRFileHandler.savePreferences();
-                    FlowRush.logDebug("Sound is off");
+                    soundButton = createSmallButtonActor(0.0f, 0.0f, BUTTON_SIZE, BUTTON_SIZE, true, FRAssetManager.getSoundOn());
                 } else {
-                    ((SmallButtonActor) event.getListenerActor()).setSprite(FRAssetManager.getSoundOn());
-                    FlowRush.getPreferences().setSound(true);
-                    FRAssetManager.getBackgroundMusic().play();
-                    FRFileHandler.savePreferences();
-                    FlowRush.logDebug("Sound is on");
+                    soundButton = createSmallButtonActor(0.0f, 0.0f, BUTTON_SIZE, BUTTON_SIZE, true, FRAssetManager.getSoundOff());
                 }
-            }
-        });
-        return soundButton;
-        case 6://CLOSE button (menu screen)
-        SmallButtonActor closeButton = createSmallButtonActor((Gdx.graphics.getWidth() - BUTTON_SIZE) / 2.0f, Gdx.graphics.getHeight() * 0.02f, BUTTON_SIZE, BUTTON_SIZE, false, FRAssetManager.getAtlas().createSprite("close_icon"));
-        closeButton.addListener(new ButtonScaleListener(true) {
-            @Override
-            public void action(InputEvent event) {
-                ScreenManager.setMenuMainScreen();
-            }
-        });
-        return closeButton;
-        case 7://AUTHORS button
-        SmallButtonActor authorsButton = createSmallButtonActor(Gdx.graphics.getWidth() - BUTTON_SIZE - Gdx.graphics.getHeight() * 0.02f, Gdx.graphics.getHeight() * 0.02f, BUTTON_SIZE, BUTTON_SIZE, true, FRAssetManager.getAtlas().createSprite("authors_icon"));
-        authorsButton.addListener(new ButtonScaleListener(true) {
-            @Override
-            public void action(InputEvent event) {
-                ScreenManager.setMenuAuthorsScreen();
-            }
-        });
-        return authorsButton;
-        case 8://FACEBOOK button
-        SmallButtonActor fbButton = createSmallButtonActor((SCREEN_WIDTH - BUTTON_SIZE) / 2.0f - BUTTON_SIZE * 1.25f, SOCIAL_BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE, false, FRAssetManager.getAtlas().createSprite("fb_icon"));
-        fbButton.addListener(new ButtonScaleListener(false) {
-            @Override
-            public void action(InputEvent event) {
-                FlowRush.getAndroidHelper().openFacebook();
-            }
-        });
-        return fbButton;
-        case 9://TWITTER button
-        SmallButtonActor twButton = createSmallButtonActor((SCREEN_WIDTH - BUTTON_SIZE) / 2.0f, SOCIAL_BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE, false, FRAssetManager.getAtlas().createSprite("tw_icon"));
-        twButton.addListener(new ButtonScaleListener(false) {
-            @Override
-            public void action(InputEvent event) {
-                FlowRush.getAndroidHelper().openTwitter();
-            }
-        });
-        return twButton;
-        case 10://VK button
-        SmallButtonActor vkButton = createSmallButtonActor((SCREEN_WIDTH - BUTTON_SIZE) / 2.0f + BUTTON_SIZE * 1.25f, SOCIAL_BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE, false, FRAssetManager.getAtlas().createSprite("vk_icon"));
-        vkButton.addListener(new ButtonScaleListener(false) {
-            @Override
-            public void action(InputEvent event) {
-                FlowRush.getAndroidHelper().openVK();
-            }
-        });
-        return vkButton;
-        case 11://WELLDONE HEX actor
-        float welldoneWidth = BUTTON_SIZE * 0.9f;
-        float welldoneHeight = BUTTON_SIZE * 0.9f * 0.8947368f;
-        SmallButtonActor welldoneHex = createSmallButtonActor((SCREEN_WIDTH - SCREEN_WIDTH * 0.6f) / 2.0f - welldoneWidth / 2.0f, SCREEN_HEIGHT - welldoneHeight - (BUTTON_SIZE - welldoneHeight) / 2.0f, welldoneWidth, welldoneHeight, false, FRAssetManager.getAtlas().createSprite("bighex_light"));
+                soundButton.addListener(new ButtonScaleListener(false) {
+                    @Override
+                    public void action(InputEvent event) {
+                        if (FlowRush.getPreferences().isSoundOn()) {
+                            ((SmallButtonActor) event.getListenerActor()).setSprite(FRAssetManager.getSoundOff());
+                            FlowRush.getPreferences().setSound(false);
+                            FRAssetManager.getBackgroundMusic().pause();
+                            FRFileHandler.savePreferences();
+                            FlowRush.logDebug("Sound is off");
+                        } else {
+                            ((SmallButtonActor) event.getListenerActor()).setSprite(FRAssetManager.getSoundOn());
+                            FlowRush.getPreferences().setSound(true);
+                            FRAssetManager.getBackgroundMusic().play();
+                            FRFileHandler.savePreferences();
+                            FlowRush.logDebug("Sound is on");
+                        }
+                    }
+                });
+                return soundButton;
+            case 6://CLOSE button (menu screen)
+                SmallButtonActor closeButton = createSmallButtonActor((Gdx.graphics.getWidth() - BUTTON_SIZE) / 2.0f, Gdx.graphics.getHeight() * 0.02f, BUTTON_SIZE, BUTTON_SIZE, false, FRAssetManager.getAtlas().createSprite("close_icon"));
+                closeButton.addListener(new ButtonScaleListener(true) {
+                    @Override
+                    public void action(InputEvent event) {
+                        ScreenManager.setMenuMainScreen();
+                    }
+                });
+                return closeButton;
+            case 7://AUTHORS button
+                SmallButtonActor authorsButton = createSmallButtonActor(Gdx.graphics.getWidth() - BUTTON_SIZE - Gdx.graphics.getHeight() * 0.02f, Gdx.graphics.getHeight() * 0.02f, BUTTON_SIZE, BUTTON_SIZE, true, FRAssetManager.getAtlas().createSprite("authors_icon"));
+                authorsButton.addListener(new ButtonScaleListener(true) {
+                    @Override
+                    public void action(InputEvent event) {
+                        ScreenManager.setMenuAuthorsScreen();
+                    }
+                });
+                return authorsButton;
+            case 8://FACEBOOK button
+                SmallButtonActor fbButton = createSmallButtonActor((SCREEN_WIDTH - BUTTON_SIZE) / 2.0f - BUTTON_SIZE * 1.25f, SOCIAL_BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE, false, FRAssetManager.getAtlas().createSprite("fb_icon"));
+                fbButton.addListener(new ButtonScaleListener(false) {
+                    @Override
+                    public void action(InputEvent event) {
+                        FlowRush.getAndroidHelper().openFacebook();
+                    }
+                });
+                return fbButton;
+            case 9://TWITTER button
+                SmallButtonActor twButton = createSmallButtonActor((SCREEN_WIDTH - BUTTON_SIZE) / 2.0f, SOCIAL_BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE, false, FRAssetManager.getAtlas().createSprite("tw_icon"));
+                twButton.addListener(new ButtonScaleListener(false) {
+                    @Override
+                    public void action(InputEvent event) {
+                        FlowRush.getAndroidHelper().openTwitter();
+                    }
+                });
+                return twButton;
+            case 10://VK button
+                SmallButtonActor vkButton = createSmallButtonActor((SCREEN_WIDTH - BUTTON_SIZE) / 2.0f + BUTTON_SIZE * 1.25f, SOCIAL_BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE, false, FRAssetManager.getAtlas().createSprite("vk_icon"));
+                vkButton.addListener(new ButtonScaleListener(false) {
+                    @Override
+                    public void action(InputEvent event) {
+                        FlowRush.getAndroidHelper().openVK();
+                    }
+                });
+                return vkButton;
+            case 11://WELLDONE HEX actor
+                float welldoneWidth = BUTTON_SIZE * 0.9f;
+                float welldoneHeight = BUTTON_SIZE * 0.9f * 0.8947368f;
+                SmallButtonActor welldoneHex = createSmallButtonActor((SCREEN_WIDTH - SCREEN_WIDTH * 0.6f) / 2.0f - welldoneWidth / 2.0f, SCREEN_HEIGHT - welldoneHeight - (BUTTON_SIZE - welldoneHeight) / 2.0f, welldoneWidth, welldoneHeight, false, FRAssetManager.getAtlas().createSprite("bighex_light"));
 
-        RotateByAction rotateToActionWellDone = new RotateByAction();
-        rotateToActionWellDone.setDuration(2f);
-        rotateToActionWellDone.setAmount(-360);
+                RotateByAction rotateToActionWellDone = new RotateByAction();
+                rotateToActionWellDone.setDuration(2f);
+                rotateToActionWellDone.setAmount(-360);
 
-        RepeatAction repeatActionWellDone = new RepeatAction();
-        repeatActionWellDone.setAction(rotateToActionWellDone);
-        repeatActionWellDone.setCount(RepeatAction.FOREVER);
+                RepeatAction repeatActionWellDone = new RepeatAction();
+                repeatActionWellDone.setAction(rotateToActionWellDone);
+                repeatActionWellDone.setCount(RepeatAction.FOREVER);
 
-        welldoneHex.addAction(repeatActionWellDone);
-        return welldoneHex;
-        case 12://NEXT button (pack or level)
-        final SmallButtonActor nextButton = createSmallButtonActor(SCREEN_WIDTH - SCREEN_WIDTH / 8, 0.0f, SCREEN_WIDTH / 8, SCREEN_WIDTH / 8, false, FRAssetManager.getAtlas().createSprite("next_icon"));
-        nextButton.addListener(new ButtonScaleListener(true) {
-            @Override
-            public void action(InputEvent event) {
-                if (LevelController.nextLevelExist()) {
-                    GameScreen.getInstance().startNewLevel();
-                    ScreenManager.setGameMainScreen();
-                } else {
-                    ScreenManager.setGamePackCompleteScreen();
-                }
-            }
-        });
-        MoveToAction moveToAction1 = new MoveToAction();
-        moveToAction1.setDuration(0.5f);
-        moveToAction1.setPosition(Gdx.graphics.getWidth() - nextButton.getWidth() * 1.3f, 0);
+                welldoneHex.addAction(repeatActionWellDone);
+                return welldoneHex;
+            case 12://NEXT button (pack or level)
+                final SmallButtonActor nextButton = createSmallButtonActor(SCREEN_WIDTH - SCREEN_WIDTH / 8, 0.0f, SCREEN_WIDTH / 8, SCREEN_WIDTH / 8, false, FRAssetManager.getAtlas().createSprite("next_icon"));
+                nextButton.addListener(new ButtonScaleListener(true) {
+                    @Override
+                    public void action(InputEvent event) {
+                        if (LevelController.nextLevelExist()) {
+                            GameScreen.getInstance().startNewLevel();
+                            ScreenManager.setGameMainScreen();
+                        } else {
+                            ScreenManager.setGamePackCompleteScreen();
+                        }
+                    }
+                });
+                MoveToAction moveToAction1 = new MoveToAction();
+                moveToAction1.setDuration(0.5f);
+                moveToAction1.setPosition(Gdx.graphics.getWidth() - nextButton.getWidth() * 1.3f, 0);
 
-        MoveToAction moveToAction2 = new MoveToAction();
-        moveToAction2.setDuration(0.5f);
-        moveToAction2.setPosition(Gdx.graphics.getWidth() - nextButton.getWidth(), 0);
+                MoveToAction moveToAction2 = new MoveToAction();
+                moveToAction2.setDuration(0.5f);
+                moveToAction2.setPosition(Gdx.graphics.getWidth() - nextButton.getWidth(), 0);
 
-        SequenceAction seqActionNextButton = new SequenceAction(moveToAction1, moveToAction2);
+                SequenceAction seqActionNextButton = new SequenceAction(moveToAction1, moveToAction2);
 
-        RepeatAction repeatActionNext = new RepeatAction();
-        repeatActionNext.setAction(seqActionNextButton);
-        repeatActionNext.setCount(RepeatAction.FOREVER);
+                RepeatAction repeatActionNext = new RepeatAction();
+                repeatActionNext.setAction(seqActionNextButton);
+                repeatActionNext.setCount(RepeatAction.FOREVER);
 
-        nextButton.addAction(repeatActionNext);
-        return nextButton;
-        case 13://SUPPORT US button
-        SmallButtonActor supportUsButton = createSmallButtonActor((SCREEN_WIDTH - BUTTON_SIZE) / 2.0f, SCREEN_HEIGHT * 0.02f, BUTTON_SIZE, BUTTON_SIZE, true, FRAssetManager.getAtlas().createSprite("ads_icon"));
-        supportUsButton.addListener(new ButtonScaleListener(true) {
-            @Override
-            public void action(InputEvent event) {
-                ScreenManager.setMenuSupportScreen();
-            }
-        });
-        return supportUsButton;
-        case 14://GOOGLE GAMES button
-        Sprite googlePlaySprite = new Sprite(new Texture(Gdx.files.internal("controller.png")));
-        SmallButtonActor googlePlayButton = createSmallButtonActor(SCREEN_HEIGHT * 0.02f, SCREEN_HEIGHT - BUTTON_SIZE, BUTTON_SIZE * 0.8f, BUTTON_SIZE * 0.8f, true, googlePlaySprite);
-        googlePlayButton.addListener(new ButtonScaleListener(true) {
-            @Override
-            public void action(InputEvent event) {
-                if (FlowRush.getPlayServices().isSignedIn()) {
-                    ScreenManager.setMenuGoogleSignedScreen();
-                } else {
-                    ScreenManager.setMenuGoogleSignInScreen();
-                }
-            }
-        });
-        return googlePlayButton;
-        default:
-        return null;
+                nextButton.addAction(repeatActionNext);
+                return nextButton;
+            case 13://SUPPORT US button
+                SmallButtonActor supportUsButton = createSmallButtonActor((SCREEN_WIDTH - BUTTON_SIZE) / 2.0f, SCREEN_HEIGHT * 0.02f, BUTTON_SIZE, BUTTON_SIZE, true, FRAssetManager.getAtlas().createSprite("ads_icon"));
+                supportUsButton.addListener(new ButtonScaleListener(true) {
+                    @Override
+                    public void action(InputEvent event) {
+                        ScreenManager.setMenuSupportScreen();
+                    }
+                });
+                return supportUsButton;
+            case 14://GOOGLE GAMES button
+                Sprite googlePlaySprite = new Sprite(new Texture(Gdx.files.internal("controller.png")));
+                SmallButtonActor googlePlayButton = createSmallButtonActor(SCREEN_HEIGHT * 0.03f, SCREEN_HEIGHT - BUTTON_SIZE-SCREEN_HEIGHT*0.01f, BUTTON_SIZE * 0.8f, BUTTON_SIZE * 0.8f, true, googlePlaySprite);
+                googlePlayButton.addListener(new ButtonScaleListener(true) {
+                    @Override
+                    public void action(InputEvent event) {
+                        if (FlowRush.getPlayServices().isSignedIn()) {
+                            ScreenManager.setMenuGoogleSignedScreen();
+                        } else {
+                            ScreenManager.setMenuGoogleSignInScreen();
+                        }
+                    }
+                });
+                return googlePlayButton;
+            case 15: // DAY NIGHT button
+                Sprite daySprite = new Sprite(new Texture(Gdx.files.internal("day-shift.png")));
+                Sprite nightSprite = new Sprite(new Texture(Gdx.files.internal("night-shift.png")));
+                SmallButtonActor dayNightButton = createSmallButtonActor( SCREEN_WIDTH- BUTTON_SIZE- SCREEN_HEIGHT*0.02f, SCREEN_HEIGHT - BUTTON_SIZE-SCREEN_HEIGHT*0.02f, BUTTON_SIZE, BUTTON_SIZE, true, daySprite);
+                dayNightButton.addListener(new ButtonScaleListener(true){
+                    @Override
+                    public void action(InputEvent event) {
+                        FlowRush.getPreferences().setNightMode(!FlowRush.getPreferences().isNightMode());
+                        SmallButtonActor smallButtonActor = (SmallButtonActor)event.getListenerActor();
+                        if(FlowRush.getPreferences().isNightMode()) smallButtonActor.setSprite(nightSprite);
+                        else smallButtonActor.setSprite(daySprite);
+                    }
+                });
+                return dayNightButton;
+            default:
+                return null;
+        }
+
     }
-
-}
 
     private static SmallButtonActor createSmallButtonActor(float x, float y, float width, float height, boolean visible, Sprite sprite) {
         final SmallButtonActor smallButtonActor = new SmallButtonActor();

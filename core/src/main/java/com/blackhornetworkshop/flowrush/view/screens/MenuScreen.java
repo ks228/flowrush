@@ -48,6 +48,7 @@ public class MenuScreen implements Screen, FRScreen {
         hudStage.addActor(UIPool.getPlayButton());
         hudStage.addActor(UIPool.getLevelsButton());
         hudStage.addActor(UIPool.getExitButton());
+        hudStage.addActor(UIPool.getDayNightButton());
         hudStage.addActor(UIPool.getAuthorsButton());
         hudStage.addActor(UIPool.getSoundButton());
         hudStage.addActor(UIPool.getSupportUsSmallButton());
@@ -117,6 +118,7 @@ public class MenuScreen implements Screen, FRScreen {
         UIPool.getSoundButton().setVisible(true);
         UIPool.getAuthorsButton().setVisible(true);
         UIPool.getSupportUsSmallButton().setVisible(true);
+        UIPool.getDayNightButton().setVisible(true);
     }
 
     public void setLevelChoiceScreen(int pack){
@@ -193,6 +195,7 @@ public class MenuScreen implements Screen, FRScreen {
         if(FlowRush.isPlayServicesAvailable()) {
             UIPool.getGooglePlayButton().setVisible(false);
         }
+        UIPool.getDayNightButton().setVisible(false);
         UIPool.getAuthorsButton().setVisible(false);
         UIPool.getSupportUsSmallButton().setVisible(false);
         UIPool.getPlayButton().setVisible(false);

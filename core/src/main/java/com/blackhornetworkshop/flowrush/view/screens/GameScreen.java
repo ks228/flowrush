@@ -67,6 +67,12 @@ public class GameScreen implements Screen, FRScreen {
 
         pauseGroup = UIPool.getPauseGroup();
         pauseGroup.setPosition(-UIPool.getQuadrantPauseBackground().getWidth(), -UIPool.getQuadrantPauseBackground().getWidth());
+        pauseGroup.addActor(UIPool.getQuadrantPauseBackground());
+        pauseGroup.addActor(UIPool.getRestartButton());
+        pauseGroup.addActor(UIPool.getResumeButton());
+        pauseGroup.addActor(UIPool.getMenuButton());
+        pauseGroup.addActor(UIPool.getSoundButton());
+
         movePauseGroupAction = new MoveToAction();
         movePauseGroupAction.setDuration(0.2f);
 

@@ -28,10 +28,10 @@ public class HexActor extends Actor{
         this.spriteOn = spriteOn;
         this.spriteOff = spriteOff;
         this.rotatePosition = rotatePosition;
-        this.isRotable = include != 1;
         this.xIndex = xIndex;
         this.yIndex = yIndex;
         this.sourceArray = sourceArray;
+        this.isRotable = include != 1;
 
         isPowerOn = !isRotable;
 

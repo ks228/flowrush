@@ -62,7 +62,7 @@ public class SourceChecker {
                     actor = tempHexArray.get(i);
                     sourceArrayMain = actor.getSourceArray();
 
-                    checkActorNew(actor);
+                    checkActor(actor);
                 }
             }
         }
@@ -80,7 +80,7 @@ public class SourceChecker {
                     actor = tempHexArray.get(i);
                     sourceArrayMain = actor.getSourceArray();
 
-                    checkActorNew(actor);
+                    checkActor(actor);
                 }
             }
         }
@@ -106,7 +106,7 @@ public class SourceChecker {
         }
     }
 
-    private void checkActorNew(HexActor actor) {
+    private void checkActor(HexActor actor) {
 
         int x, y;
 

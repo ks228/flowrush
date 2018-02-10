@@ -70,6 +70,7 @@ public class UIPool {
     private static Actor triangleBackground;
     private static Group levelNumbersGroup;
     private static ArrayList<LevelNumberButton> levelNumbersGroupArray;
+    private static SmallButtonActor dayNightButton;
 
     //Main buttons
     private static TextButton playButton;
@@ -87,6 +88,9 @@ public class UIPool {
     private static Group pauseGroup;
     private static SmallButtonActor pauseButton;
     private static Actor quadrantPauseBackground;
+    private static SmallButtonActor restartButton;
+    private static SmallButtonActor menuButton;
+    private static SmallButtonActor resumeButton;
 
     // Level complete elements
     private static Label wellDoneLabel;
@@ -187,6 +191,9 @@ public class UIPool {
             levelNumbersGroupArray.add(levelNumberButton);
         }
 
+        //Day night button
+        dayNightButton = UiActorCreator.getSmallButtonActor(15);
+
         //Social networks
         socialNetworkBackground = UiActorCreator.getTextButton(8);
         twitterButton = UiActorCreator.getSmallButtonActor(9);
@@ -219,6 +226,10 @@ public class UIPool {
         //Pause menu elements
         pauseGroup = new Group();
 
+        restartButton = UiActorCreator.getSmallButtonActor(3);
+        resumeButton = UiActorCreator.getSmallButtonActor(2);
+        menuButton = UiActorCreator.getSmallButtonActor(4);
+
         pauseButton = UiActorCreator.getSmallButtonActor(1);
 
         quadrantPauseBackground = new Actor() {
@@ -243,11 +254,6 @@ public class UIPool {
             }
         });
 
-        pauseGroup.addActor(quadrantPauseBackground);
-        pauseGroup.addActor(UiActorCreator.getSmallButtonActor(4));
-        pauseGroup.addActor(UiActorCreator.getSmallButtonActor(2));
-        pauseGroup.addActor(UiActorCreator.getSmallButtonActor(3));
-        pauseGroup.addActor(soundButton);
 
         //Level complete elements
         nextLevelButton = UiActorCreator.getSmallButtonActor(12);
@@ -315,6 +321,11 @@ public class UIPool {
 
 
     //-----------------------------------------------------------  MAIN MENU ELEMENTS
+
+
+    public static SmallButtonActor getDayNightButton() {
+        return dayNightButton;
+    }
 
     public static SmallButtonActor getFacebookButton() {
         return facebookButton;
@@ -425,6 +436,18 @@ public class UIPool {
 
     public static Group getPauseGroup() {
         return pauseGroup;
+    }
+
+    public static SmallButtonActor getRestartButton() {
+        return restartButton;
+    }
+
+    public static SmallButtonActor getMenuButton() {
+        return menuButton;
+    }
+
+    public static SmallButtonActor getResumeButton() {
+        return resumeButton;
     }
 
     public static SmallButtonActor getPauseButton() {
