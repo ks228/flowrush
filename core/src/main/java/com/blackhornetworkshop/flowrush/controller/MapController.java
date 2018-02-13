@@ -139,8 +139,8 @@ public class MapController {
                 indexSpriteOff = actorInfo.getIndex() - 13;
             }
 
-            Sprite spriteOff = FRAssetManager.getHexSprite(indexSpriteOff);
-            Sprite spriteOn = FRAssetManager.getHexSprite(indexSpriteOn);
+            Sprite spriteOff = FRAssetManager.getSprite("hex"+indexSpriteOff);
+            Sprite spriteOn = FRAssetManager.getSprite("hex"+indexSpriteOn);
 
             HexActor actor = new HexActor(actorInfo.getIndex(), actorInfo.getInclude(), spriteOff, spriteOn, actorInfo.getPosition(), x, y, createSourceArray(actorInfo.getIndex()));
 
@@ -163,11 +163,11 @@ public class MapController {
             HexController.setHexbackTouchOff(actor);
 
             if (actor.getInclude() == 1) {
-                actor.setIcon(FRAssetManager.getIconSource());
+                actor.setIcon(FRAssetManager.getSprite("source_icon"));
             } else if (actor.getInclude() == 2) {
-                actor.setIcon(FRAssetManager.getIconPointOff());
+                actor.setIcon(FRAssetManager.getSprite("point_icon_off"));
             } else if (actor.getInclude() == 3) {
-                actor.setIcon(FRAssetManager.getIconDoveOff());
+                actor.setIcon(FRAssetManager.getSprite("dove_icon_off"));
             }
 
             ScaleToAction scale = new ScaleToAction();

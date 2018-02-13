@@ -1,0 +1,90 @@
+{
+com.badlogic.gdx.graphics.Color: {
+	blue: {
+		r: 0.0745
+		g: 0.0941
+		b: 0.1059
+		a: 1
+	}
+	grey: {
+		r: 0.1412
+		g: 0.1882
+		b: 0.2157
+		a: 1
+	}
+	white: {
+		r: 0.4078
+		g: 0.4118
+		b: 0.4118
+		a: 1
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
+	default: {
+		font: fontMid
+		fontColor: white
+		up: alphablack
+	}
+	playbutton: {
+		font: fontLarge
+		fontColor: blue
+		up: white
+	}
+	darkblue: {
+		font: fontMid
+		fontColor: white
+		up: lightblue
+	}
+	white: {
+		font: fontMid
+		fontColor: blue
+		up: white
+	}
+	lightblue: {
+		font: fontMid
+		fontColor: white
+		up: lightblue
+	}
+	alphablackgrey: {
+		font: fontMid
+		fontColor: white
+		up: alphablack
+	}
+	whitesmall: {
+		font: fontSmall
+		fontColor: grey
+		up: white
+	}
+		bordersmall: {
+		font: fontSmall
+		fontColor: white
+		up: whiteborder
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+	default: {
+		font: fontSmall
+		fontColor: white
+		background: alphablack
+	}
+		alphawhite: {
+		font: fontMid
+		fontColor: blue
+		background: alphawhite
+	}
+		darkbluesmall: {
+		font: fontSmall
+		fontColor: white
+		background: darkblue
+	}
+		greyfont: {
+		font: fontMid
+		fontColor: white
+	}
+		darkblue: {
+		font: fontMid
+		fontColor: white
+		background: darkblue
+	}
+}
+}

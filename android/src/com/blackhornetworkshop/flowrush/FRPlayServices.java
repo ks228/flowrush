@@ -263,7 +263,7 @@ public class FRPlayServices implements PlayServices {
     }
 
     private void loadSnapshot(final SnapshotMetadata snapshotMetadata) {
-        app.showLoadingDialog();
+        app.showLoadingLabel();
         FlowRush.getInstance().pause();
 
         FRAndroidHelper.getInstance().logDebug("Open the saved game");

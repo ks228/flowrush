@@ -33,7 +33,7 @@ public class FRFileHandler {
         }
     }
 
-    static void savePreferences() {
+    public static void savePreferences() {
         try {
             String string = FlowRush.getGson().toJson(FlowRush.getPreferences());
             FileHandle file = Gdx.files.local("preferences.json");

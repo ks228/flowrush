@@ -10,4 +10,5 @@ public interface AndroidHelper {
     void openPlayMarket();
     void logError(String msg, Throwable tr);
     void logDebug(String msg);
+
 }

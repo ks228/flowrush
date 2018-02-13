@@ -20,12 +20,15 @@ public class MenuScreen implements Screen, FRScreen {
     private Stage hudStage;
     private boolean isActive;
 
+    private InputMultiplexer inputMultiplexer;
     public static MenuScreen getInstance(){
         if(instance == null) instance = new MenuScreen();
         return instance;
     }
 
-    private MenuScreen() {}
+    private MenuScreen() {
+        inputMultiplexer = new InputMultiplexer();
+    }
 
     @Override
     public void show() {
@@ -33,11 +36,7 @@ public class MenuScreen implements Screen, FRScreen {
 
         isActive = true;
 
-        Gdx.gl.glClearColor(0.26f, 0.64f, 0.87f, 1);
-
         hudStage = FlowRush.getInstance().getHudStage();
-
-        LevelController.setCurrentLevel(FlowRush.getSave().getCurrentPack(), FlowRush.getSave().getCurrentLvl());
 
         UIPool.getSoundButton().setPosition(Gdx.graphics.getHeight()*0.02f, Gdx.graphics.getHeight()*0.02f);
         UIPool.getSoundButton().setVisible(true);
@@ -75,7 +74,7 @@ public class MenuScreen implements Screen, FRScreen {
             hudStage.addActor(UIPool.getShowAchievementsButton());
         }
 
-        InputMultiplexer inputMultiplexer = new InputMultiplexer();
+
         inputMultiplexer.addProcessor(0, FlowRush.getOneTouchProcessor());
         inputMultiplexer.addProcessor(1, FlowRush.getInstance().getHudStage());
         Gdx.input.setInputProcessor(inputMultiplexer);
@@ -85,11 +84,18 @@ public class MenuScreen implements Screen, FRScreen {
     @Override
     public void hide() {
         FlowRush.logDebug("Main menu screen hide() method called");
+        inputMultiplexer.clear();
         hudStage.clear();
         isActive = false;
     }
 
     public void setMainMenuScreen(){
+        if(FlowRush.getPreferences().isNightMode()){
+            Gdx.gl.glClearColor(0.0745f, 0.0941f, 0.1059f, 1);
+        }else{
+            Gdx.gl.glClearColor(0.26f, 0.64f, 0.87f, 1);
+        }
+
         UIPool.getMenuLabel().setVisible(false);
         UIPool.getLevelNumbersGroup().setVisible(false);
         UIPool.getInnerLayout().setVisible(false);

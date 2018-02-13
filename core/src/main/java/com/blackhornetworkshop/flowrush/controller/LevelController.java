@@ -116,7 +116,7 @@ public class LevelController {
             case 4:
                 return "FLYING";
             case 5:
-                return "SOURCE\ncoming soon";
+                return "SOURCE";
             default:
                 return "";
         }

@@ -49,6 +49,7 @@ public class GameScreen implements Screen, FRScreen {
     }
 
     private GameScreen() {
+        inputMultiplexer = new InputMultiplexer();
     }
 
     @Override
@@ -100,13 +101,11 @@ public class GameScreen implements Screen, FRScreen {
             }
         }, 0.6f, 0.6f);
 
-        inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.clear();
         inputMultiplexer.addProcessor(0, FlowRush.getOneTouchProcessor());
         inputMultiplexer.addProcessor(1, hudStage);
         inputMultiplexer.addProcessor(2, mainStage);
         Gdx.input.setInputProcessor(inputMultiplexer);
-
-        Gdx.gl.glClearColor(0.93f, 0.93f, 0.93f, 1);
 
         startNewLevel();
     }
@@ -126,6 +125,7 @@ public class GameScreen implements Screen, FRScreen {
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+
         FlowRush.getBatch().begin();
         dotBackground.draw(FlowRush.getBatch(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         FlowRush.getBatch().end();
@@ -138,6 +138,13 @@ public class GameScreen implements Screen, FRScreen {
     }
 
     public void setGameMainScreen() {
+        if(FlowRush.getPreferences().isNightMode()){
+            Gdx.gl.glClearColor(0.0745f, 0.0941f, 0.1059f, 1);
+        }else{
+            Gdx.gl.glClearColor(0.93f, 0.93f, 0.93f, 1);
+        }
+
+
         if (!inputMultiplexer.getProcessors().contains(mainStage, true)) {
             inputMultiplexer.addProcessor(mainStage);
         }
@@ -165,9 +172,9 @@ public class GameScreen implements Screen, FRScreen {
         SourceChecker.getInstance().initialization();
         SourceChecker.getInstance().update();
 
-        if (!LevelController.nextLevelExist()) {
+        //if (!LevelController.nextLevelExist()) {
             enablePackCompleteGroup();
-        }
+        //}
     }
 
 
@@ -217,12 +224,12 @@ public class GameScreen implements Screen, FRScreen {
         UIPool.getPackCompleteLowerHex().setVisible(true);
         UIPool.getPackCompleteUpperHex().setVisible(true);
         UIPool.getPackCompleteMenuButton().setVisible(true);
-        if (FlowRush.getPreferences().isShowRateDialog()) {
+        //if (FlowRush.getPreferences().isShowRateDialog()) {
             RateDialogController.reset();
             UIPool.getDialogBackground().setVisible(true);
             UIPool.getLeftButton().setVisible(true);
             UIPool.getRightButton().setVisible(true);
-        }
+        //}
     }
 
     public void setPauseScreen() {
@@ -254,17 +261,17 @@ public class GameScreen implements Screen, FRScreen {
 
     public void levelComplete() {
         FlowRush.logDebug("GameScreen levelComplete() method called");
-
+/*
         if (LevelController.nextLevelExist()) {
             LevelController.nextLvl();
             FlowRush.getSave().setCurrentLvl(LevelController.getCurrentLevel());
         } else {
-            FlowRush.getSave().finishPack(LevelController.getCurrentPack() - 1);
-            if (LevelController.nextPackExist() && LevelController.getLevelPack(LevelController.getCurrentPack()).available) {
-                LevelController.nextPack();
+            FlowRush.getSave().finishPack(LevelController.getCurrentPack() - 1);*/
+/*            if (LevelController.nextPackExist() && LevelController.getLevelPack(LevelController.getCurrentPack()).available) {
+                LevelController.nextPack();*/
                 UIPool.getPackCompleteNextPackButton().setName("visible");
-            }
-        }
+            //}
+        //}
 
         FlowRush.checkAchievements();
 

@@ -1,6 +1,7 @@
 package com.blackhornetworkshop.flowrush.model.ui;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.blackhornetworkshop.flowrush.model.FRAssetManager;
@@ -12,10 +13,12 @@ public class LevelNumberButton extends TextButton {
 
     private int level;
     private boolean isAvailable;
+    private Sprite lock;
     private LevelNumberListener levelNumberListener;
-    public LevelNumberButton(String text, Skin skin, String styleName, int level) {
-        super(text, skin, styleName);
+    public LevelNumberButton(String text, TextButtonStyle textButtonStyle, Sprite lock, int level) {
+        super(text, textButtonStyle);
         this.level = level;
+        this.lock = lock;
         levelNumberListener = new LevelNumberListener(false, level);
         addListener(levelNumberListener);
     }
@@ -36,7 +39,7 @@ public class LevelNumberButton extends TextButton {
         if(isAvailable) {
             super.draw(batch, parentAlpha);
         }else{
-            batch.draw(FRAssetManager.getLockSprite(), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+            batch.draw(lock, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
         }
     }
 }

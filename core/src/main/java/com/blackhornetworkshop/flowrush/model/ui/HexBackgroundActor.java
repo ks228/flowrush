@@ -13,7 +13,7 @@ import com.blackhornetworkshop.flowrush.model.FRConstants;
 
 public class HexBackgroundActor extends Actor {
 
-    private Sprite tapEffect;
+    private Sprite sprite;
     private ScaleToAction scale1;
     private ScaleToAction scale2;
     private SequenceAction sequenceAction;
@@ -23,7 +23,7 @@ public class HexBackgroundActor extends Actor {
         setSize(FRConstants.HEX_WIDTH, FRConstants.HEX_HEIGHT);
         setOrigin(Align.center);
 
-        tapEffect = sprite;
+        this.sprite = sprite;
 
         scale1 = new ScaleToAction();
         scale1.setScale(1f, 1f);
@@ -55,9 +55,15 @@ public class HexBackgroundActor extends Actor {
         }
     }
 
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
+
     @Override
     public void draw(Batch batch, float alpha) {
-        batch.draw(tapEffect, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+        batch.draw(sprite, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
     }
+
+
 
 }

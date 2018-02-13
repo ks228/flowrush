@@ -57,4 +57,8 @@ public abstract class BackgroundActor extends Actor{
 
     abstract void restartPosition();
     abstract boolean isOutside();
+
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 }

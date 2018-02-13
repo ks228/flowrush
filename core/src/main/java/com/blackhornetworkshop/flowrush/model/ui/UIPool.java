@@ -15,10 +15,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.blackhornetworkshop.flowrush.model.FRAssetManager;
 import com.blackhornetworkshop.flowrush.model.FRConstants;
+import com.blackhornetworkshop.flowrush.model.ui.background.BackgroundActor;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
 import com.blackhornetworkshop.flowrush.controller.ScreenManager;
 import com.blackhornetworkshop.flowrush.controller.LevelController;
-import com.blackhornetworkshop.flowrush.model.UiActorCreator;
 
 import java.util.ArrayList;
 
@@ -106,18 +106,104 @@ public class UIPool {
     private static Label dialogBackground;
 
 
+    public static void reinialize() {
+        levelNumberActor.setStyle(FRAssetManager.getLabelStyle("greyfont"));
+
+        if (FlowRush.getPreferences().isSoundOn())
+            soundButton.setSprite(FRAssetManager.getSprite("soundOn"));
+        else soundButton.setSprite(FRAssetManager.getSprite("soundOff"));
+
+        hexBackgroundActor.setSprite(FRAssetManager.getSprite("animbackhex"));
+
+        for (int x = 0; x < backgroundAnimation.getChildren().size; x++) {
+            ((BackgroundActor)backgroundAnimation.getChildren().get(x)).setSprite(FRAssetManager.getBackgroundStripe());
+        }
+
+        menuLabel.setStyle(FRAssetManager.getTextButtonStyle("white"));
+
+        innerLayout.setStyle(FRAssetManager.getLabelStyle("default"));
+        messageBackground.setStyle(FRAssetManager.getLabelStyle("default"));
+
+        closeButton.setSprite(FRAssetManager.getSprite("close_icon"));
+
+        playButton.setStyle(FRAssetManager.getTextButtonStyle("playbutton"));
+        levelsButton.setStyle(FRAssetManager.getTextButtonStyle("lightblue"));
+        exitButton.setStyle(FRAssetManager.getTextButtonStyle("lightblue"));
+
+        for(int x = 0; x < packGroup.getChildren().size; x++){
+            ((TextButton)packGroup.getChildren().get(x)).setStyle(FRAssetManager.getTextButtonStyle("darkblue"));
+        }
+
+        for (int x = 0; x < levelNumbersGroup.getChildren().size; x++) {
+            ((LevelNumberButton)levelNumbersGroup.getChildren().get(x)).setStyle(FRAssetManager.getTextButtonStyle("lightblue"));
+        }
+
+        dayNightButton.setSprite(FRAssetManager.getSprite("daynight"));
+
+        socialNetworkBackground.setStyle(FRAssetManager.getTextButtonStyle("white"));
+        twitterButton.setSprite(FRAssetManager.getTwLogo());
+        facebookButton.setSprite(FRAssetManager.getFbLogo());
+        vkButton.setSprite(FRAssetManager.getVkLogo());
+
+        //Support us
+        supportUsSmallButton.setSprite(FRAssetManager.getSprite("ads_icon"));
+        supportUsButton.setStyle(FRAssetManager.getTextButtonStyle("white"));
+        rateUsButton.setStyle(FRAssetManager.getTextButtonStyle("white"));
+        feedButton.setStyle(FRAssetManager.getTextButtonStyle("white"));
+
+        authorsButton.setSprite(FRAssetManager.getSprite("authors_icon"));
+
+        if (FlowRush.isPlayServicesAvailable()) {
+            googlePlayButton.setSprite(FRAssetManager.getSprite("controller"));
+            signInButton.setStyle(FRAssetManager.getTextButtonStyle("white"));
+            showSnapshotsButton.setStyle(FRAssetManager.getTextButtonStyle("white"));
+            showAchievementsButton.setStyle(FRAssetManager.getTextButtonStyle("white"));
+            signOutButton.setStyle(FRAssetManager.getTextButtonStyle("white"));
+        }
+
+        restartButton.setSprite(FRAssetManager.getSprite("restart_icon"));
+        resumeButton.setSprite(FRAssetManager.getSprite("back_icon"));
+        menuButton.setSprite(FRAssetManager.getSprite("mmenu_icon"));
+
+        pauseButton.setSprite(FRAssetManager.getSprite("pause_icon"));
+
+
+        pauseBackground.setStyle(FRAssetManager.getLabelStyle("alphawhite"));
+
+
+        //Level complete elements
+        nextLevelButton.setSprite(FRAssetManager.getSprite("next_icon"));
+
+        wellDonehex.setSprite(FRAssetManager.getSprite("bighex_light"));
+
+        wellDoneLabel.setStyle(FRAssetManager.getLabelStyle("darkblue"));
+
+        //Pack complete elements
+        packCompleteUpperHex.setSprite(FRAssetManager.getSprite("bighex_dark"));
+        packCompleteLowerHex.setSprite(FRAssetManager.getSprite("bighex_light"));
+        packCompleteMenuButton.setStyle(FRAssetManager.getTextButtonStyle("default"));
+        packCompleteNextPackButton.setStyle(FRAssetManager.getTextButtonStyle("darkblue"));
+
+        dialogBackground.setStyle(FRAssetManager.getLabelStyle("darkbluesmall"));
+
+        leftButton.setStyle(FRAssetManager.getTextButtonStyle("bordersmall"));
+        rightButton.setStyle(FRAssetManager.getTextButtonStyle("whitesmall"));
+    }
+
     public static void initialize() {
+
+
 
         //----------------------- COMMON
 
-        levelNumberActor = new Label("", FRAssetManager.getSkin(), "greyfont");
+        levelNumberActor = new Label("", FRAssetManager.getLabelStyle("greyfont"));
         levelNumberActor.setSize(FRConstants.BUTTON_SIZE, FRConstants.BUTTON_SIZE);
         levelNumberActor.setPosition(Gdx.graphics.getWidth() - levelNumberActor.getWidth(), Gdx.graphics.getHeight() - levelNumberActor.getHeight());
         levelNumberActor.setAlignment(Align.center);
 
         soundButton = UiActorCreator.getSmallButtonActor(5);
 
-        hexBackgroundActor = new HexBackgroundActor(FRAssetManager.getAtlas().createSprite("animbackhex"));
+        hexBackgroundActor = new HexBackgroundActor(FRAssetManager.getSprite("animbackhex"));
 
         backgroundAnimation = new Group();
         for (int type = 1; type < 5; type++) {
@@ -131,12 +217,12 @@ public class UIPool {
         menuLabel = UiActorCreator.getTextButton(7);
         menuLabel.setText("SUPPORT US");
 
-        innerLayout = new Label("", FRAssetManager.getSkin(), "default");
+        innerLayout = new Label("", FRAssetManager.getLabelStyle("default"));
         innerLayout.setSize(Gdx.graphics.getWidth() * 0.9f, (((Gdx.graphics.getHeight() * 0.98f - FRConstants.BUTTON_SIZE)) + (FRConstants.BUTTON_SIZE) / 2) - (FRConstants.BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f)); // размеры PACK_GROUP_TOP_MARGIN и PACK_GROUP_BOTTOM_MARGIN иннерскрин? высчитываем через высоту textButton любого выше высчитываем через высоту кнопки circle button back
         innerLayout.setPosition((Gdx.graphics.getWidth() - innerLayout.getWidth()) / 2, FRConstants.BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f);
         innerLayout.setVisible(false);
 
-        messageBackground = new Label("development\nTIMUR SCISSORS\n\ndesign\nSONYA KOVALSKI\n\nmusic\nERIC HOPTON", FRAssetManager.getSkin(), "default");
+        messageBackground = new Label("development\nTIMUR SCISSORS\n\ndesign\nSONYA KOVALSKI\n\nmusic\nERIC HOPTON", FRAssetManager.getLabelStyle("default"));
         messageBackground.setVisible(false);
         messageBackground.setAlignment(Align.top);
         messageBackground.setWrap(true);
@@ -183,7 +269,7 @@ public class UIPool {
         levelNumbersGroup.setVisible(false);
 
         for (int x = 1; x < 51; x++) {
-            LevelNumberButton levelNumberButton = new LevelNumberButton("" + x, FRAssetManager.getSkin(), "lightblue", x);
+            LevelNumberButton levelNumberButton = new LevelNumberButton("" + x, FRAssetManager.getTextButtonStyle("lightblue"), FRAssetManager.getSprite("lock"), x);
             setLevelNumberPosition(x, levelNumberButton);
             levelNumberButton.setSize(LEVEL_NUMBER_SIZE, LEVEL_NUMBER_SIZE);
             levelNumberButton.setOrigin(Align.center);
@@ -210,7 +296,7 @@ public class UIPool {
         authorsButton = UiActorCreator.getSmallButtonActor(7);
 
         //!!!!!!!!!!! НЕ УДАЛИТЬ СЛУЧАЙНО
-        /**removeAds = com.blackhornetworkshop.flowrush.model.UiActorCreator.getTextButton(6, game);
+        /**removeAds = com.blackhornetworkshop.flowrush.model.ui.UiActorCreator.getTextButton(6, game);
          removeAds.addListener(new com.blackhornetworkshop.flowrush.model.listeners.ButtonScaleListener(removeAds, game));*/
 
         if (FlowRush.isPlayServicesAvailable()) {
@@ -241,7 +327,7 @@ public class UIPool {
         quadrantPauseBackground.setSize(FRConstants.BUTTON_SIZE * 2 + Gdx.graphics.getHeight() * 0.1f, FRConstants.BUTTON_SIZE * 2 + Gdx.graphics.getHeight() * 0.1f);
         quadrantPauseBackground.setPosition(0, 0);
 
-        pauseBackground = new Label("", FRAssetManager.getSkin(), "alphawhite");
+        pauseBackground = new Label("", FRAssetManager.getLabelStyle("alphawhite"));
         pauseBackground.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         pauseBackground.setVisible(false);
         pauseBackground.addListener(new ClickListener() {
@@ -258,20 +344,20 @@ public class UIPool {
         //Level complete elements
         nextLevelButton = UiActorCreator.getSmallButtonActor(12);
         wellDonehex = UiActorCreator.getSmallButtonActor(11);
-        wellDoneLabel = new Label("WELL DONE!", FRAssetManager.getSkin(), "darkblue");
+        wellDoneLabel = new Label("WELL DONE!", FRAssetManager.getLabelStyle("darkblue"));
         wellDoneLabel.setSize(Gdx.graphics.getWidth() * 0.6f, FRConstants.BUTTON_SIZE * 0.7f);
         wellDoneLabel.setPosition((Gdx.graphics.getWidth() - wellDoneLabel.getWidth()) / 2, Gdx.graphics.getHeight() - FRConstants.BUTTON_SIZE * 0.85f);
         wellDoneLabel.setAlignment(Align.center);
         wellDoneLabel.setVisible(false);
 
         //Pack complete elements
-        packCompleteUpperHex = new PackCompleteTopHex(FRAssetManager.getSkin().getFont("fontMid"), LevelController.getPackName(FlowRush.getSave().getCurrentPack()));
-        packCompleteLowerHex = new PackCompleteLowerHex(FRAssetManager.getAtlas());
+        packCompleteUpperHex = new PackCompleteTopHex(LevelController.getPackName(FlowRush.getSave().getCurrentPack()));
+        packCompleteLowerHex = new PackCompleteLowerHex();
         packCompleteMenuButton = UiActorCreator.getTextButton(9);
         packCompleteNextPackButton = UiActorCreator.getTextButton(12);
         packCompleteNextPackButton.setName("");
 
-        dialogBackground = new Label("ENJOYING  FLOW RUSH?", FRAssetManager.getSkin(), "darkbluesmall");
+        dialogBackground = new Label("ENJOYING  FLOW RUSH?", FRAssetManager.getLabelStyle("darkbluesmall"));
         dialogBackground.setSize(Gdx.graphics.getWidth(), FRConstants.BUTTON_SIZE * 1.45f);
         dialogBackground.setPosition(0, 0);
         dialogBackground.setAlignment(Align.top);

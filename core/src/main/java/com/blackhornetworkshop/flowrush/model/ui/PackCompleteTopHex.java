@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.blackhornetworkshop.flowrush.model.FRAssetManager;
+import com.blackhornetworkshop.flowrush.view.FlowRush;
 
 public class PackCompleteTopHex extends Actor {
 
@@ -19,16 +20,21 @@ public class PackCompleteTopHex extends Actor {
     private Container<Label> labelContainer;
 
 
-    public PackCompleteTopHex(BitmapFont font, String string){
+    public PackCompleteTopHex(String string){
         setSize(Gdx.graphics.getHeight()*0.35f*1.117647058823529f, Gdx.graphics.getHeight()*0.35f);
         setOrigin(getWidth()/2, getHeight()/2);
         setPosition((Gdx.graphics.getWidth()-getWidth())/2, (Gdx.graphics.getHeight()-getHeight())/4*3);
 
-        sprite = FRAssetManager.getAtlas().createSprite("bighex_dark");
+        sprite = FRAssetManager.getSprite("bighex_dark");
 
-        Color color = new Color(1f, 1f, 1f, 1);
+        Color color;
+        if(FlowRush.getPreferences().isNightMode()){
+            color = new Color(0.4078f, 0.4118f, 0.4118f, 1);
+        }else{
+            color = new Color(1f, 1f, 1f, 1);
+        }
 
-        Label.LabelStyle labelStyle = new Label.LabelStyle(font, color);
+        Label.LabelStyle labelStyle = new Label.LabelStyle(FRAssetManager.getMidFont(), color);
         Label label = new Label(string+"\nPACK\nIS DONE!",labelStyle);
         label.setAlignment(Align.center);
 
@@ -46,4 +52,7 @@ public class PackCompleteTopHex extends Actor {
         labelContainer.draw(batch, 1);
     }
 
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 }

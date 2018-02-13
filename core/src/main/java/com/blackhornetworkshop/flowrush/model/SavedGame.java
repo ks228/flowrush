@@ -8,7 +8,7 @@ public class SavedGame {
     private boolean[] achievements = {false, false, false, false, false, false, false, false, false, false};
     private int currentLvl = 1;
     private int currentPack = 1;
-    private int[] levelsProgress = {1, 1, 1, 1, 1};
+    private int[] levelsProgress = {1, 1, 1, 1, 5};
     private boolean[] finishedPacks = {false, false, false, false, false};
 
 

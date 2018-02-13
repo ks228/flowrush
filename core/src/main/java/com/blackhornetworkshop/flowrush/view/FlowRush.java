@@ -2,6 +2,7 @@ package com.blackhornetworkshop.flowrush.view;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -97,6 +98,21 @@ public class FlowRush extends Game {
 
         //Start a game
         ScreenManager.setLogoBHWScreen();
+
+
+    }
+
+    public static void dayNightShift(){
+        logDebug("FlowRush dayNightShift() called");
+
+        hudStage.clear();
+
+        UIPool.reinialize();
+
+        MenuScreen.getInstance().show();
+
+        ScreenManager.setMenuMainScreen();
+
     }
 
     public static void checkAchievements() {
@@ -187,9 +203,6 @@ public class FlowRush extends Game {
         MenuScreen.getInstance().dispose();
         GameScreen.getInstance().dispose();
 
-        FRAssetManager.getSkin().remove("fontLarge", BitmapFont.class);// REMOVE IS IMPORTANT!
-        FRAssetManager.getSkin().remove("fontMid", BitmapFont.class);
-        FRAssetManager.getSkin().remove("fontSmall", BitmapFont.class);
         FRAssetManager.dispose();
     }
     public static OneTouchProcessor getOneTouchProcessor(){return oneTouchProcessor;}

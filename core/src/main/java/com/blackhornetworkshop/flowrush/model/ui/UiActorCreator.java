@@ -1,7 +1,6 @@
-package com.blackhornetworkshop.flowrush.model;
+package com.blackhornetworkshop.flowrush.model.ui;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
@@ -13,11 +12,11 @@ import com.badlogic.gdx.utils.Align;
 import com.blackhornetworkshop.flowrush.controller.LevelController;
 import com.blackhornetworkshop.flowrush.controller.RateDialogController;
 import com.blackhornetworkshop.flowrush.controller.ScreenManager;
+import com.blackhornetworkshop.flowrush.model.FRAssetManager;
+import com.blackhornetworkshop.flowrush.model.FRFileHandler;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
 import com.blackhornetworkshop.flowrush.model.listeners.ButtonScaleListener;
 import com.blackhornetworkshop.flowrush.view.screens.GameScreen;
-import com.blackhornetworkshop.flowrush.model.ui.SmallButtonActor;
-import com.blackhornetworkshop.flowrush.model.ui.UIPool;
 import com.blackhornetworkshop.flowrush.model.ui.background.BackgroundActor;
 import com.blackhornetworkshop.flowrush.model.ui.background.BottomBackgroundActor;
 import com.blackhornetworkshop.flowrush.model.ui.background.LeftBackgroundActor;
@@ -38,6 +37,7 @@ public class UiActorCreator {
                 textButton.addListener(new ButtonScaleListener(true) {
                     @Override
                     public void action(InputEvent event) {
+                        LevelController.setCurrentLevel(FlowRush.getSave().getCurrentPack(), FlowRush.getSave().getCurrentLvl());
                         ScreenManager.setGameMainScreen();
                     }
                 });
@@ -89,7 +89,7 @@ public class UiActorCreator {
                 textButton = createTextButton("", "white", MENU_BUTTON_WIDTH, SOCIAL_BACKGROUND_HEIGHT, MENU_BUTTON_X, MENU_BUTTON_Y_1, false, false);
                 textButton.setVisible(false);
                 return textButton;
-            case 9: //PACK COMPLETE MENU button
+            case 9: //MENU button (pack complete)
                 textButton = createTextButton("MENU", "default", MENU_PACK_COMPLETE_BUTTON_WIDTH, MENU_PACK_COMPLETE_BUTTON_HEIGHT, MENU_PACK_COMPLETE_BUTTON_X, MENU_PACK_COMPLETE_BUTTON_Y, false, true);
                 textButton.addListener(new ButtonScaleListener(true) {
                     @Override
@@ -197,7 +197,7 @@ public class UiActorCreator {
     }
 
     private static TextButton createTextButton(String text, String styleName, float width, float height, float x, float y, boolean isVisible, boolean isTransformable) {
-        TextButton textButton = new TextButton(text, FRAssetManager.getSkin(), styleName);
+        TextButton textButton = new TextButton(text, FRAssetManager.getTextButtonStyle(styleName));
         textButton.setBounds(x, y, width, height);
         textButton.setVisible(isVisible);
         textButton.setTransform(isTransformable);
@@ -208,18 +208,18 @@ public class UiActorCreator {
     public static TextButton getPackButton(int pack) {
         TextButton textButton;
 
-        if (LevelController.getLevelPack(pack - 1).available) {
-            textButton = new TextButton("", FRAssetManager.getSkin(), "darkblue");
+        //if (LevelController.getLevelPack(pack - 1).available) {
+            textButton = new TextButton("", FRAssetManager.getTextButtonStyle("darkblue"));
             textButton.addListener(new ButtonScaleListener(true) {
                 @Override
                 public void action(InputEvent event) {
                     ScreenManager.setMenuLevelChoiceScreen(pack);
                 }
             });
-        } else {
+/*        } else {
             textButton = new TextButton("", FRAssetManager.getSkin(), "alphablackgrey");
             textButton.addListener(new ButtonScaleListener(false));
-        }
+        }*/
 
         String packName = LevelController.getPackName(pack);
 
@@ -237,7 +237,7 @@ public class UiActorCreator {
     public static SmallButtonActor getSmallButtonActor(int type) { //Маленькие кнопки актеры
         switch (type) {
             case 1://PAUSE button
-                SmallButtonActor pauseButton = createSmallButtonActor(0.0f, 0.0f, Gdx.graphics.getWidth() / 8, Gdx.graphics.getWidth() / 8, true, FRAssetManager.getAtlas().createSprite("pause_icon"));
+                SmallButtonActor pauseButton = createSmallButtonActor(0.0f, 0.0f, Gdx.graphics.getWidth() / 8, Gdx.graphics.getWidth() / 8, true, FRAssetManager.getSprite("pause_icon"));
                 pauseButton.addListener(new ButtonScaleListener(false) {
                     @Override
                     public void action(InputEvent event) {
@@ -249,7 +249,7 @@ public class UiActorCreator {
                 });
                 return pauseButton;
             case 2: //RESUME button
-                SmallButtonActor backButton = createSmallButtonActor(0.0f, 0.0f, BUTTON_SIZE, BUTTON_SIZE, true, FRAssetManager.getAtlas().createSprite("back_icon"));
+                SmallButtonActor backButton = createSmallButtonActor(0.0f, 0.0f, BUTTON_SIZE, BUTTON_SIZE, true, FRAssetManager.getSprite("back_icon"));
                 backButton.addListener(new ButtonScaleListener(false) {
                     @Override
                     public void action(InputEvent event) {
@@ -262,7 +262,7 @@ public class UiActorCreator {
                 });
                 return backButton;
             case 3://RESTART button
-                SmallButtonActor restartButton = createSmallButtonActor(BUTTON_SIZE + SCREEN_HEIGHT * 0.05f, 0.0f, BUTTON_SIZE, BUTTON_SIZE, true, FRAssetManager.getAtlas().createSprite("restart_icon"));
+                SmallButtonActor restartButton = createSmallButtonActor(BUTTON_SIZE + SCREEN_HEIGHT * 0.05f, 0.0f, BUTTON_SIZE, BUTTON_SIZE, true, FRAssetManager.getSprite("restart_icon"));
                 restartButton.addListener(new ButtonScaleListener(true) {
                     @Override
                     public void action(InputEvent event) {
@@ -278,7 +278,7 @@ public class UiActorCreator {
 
                 return restartButton;
             case 4://MENU button (pause group)
-                SmallButtonActor mainMenuButton = createSmallButtonActor(BUTTON_SIZE, BUTTON_SIZE, BUTTON_SIZE, BUTTON_SIZE, true, FRAssetManager.getAtlas().createSprite("mmenu_icon"));
+                SmallButtonActor mainMenuButton = createSmallButtonActor(BUTTON_SIZE, BUTTON_SIZE, BUTTON_SIZE, BUTTON_SIZE, true, FRAssetManager.getSprite("mmenu_icon"));
                 mainMenuButton.addListener(new ButtonScaleListener(true) {
                     @Override
                     public void action(InputEvent event) {
@@ -289,21 +289,21 @@ public class UiActorCreator {
             case 5://SOUND button
                 SmallButtonActor soundButton;
                 if (FlowRush.getPreferences().isSoundOn()) {
-                    soundButton = createSmallButtonActor(0.0f, 0.0f, BUTTON_SIZE, BUTTON_SIZE, true, FRAssetManager.getSoundOn());
+                    soundButton = createSmallButtonActor(0.0f, 0.0f, BUTTON_SIZE, BUTTON_SIZE, true, FRAssetManager.getSprite("soundOn"));
                 } else {
-                    soundButton = createSmallButtonActor(0.0f, 0.0f, BUTTON_SIZE, BUTTON_SIZE, true, FRAssetManager.getSoundOff());
+                    soundButton = createSmallButtonActor(0.0f, 0.0f, BUTTON_SIZE, BUTTON_SIZE, true, FRAssetManager.getSprite("soundOff"));
                 }
                 soundButton.addListener(new ButtonScaleListener(false) {
                     @Override
                     public void action(InputEvent event) {
                         if (FlowRush.getPreferences().isSoundOn()) {
-                            ((SmallButtonActor) event.getListenerActor()).setSprite(FRAssetManager.getSoundOff());
+                            ((SmallButtonActor) event.getListenerActor()).setSprite(FRAssetManager.getSprite("soundOff"));
                             FlowRush.getPreferences().setSound(false);
                             FRAssetManager.getBackgroundMusic().pause();
                             FRFileHandler.savePreferences();
                             FlowRush.logDebug("Sound is off");
                         } else {
-                            ((SmallButtonActor) event.getListenerActor()).setSprite(FRAssetManager.getSoundOn());
+                            ((SmallButtonActor) event.getListenerActor()).setSprite(FRAssetManager.getSprite("soundOn"));
                             FlowRush.getPreferences().setSound(true);
                             FRAssetManager.getBackgroundMusic().play();
                             FRFileHandler.savePreferences();
@@ -313,7 +313,7 @@ public class UiActorCreator {
                 });
                 return soundButton;
             case 6://CLOSE button (menu screen)
-                SmallButtonActor closeButton = createSmallButtonActor((Gdx.graphics.getWidth() - BUTTON_SIZE) / 2.0f, Gdx.graphics.getHeight() * 0.02f, BUTTON_SIZE, BUTTON_SIZE, false, FRAssetManager.getAtlas().createSprite("close_icon"));
+                SmallButtonActor closeButton = createSmallButtonActor((Gdx.graphics.getWidth() - BUTTON_SIZE) / 2.0f, Gdx.graphics.getHeight() * 0.02f, BUTTON_SIZE, BUTTON_SIZE, false, FRAssetManager.getSprite("close_icon"));
                 closeButton.addListener(new ButtonScaleListener(true) {
                     @Override
                     public void action(InputEvent event) {
@@ -322,7 +322,7 @@ public class UiActorCreator {
                 });
                 return closeButton;
             case 7://AUTHORS button
-                SmallButtonActor authorsButton = createSmallButtonActor(Gdx.graphics.getWidth() - BUTTON_SIZE - Gdx.graphics.getHeight() * 0.02f, Gdx.graphics.getHeight() * 0.02f, BUTTON_SIZE, BUTTON_SIZE, true, FRAssetManager.getAtlas().createSprite("authors_icon"));
+                SmallButtonActor authorsButton = createSmallButtonActor(Gdx.graphics.getWidth() - BUTTON_SIZE - Gdx.graphics.getHeight() * 0.02f, Gdx.graphics.getHeight() * 0.02f, BUTTON_SIZE, BUTTON_SIZE, true, FRAssetManager.getSprite("authors_icon"));
                 authorsButton.addListener(new ButtonScaleListener(true) {
                     @Override
                     public void action(InputEvent event) {
@@ -331,7 +331,7 @@ public class UiActorCreator {
                 });
                 return authorsButton;
             case 8://FACEBOOK button
-                SmallButtonActor fbButton = createSmallButtonActor((SCREEN_WIDTH - BUTTON_SIZE) / 2.0f - BUTTON_SIZE * 1.25f, SOCIAL_BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE, false, FRAssetManager.getAtlas().createSprite("fb_icon"));
+                SmallButtonActor fbButton = createSmallButtonActor((SCREEN_WIDTH - BUTTON_SIZE) / 2.0f - BUTTON_SIZE * 1.25f, SOCIAL_BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE, false, FRAssetManager.getFbLogo());
                 fbButton.addListener(new ButtonScaleListener(false) {
                     @Override
                     public void action(InputEvent event) {
@@ -340,7 +340,7 @@ public class UiActorCreator {
                 });
                 return fbButton;
             case 9://TWITTER button
-                SmallButtonActor twButton = createSmallButtonActor((SCREEN_WIDTH - BUTTON_SIZE) / 2.0f, SOCIAL_BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE, false, FRAssetManager.getAtlas().createSprite("tw_icon"));
+                SmallButtonActor twButton = createSmallButtonActor((SCREEN_WIDTH - BUTTON_SIZE) / 2.0f, SOCIAL_BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE, false, FRAssetManager.getTwLogo());
                 twButton.addListener(new ButtonScaleListener(false) {
                     @Override
                     public void action(InputEvent event) {
@@ -349,7 +349,7 @@ public class UiActorCreator {
                 });
                 return twButton;
             case 10://VK button
-                SmallButtonActor vkButton = createSmallButtonActor((SCREEN_WIDTH - BUTTON_SIZE) / 2.0f + BUTTON_SIZE * 1.25f, SOCIAL_BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE, false, FRAssetManager.getAtlas().createSprite("vk_icon"));
+                SmallButtonActor vkButton = createSmallButtonActor((SCREEN_WIDTH - BUTTON_SIZE) / 2.0f + BUTTON_SIZE * 1.25f, SOCIAL_BUTTON_Y, BUTTON_SIZE, BUTTON_SIZE, false, FRAssetManager.getVkLogo());
                 vkButton.addListener(new ButtonScaleListener(false) {
                     @Override
                     public void action(InputEvent event) {
@@ -360,7 +360,7 @@ public class UiActorCreator {
             case 11://WELLDONE HEX actor
                 float welldoneWidth = BUTTON_SIZE * 0.9f;
                 float welldoneHeight = BUTTON_SIZE * 0.9f * 0.8947368f;
-                SmallButtonActor welldoneHex = createSmallButtonActor((SCREEN_WIDTH - SCREEN_WIDTH * 0.6f) / 2.0f - welldoneWidth / 2.0f, SCREEN_HEIGHT - welldoneHeight - (BUTTON_SIZE - welldoneHeight) / 2.0f, welldoneWidth, welldoneHeight, false, FRAssetManager.getAtlas().createSprite("bighex_light"));
+                SmallButtonActor welldoneHex = createSmallButtonActor((SCREEN_WIDTH - SCREEN_WIDTH * 0.6f) / 2.0f - welldoneWidth / 2.0f, SCREEN_HEIGHT - welldoneHeight - (BUTTON_SIZE - welldoneHeight) / 2.0f, welldoneWidth, welldoneHeight, false, FRAssetManager.getSprite("bighex_light"));
 
                 RotateByAction rotateToActionWellDone = new RotateByAction();
                 rotateToActionWellDone.setDuration(2f);
@@ -373,16 +373,16 @@ public class UiActorCreator {
                 welldoneHex.addAction(repeatActionWellDone);
                 return welldoneHex;
             case 12://NEXT button (pack or level)
-                final SmallButtonActor nextButton = createSmallButtonActor(SCREEN_WIDTH - SCREEN_WIDTH / 8, 0.0f, SCREEN_WIDTH / 8, SCREEN_WIDTH / 8, false, FRAssetManager.getAtlas().createSprite("next_icon"));
+                final SmallButtonActor nextButton = createSmallButtonActor(SCREEN_WIDTH - SCREEN_WIDTH / 8, 0.0f, SCREEN_WIDTH / 8, SCREEN_WIDTH / 8, false, FRAssetManager.getSprite("next_icon"));
                 nextButton.addListener(new ButtonScaleListener(true) {
                     @Override
                     public void action(InputEvent event) {
-                        if (LevelController.nextLevelExist()) {
+/*                        if (LevelController.nextLevelExist()) {
                             GameScreen.getInstance().startNewLevel();
                             ScreenManager.setGameMainScreen();
-                        } else {
+                        } else {*/
                             ScreenManager.setGamePackCompleteScreen();
-                        }
+                        //}
                     }
                 });
                 MoveToAction moveToAction1 = new MoveToAction();
@@ -402,7 +402,7 @@ public class UiActorCreator {
                 nextButton.addAction(repeatActionNext);
                 return nextButton;
             case 13://SUPPORT US button
-                SmallButtonActor supportUsButton = createSmallButtonActor((SCREEN_WIDTH - BUTTON_SIZE) / 2.0f, SCREEN_HEIGHT * 0.02f, BUTTON_SIZE, BUTTON_SIZE, true, FRAssetManager.getAtlas().createSprite("ads_icon"));
+                SmallButtonActor supportUsButton = createSmallButtonActor((SCREEN_WIDTH - BUTTON_SIZE) / 2.0f, SCREEN_HEIGHT * 0.02f, BUTTON_SIZE, BUTTON_SIZE, true, FRAssetManager.getSprite("ads_icon"));
                 supportUsButton.addListener(new ButtonScaleListener(true) {
                     @Override
                     public void action(InputEvent event) {
@@ -411,8 +411,7 @@ public class UiActorCreator {
                 });
                 return supportUsButton;
             case 14://GOOGLE GAMES button
-                Sprite googlePlaySprite = new Sprite(new Texture(Gdx.files.internal("controller.png")));
-                SmallButtonActor googlePlayButton = createSmallButtonActor(SCREEN_HEIGHT * 0.03f, SCREEN_HEIGHT - BUTTON_SIZE-SCREEN_HEIGHT*0.01f, BUTTON_SIZE * 0.8f, BUTTON_SIZE * 0.8f, true, googlePlaySprite);
+                SmallButtonActor googlePlayButton = createSmallButtonActor(SCREEN_HEIGHT * 0.02f, SCREEN_HEIGHT - BUTTON_SIZE-SCREEN_HEIGHT*0.02f, BUTTON_SIZE, BUTTON_SIZE, true, FRAssetManager.getSprite("controller"));
                 googlePlayButton.addListener(new ButtonScaleListener(true) {
                     @Override
                     public void action(InputEvent event) {
@@ -425,16 +424,13 @@ public class UiActorCreator {
                 });
                 return googlePlayButton;
             case 15: // DAY NIGHT button
-                Sprite daySprite = new Sprite(new Texture(Gdx.files.internal("day-shift.png")));
-                Sprite nightSprite = new Sprite(new Texture(Gdx.files.internal("night-shift.png")));
-                SmallButtonActor dayNightButton = createSmallButtonActor( SCREEN_WIDTH- BUTTON_SIZE- SCREEN_HEIGHT*0.02f, SCREEN_HEIGHT - BUTTON_SIZE-SCREEN_HEIGHT*0.02f, BUTTON_SIZE, BUTTON_SIZE, true, daySprite);
+                SmallButtonActor dayNightButton = createSmallButtonActor( SCREEN_WIDTH- BUTTON_SIZE- SCREEN_HEIGHT*0.02f, SCREEN_HEIGHT - BUTTON_SIZE-SCREEN_HEIGHT*0.02f, BUTTON_SIZE, BUTTON_SIZE, true, FRAssetManager.getSprite("daynight"));
                 dayNightButton.addListener(new ButtonScaleListener(true){
                     @Override
                     public void action(InputEvent event) {
                         FlowRush.getPreferences().setNightMode(!FlowRush.getPreferences().isNightMode());
-                        SmallButtonActor smallButtonActor = (SmallButtonActor)event.getListenerActor();
-                        if(FlowRush.getPreferences().isNightMode()) smallButtonActor.setSprite(nightSprite);
-                        else smallButtonActor.setSprite(daySprite);
+                        FRFileHandler.savePreferences();
+                        FlowRush.dayNightShift();
                     }
                 });
                 return dayNightButton;

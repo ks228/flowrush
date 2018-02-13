@@ -12,6 +12,7 @@ import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.blackhornetworkshop.flowrush.model.FRConstants;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
+import com.google.android.gms.tasks.Task;
 
 public class AndroidLauncher extends AndroidApplication {
 
@@ -49,6 +50,8 @@ public class AndroidLauncher extends AndroidApplication {
         View libGDXLayout = initializeForView(FlowRush.getInstance(), getConfig());
         mainLayout.addView(libGDXLayout);
 
+        //admob here
+
         setContentView(mainLayout);
     }
 
@@ -77,7 +80,7 @@ public class AndroidLauncher extends AndroidApplication {
         }
     }
 
-    void showLoadingDialog(){
+    void showLoadingLabel(){
         runOnUiThread(new Runnable() {
             public void run() {
                 FRAndroidHelper.getInstance().logDebug("Display loading dialog");
@@ -90,4 +93,7 @@ public class AndroidLauncher extends AndroidApplication {
         loadingDialog.dismiss();
     }
 
+    void reloadFlowRushGraphics(){
+
+    }
 }

@@ -1,5 +1,7 @@
 package com.blackhornetworkshop.flowrush.model;
 
+import com.blackhornetworkshop.flowrush.view.FlowRush;
+
 public class GamePreferences{
 
     private boolean soundIsOn = true;
@@ -9,6 +11,7 @@ public class GamePreferences{
 
     public boolean isNightMode(){ return isNightMode;}
     public void setNightMode(boolean isNightMode){
+        FlowRush.logDebug("Is night mode: "+isNightMode);
         this.isNightMode = isNightMode;
     }
     public boolean isAdsIsRemoved(){return adsIsRemoved;}
