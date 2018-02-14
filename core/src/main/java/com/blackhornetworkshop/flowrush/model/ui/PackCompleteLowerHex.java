@@ -3,11 +3,15 @@ package com.blackhornetworkshop.flowrush.model.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RotateByAction;
+import com.badlogic.gdx.utils.Align;
 import com.blackhornetworkshop.flowrush.model.FRAssetManager;
+
+import static com.blackhornetworkshop.flowrush.model.FRConstants.BIG_HEX_LIGHT;
+import static com.blackhornetworkshop.flowrush.model.FRConstants.SCREEN_HEIGHT;
+import static com.blackhornetworkshop.flowrush.model.FRConstants.SCREEN_WIDTH;
 
 //Created by TScissors.
 
@@ -15,11 +19,11 @@ public class PackCompleteLowerHex extends Actor {
     private Sprite sprite;
 
     public PackCompleteLowerHex(){
-        setSize(Gdx.graphics.getHeight()*0.35f*1.117647058823529f, Gdx.graphics.getHeight()*0.35f);
-        setOrigin(getWidth()/2, getHeight()/2);
-        setPosition((Gdx.graphics.getWidth()-getWidth())/2, (Gdx.graphics.getHeight()-getHeight())/4*3);
+        setSize(SCREEN_HEIGHT*0.35f*1.117647058823529f, SCREEN_HEIGHT*0.35f);
+        setPosition((SCREEN_WIDTH-getWidth())/2, (SCREEN_HEIGHT-getHeight())/4*3);
+        setOrigin(Align.center);
 
-        sprite = FRAssetManager.getSprite("bighex_light");
+        sprite = FRAssetManager.getSprite(BIG_HEX_LIGHT);
 
         RotateByAction rotateToActionPackBack = new RotateByAction();
         rotateToActionPackBack.setDuration(3f);

@@ -23,8 +23,7 @@ import com.blackhornetworkshop.flowrush.view.FlowRush;
 
 import java.util.HashMap;
 
-import static com.blackhornetworkshop.flowrush.model.FRConstants.SCREEN_HEIGHT;
-import static com.blackhornetworkshop.flowrush.model.FRConstants.SCREEN_WIDTH;
+import static com.blackhornetworkshop.flowrush.model.FRConstants.*;
 
 public class FRAssetManager {
 
@@ -144,127 +143,120 @@ public class FRAssetManager {
     }
 
     private static void loadStyles(){
-        dayLabelStyleHashMap.put("greyfont", daySkin.get("greyfont", Label.LabelStyle.class));
-        dayLabelStyleHashMap.put("default", daySkin.get("default", Label.LabelStyle.class));
-        dayLabelStyleHashMap.put("alphawhite", daySkin.get("alphawhite", Label.LabelStyle.class));
-        dayLabelStyleHashMap.put("darkblue", daySkin.get("darkblue", Label.LabelStyle.class));
-        dayLabelStyleHashMap.put("darkbluesmall", daySkin.get("darkbluesmall", Label.LabelStyle.class));
-        dayLabelStyleHashMap.put("greyfont", daySkin.get("greyfont", Label.LabelStyle.class));
+        dayLabelStyleHashMap.put(LABEL_STYLE_GREYFONT, daySkin.get(LABEL_STYLE_GREYFONT, Label.LabelStyle.class));
+        dayLabelStyleHashMap.put(LABEL_STYLE_DEFAULT, daySkin.get(LABEL_STYLE_DEFAULT, Label.LabelStyle.class));
+        dayLabelStyleHashMap.put(LABEL_STYLE_ALPHAWHITE, daySkin.get(LABEL_STYLE_ALPHAWHITE, Label.LabelStyle.class));
+        dayLabelStyleHashMap.put(LABEL_STYLE_DARKBLUE, daySkin.get(LABEL_STYLE_DARKBLUE, Label.LabelStyle.class));
+        dayLabelStyleHashMap.put(LABEL_STYLE_DARKBLUESMALL, daySkin.get(LABEL_STYLE_DARKBLUESMALL, Label.LabelStyle.class));
+
+        nightLabelStyleHashMap.put(LABEL_STYLE_GREYFONT, nightSkin.get(LABEL_STYLE_GREYFONT, Label.LabelStyle.class));
+        nightLabelStyleHashMap.put(LABEL_STYLE_DEFAULT, nightSkin.get(LABEL_STYLE_DEFAULT, Label.LabelStyle.class));
+        nightLabelStyleHashMap.put(LABEL_STYLE_ALPHAWHITE, nightSkin.get(LABEL_STYLE_ALPHAWHITE, Label.LabelStyle.class));
+        nightLabelStyleHashMap.put(LABEL_STYLE_DARKBLUE, nightSkin.get(LABEL_STYLE_DARKBLUE, Label.LabelStyle.class));
+        nightLabelStyleHashMap.put(LABEL_STYLE_DARKBLUESMALL, nightSkin.get(LABEL_STYLE_DARKBLUESMALL, Label.LabelStyle.class));
 
 
-        nightLabelStyleHashMap.put("greyfont", nightSkin.get("greyfont", Label.LabelStyle.class));
-        nightLabelStyleHashMap.put("default", nightSkin.get("default", Label.LabelStyle.class));
-        nightLabelStyleHashMap.put("alphawhite", nightSkin.get("alphawhite", Label.LabelStyle.class));
-        nightLabelStyleHashMap.put("darkblue", nightSkin.get("darkblue", Label.LabelStyle.class));
-        nightLabelStyleHashMap.put("darkbluesmall", nightSkin.get("darkbluesmall", Label.LabelStyle.class));
-        nightLabelStyleHashMap.put("greyfont", nightSkin.get("greyfont", Label.LabelStyle.class));
+        dayTextbuttonStyleHashMap.put(TEXT_BUTTON_STYLE_DARKBLUE, daySkin.get(TEXT_BUTTON_STYLE_DARKBLUE, TextButton.TextButtonStyle.class));
+        dayTextbuttonStyleHashMap.put(TEXT_BUTTON_STYLE_WHITE, daySkin.get(TEXT_BUTTON_STYLE_WHITE, TextButton.TextButtonStyle.class));
+        dayTextbuttonStyleHashMap.put(TEXT_BUTTON_STYLE_PLAYBUTTON, daySkin.get(TEXT_BUTTON_STYLE_PLAYBUTTON, TextButton.TextButtonStyle.class));
+        dayTextbuttonStyleHashMap.put(TEXT_BUTTON_STYLE_LIGHTBLUE, daySkin.get(TEXT_BUTTON_STYLE_LIGHTBLUE, TextButton.TextButtonStyle.class));
+        dayTextbuttonStyleHashMap.put(TEXT_BUTTON_STYLE_DEFAULT, daySkin.get(TEXT_BUTTON_STYLE_DEFAULT, TextButton.TextButtonStyle.class));
+        dayTextbuttonStyleHashMap.put(TEXT_BUTTON_STYLE_BORDERSMALL, daySkin.get(TEXT_BUTTON_STYLE_BORDERSMALL, TextButton.TextButtonStyle.class));
+        dayTextbuttonStyleHashMap.put(TEXT_BUTTON_STYLE_WHITESMALL, daySkin.get(TEXT_BUTTON_STYLE_WHITESMALL, TextButton.TextButtonStyle.class));
 
-
-
-        dayTextbuttonStyleHashMap.put("darkblue", daySkin.get("darkblue", TextButton.TextButtonStyle.class));
-        dayTextbuttonStyleHashMap.put("white", daySkin.get("white", TextButton.TextButtonStyle.class));
-        dayTextbuttonStyleHashMap.put("playbutton", daySkin.get("playbutton", TextButton.TextButtonStyle.class));
-        dayTextbuttonStyleHashMap.put("lightblue", daySkin.get("lightblue", TextButton.TextButtonStyle.class));
-        dayTextbuttonStyleHashMap.put("default", daySkin.get("default", TextButton.TextButtonStyle.class));
-        dayTextbuttonStyleHashMap.put("bordersmall", daySkin.get("bordersmall", TextButton.TextButtonStyle.class));
-        dayTextbuttonStyleHashMap.put("whitesmall", daySkin.get("whitesmall", TextButton.TextButtonStyle.class));
-
-
-        nightTextbuttonStyleHashMap.put("darkblue", nightSkin.get("darkblue", TextButton.TextButtonStyle.class));
-        nightTextbuttonStyleHashMap.put("white", nightSkin.get("white", TextButton.TextButtonStyle.class));
-        nightTextbuttonStyleHashMap.put("playbutton", nightSkin.get("playbutton", TextButton.TextButtonStyle.class));
-        nightTextbuttonStyleHashMap.put("lightblue", nightSkin.get("lightblue", TextButton.TextButtonStyle.class));
-        nightTextbuttonStyleHashMap.put("default", nightSkin.get("default", TextButton.TextButtonStyle.class));
-        nightTextbuttonStyleHashMap.put("bordersmall", nightSkin.get("bordersmall", TextButton.TextButtonStyle.class));
-        nightTextbuttonStyleHashMap.put("whitesmall", nightSkin.get("whitesmall", TextButton.TextButtonStyle.class));
+        nightTextbuttonStyleHashMap.put(TEXT_BUTTON_STYLE_DARKBLUE, nightSkin.get(TEXT_BUTTON_STYLE_DARKBLUE, TextButton.TextButtonStyle.class));
+        nightTextbuttonStyleHashMap.put(TEXT_BUTTON_STYLE_WHITE, nightSkin.get(TEXT_BUTTON_STYLE_WHITE, TextButton.TextButtonStyle.class));
+        nightTextbuttonStyleHashMap.put(TEXT_BUTTON_STYLE_PLAYBUTTON, nightSkin.get(TEXT_BUTTON_STYLE_PLAYBUTTON, TextButton.TextButtonStyle.class));
+        nightTextbuttonStyleHashMap.put(TEXT_BUTTON_STYLE_LIGHTBLUE, nightSkin.get(TEXT_BUTTON_STYLE_LIGHTBLUE, TextButton.TextButtonStyle.class));
+        nightTextbuttonStyleHashMap.put(TEXT_BUTTON_STYLE_DEFAULT, nightSkin.get(TEXT_BUTTON_STYLE_DEFAULT, TextButton.TextButtonStyle.class));
+        nightTextbuttonStyleHashMap.put(TEXT_BUTTON_STYLE_BORDERSMALL, nightSkin.get(TEXT_BUTTON_STYLE_BORDERSMALL, TextButton.TextButtonStyle.class));
+        nightTextbuttonStyleHashMap.put(TEXT_BUTTON_STYLE_WHITESMALL, nightSkin.get(TEXT_BUTTON_STYLE_WHITESMALL, TextButton.TextButtonStyle.class));
 
     }
 
     private static void createSprites(){
-        daySpriteHashMap.put("background_hex", dayAtlas.createSprite("backhex"));
-        nightSpriteHashMap.put("background_hex", nightAtlas.createSprite("backhex"));
+        daySpriteHashMap.put(BACKGROUND_HEX, dayAtlas.createSprite(BACKGROUND_HEX));
+        nightSpriteHashMap.put(BACKGROUND_HEX, nightAtlas.createSprite(BACKGROUND_HEX));
 
-        daySpriteHashMap.put("background_hex_source", dayAtlas.createSprite("backhexS"));
-        nightSpriteHashMap.put("background_hex_source", nightAtlas.createSprite("backhexS"));
+        daySpriteHashMap.put(BACKGROUND_HEX_WITH_SOURCE, dayAtlas.createSprite(BACKGROUND_HEX_WITH_SOURCE));
+        nightSpriteHashMap.put(BACKGROUND_HEX_WITH_SOURCE, nightAtlas.createSprite(BACKGROUND_HEX_WITH_SOURCE));
 
-        daySpriteHashMap.put("background_hex_touched", dayAtlas.createSprite("backhex_touched"));
-        nightSpriteHashMap.put("background_hex_touched", dayAtlas.createSprite("backhex_touched"));
+        daySpriteHashMap.put(BACKGROUND_HEX_TOUCHED, dayAtlas.createSprite(BACKGROUND_HEX_TOUCHED));
+        nightSpriteHashMap.put(BACKGROUND_HEX_TOUCHED, dayAtlas.createSprite(BACKGROUND_HEX_TOUCHED));
 
-        daySpriteHashMap.put("background_hex_touched_source", nightAtlas.createSprite("backhex_touchedS"));
-        nightSpriteHashMap.put("background_hex_touched_source", nightAtlas.createSprite("backhex_touchedS"));
+        daySpriteHashMap.put(BACKGROUND_HEX_TOUCHED_WITH_SOURCE, nightAtlas.createSprite(BACKGROUND_HEX_TOUCHED_WITH_SOURCE));
+        nightSpriteHashMap.put(BACKGROUND_HEX_TOUCHED_WITH_SOURCE, nightAtlas.createSprite(BACKGROUND_HEX_TOUCHED_WITH_SOURCE));
 
-        daySpriteHashMap.put("source_icon", dayAtlas.createSprite("iconMP"));
-        daySpriteHashMap.put("dove_icon_off", dayAtlas.createSprite("iconD"));
-        daySpriteHashMap.put("dove_icon_on", dayAtlas.createSprite("iconDP"));
-        daySpriteHashMap.put("point_icon_off", dayAtlas.createSprite("iconE"));
-        daySpriteHashMap.put("point_icon_white", dayAtlas.createSprite("iconEW"));
-        daySpriteHashMap.put("point_icon_on", dayAtlas.createSprite("iconEP"));
+        daySpriteHashMap.put(SOURCE_ICON, dayAtlas.createSprite(SOURCE_ICON));
+        daySpriteHashMap.put(DOVE_OFF_ICON, dayAtlas.createSprite(DOVE_OFF_ICON));
+        daySpriteHashMap.put(DOVE_ON_ICON, dayAtlas.createSprite(DOVE_ON_ICON));
+        daySpriteHashMap.put(POINT_OFF_ICON, dayAtlas.createSprite(POINT_OFF_ICON));
+        daySpriteHashMap.put(POINT_WHITE_ICON, dayAtlas.createSprite(POINT_WHITE_ICON));
+        daySpriteHashMap.put(POINT_ON_ICON, dayAtlas.createSprite(POINT_ON_ICON));
 
-        nightSpriteHashMap.put("source_icon", nightAtlas.createSprite("iconMP"));
-        nightSpriteHashMap.put("dove_icon_off", nightAtlas.createSprite("iconD"));
-        nightSpriteHashMap.put("dove_icon_on", nightAtlas.createSprite("iconDP"));
-        nightSpriteHashMap.put("point_icon_off", nightAtlas.createSprite("iconE"));
-        nightSpriteHashMap.put("point_icon_white", nightAtlas.createSprite("iconEW"));
-        nightSpriteHashMap.put("point_icon_on", nightAtlas.createSprite("iconEP"));
+        nightSpriteHashMap.put(SOURCE_ICON, nightAtlas.createSprite(SOURCE_ICON));
+        nightSpriteHashMap.put(DOVE_OFF_ICON, nightAtlas.createSprite(DOVE_OFF_ICON));
+        nightSpriteHashMap.put(DOVE_ON_ICON, nightAtlas.createSprite(DOVE_ON_ICON));
+        nightSpriteHashMap.put(POINT_OFF_ICON, nightAtlas.createSprite(POINT_OFF_ICON));
+        nightSpriteHashMap.put(POINT_WHITE_ICON, nightAtlas.createSprite(POINT_WHITE_ICON));
+        nightSpriteHashMap.put(POINT_ON_ICON, nightAtlas.createSprite(POINT_ON_ICON));
 
         for (int x = 1; x < 51; x++) {
-            daySpriteHashMap.put("hex"+x, dayAtlas.createSprite("hex", x));
+            daySpriteHashMap.put(HEX+x, dayAtlas.createSprite(HEX, x));
         }
 
         for (int x = 1; x < 51; x++) {
-            nightSpriteHashMap.put("hex"+x, nightAtlas.createSprite("hex", x));
+            nightSpriteHashMap.put(HEX+x, nightAtlas.createSprite(HEX, x));
         }
 
-        daySpriteHashMap.put("close_icon", dayAtlas.createSprite("close_icon"));
-        daySpriteHashMap.put("daynight", dayAtlas.createSprite("daynight"));
-        daySpriteHashMap.put("soundOff", dayAtlas.createSprite("soundOff_icon"));
-        daySpriteHashMap.put("soundOn", dayAtlas.createSprite("soundOn_icon"));
-        daySpriteHashMap.put("q_circle", dayAtlas.createSprite("q_circle"));
-        daySpriteHashMap.put("lock", dayAtlas.createSprite("lock"));
-        daySpriteHashMap.put("back_white", dayAtlas.createSprite("back_white"));
-        daySpriteHashMap.put("pause_icon", dayAtlas.createSprite("pause_icon"));
-        daySpriteHashMap.put("back_icon", dayAtlas.createSprite("back_icon"));
-        daySpriteHashMap.put("restart_icon", dayAtlas.createSprite("restart_icon"));
-        daySpriteHashMap.put("mmenu_icon", dayAtlas.createSprite("mmenu_icon"));
-        daySpriteHashMap.put("authors_icon", dayAtlas.createSprite("authors_icon"));
-        daySpriteHashMap.put("bighex_light", dayAtlas.createSprite("bighex_light"));
-        daySpriteHashMap.put("bighex_dark", dayAtlas.createSprite("bighex_dark"));
-        daySpriteHashMap.put("next_icon", dayAtlas.createSprite("next_icon"));
-        daySpriteHashMap.put("ads_icon", dayAtlas.createSprite("ads_icon"));
-        daySpriteHashMap.put("controller", dayAtlas.createSprite("controller"));
-        daySpriteHashMap.put("animbackhex", dayAtlas.createSprite("animbackhex"));
+        daySpriteHashMap.put(CLOSE_ICON, dayAtlas.createSprite(CLOSE_ICON));
+        daySpriteHashMap.put(DAY_NIGHT_ICON, dayAtlas.createSprite(DAY_NIGHT_ICON));
+        daySpriteHashMap.put(SOUND_OFF_ICON, dayAtlas.createSprite(SOUND_OFF_ICON));
+        daySpriteHashMap.put(SOUND_ON_ICON, dayAtlas.createSprite(SOUND_ON_ICON));
+        daySpriteHashMap.put(LOCK_ICON, dayAtlas.createSprite(LOCK_ICON));
+        daySpriteHashMap.put(PAUSE_ICON, dayAtlas.createSprite(PAUSE_ICON));
+        daySpriteHashMap.put(BACK_BUTTON_ICON, dayAtlas.createSprite(BACK_BUTTON_ICON));
+        daySpriteHashMap.put(RESTART_ICON, dayAtlas.createSprite(RESTART_ICON));
+        daySpriteHashMap.put(MENU_ICON, dayAtlas.createSprite(MENU_ICON));
+        daySpriteHashMap.put(AUTHORS_ICON, dayAtlas.createSprite(AUTHORS_ICON));
+        daySpriteHashMap.put(NEXT_ICON, dayAtlas.createSprite(NEXT_ICON));
+        daySpriteHashMap.put(ADS_ICON, dayAtlas.createSprite(ADS_ICON));
+        daySpriteHashMap.put(CONTROLLER_ICON, dayAtlas.createSprite(CONTROLLER_ICON));
 
-        nightSpriteHashMap.put("close_icon", nightAtlas.createSprite("close_icon"));
-        nightSpriteHashMap.put("daynight", nightAtlas.createSprite("daynight"));
-        nightSpriteHashMap.put("soundOff", nightAtlas.createSprite("soundOff_icon"));
-        nightSpriteHashMap.put("soundOn", nightAtlas.createSprite("soundOn_icon"));
-        nightSpriteHashMap.put("q_circle", nightAtlas.createSprite("q_circle"));
-        nightSpriteHashMap.put("lock", nightAtlas.createSprite("lock"));
-        nightSpriteHashMap.put("back_white", nightAtlas.createSprite("back_white"));
-        nightSpriteHashMap.put("pause_icon", nightAtlas.createSprite("pause_icon"));
-        nightSpriteHashMap.put("back_icon", nightAtlas.createSprite("back_icon"));
-        nightSpriteHashMap.put("restart_icon", nightAtlas.createSprite("restart_icon"));
-        nightSpriteHashMap.put("mmenu_icon", nightAtlas.createSprite("mmenu_icon"));
-        nightSpriteHashMap.put("authors_icon", nightAtlas.createSprite("authors_icon"));
-        nightSpriteHashMap.put("bighex_light", nightAtlas.createSprite("bighex_light"));
-        nightSpriteHashMap.put("bighex_dark", nightAtlas.createSprite("bighex_dark"));
-        nightSpriteHashMap.put("next_icon", nightAtlas.createSprite("next_icon"));
-        nightSpriteHashMap.put("ads_icon", nightAtlas.createSprite("ads_icon"));
-        nightSpriteHashMap.put("controller", nightAtlas.createSprite("controller"));
-        nightSpriteHashMap.put("animbackhex", nightAtlas.createSprite("animbackhex"));
+        nightSpriteHashMap.put(CLOSE_ICON, nightAtlas.createSprite(CLOSE_ICON));
+        nightSpriteHashMap.put(DAY_NIGHT_ICON, nightAtlas.createSprite(DAY_NIGHT_ICON));
+        nightSpriteHashMap.put(SOUND_OFF_ICON, nightAtlas.createSprite(SOUND_OFF_ICON));
+        nightSpriteHashMap.put(SOUND_ON_ICON, nightAtlas.createSprite(SOUND_ON_ICON));
+        nightSpriteHashMap.put(LOCK_ICON, nightAtlas.createSprite(LOCK_ICON));
+        nightSpriteHashMap.put(PAUSE_ICON, nightAtlas.createSprite(PAUSE_ICON));
+        nightSpriteHashMap.put(BACK_BUTTON_ICON, nightAtlas.createSprite(BACK_BUTTON_ICON));
+        nightSpriteHashMap.put(RESTART_ICON, nightAtlas.createSprite(RESTART_ICON));
+        nightSpriteHashMap.put(MENU_ICON, nightAtlas.createSprite(MENU_ICON));
+        nightSpriteHashMap.put(AUTHORS_ICON, nightAtlas.createSprite(AUTHORS_ICON));
+        nightSpriteHashMap.put(NEXT_ICON, nightAtlas.createSprite(NEXT_ICON));
+        nightSpriteHashMap.put(ADS_ICON, nightAtlas.createSprite(ADS_ICON));
+        nightSpriteHashMap.put(CONTROLLER_ICON, nightAtlas.createSprite(CONTROLLER_ICON));
+
+        daySpriteHashMap.put(BIG_HEX_LIGHT, dayAtlas.createSprite(BIG_HEX_LIGHT));
+        daySpriteHashMap.put(BIG_HEX_DARK, dayAtlas.createSprite(BIG_HEX_DARK));
+        daySpriteHashMap.put(BACKGROUND_ANIMATION, dayAtlas.createSprite(BACKGROUND_ANIMATION));
+
+        nightSpriteHashMap.put(BIG_HEX_LIGHT, nightAtlas.createSprite(BIG_HEX_LIGHT));
+        nightSpriteHashMap.put(BIG_HEX_DARK, nightAtlas.createSprite(BIG_HEX_DARK));
+        nightSpriteHashMap.put(BACKGROUND_ANIMATION, nightAtlas.createSprite(BACKGROUND_ANIMATION));
 
 
-        if (Gdx.graphics.getWidth() < 500) {
+        if (SCREEN_WIDTH < 500) {
             dayBackgroundDot = new TiledDrawable(dayAtlas.findRegion("point"));
             nightBackgroundDot = new TiledDrawable(nightAtlas.findRegion("point"));
             dayBackgroundStripe = dayAtlas.createSprite("animation");
             nightBackgroundStripe = nightAtlas.createSprite("animation");
-        } else if (Gdx.graphics.getWidth() < 900) {
+        } else if (SCREEN_WIDTH < 900) {
             dayBackgroundDot = new TiledDrawable(dayAtlas.findRegion("point2"));
             nightBackgroundDot = new TiledDrawable(nightAtlas.findRegion("point2"));
             dayBackgroundStripe = dayAtlas.createSprite("animation2");
             nightBackgroundStripe = nightAtlas.createSprite("animation2");
-        } else if (Gdx.graphics.getWidth() < 1300) {
+        } else if (SCREEN_WIDTH < 1300) {
             dayBackgroundDot = new TiledDrawable(dayAtlas.findRegion("point3"));
             nightBackgroundDot = new TiledDrawable(nightAtlas.findRegion("point3"));
             dayBackgroundStripe = dayAtlas.createSprite("animation3");
@@ -276,11 +268,11 @@ public class FRAssetManager {
             nightBackgroundStripe = nightAtlas.createSprite("animation4");
         }
 
-        dayQuadrantSprite = dayAtlas.createSprite("q_circle");
-        nightQuadrantSprite = nightAtlas.createSprite("q_circle");
+        dayQuadrantSprite = dayAtlas.createSprite(QUADRANT_BACKGROUND);
+        nightQuadrantSprite = nightAtlas.createSprite(QUADRANT_BACKGROUND);
 
-        dayBackgroundWhite = dayAtlas.createSprite("back_white");
-        nightBackgroundWhite = nightAtlas.createSprite("back_white");
+        dayBackgroundWhite = dayAtlas.createSprite(TRIANGLE_BACKGROUND);
+        nightBackgroundWhite = nightAtlas.createSprite(TRIANGLE_BACKGROUND);
 
         fbLogo = commonAtlas.createSprite("fb_icon");
         twLogo = commonAtlas.createSprite("tw_icon");

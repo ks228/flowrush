@@ -15,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.blackhornetworkshop.flowrush.controller.RateDialogController;
 import com.blackhornetworkshop.flowrush.model.FRAssetManager;
 import com.blackhornetworkshop.flowrush.controller.MapController;
-import com.blackhornetworkshop.flowrush.model.FRConstants;
 import com.blackhornetworkshop.flowrush.model.FRFileHandler;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
 import com.blackhornetworkshop.flowrush.controller.ScreenManager;
@@ -24,6 +23,10 @@ import com.blackhornetworkshop.flowrush.model.HexActor;
 import com.blackhornetworkshop.flowrush.controller.HexController;
 import com.blackhornetworkshop.flowrush.controller.LevelController;
 import com.blackhornetworkshop.flowrush.model.ui.UIPool;
+
+import static com.blackhornetworkshop.flowrush.model.FRConstants.BUTTON_SIZE;
+import static com.blackhornetworkshop.flowrush.model.FRConstants.SCREEN_HEIGHT;
+import static com.blackhornetworkshop.flowrush.model.FRConstants.SCREEN_WIDTH;
 
 //Created by TScissors.
 
@@ -40,6 +43,7 @@ public class GameScreen implements Screen, FRScreen {
 
     private static boolean isSpecialIconsAnimationWhite;
     private boolean isActive;
+    private boolean showPackCompleteNextButton;
 
     private static InputMultiplexer inputMultiplexer;
 
@@ -63,7 +67,7 @@ public class GameScreen implements Screen, FRScreen {
 
         dotBackground = FRAssetManager.getBackgroundDot();
 
-        UIPool.getSoundButton().setPosition(0, FRConstants.BUTTON_SIZE + Gdx.graphics.getHeight() * 0.05f);
+        UIPool.getSoundButton().setPosition(0, BUTTON_SIZE + SCREEN_HEIGHT * 0.05f);
         UIPool.getSoundButton().setVisible(true);
 
         pauseGroup = UIPool.getPauseGroup();
@@ -127,7 +131,7 @@ public class GameScreen implements Screen, FRScreen {
 
 
         FlowRush.getBatch().begin();
-        dotBackground.draw(FlowRush.getBatch(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        dotBackground.draw(FlowRush.getBatch(), 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         FlowRush.getBatch().end();
 
         mainStage.act(Gdx.graphics.getDeltaTime());
@@ -172,9 +176,9 @@ public class GameScreen implements Screen, FRScreen {
         SourceChecker.getInstance().initialization();
         SourceChecker.getInstance().update();
 
-        //if (!LevelController.nextLevelExist()) {
+        if (!LevelController.nextLevelExist()) {
             enablePackCompleteGroup();
-        //}
+        }
     }
 
 
@@ -216,20 +220,19 @@ public class GameScreen implements Screen, FRScreen {
             FRAssetManager.getPackCompleteSound().play();
         }
 
-        if (UIPool.getPackCompleteNextPackButton().getName().equals("visible")) {
+        if (showPackCompleteNextButton) {
             UIPool.getPackCompleteNextPackButton().setVisible(true);
-            UIPool.getPackCompleteNextPackButton().setName("");
         }
 
         UIPool.getPackCompleteLowerHex().setVisible(true);
         UIPool.getPackCompleteUpperHex().setVisible(true);
         UIPool.getPackCompleteMenuButton().setVisible(true);
-        //if (FlowRush.getPreferences().isShowRateDialog()) {
+        if (FlowRush.getPreferences().isShowRateDialog()) {
             RateDialogController.reset();
             UIPool.getDialogBackground().setVisible(true);
             UIPool.getLeftButton().setVisible(true);
             UIPool.getRightButton().setVisible(true);
-        //}
+        }
     }
 
     public void setPauseScreen() {
@@ -253,7 +256,10 @@ public class GameScreen implements Screen, FRScreen {
         movePauseGroupDown();
     }
 
-    public void setGameLevelCompleteScreen() {
+    public void setGameLevelCompleteScreen(boolean showAd) {
+        if(showAd) {
+            FlowRush.getAndroidHelper().loadAndShowAd();
+        }
         UIPool.getNextLevelButton().setVisible(true);
         UIPool.getWellDoneLabel().setVisible(true);
         UIPool.getWellDonehex().setVisible(true);
@@ -261,31 +267,41 @@ public class GameScreen implements Screen, FRScreen {
 
     public void levelComplete() {
         FlowRush.logDebug("GameScreen levelComplete() method called");
-/*
+
+        boolean showAd = false;
+
+        if((LevelController.getCurrentLevel() > 15 && LevelController.getCurrentPack() == 1 && LevelController.getCurrentLevel() % 2 == 0) ||
+                LevelController.getCurrentLevel() % 2 == 0 && LevelController.getCurrentPack() != 1) {
+            showAd = true;
+        }
+
+        showPackCompleteNextButton = false;
+
         if (LevelController.nextLevelExist()) {
             LevelController.nextLvl();
             FlowRush.getSave().setCurrentLvl(LevelController.getCurrentLevel());
         } else {
-            FlowRush.getSave().finishPack(LevelController.getCurrentPack() - 1);*/
-/*            if (LevelController.nextPackExist() && LevelController.getLevelPack(LevelController.getCurrentPack()).available) {
-                LevelController.nextPack();*/
-                UIPool.getPackCompleteNextPackButton().setName("visible");
-            //}
-        //}
+            showAd = false;
+            FlowRush.getSave().finishPack(LevelController.getCurrentPack() - 1);
+            if (LevelController.nextPackExist() && LevelController.getLevelPack(LevelController.getCurrentPack()).available) {
+                LevelController.nextPack();
+                showPackCompleteNextButton = true;
+            }
+        }
 
         FlowRush.checkAchievements();
 
         FRFileHandler.saveGame();
 
         if (FlowRush.isPlayServicesAvailable() && FlowRush.getPlayServices().isSignedIn()) {
-            FlowRush.getPlayServices().saveGame();// Save in Google Play
+            FlowRush.getPlayServices().saveGame();
         }
 
         if (FlowRush.getPreferences().isSoundOn()) {
             FRAssetManager.getLvlCompleteSound().play();
         }
 
-        ScreenManager.setGameLevelCompleteScreen();
+        ScreenManager.setGameLevelCompleteScreen(showAd);
     }
 
 

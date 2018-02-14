@@ -2,8 +2,9 @@ package com.blackhornetworkshop.flowrush.model.ui.background;
 
 //Created by TScissors
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+
+import static com.blackhornetworkshop.flowrush.model.FRConstants.SCREEN_HEIGHT;
 
 public class TopBackgroundActor extends BackgroundActor {
 
@@ -12,7 +13,7 @@ public class TopBackgroundActor extends BackgroundActor {
     public TopBackgroundActor(Sprite sprite, float duration) {
         super(sprite, duration, 180);
         moveToYDown = 0 - getHeight();
-        posYTop = Gdx.graphics.getHeight();
+        posYTop = SCREEN_HEIGHT;
         restartPosition();
     }
 

@@ -78,6 +78,7 @@ project(":core") {
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
 		compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+        compile 'com.google.android.gms:play-services-ads:11.8.0'
 
 
         testCompile "junit:junit:$junitVersion"

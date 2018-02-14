@@ -5,20 +5,22 @@ package com.blackhornetworkshop.flowrush.model.ui.background;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
-public class BottomBackgroundActor extends BackgroundActor{
+import static com.blackhornetworkshop.flowrush.model.FRConstants.SCREEN_HEIGHT;
+
+public class BottomBackgroundActor extends BackgroundActor {
 
     private float moveToYTop, posYDown;
 
-    public BottomBackgroundActor(Sprite sprite, float duration){
+    public BottomBackgroundActor(Sprite sprite, float duration) {
         super(sprite, duration, 0);
-        moveToYTop = Gdx.graphics.getHeight() + getHeight();
+        moveToYTop = SCREEN_HEIGHT + getHeight();
         posYDown = 0 - getHeight();
         restartPosition();
     }
 
     @Override
     public boolean isOutside() {
-        return getY() >= Gdx.graphics.getHeight() + getHeight() / 2;
+        return getY() >= SCREEN_HEIGHT + getHeight() / 2;
     }
 
     @Override

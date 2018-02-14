@@ -1,15 +1,21 @@
 <resources>
 
     <style name="MainLayout">
-        <item name="android:background">#FFFFFF</item>
+        <item name="android:background">#F5F5F5</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:orientation">vertical</item>
     </style>
 
     <style name="TopLayout">
-        <item name="android:background">#00FF00</item>
-        <item name="android:padding">10px</item>
+        <item name="android:background">#F5F5F5</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="SocialNetworksLayout">
+        <item name="android:gravity">center</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:orientation">vertical</item>

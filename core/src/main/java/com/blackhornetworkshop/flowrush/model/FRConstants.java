@@ -39,8 +39,8 @@ public class FRConstants {
 
     public static final float RATE_DIALOG_BUTTON_WIDTH = SCREEN_WIDTH * 0.45f;
     public static final float RATE_DIALOG_BUTTON_HEIGHT = BUTTON_SIZE * 0.8f;
-    public static final float RATE_US_DIALOG_BUTTON_RIGHT_X = (Gdx.graphics.getWidth() - RATE_DIALOG_BUTTON_WIDTH * 2) / 3 * 2 + RATE_DIALOG_BUTTON_WIDTH;
-    public static final float RATE_US_DIALOG_BUTTON_LEFT_X = (Gdx.graphics.getWidth() - RATE_DIALOG_BUTTON_WIDTH * 2) / 3;
+    public static final float RATE_US_DIALOG_BUTTON_RIGHT_X = (SCREEN_WIDTH - RATE_DIALOG_BUTTON_WIDTH * 2) / 3 * 2 + RATE_DIALOG_BUTTON_WIDTH;
+    public static final float RATE_US_DIALOG_BUTTON_LEFT_X = (SCREEN_WIDTH - RATE_DIALOG_BUTTON_WIDTH * 2) / 3;
     public static final float RATE_US_DIALOG_BUTTON_Y = (BUTTON_SIZE * 1.45f - FONT_SIZE_X - BUTTON_SIZE * 0.8f) / 2;
 
     public static final float NEXT_PACK_BUTTON_WIDTH = SCREEN_WIDTH * 0.5f;
@@ -54,6 +54,9 @@ public class FRConstants {
 
     public final static float REMOVE_ADS_BUTTON_Y = (BUTTON_SIZE / 2 + SCREEN_HEIGHT * 0.02f) + BUTTON_SIZE / 2 + ((((SCREEN_HEIGHT * 0.98f - BUTTON_SIZE)) +
             BUTTON_SIZE / 2) - (BUTTON_SIZE / 2 + SCREEN_HEIGHT * 0.02f) - BUTTON_SIZE) * 0.05f / 2 + BUTTON_SIZE * 1.9f;
+
+    public final static float WEBSITE_BUTTON_Y = (BUTTON_SIZE / 2 + SCREEN_HEIGHT * 0.02f) + BUTTON_SIZE / 2 + ((((SCREEN_HEIGHT * 0.98f - BUTTON_SIZE)) +
+            BUTTON_SIZE / 2) - (BUTTON_SIZE / 2 + SCREEN_HEIGHT * 0.02f) - BUTTON_SIZE) * 0.05f / 2 + BUTTON_SIZE * 1.9f + BUTTON_SIZE*1.1f;
 
     public static final float MENU_BUTTON_Y_1 = (BUTTON_SIZE / 2 + SCREEN_HEIGHT * 0.02f) + BUTTON_SIZE / 2 + ((((SCREEN_HEIGHT * 0.98f - BUTTON_SIZE)) +
             (BUTTON_SIZE) / 2) - (BUTTON_SIZE / 2 + SCREEN_HEIGHT * 0.02f) - BUTTON_SIZE) * 0.05f / 2 + BUTTON_SIZE * 0.3f;
@@ -103,5 +106,70 @@ public class FRConstants {
     public final static int RC_LIST_SAVED_GAMES = 9002;
     public final static int RC_ACHIEVEMENT_UI = 9003;
     public final static int MAX_SNAPSHOT_RESOLVE_RETRIES = 20;
+
+    // Texts
+    public final static String AUTHORS_MSG= "development\nTIMUR SCISSORS\n\ndesign\nANN KOVALSKI\n\nmusic\nERIC HOPTON";
+    public final static String SUPPORT_MSG= "Please support our indie development team. Remove ads or share our game with your friends .\n\nYou help us to grow.\nThank you!";
+    public final static String SIGN_IN_MSG= "By signing in your Google Play Games account, you can: save and load your in-game progress, earn in-game achievements, get experience for your Google Play Games account";
+    public final static String SIGNED_MSG= "Welcome!\nHere you can see your Flow Rush achievements and manage your saved games";
+    public final static String QUESTION_1 = "ENJOYING  FLOW RUSH?";
+    public final static String QUESTION_2 = "RATE THE GAME, PLEASE";
+    public final static String QUESTION_3 = "SEND US FEEDBACK, PLEASE";
+    public final static String ANSWER_YES_1 = "YES!";
+    public final static String ANSWER_YES_2 = "YES, SURE";
+    public final static String ANSWER_YES_3 = "OK";
+    public final static String ANSWER_NO_1 = "NOT SURE";
+    public final static String ANSWER_NO_2 = "NO, THANKS";
+
+    // Sprites
+
+    public final static String BACKGROUND_HEX = "backhex";
+    public final static String BACKGROUND_HEX_WITH_SOURCE = "backhexS";
+    public final static String BACKGROUND_HEX_TOUCHED = "backhex_touched";
+    public final static String BACKGROUND_HEX_TOUCHED_WITH_SOURCE = "backhex_touchedS";
+
+    public final static String SOURCE_ICON = "iconMP";
+    public final static String DOVE_OFF_ICON = "iconD";
+    public final static String DOVE_ON_ICON = "iconDP";
+    public final static String POINT_OFF_ICON = "iconE";
+    public final static String POINT_ON_ICON = "iconEP";
+    public final static String POINT_WHITE_ICON = "iconEW";
+
+    public final static String HEX = "hex";
+
+    public final static String CLOSE_ICON = "close_icon";
+    public final static String DAY_NIGHT_ICON = "daynight";
+    public final static String SOUND_OFF_ICON = "soundOff_icon";
+    public final static String SOUND_ON_ICON = "soundOn_icon";
+    public final static String LOCK_ICON = "lock";
+    public final static String PAUSE_ICON = "pause_icon";
+    public final static String BACK_BUTTON_ICON = "back_icon";
+    public final static String RESTART_ICON = "restart_icon";
+    public final static String MENU_ICON = "mmenu_icon";
+    public final static String AUTHORS_ICON = "authors_icon";
+    public final static String NEXT_ICON = "next_icon";
+    public final static String ADS_ICON = "ads_icon";
+    public final static String CONTROLLER_ICON = "controller";
+
+    public final static String BIG_HEX_LIGHT = "bighex_light";
+    public final static String BIG_HEX_DARK = "bighex_dark";
+    public final static String BACKGROUND_ANIMATION = "animbackhex";
+
+    final static String TRIANGLE_BACKGROUND = "back_white";
+    final static String QUADRANT_BACKGROUND = "q_circle";
+
+    public final static String LABEL_STYLE_DEFAULT = "default";
+    public final static String LABEL_STYLE_GREYFONT = "greyfont";
+    public final static String LABEL_STYLE_ALPHAWHITE = "alphawhite";
+    public final static String LABEL_STYLE_DARKBLUE = "darkblue";
+    public final static String LABEL_STYLE_DARKBLUESMALL = "darkbluesmall";
+
+    public final static String TEXT_BUTTON_STYLE_DEFAULT = "default";
+    public final static String TEXT_BUTTON_STYLE_LIGHTBLUE = "lightblue";
+    public final static String TEXT_BUTTON_STYLE_DARKBLUE = "darkblue";
+    public final static String TEXT_BUTTON_STYLE_WHITE = "white";
+    public final static String TEXT_BUTTON_STYLE_PLAYBUTTON = "playbutton";
+    public final static String TEXT_BUTTON_STYLE_BORDERSMALL = "bordersmall";
+    public final static String TEXT_BUTTON_STYLE_WHITESMALL = "whitesmall";
 }
 

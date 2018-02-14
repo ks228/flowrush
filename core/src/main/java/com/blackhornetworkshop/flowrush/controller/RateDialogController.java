@@ -5,6 +5,15 @@ package com.blackhornetworkshop.flowrush.controller;
 import com.blackhornetworkshop.flowrush.model.ui.UIPool;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
 
+import static com.blackhornetworkshop.flowrush.model.FRConstants.ANSWER_NO_1;
+import static com.blackhornetworkshop.flowrush.model.FRConstants.ANSWER_NO_2;
+import static com.blackhornetworkshop.flowrush.model.FRConstants.ANSWER_YES_1;
+import static com.blackhornetworkshop.flowrush.model.FRConstants.ANSWER_YES_2;
+import static com.blackhornetworkshop.flowrush.model.FRConstants.ANSWER_YES_3;
+import static com.blackhornetworkshop.flowrush.model.FRConstants.QUESTION_1;
+import static com.blackhornetworkshop.flowrush.model.FRConstants.QUESTION_2;
+import static com.blackhornetworkshop.flowrush.model.FRConstants.QUESTION_3;
+
 public class RateDialogController {
 
     private static boolean isFirstAnswer = true;
@@ -14,9 +23,9 @@ public class RateDialogController {
         FlowRush.logDebug("RateDialogController reset() method called");
         isFirstAnswer = true;
         isFirstAnswer = true;
-        UIPool.getDialogBackground().setText("ENJOYING  FLOW RUSH?");
-        UIPool.getRightButton().setText("YES!");
-        UIPool.getLeftButton().setText("NOT SURE");
+        UIPool.getDialogBackground().setText(QUESTION_1);
+        UIPool.getRightButton().setText(ANSWER_YES_1);
+        UIPool.getLeftButton().setText(ANSWER_NO_1);
     }
 
     public static boolean isFirstAnswer() {
@@ -27,13 +36,13 @@ public class RateDialogController {
         isFirstAnswer = false;
         RateDialogController.isFirstAnswerWasYes = isFirstAnswerWasYes;
         if(isFirstAnswerWasYes) {
-            UIPool.getDialogBackground().setText("RATE THE GAME, PLEASE");
-            UIPool.getRightButton().setText("YES, SURE");
-            UIPool.getLeftButton().setText("NO, THANKS");
+            UIPool.getDialogBackground().setText(QUESTION_2);
+            UIPool.getRightButton().setText(ANSWER_YES_2);
+            UIPool.getLeftButton().setText(ANSWER_NO_2);
         }else{
-            UIPool.getDialogBackground().setText("SEND US FEEDBACK, PLEASE");
-            UIPool.getLeftButton().setText("NO, THANKS");
-            UIPool.getRightButton().setText("OK");
+            UIPool.getDialogBackground().setText(QUESTION_3);
+            UIPool.getRightButton().setText(ANSWER_YES_3);
+            UIPool.getLeftButton().setText(ANSWER_NO_2);
         }
     }
 

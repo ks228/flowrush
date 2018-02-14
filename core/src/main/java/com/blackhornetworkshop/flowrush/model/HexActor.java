@@ -2,10 +2,12 @@ package com.blackhornetworkshop.flowrush.model;
 
 //Created by TScissors.
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+
+import static com.blackhornetworkshop.flowrush.model.FRConstants.HEX_HEIGHT;
+import static com.blackhornetworkshop.flowrush.model.FRConstants.HEX_WIDTH;
 
 public class HexActor extends Actor{
     private int index;
@@ -47,7 +49,7 @@ public class HexActor extends Actor{
             batch.draw(spriteOff, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
         }
         if (include != 0) {
-            batch.draw(icon, (getX() + (getWidth() - Gdx.graphics.getWidth() / 5) / 2), (getY() + (getHeight() - Gdx.graphics.getWidth() / 5 * 0.8658536585365854f) / 2), getOriginX(), getOriginY(), Gdx.graphics.getWidth() / 5, Gdx.graphics.getWidth() / 5 * 0.8658536585365854f, getScaleX(), getScaleY(), 0);
+            batch.draw(icon, (getX() + (getWidth() - HEX_WIDTH) / 2), (getY() + (getHeight() - HEX_HEIGHT) / 2), getOriginX(), getOriginY(), HEX_WIDTH, HEX_HEIGHT, getScaleX(), getScaleY(), 0);
         }
     }
 

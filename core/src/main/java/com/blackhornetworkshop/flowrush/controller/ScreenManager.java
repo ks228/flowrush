@@ -109,13 +109,13 @@ public class ScreenManager {
         GameScreen.getInstance().setPauseScreen();
     }
 
-    public static void setGameLevelCompleteScreen() {
+    public static void setGameLevelCompleteScreen(boolean showAd) {
         checkScreen(GameScreen.getInstance());
         if(currentScreen == GAME_LVL_COMPLETE_PAUSE){
             GameScreen.getInstance().removePause();
         }
         currentScreen = GAME_LVL_COMPLETE;
-        GameScreen.getInstance().setGameLevelCompleteScreen();
+        GameScreen.getInstance().setGameLevelCompleteScreen(showAd);
         FlowRush.logDebug("GAME LVL COMPLETE screen");
     }
 

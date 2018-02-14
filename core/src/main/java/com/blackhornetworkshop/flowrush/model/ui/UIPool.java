@@ -2,7 +2,6 @@ package com.blackhornetworkshop.flowrush.model.ui;
 
 //Created by TScissors.
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -22,10 +21,7 @@ import com.blackhornetworkshop.flowrush.controller.LevelController;
 
 import java.util.ArrayList;
 
-import static com.blackhornetworkshop.flowrush.model.FRConstants.LEVEL_NUMBER_GROUP_MARGIN_LEFT;
-import static com.blackhornetworkshop.flowrush.model.FRConstants.LEVEL_NUMBER_GROUP_TOP_MARGIN;
-import static com.blackhornetworkshop.flowrush.model.FRConstants.LEVEL_NUMBER_PADDING;
-import static com.blackhornetworkshop.flowrush.model.FRConstants.LEVEL_NUMBER_SIZE;
+import static com.blackhornetworkshop.flowrush.model.FRConstants.*;
 
 public class UIPool {
 
@@ -39,10 +35,7 @@ public class UIPool {
     //------------------------ MENU
 
     //Social networks
-    private static TextButton socialNetworkBackground;
-    private static SmallButtonActor twitterButton;
-    private static SmallButtonActor facebookButton;
-    private static SmallButtonActor vkButton;
+    private static TextButton socialNetworksButton;
 
     //Google play
     private static SmallButtonActor googlePlayButton;
@@ -54,6 +47,8 @@ public class UIPool {
     //Support us
     private static SmallButtonActor supportUsSmallButton;
     private static TextButton supportUsButton;
+    private static TextButton removeAdsButton;
+    private static TextButton websiteButton;
     private static TextButton rateUsButton;
     private static TextButton feedButton;
 
@@ -77,10 +72,6 @@ public class UIPool {
     private static TextButton exitButton;
     private static TextButton levelsButton;
     private static Group packGroup;
-
-    /**
-     * private TextButton removeAds;
-     */
 
     //--------------------- GAME_MAIN
 
@@ -107,103 +98,102 @@ public class UIPool {
 
 
     public static void reinialize() {
-        levelNumberActor.setStyle(FRAssetManager.getLabelStyle("greyfont"));
+        levelNumberActor.setStyle(FRAssetManager.getLabelStyle(LABEL_STYLE_GREYFONT));
 
-        if (FlowRush.getPreferences().isSoundOn())
-            soundButton.setSprite(FRAssetManager.getSprite("soundOn"));
-        else soundButton.setSprite(FRAssetManager.getSprite("soundOff"));
+        if (FlowRush.getPreferences().isSoundOn()) {
+            soundButton.setSprite(FRAssetManager.getSprite(SOUND_ON_ICON));
+        } else {
+            soundButton.setSprite(FRAssetManager.getSprite(SOUND_OFF_ICON));
+        }
 
-        hexBackgroundActor.setSprite(FRAssetManager.getSprite("animbackhex"));
+        hexBackgroundActor.setSprite(FRAssetManager.getSprite(BACKGROUND_ANIMATION));
 
         for (int x = 0; x < backgroundAnimation.getChildren().size; x++) {
             ((BackgroundActor)backgroundAnimation.getChildren().get(x)).setSprite(FRAssetManager.getBackgroundStripe());
         }
 
-        menuLabel.setStyle(FRAssetManager.getTextButtonStyle("white"));
+        menuLabel.setStyle(FRAssetManager.getTextButtonStyle(TEXT_BUTTON_STYLE_WHITE));
 
-        innerLayout.setStyle(FRAssetManager.getLabelStyle("default"));
-        messageBackground.setStyle(FRAssetManager.getLabelStyle("default"));
+        innerLayout.setStyle(FRAssetManager.getLabelStyle(LABEL_STYLE_DEFAULT));
+        messageBackground.setStyle(FRAssetManager.getLabelStyle(LABEL_STYLE_DEFAULT));
 
-        closeButton.setSprite(FRAssetManager.getSprite("close_icon"));
+        closeButton.setSprite(FRAssetManager.getSprite(CLOSE_ICON));
 
-        playButton.setStyle(FRAssetManager.getTextButtonStyle("playbutton"));
-        levelsButton.setStyle(FRAssetManager.getTextButtonStyle("lightblue"));
-        exitButton.setStyle(FRAssetManager.getTextButtonStyle("lightblue"));
+        playButton.setStyle(FRAssetManager.getTextButtonStyle(TEXT_BUTTON_STYLE_PLAYBUTTON));
+        levelsButton.setStyle(FRAssetManager.getTextButtonStyle(TEXT_BUTTON_STYLE_LIGHTBLUE));
+        exitButton.setStyle(FRAssetManager.getTextButtonStyle(TEXT_BUTTON_STYLE_LIGHTBLUE));
 
         for(int x = 0; x < packGroup.getChildren().size; x++){
-            ((TextButton)packGroup.getChildren().get(x)).setStyle(FRAssetManager.getTextButtonStyle("darkblue"));
+            ((TextButton)packGroup.getChildren().get(x)).setStyle(FRAssetManager.getTextButtonStyle(TEXT_BUTTON_STYLE_DARKBLUE));
         }
 
         for (int x = 0; x < levelNumbersGroup.getChildren().size; x++) {
-            ((LevelNumberButton)levelNumbersGroup.getChildren().get(x)).setStyle(FRAssetManager.getTextButtonStyle("lightblue"));
+            LevelNumberButton levelNumberButton = (LevelNumberButton)levelNumbersGroup.getChildren().get(x);
+            levelNumberButton.setStyle(FRAssetManager.getTextButtonStyle(TEXT_BUTTON_STYLE_LIGHTBLUE));
+            levelNumberButton.setLockSprite(FRAssetManager.getSprite(LOCK_ICON));
         }
 
-        dayNightButton.setSprite(FRAssetManager.getSprite("daynight"));
+        dayNightButton.setSprite(FRAssetManager.getSprite(DAY_NIGHT_ICON));
 
-        socialNetworkBackground.setStyle(FRAssetManager.getTextButtonStyle("white"));
-        twitterButton.setSprite(FRAssetManager.getTwLogo());
-        facebookButton.setSprite(FRAssetManager.getFbLogo());
-        vkButton.setSprite(FRAssetManager.getVkLogo());
+        socialNetworksButton.setStyle(FRAssetManager.getTextButtonStyle(TEXT_BUTTON_STYLE_WHITE));
 
         //Support us
-        supportUsSmallButton.setSprite(FRAssetManager.getSprite("ads_icon"));
-        supportUsButton.setStyle(FRAssetManager.getTextButtonStyle("white"));
-        rateUsButton.setStyle(FRAssetManager.getTextButtonStyle("white"));
-        feedButton.setStyle(FRAssetManager.getTextButtonStyle("white"));
+        supportUsSmallButton.setSprite(FRAssetManager.getSprite(ADS_ICON));
+        supportUsButton.setStyle(FRAssetManager.getTextButtonStyle(TEXT_BUTTON_STYLE_WHITE));
+        rateUsButton.setStyle(FRAssetManager.getTextButtonStyle(TEXT_BUTTON_STYLE_WHITE));
+        feedButton.setStyle(FRAssetManager.getTextButtonStyle(TEXT_BUTTON_STYLE_WHITE));
+        websiteButton.setStyle(FRAssetManager.getTextButtonStyle(TEXT_BUTTON_STYLE_LIGHTBLUE));
+        removeAdsButton.setStyle(FRAssetManager.getTextButtonStyle(TEXT_BUTTON_STYLE_WHITE));
 
-        authorsButton.setSprite(FRAssetManager.getSprite("authors_icon"));
+        authorsButton.setSprite(FRAssetManager.getSprite(AUTHORS_ICON));
 
         if (FlowRush.isPlayServicesAvailable()) {
-            googlePlayButton.setSprite(FRAssetManager.getSprite("controller"));
-            signInButton.setStyle(FRAssetManager.getTextButtonStyle("white"));
-            showSnapshotsButton.setStyle(FRAssetManager.getTextButtonStyle("white"));
-            showAchievementsButton.setStyle(FRAssetManager.getTextButtonStyle("white"));
-            signOutButton.setStyle(FRAssetManager.getTextButtonStyle("white"));
+            googlePlayButton.setSprite(FRAssetManager.getSprite(CONTROLLER_ICON));
+            signInButton.setStyle(FRAssetManager.getTextButtonStyle(TEXT_BUTTON_STYLE_WHITE));
+            showSnapshotsButton.setStyle(FRAssetManager.getTextButtonStyle(TEXT_BUTTON_STYLE_WHITE));
+            showAchievementsButton.setStyle(FRAssetManager.getTextButtonStyle(TEXT_BUTTON_STYLE_WHITE));
+            signOutButton.setStyle(FRAssetManager.getTextButtonStyle(TEXT_BUTTON_STYLE_WHITE));
         }
 
-        restartButton.setSprite(FRAssetManager.getSprite("restart_icon"));
-        resumeButton.setSprite(FRAssetManager.getSprite("back_icon"));
-        menuButton.setSprite(FRAssetManager.getSprite("mmenu_icon"));
+        restartButton.setSprite(FRAssetManager.getSprite(RESTART_ICON));
+        resumeButton.setSprite(FRAssetManager.getSprite(BACK_BUTTON_ICON));
+        menuButton.setSprite(FRAssetManager.getSprite(MENU_ICON));
 
-        pauseButton.setSprite(FRAssetManager.getSprite("pause_icon"));
+        pauseButton.setSprite(FRAssetManager.getSprite(PAUSE_ICON));
 
-
-        pauseBackground.setStyle(FRAssetManager.getLabelStyle("alphawhite"));
-
+        pauseBackground.setStyle(FRAssetManager.getLabelStyle(LABEL_STYLE_ALPHAWHITE));
 
         //Level complete elements
-        nextLevelButton.setSprite(FRAssetManager.getSprite("next_icon"));
+        nextLevelButton.setSprite(FRAssetManager.getSprite(NEXT_ICON));
 
-        wellDonehex.setSprite(FRAssetManager.getSprite("bighex_light"));
+        wellDonehex.setSprite(FRAssetManager.getSprite(BIG_HEX_LIGHT));
 
-        wellDoneLabel.setStyle(FRAssetManager.getLabelStyle("darkblue"));
+        wellDoneLabel.setStyle(FRAssetManager.getLabelStyle(LABEL_STYLE_DARKBLUE));
 
         //Pack complete elements
-        packCompleteUpperHex.setSprite(FRAssetManager.getSprite("bighex_dark"));
-        packCompleteLowerHex.setSprite(FRAssetManager.getSprite("bighex_light"));
-        packCompleteMenuButton.setStyle(FRAssetManager.getTextButtonStyle("default"));
-        packCompleteNextPackButton.setStyle(FRAssetManager.getTextButtonStyle("darkblue"));
+        packCompleteUpperHex.reload(FRAssetManager.getSprite(BIG_HEX_DARK));
+        packCompleteLowerHex.setSprite(FRAssetManager.getSprite(BIG_HEX_LIGHT));
+        packCompleteMenuButton.setStyle(FRAssetManager.getTextButtonStyle(TEXT_BUTTON_STYLE_DEFAULT));
+        packCompleteNextPackButton.setStyle(FRAssetManager.getTextButtonStyle(TEXT_BUTTON_STYLE_DARKBLUE));
 
-        dialogBackground.setStyle(FRAssetManager.getLabelStyle("darkbluesmall"));
+        dialogBackground.setStyle(FRAssetManager.getLabelStyle(LABEL_STYLE_DARKBLUESMALL));
 
-        leftButton.setStyle(FRAssetManager.getTextButtonStyle("bordersmall"));
-        rightButton.setStyle(FRAssetManager.getTextButtonStyle("whitesmall"));
+        leftButton.setStyle(FRAssetManager.getTextButtonStyle(TEXT_BUTTON_STYLE_BORDERSMALL));
+        rightButton.setStyle(FRAssetManager.getTextButtonStyle(TEXT_BUTTON_STYLE_WHITESMALL));
     }
 
     public static void initialize() {
 
-
-
         //----------------------- COMMON
 
-        levelNumberActor = new Label("", FRAssetManager.getLabelStyle("greyfont"));
+        levelNumberActor = new Label("", FRAssetManager.getLabelStyle(LABEL_STYLE_GREYFONT));
         levelNumberActor.setSize(FRConstants.BUTTON_SIZE, FRConstants.BUTTON_SIZE);
-        levelNumberActor.setPosition(Gdx.graphics.getWidth() - levelNumberActor.getWidth(), Gdx.graphics.getHeight() - levelNumberActor.getHeight());
+        levelNumberActor.setPosition(SCREEN_WIDTH - levelNumberActor.getWidth(), SCREEN_HEIGHT - levelNumberActor.getHeight());
         levelNumberActor.setAlignment(Align.center);
 
         soundButton = UiActorCreator.getSmallButtonActor(5);
 
-        hexBackgroundActor = new HexBackgroundActor(FRAssetManager.getSprite("animbackhex"));
+        hexBackgroundActor = new HexBackgroundActor(FRAssetManager.getSprite(BACKGROUND_ANIMATION));
 
         backgroundAnimation = new Group();
         for (int type = 1; type < 5; type++) {
@@ -217,20 +207,20 @@ public class UIPool {
         menuLabel = UiActorCreator.getTextButton(7);
         menuLabel.setText("SUPPORT US");
 
-        innerLayout = new Label("", FRAssetManager.getLabelStyle("default"));
-        innerLayout.setSize(Gdx.graphics.getWidth() * 0.9f, (((Gdx.graphics.getHeight() * 0.98f - FRConstants.BUTTON_SIZE)) + (FRConstants.BUTTON_SIZE) / 2) - (FRConstants.BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f)); // размеры PACK_GROUP_TOP_MARGIN и PACK_GROUP_BOTTOM_MARGIN иннерскрин? высчитываем через высоту textButton любого выше высчитываем через высоту кнопки circle button back
-        innerLayout.setPosition((Gdx.graphics.getWidth() - innerLayout.getWidth()) / 2, FRConstants.BUTTON_SIZE / 2 + Gdx.graphics.getHeight() * 0.02f);
+        innerLayout = new Label("", FRAssetManager.getLabelStyle(LABEL_STYLE_DEFAULT));
+        innerLayout.setSize(SCREEN_WIDTH * 0.9f, (((SCREEN_HEIGHT * 0.98f - BUTTON_SIZE)) + (BUTTON_SIZE) / 2) - (BUTTON_SIZE / 2 + SCREEN_HEIGHT * 0.02f));
+        innerLayout.setPosition((SCREEN_WIDTH - innerLayout.getWidth()) / 2, BUTTON_SIZE / 2 + SCREEN_HEIGHT * 0.02f);
         innerLayout.setVisible(false);
 
-        messageBackground = new Label("development\nTIMUR SCISSORS\n\ndesign\nSONYA KOVALSKI\n\nmusic\nERIC HOPTON", FRAssetManager.getLabelStyle("default"));
+        messageBackground = new Label(AUTHORS_MSG, FRAssetManager.getLabelStyle(LABEL_STYLE_DEFAULT));
         messageBackground.setVisible(false);
         messageBackground.setAlignment(Align.top);
         messageBackground.setWrap(true);
 
-        labelContainer = new Container<>(messageBackground); //Контейнер нужен для того чтобы сделать перенос строки
+        labelContainer = new Container<>(messageBackground);
         labelContainer.fill();
-        labelContainer.setSize(innerLayout.getWidth() * 0.9f, (innerLayout.getHeight() - FRConstants.BUTTON_SIZE) * 0.95f);
-        labelContainer.setPosition((Gdx.graphics.getWidth() - innerLayout.getWidth() * 0.9f) / 2, innerLayout.getY() + FRConstants.BUTTON_SIZE / 2 + (innerLayout.getHeight() - FRConstants.BUTTON_SIZE) * 0.05f / 2);
+        labelContainer.setSize(innerLayout.getWidth() * 0.9f, (innerLayout.getHeight() - BUTTON_SIZE) * 0.95f);
+        labelContainer.setPosition((SCREEN_WIDTH - innerLayout.getWidth() * 0.9f) / 2, innerLayout.getY() + BUTTON_SIZE / 2 + (innerLayout.getHeight() - BUTTON_SIZE) * 0.05f / 2);
 
         closeButton = UiActorCreator.getSmallButtonActor(6);
 
@@ -239,18 +229,18 @@ public class UIPool {
                 batch.draw(FRAssetManager.getBackgroundWhite(), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
             }
         };
-        triangleBackground.setSize(Gdx.graphics.getWidth() * 0.65f, Gdx.graphics.getWidth() * 0.65f * 1.71358024691358f);
-        triangleBackground.setPosition(Gdx.graphics.getWidth() - triangleBackground.getWidth(), 0);
+        triangleBackground.setSize(SCREEN_WIDTH * 0.65f, SCREEN_WIDTH * 0.65f * 1.71358024691358f);
+        triangleBackground.setPosition(SCREEN_WIDTH - triangleBackground.getWidth(), 0);
 
         triangleBackgroundTop = new Actor() {
             public void draw(Batch batch, float alpha) {
                 batch.draw(FRAssetManager.getBackgroundWhite(), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
             }
         };
-        triangleBackgroundTop.setSize(Gdx.graphics.getWidth() * 0.65f, Gdx.graphics.getWidth() * 0.65f * 1.71358024691358f);
+        triangleBackgroundTop.setSize(SCREEN_WIDTH * 0.65f, SCREEN_WIDTH * 0.65f * 1.71358024691358f);
         triangleBackgroundTop.setOrigin(triangleBackgroundTop.getWidth() / 2, triangleBackgroundTop.getHeight() / 2);
         triangleBackgroundTop.setRotation(180);
-        triangleBackgroundTop.setPosition(0, Gdx.graphics.getHeight() - triangleBackgroundTop.getHeight());
+        triangleBackgroundTop.setPosition(0, SCREEN_HEIGHT - triangleBackgroundTop.getHeight());
 
         //Main buttons
         playButton = UiActorCreator.getTextButton(1);
@@ -269,7 +259,7 @@ public class UIPool {
         levelNumbersGroup.setVisible(false);
 
         for (int x = 1; x < 51; x++) {
-            LevelNumberButton levelNumberButton = new LevelNumberButton("" + x, FRAssetManager.getTextButtonStyle("lightblue"), FRAssetManager.getSprite("lock"), x);
+            LevelNumberButton levelNumberButton = new LevelNumberButton("" + x, FRAssetManager.getTextButtonStyle(TEXT_BUTTON_STYLE_LIGHTBLUE), FRAssetManager.getSprite(LOCK_ICON), x);
             setLevelNumberPosition(x, levelNumberButton);
             levelNumberButton.setSize(LEVEL_NUMBER_SIZE, LEVEL_NUMBER_SIZE);
             levelNumberButton.setOrigin(Align.center);
@@ -281,23 +271,18 @@ public class UIPool {
         dayNightButton = UiActorCreator.getSmallButtonActor(15);
 
         //Social networks
-        socialNetworkBackground = UiActorCreator.getTextButton(8);
-        twitterButton = UiActorCreator.getSmallButtonActor(9);
-        facebookButton = UiActorCreator.getSmallButtonActor(8);
-        vkButton = UiActorCreator.getSmallButtonActor(10);
+        socialNetworksButton = UiActorCreator.getTextButton(8);
 
         //Support us
         supportUsSmallButton = UiActorCreator.getSmallButtonActor(13);
         supportUsButton = UiActorCreator.getTextButton(5);
         rateUsButton = UiActorCreator.getTextButton(4);
         feedButton = UiActorCreator.getTextButton(3);
-
+        websiteButton = UiActorCreator.getTextButton(18);
         //Authors
         authorsButton = UiActorCreator.getSmallButtonActor(7);
 
-        //!!!!!!!!!!! НЕ УДАЛИТЬ СЛУЧАЙНО
-        /**removeAds = com.blackhornetworkshop.flowrush.model.ui.UiActorCreator.getTextButton(6, game);
-         removeAds.addListener(new com.blackhornetworkshop.flowrush.model.listeners.ButtonScaleListener(removeAds, game));*/
+        removeAdsButton = UiActorCreator.getTextButton(6);
 
         if (FlowRush.isPlayServicesAvailable()) {
             googlePlayButton = UiActorCreator.getSmallButtonActor(14);
@@ -324,11 +309,11 @@ public class UIPool {
                 batch.draw(FRAssetManager.getQuadrantSprite(), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
             }
         };
-        quadrantPauseBackground.setSize(FRConstants.BUTTON_SIZE * 2 + Gdx.graphics.getHeight() * 0.1f, FRConstants.BUTTON_SIZE * 2 + Gdx.graphics.getHeight() * 0.1f);
+        quadrantPauseBackground.setSize(BUTTON_SIZE * 2 + SCREEN_HEIGHT * 0.1f, BUTTON_SIZE * 2 + SCREEN_HEIGHT * 0.1f);
         quadrantPauseBackground.setPosition(0, 0);
 
-        pauseBackground = new Label("", FRAssetManager.getLabelStyle("alphawhite"));
-        pauseBackground.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        pauseBackground = new Label("", FRAssetManager.getLabelStyle(LABEL_STYLE_ALPHAWHITE));
+        pauseBackground.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
         pauseBackground.setVisible(false);
         pauseBackground.addListener(new ClickListener() {
             @Override
@@ -344,9 +329,9 @@ public class UIPool {
         //Level complete elements
         nextLevelButton = UiActorCreator.getSmallButtonActor(12);
         wellDonehex = UiActorCreator.getSmallButtonActor(11);
-        wellDoneLabel = new Label("WELL DONE!", FRAssetManager.getLabelStyle("darkblue"));
-        wellDoneLabel.setSize(Gdx.graphics.getWidth() * 0.6f, FRConstants.BUTTON_SIZE * 0.7f);
-        wellDoneLabel.setPosition((Gdx.graphics.getWidth() - wellDoneLabel.getWidth()) / 2, Gdx.graphics.getHeight() - FRConstants.BUTTON_SIZE * 0.85f);
+        wellDoneLabel = new Label("WELL DONE!", FRAssetManager.getLabelStyle(LABEL_STYLE_DARKBLUE));
+        wellDoneLabel.setSize(SCREEN_WIDTH * 0.6f, BUTTON_SIZE * 0.7f);
+        wellDoneLabel.setPosition((SCREEN_WIDTH - wellDoneLabel.getWidth()) / 2, SCREEN_HEIGHT - BUTTON_SIZE * 0.85f);
         wellDoneLabel.setAlignment(Align.center);
         wellDoneLabel.setVisible(false);
 
@@ -355,10 +340,9 @@ public class UIPool {
         packCompleteLowerHex = new PackCompleteLowerHex();
         packCompleteMenuButton = UiActorCreator.getTextButton(9);
         packCompleteNextPackButton = UiActorCreator.getTextButton(12);
-        packCompleteNextPackButton.setName("");
 
-        dialogBackground = new Label("ENJOYING  FLOW RUSH?", FRAssetManager.getLabelStyle("darkbluesmall"));
-        dialogBackground.setSize(Gdx.graphics.getWidth(), FRConstants.BUTTON_SIZE * 1.45f);
+        dialogBackground = new Label(QUESTION_1, FRAssetManager.getLabelStyle(LABEL_STYLE_DARKBLUESMALL));
+        dialogBackground.setSize(SCREEN_WIDTH, BUTTON_SIZE * 1.45f);
         dialogBackground.setPosition(0, 0);
         dialogBackground.setAlignment(Align.top);
 
@@ -409,24 +393,16 @@ public class UIPool {
     //-----------------------------------------------------------  MAIN MENU ELEMENTS
 
 
+    public static TextButton getRemoveAdsButton() {
+        return removeAdsButton;
+    }
+
     public static SmallButtonActor getDayNightButton() {
         return dayNightButton;
     }
 
-    public static SmallButtonActor getFacebookButton() {
-        return facebookButton;
-    }
-
-    public static SmallButtonActor getTwitterButton() {
-        return twitterButton;
-    }
-
-    public static SmallButtonActor getVkButton() {
-        return vkButton;
-    }
-
-    public static TextButton getSocialNetworkBackground() {
-        return socialNetworkBackground;
+    public static TextButton getSocialNetworksButton() {
+        return socialNetworksButton;
     }
 
     public static TextButton getShowAchievementsButton() {
@@ -517,8 +493,11 @@ public class UIPool {
         return levelNumbersGroup;
     }
 
-    //---------------------------------------------- Game screen elements
+    public static TextButton getWebsiteButton() {
+        return websiteButton;
+    }
 
+    //---------------------------------------------- Game screen elements
 
     public static Group getPauseGroup() {
         return pauseGroup;

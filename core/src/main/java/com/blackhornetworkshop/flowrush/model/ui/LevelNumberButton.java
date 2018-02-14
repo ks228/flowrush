@@ -42,4 +42,8 @@ public class LevelNumberButton extends TextButton {
             batch.draw(lock, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
         }
     }
+
+    public void setLockSprite(Sprite lock){
+        this.lock = lock;
+    }
 }

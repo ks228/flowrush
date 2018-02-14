@@ -9,8 +9,13 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Timer;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
-import com.blackhornetworkshop.flowrush.controller.LevelController;
 import com.blackhornetworkshop.flowrush.model.ui.UIPool;
+
+import static com.blackhornetworkshop.flowrush.model.FRConstants.AUTHORS_MSG;
+import static com.blackhornetworkshop.flowrush.model.FRConstants.SCREEN_HEIGHT;
+import static com.blackhornetworkshop.flowrush.model.FRConstants.SIGNED_MSG;
+import static com.blackhornetworkshop.flowrush.model.FRConstants.SIGN_IN_MSG;
+import static com.blackhornetworkshop.flowrush.model.FRConstants.SUPPORT_MSG;
 
 //Created by TScissors.
 
@@ -38,7 +43,7 @@ public class MenuScreen implements Screen, FRScreen {
 
         hudStage = FlowRush.getInstance().getHudStage();
 
-        UIPool.getSoundButton().setPosition(Gdx.graphics.getHeight()*0.02f, Gdx.graphics.getHeight()*0.02f);
+        UIPool.getSoundButton().setPosition(SCREEN_HEIGHT*0.02f, SCREEN_HEIGHT*0.02f);
         UIPool.getSoundButton().setVisible(true);
 
         hudStage.addActor(UIPool.getTriangleBackground());
@@ -57,11 +62,9 @@ public class MenuScreen implements Screen, FRScreen {
         hudStage.addActor(UIPool.getSupportUsButton());
         hudStage.addActor(UIPool.getRateUsButton());
         hudStage.addActor(UIPool.getFeedButton());
-        /**hudStage.addActor(removeAds);*/
-        hudStage.addActor(UIPool.getSocialNetworkBackground());
-        hudStage.addActor(UIPool.getTwitterButton());
-        hudStage.addActor(UIPool.getFacebookButton());
-        hudStage.addActor(UIPool.getVkButton());
+        hudStage.addActor(UIPool.getRemoveAdsButton());
+        hudStage.addActor(UIPool.getSocialNetworksButton());
+        hudStage.addActor(UIPool.getWebsiteButton());
         hudStage.addActor(UIPool.getLevelNumbersGroup());
         hudStage.addActor(UIPool.getCloseButton());
         hudStage.addActor(UIPool.getMenuLabel());
@@ -105,11 +108,9 @@ public class MenuScreen implements Screen, FRScreen {
         UIPool.getSupportUsButton().setVisible(false);
         UIPool.getRateUsButton().setVisible(false);
         UIPool.getFeedButton().setVisible(false);
-        UIPool.getSocialNetworkBackground().setVisible(false);
-        /**removeAds.setVisible(false);*/
-        UIPool.getTwitterButton().setVisible(false);
-        UIPool.getFacebookButton().setVisible(false);
-        UIPool.getVkButton().setVisible(false);
+        UIPool.getSocialNetworksButton().setVisible(false);
+        UIPool.getRemoveAdsButton().setVisible(false);
+        UIPool.getWebsiteButton().setVisible(false);
 
         if(FlowRush.isPlayServicesAvailable()) {
             UIPool.getGooglePlayButton().setVisible(true);
@@ -146,20 +147,17 @@ public class MenuScreen implements Screen, FRScreen {
         UIPool.getRateUsButton().setVisible(false);
         UIPool.getFeedButton().setVisible(false);
 
-        /**messageBack.setText("\nPlease support our indie development team. Remove ads or share our game with your friends .\n\nYou help us to grow.\nThank you!");*/
-        UIPool.getMessageBackground().setText("Please support our indie development team. Share our game with your friends.\n\nYou help us to grow.\nThank you!");
+        UIPool.getMessageBackground().setText(SUPPORT_MSG);
         UIPool.getMenuLabel().setText("SUPPORT US");
 
         UIPool.getMessageBackground().setVisible(true);
-        UIPool.getSocialNetworkBackground().setVisible(true);
-        /**removeAds.setVisible(true);*/
-        UIPool.getTwitterButton().setVisible(true);
-        UIPool.getFacebookButton().setVisible(true);
-        UIPool.getVkButton().setVisible(true);
+        UIPool.getSocialNetworksButton().setVisible(true);
+        UIPool.getRemoveAdsButton().setVisible(true);
+        UIPool.getWebsiteButton().setVisible(true);
     }
 
     public void setAuthorsScreen(){
-        UIPool.getMessageBackground().setText("development\nTIMUR SCISSORS\n\ndesign\nSONYA KOVALSKI\n\nmusic\nERIC HOPTON");
+        UIPool.getMessageBackground().setText(AUTHORS_MSG);
         UIPool.getMenuLabel().setText("AUTHORS");
         setOnVisibleForInnerScreen();
 
@@ -170,9 +168,7 @@ public class MenuScreen implements Screen, FRScreen {
     }
 
     public void setSignInScreen(){
-        UIPool.getMessageBackground().setText("By signing in your game progress will be saved online " +
-                "with Google Play. Your Google Play Games Achievements will be associated with your" +
-                "Google+ indentity. These will be viewable from some Google products");
+        UIPool.getMessageBackground().setText(SIGN_IN_MSG);
         UIPool.getMenuLabel().setText("GOOGLE PLAY");
 
         setOnVisibleForInnerScreen();
@@ -182,7 +178,7 @@ public class MenuScreen implements Screen, FRScreen {
     }
 
     public void setSignedScreen(){
-        UIPool.getMessageBackground().setText("Welcome!\nHere you can see your Flow Rush achievements and manage your saved games");
+        UIPool.getMessageBackground().setText(SIGNED_MSG);
         UIPool.getMenuLabel().setText("GOOGLE PLAY");
 
         setOnVisibleForInnerScreen();

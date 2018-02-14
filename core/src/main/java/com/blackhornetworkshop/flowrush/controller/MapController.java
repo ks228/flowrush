@@ -16,7 +16,13 @@ import com.blackhornetworkshop.flowrush.model.ui.UIPool;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.blackhornetworkshop.flowrush.model.FRConstants.BUTTON_SIZE;
+import static com.blackhornetworkshop.flowrush.model.FRConstants.DOVE_OFF_ICON;
+import static com.blackhornetworkshop.flowrush.model.FRConstants.POINT_OFF_ICON;
 import static com.blackhornetworkshop.flowrush.model.FRConstants.SCREEN_HEIGHT;
+import static com.blackhornetworkshop.flowrush.model.FRConstants.SCREEN_WIDTH;
+import static com.blackhornetworkshop.flowrush.model.FRConstants.SOURCE_ICON;
+import static com.blackhornetworkshop.flowrush.model.FRConstants.HEX;
 
 //Created by TScissors.
 
@@ -68,7 +74,7 @@ public class MapController {
         specialActors.clear();
         numOfReceivers = 0;
 
-        minCoord = Gdx.graphics.getHeight();
+        minCoord = SCREEN_HEIGHT;
         maxCoord = 0;
 
         mapGroup.addActor(UIPool.getHexBackgroundActor());
@@ -90,8 +96,8 @@ public class MapController {
         mapGroup.setWidth(list.size() * FRConstants.HEX_WIDTH - (list.size() - 1) * (FRConstants.HEX_WIDTH / 4));
         mapGroup.setHeight(maxCoord - minCoord);
 
-        float availHeight = (Gdx.graphics.getHeight() - (Gdx.graphics.getWidth() / 10) - UIPool.getLevelNumberActor().getHeight() * 1.1f - FRConstants.BUTTON_SIZE * 1.1f);
-        float zoom = (Gdx.graphics.getWidth() - (Gdx.graphics.getWidth() / 10)) / mapGroup.getWidth();
+        float availHeight = (SCREEN_HEIGHT - (SCREEN_WIDTH / 10) - UIPool.getLevelNumberActor().getHeight() * 1.1f - BUTTON_SIZE * 1.1f);
+        float zoom = (SCREEN_WIDTH - (SCREEN_WIDTH/ 10)) / mapGroup.getWidth();
 
         if (mapGroup.getHeight() * zoom > availHeight && zoom > availHeight / mapGroup.getHeight()) {
             zoom = availHeight / mapGroup.getHeight();
@@ -100,7 +106,7 @@ public class MapController {
         if (minus) {
             coefficient = FRConstants.HEX_HEIGHT * 0.5f * zoom;
         }
-        mapGroup.setPosition((Gdx.graphics.getWidth() - mapGroup.getWidth()) / 2, ((Gdx.graphics.getHeight() - (mapGroup.getHeight())) / 2) - coefficient);
+        mapGroup.setPosition((SCREEN_WIDTH - mapGroup.getWidth()) / 2, ((SCREEN_HEIGHT- (mapGroup.getHeight())) / 2) - coefficient);
 
         mapGroup.setOrigin(Align.center);
         mapGroup.setScale(zoom);
@@ -139,8 +145,8 @@ public class MapController {
                 indexSpriteOff = actorInfo.getIndex() - 13;
             }
 
-            Sprite spriteOff = FRAssetManager.getSprite("hex"+indexSpriteOff);
-            Sprite spriteOn = FRAssetManager.getSprite("hex"+indexSpriteOn);
+            Sprite spriteOff = FRAssetManager.getSprite(HEX+indexSpriteOff);
+            Sprite spriteOn = FRAssetManager.getSprite(HEX+indexSpriteOn);
 
             HexActor actor = new HexActor(actorInfo.getIndex(), actorInfo.getInclude(), spriteOff, spriteOn, actorInfo.getPosition(), x, y, createSourceArray(actorInfo.getIndex()));
 
@@ -163,11 +169,11 @@ public class MapController {
             HexController.setHexbackTouchOff(actor);
 
             if (actor.getInclude() == 1) {
-                actor.setIcon(FRAssetManager.getSprite("source_icon"));
+                actor.setIcon(FRAssetManager.getSprite(SOURCE_ICON));
             } else if (actor.getInclude() == 2) {
-                actor.setIcon(FRAssetManager.getSprite("point_icon_off"));
+                actor.setIcon(FRAssetManager.getSprite(POINT_OFF_ICON));
             } else if (actor.getInclude() == 3) {
-                actor.setIcon(FRAssetManager.getSprite("dove_icon_off"));
+                actor.setIcon(FRAssetManager.getSprite(DOVE_OFF_ICON));
             }
 
             ScaleToAction scale = new ScaleToAction();

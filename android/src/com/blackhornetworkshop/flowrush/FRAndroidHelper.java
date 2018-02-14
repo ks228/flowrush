@@ -13,68 +13,52 @@ public class FRAndroidHelper implements AndroidHelper {
     private static final FRAndroidHelper instance = new FRAndroidHelper();
 
     private AndroidLauncher app;
-    private String fbUrl, twUrl, vkUrl, appPackageName;
+    private final static String websiteUrl = "https://blackhor.net";
 
-    static FRAndroidHelper getInstance(){
+    static FRAndroidHelper getInstance() {
         return instance;
     }
 
-    private FRAndroidHelper(){}
+    private FRAndroidHelper() {}
 
-    void setup(AndroidLauncher app){
+    void setup(AndroidLauncher app) {
         this.app = app;
-        fbUrl = "https://www.facebook.com/blackhornet.workshop/";
-        twUrl = "https://twitter.com/blackhornet_w";
-        vkUrl = "https://vk.com/blackhornet.workshop";
-        appPackageName = this.app.getPackageName();
     }
 
     @Override
-    public void sendMail(){
+    public void openWebsite() {
+        logDebug("AndroidHelper openWebsite() method called");
+        app.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(websiteUrl)));
+    }
+
+    @Override
+    public void sendMail() {
         logDebug("AndroidHelper sendMail() method called");
         Intent intent = new Intent(Intent.ACTION_VIEW);
         Uri data = Uri.parse("mailto:blackhornet.w@gmail.com?subject=FlowRushFeedBack&body=");
         intent.setData(data);
         app.startActivity(intent);
     }
-    @Override
-    public void openFacebook(){
-        logDebug("AndroidHelper openFacebook() method called");
-        try {
-            app.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("fb://facewebmodal/f?href=" + fbUrl)));
-        } catch (Exception e) {
-            app.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(fbUrl)));
-        }
-    }
 
-    @Override
-    public void openTwitter() {
-        logDebug("AndroidHelper openTwitter() method called");
-        try {
-            app.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("twitter://user?screen_name=blackhornet_w")));
-        }catch (Exception e) {
-            app.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(twUrl)));
-        }
-    }
-
-    @Override
-    public void openVK() {
-        logDebug("AndroidHelper openVK() method called");
-        try {
-            app.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("vkontakte://profile/-112124312")));
-        } catch (Exception e) {
-            app.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(vkUrl)));
-        }
-    }
 
     @Override
     public void openPlayMarket() {
         logDebug("AndroidHelper openPlayMarket() method called");
         try {
-            app.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+            app.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + app.getPackageName())));
         } catch (Exception e) {
-            app.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+            app.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + app.getPackageName())));
         }
+    }
+
+    @Override
+    public void loadAndShowAd() {
+        app.runOnUiThread(new Runnable() {
+            public void run() {
+                FRAndroidHelper.getInstance().logDebug("AndroidHelper loadAndShowAd() method called (runOnUiThread())");
+                app.loadAndShowAdd();
+            }
+        });
     }
 
     @Override
@@ -85,7 +69,7 @@ public class FRAndroidHelper implements AndroidHelper {
 
     @Override
     public void logDebug(String msg) {
-        if(FRConstants.IS_DEBUG) {
+        if (FRConstants.IS_DEBUG) {
             Log.d(FRConstants.TAG, msg);
         }
     }
@@ -100,4 +84,9 @@ public class FRAndroidHelper implements AndroidHelper {
         });
     }
 
+    @Override
+    public void openSocialNetworksActivity() {
+        Intent intent = new Intent(app, SocialNetworksActivity.class);
+        app.startActivity(intent);
+    }
 }

@@ -10,6 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.utils.Align;
 
+import static com.blackhornetworkshop.flowrush.model.FRConstants.SCREEN_HEIGHT;
+import static com.blackhornetworkshop.flowrush.model.FRConstants.SCREEN_WIDTH;
+
 public abstract class BackgroundActor extends Actor{
 
     private Sprite sprite;
@@ -48,11 +51,11 @@ public abstract class BackgroundActor extends Actor{
     }
 
     float randomX(){
-        return MathUtils.random() * (Gdx.graphics.getWidth() - Gdx.graphics.getWidth() * 0.2f) + Gdx.graphics.getWidth() * 0.1f;
+        return MathUtils.random() * (SCREEN_WIDTH - SCREEN_WIDTH * 0.2f) + SCREEN_WIDTH * 0.1f;
     }
 
     float randomY(){
-        return MathUtils.random() * (Gdx.graphics.getHeight() - Gdx.graphics.getHeight() * 0.2f) + Gdx.graphics.getHeight() * 0.1f;
+        return MathUtils.random() * (SCREEN_HEIGHT- SCREEN_HEIGHT * 0.2f) + SCREEN_HEIGHT * 0.1f;
     }
 
     abstract void restartPosition();

@@ -14,31 +14,39 @@ import com.badlogic.gdx.utils.Align;
 import com.blackhornetworkshop.flowrush.model.FRAssetManager;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
 
+import static com.blackhornetworkshop.flowrush.model.FRConstants.BIG_HEX_DARK;
+import static com.blackhornetworkshop.flowrush.model.FRConstants.SCREEN_HEIGHT;
+import static com.blackhornetworkshop.flowrush.model.FRConstants.SCREEN_WIDTH;
+
 public class PackCompleteTopHex extends Actor {
 
     private Sprite sprite;
     private Container<Label> labelContainer;
-
+    private Label label;
+    private Label.LabelStyle daylabelStyle, nightLabelStyle;
 
     public PackCompleteTopHex(String string){
-        setSize(Gdx.graphics.getHeight()*0.35f*1.117647058823529f, Gdx.graphics.getHeight()*0.35f);
-        setOrigin(getWidth()/2, getHeight()/2);
-        setPosition((Gdx.graphics.getWidth()-getWidth())/2, (Gdx.graphics.getHeight()-getHeight())/4*3);
+        setSize(SCREEN_HEIGHT*0.35f*1.117647058823529f, SCREEN_HEIGHT*0.35f);
+        setOrigin(Align.center);
+        setPosition((SCREEN_WIDTH-getWidth())/2, (SCREEN_HEIGHT-getHeight())/4*3);
 
-        sprite = FRAssetManager.getSprite("bighex_dark");
+        sprite = FRAssetManager.getSprite(BIG_HEX_DARK);
 
-        Color color;
-        if(FlowRush.getPreferences().isNightMode()){
-            color = new Color(0.4078f, 0.4118f, 0.4118f, 1);
+        Color dayColor = new Color(1f, 1f, 1f, 1);
+        Color nightColor = new Color(0.4078f, 0.4118f, 0.4118f, 1);
+
+        nightLabelStyle = new Label.LabelStyle(FRAssetManager.getMidFont(), nightColor);
+        daylabelStyle = new Label.LabelStyle(FRAssetManager.getMidFont(), dayColor);
+
+
+        if(FlowRush.getPreferences().isNightMode()) {
+            label = new Label(string + "\nPACK\nIS DONE!", nightLabelStyle);
         }else{
-            color = new Color(1f, 1f, 1f, 1);
+            label = new Label(string + "\nPACK\nIS DONE!", daylabelStyle);
         }
-
-        Label.LabelStyle labelStyle = new Label.LabelStyle(FRAssetManager.getMidFont(), color);
-        Label label = new Label(string+"\nPACK\nIS DONE!",labelStyle);
         label.setAlignment(Align.center);
 
-        labelContainer = new Container<Label>(label);
+        labelContainer = new Container<>(label);
         labelContainer.setPosition(getX()+getWidth()/2, getY()+getHeight()/2);
         labelContainer.setTransform(true);
         setVisible(false);
@@ -52,7 +60,12 @@ public class PackCompleteTopHex extends Actor {
         labelContainer.draw(batch, 1);
     }
 
-    public void setSprite(Sprite sprite) {
+    public void reload(Sprite sprite){
         this.sprite = sprite;
+        if(FlowRush.getPreferences().isNightMode()){
+            label.setStyle(nightLabelStyle);
+        }else{
+            label.setStyle(daylabelStyle);
+        }
     }
 }

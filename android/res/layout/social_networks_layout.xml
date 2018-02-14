@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    style="@style/SocialNetworksLayout">
+
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#F5F5F5"
+        android:padding="10dp">
+
+        <TableRow>
+
+            <TextView
+                android:layout_span="3"
+                android:padding="10dp"
+                android:textSize="24sp"
+                android:textColor="#49595E"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/social_networks_title"
+                android:gravity="center"
+                android:textAlignment="gravity" />
+
+        </TableRow>
+
+        <TableRow>
+
+            <ImageButton
+                android:id="@+id/facebookButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:padding="10dp"
+                android:src="@drawable/fb_icon"
+                android:onClick="openFacebook"/>
+
+            <ImageButton
+                android:id="@+id/twitterButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:padding="10dp"
+                android:src="@drawable/twitter_icon"
+                android:onClick="openTwitter"/>
+
+            <ImageButton
+                android:id="@+id/youtubeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:padding="10dp"
+                android:src="@drawable/youtube_icon"
+                android:onClick="openYoutube"
+                />
+        </TableRow>
+
+        <TableRow>
+
+            <ImageButton
+                android:id="@+id/googlePlusButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:padding="10dp"
+                android:src="@drawable/gplus_icon"
+                android:onClick="openGooglePlus"/>
+
+            <ImageButton
+                android:id="@+id/vkButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:padding="10dp"
+                android:src="@drawable/vk_icon"
+                android:onClick="openVK"/>
+
+            <ImageButton
+                android:id="@+id/instagramButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:padding="10dp"
+                android:src="@drawable/instagram_icon"
+                android:onClick="openInstagram"/>
+        </TableRow>
+    </TableLayout>
+</LinearLayout>

@@ -75,11 +75,11 @@ public class OneTouchProcessor implements InputProcessor {
                     msg = msg + "No action.";
                     break;
             }
+            if(FlowRush.getPreferences().isSoundOn()) {
+                FRAssetManager.getTapSound().play();
+            }
+            FlowRush.logDebug(msg);
         }
-        if(FlowRush.getPreferences().isSoundOn()) {
-            FRAssetManager.getTapSound().play();
-        }
-        FlowRush.logDebug(msg);
         return false;
     }
 

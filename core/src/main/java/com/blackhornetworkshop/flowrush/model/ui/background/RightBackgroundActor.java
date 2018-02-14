@@ -2,8 +2,9 @@ package com.blackhornetworkshop.flowrush.model.ui.background;
 
 //Created by TScissors
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+
+import static com.blackhornetworkshop.flowrush.model.FRConstants.SCREEN_WIDTH;
 
 public class RightBackgroundActor extends BackgroundActor{
 
@@ -12,7 +13,7 @@ public class RightBackgroundActor extends BackgroundActor{
     public RightBackgroundActor(Sprite sprite, float duration){
         super(sprite, duration, 90);
         moveToXLeft = 0 - getHeight();
-        posXRight = Gdx.graphics.getWidth()+getHeight()/2;
+        posXRight = SCREEN_WIDTH+getHeight()/2;
         restartPosition();
     }
 

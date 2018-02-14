@@ -12,11 +12,15 @@ import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.blackhornetworkshop.flowrush.model.FRConstants;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 
 public class AndroidLauncher extends AndroidApplication {
 
     private ProgressDialog loadingDialog;
+    private InterstitialAd interstitialAd;
 
     @Override
     public void onCreate (Bundle savedInstanceState) {
@@ -48,9 +52,20 @@ public class AndroidLauncher extends AndroidApplication {
 
         RelativeLayout mainLayout = (RelativeLayout)getLayoutInflater().inflate(R.layout.main_layout, null);
         View libGDXLayout = initializeForView(FlowRush.getInstance(), getConfig());
+
         mainLayout.addView(libGDXLayout);
 
-        //admob here
+
+        MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
+
+        interstitialAd = new InterstitialAd(this);
+        interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        interstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                interstitialAd.show();
+            }
+        });
 
         setContentView(mainLayout);
     }
@@ -61,6 +76,10 @@ public class AndroidLauncher extends AndroidApplication {
         config.useCompass = false;
         config.useGyroscope = false;
         return config;
+    }
+
+    public void loadAndShowAdd(){
+        interstitialAd.loadAd(new AdRequest.Builder().build());
     }
 
     @Override
@@ -93,7 +112,4 @@ public class AndroidLauncher extends AndroidApplication {
         loadingDialog.dismiss();
     }
 
-    void reloadFlowRushGraphics(){
-
-    }
 }
