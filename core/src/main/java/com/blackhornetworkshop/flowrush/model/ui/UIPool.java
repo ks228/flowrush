@@ -19,8 +19,6 @@ import com.blackhornetworkshop.flowrush.view.FlowRush;
 import com.blackhornetworkshop.flowrush.controller.ScreenManager;
 import com.blackhornetworkshop.flowrush.controller.LevelController;
 
-import java.util.ArrayList;
-
 import static com.blackhornetworkshop.flowrush.model.FRConstants.*;
 
 public class UIPool {
@@ -64,7 +62,7 @@ public class UIPool {
     private static Actor triangleBackgroundTop;
     private static Actor triangleBackground;
     private static Group levelNumbersGroup;
-    private static ArrayList<LevelNumberButton> levelNumbersGroupArray;
+    //private static ArrayList<LevelNumberButton> levelNumbersGroupArray;
     private static SmallButtonActor dayNightButton;
 
     //Main buttons
@@ -255,7 +253,7 @@ public class UIPool {
         packGroup.setVisible(false);
 
         levelNumbersGroup = new Group();
-        levelNumbersGroupArray = new ArrayList<>();
+        //levelNumbersGroupArray = new ArrayList<>();
         levelNumbersGroup.setVisible(false);
 
         for (int x = 1; x < 51; x++) {
@@ -264,7 +262,7 @@ public class UIPool {
             levelNumberButton.setSize(LEVEL_NUMBER_SIZE, LEVEL_NUMBER_SIZE);
             levelNumberButton.setOrigin(Align.center);
             levelNumbersGroup.addActor(levelNumberButton);
-            levelNumbersGroupArray.add(levelNumberButton);
+            //levelNumbersGroupArray.add(levelNumberButton);
         }
 
         //Day night button
@@ -351,10 +349,16 @@ public class UIPool {
     }
 
     public static void getLevelNumbersGroup(int pack) {
-        for (LevelNumberButton levelNumberButton : levelNumbersGroupArray) {
+        for(int x = 0; x < levelNumbersGroup.getChildren().size; x++){
+            LevelNumberButton levelNumberButton = (LevelNumberButton) levelNumbersGroup.getChildren().get(x);
             levelNumberButton.setIsAvailable(levelNumberButton.getLevel() <= FlowRush.getSave().getLevelsProgress(pack - 1));
             levelNumberButton.setPack(pack);
         }
+
+/*        for (LevelNumberButton levelNumberButton : levelNumbersGroupArray) {
+            levelNumberButton.setIsAvailable(levelNumberButton.getLevel() <= FlowRush.getSave().getLevelsProgress(pack - 1));
+            levelNumberButton.setPack(pack);
+        }*/
     }
 
     private static void setLevelNumberPosition(int number, Actor actor) {

@@ -292,7 +292,8 @@ public class FRPlayServices implements PlayServices {
             public void onComplete(@NonNull Task<byte[]> task) {
                 FRAndroidHelper.getInstance().logDebug("Downloading a snapshot from the server is complete");
                 String snapshotInJson = new String(task.getResult());
-                FlowRush.loadSave(FlowRush.getGson().fromJson(snapshotInJson, SavedGame.class));
+                FRAndroidHelper.getInstance().logDebug("Save json snapshot: "+snapshotInJson);
+                FlowRush.setSave(FlowRush.getGson().fromJson(snapshotInJson, SavedGame.class));
                 FRAndroidHelper.getInstance().logDebug("Snapshot reading from json is completed successfully");
                 app.hideLoadingDialog();
                 ScreenManager.setMenuMainScreen();

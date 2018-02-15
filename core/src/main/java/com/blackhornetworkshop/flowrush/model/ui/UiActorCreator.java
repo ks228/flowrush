@@ -27,13 +27,13 @@ import static com.blackhornetworkshop.flowrush.model.FRConstants.*;
 
 //Created by TScissors.
 
-public class UiActorCreator {
+class UiActorCreator {
 
-    public static TextButton getTextButton(int type) {
+    static TextButton getTextButton(int type) {
         TextButton textButton;
         switch (type) {
             case 1: //PLAY button
-                textButton = createTextButton("PLAY", TEXT_BUTTON_STYLE_PLAYBUTTON, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT, PLAY_BUTTON_X, PLAY_BUTTON_Y, true, true);
+                textButton = createTextButton("PLAY", TEXT_BUTTON_STYLE_PLAYBUTTON, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT, PLAY_BUTTON_X, PLAY_BUTTON_Y, true);
                 textButton.addListener(new ButtonScaleListener(true) {
                     @Override
                     public void action(InputEvent event) {
@@ -43,7 +43,7 @@ public class UiActorCreator {
                 });
                 return textButton;
             case 2://LEVELS button
-                textButton = createTextButton("LEVELS", TEXT_BUTTON_STYLE_LIGHTBLUE, MENU_BUTTON_WIDTH, BUTTON_SIZE, MENU_BUTTON_X, LEVELS_BUTTON_Y, true, true);
+                textButton = createTextButton("LEVELS", TEXT_BUTTON_STYLE_LIGHTBLUE, MENU_BUTTON_WIDTH, BUTTON_SIZE, MENU_BUTTON_X, LEVELS_BUTTON_Y, true);
                 textButton.addListener(new ButtonScaleListener(true) {
                     @Override
                     public void action(InputEvent event) {
@@ -52,7 +52,7 @@ public class UiActorCreator {
                 });
                 return textButton;
             case 3: //FEEDBACK button
-                textButton = createTextButton("SEND FEEDBACK", TEXT_BUTTON_STYLE_WHITE, MENU_BUTTON_WIDTH, BUTTON_SIZE, MENU_BUTTON_X, MENU_BUTTON_Y_1, false, true);
+                textButton = createTextButton("SEND FEEDBACK", TEXT_BUTTON_STYLE_WHITE, MENU_BUTTON_WIDTH, BUTTON_SIZE, MENU_BUTTON_X, MENU_BUTTON_Y_1, false);
                 textButton.addListener(new ButtonScaleListener(false) {
                     @Override
                     public void action(InputEvent event) {
@@ -61,7 +61,7 @@ public class UiActorCreator {
                 });
                 return textButton;
             case 4: //RATE button
-                textButton = createTextButton("RATE", TEXT_BUTTON_STYLE_WHITE, MENU_BUTTON_WIDTH, BUTTON_SIZE, MENU_BUTTON_X, MENU_BUTTON_Y_2, false, true);
+                textButton = createTextButton("RATE", TEXT_BUTTON_STYLE_WHITE, MENU_BUTTON_WIDTH, BUTTON_SIZE, MENU_BUTTON_X, MENU_BUTTON_Y_2, false);
                 textButton.addListener(new ButtonScaleListener(false) {
                     @Override
                     public void action(InputEvent event) {
@@ -70,7 +70,7 @@ public class UiActorCreator {
                 });
                 return textButton;
             case 5: //SUPPORT US button (authors screen)
-                textButton = createTextButton("SUPPORT US", TEXT_BUTTON_STYLE_WHITE, MENU_BUTTON_WIDTH, BUTTON_SIZE, MENU_BUTTON_X, MENU_BUTTON_Y_3, false, true);
+                textButton = createTextButton("SUPPORT US", TEXT_BUTTON_STYLE_WHITE, MENU_BUTTON_WIDTH, BUTTON_SIZE, MENU_BUTTON_X, MENU_BUTTON_Y_3, false);
                 textButton.addListener(new ButtonScaleListener(true) {
                     @Override
                     public void action(InputEvent event) {
@@ -79,7 +79,7 @@ public class UiActorCreator {
                 });
                 return textButton;
             case 6: //REMOVE ADS button
-                textButton = createTextButton("REMOVE ADS", TEXT_BUTTON_STYLE_WHITE, MENU_BUTTON_WIDTH, BUTTON_SIZE, MENU_BUTTON_X, MENU_BUTTON_Y_2, true, true);
+                textButton = createTextButton("REMOVE ADS", TEXT_BUTTON_STYLE_WHITE, MENU_BUTTON_WIDTH, BUTTON_SIZE, MENU_BUTTON_X, MENU_BUTTON_Y_2, true);
                 textButton.addListener(new ButtonScaleListener(true) {
                     @Override
                     public void action(InputEvent event) {
@@ -88,11 +88,11 @@ public class UiActorCreator {
                 });
                 return textButton;
             case 7: //MENU label
-                textButton = createTextButton("", TEXT_BUTTON_STYLE_WHITE, MENU_BUTTON_WIDTH, BUTTON_SIZE, MENU_BUTTON_X, MENU_LABEL_Y, false, true);
+                textButton = createTextButton("", TEXT_BUTTON_STYLE_WHITE, MENU_BUTTON_WIDTH, BUTTON_SIZE, MENU_BUTTON_X, MENU_LABEL_Y, false);
                 textButton.setVisible(false);
                 return textButton;
             case 8: //SOCIAL NETWORKS button
-                textButton = createTextButton("JOIN US", TEXT_BUTTON_STYLE_WHITE, MENU_BUTTON_WIDTH, BUTTON_SIZE, MENU_BUTTON_X, MENU_BUTTON_Y_1, false, true);
+                textButton = createTextButton("JOIN US", TEXT_BUTTON_STYLE_WHITE, MENU_BUTTON_WIDTH, BUTTON_SIZE, MENU_BUTTON_X, MENU_BUTTON_Y_1, false);
                 textButton.addListener(new ButtonScaleListener(false) {
                     @Override
                     public void action(InputEvent event) {
@@ -101,7 +101,7 @@ public class UiActorCreator {
                 });
                 return textButton;
             case 9: //MENU button (pack complete)
-                textButton = createTextButton("MENU", TEXT_BUTTON_STYLE_DEFAULT, MENU_PACK_COMPLETE_BUTTON_WIDTH, MENU_PACK_COMPLETE_BUTTON_HEIGHT, MENU_PACK_COMPLETE_BUTTON_X, MENU_PACK_COMPLETE_BUTTON_Y, false, true);
+                textButton = createTextButton("MENU", TEXT_BUTTON_STYLE_DEFAULT, MENU_PACK_COMPLETE_BUTTON_WIDTH, MENU_PACK_COMPLETE_BUTTON_HEIGHT, MENU_PACK_COMPLETE_BUTTON_X, MENU_PACK_COMPLETE_BUTTON_Y, false);
                 textButton.addListener(new ButtonScaleListener(true) {
                     @Override
                     public void action(InputEvent event) {
@@ -110,7 +110,7 @@ public class UiActorCreator {
                 });
                 return textButton;
             case 10: //RIGHT button
-                textButton = createTextButton(ANSWER_YES_1, TEXT_BUTTON_STYLE_WHITESMALL, RATE_DIALOG_BUTTON_WIDTH, RATE_DIALOG_BUTTON_HEIGHT, RATE_US_DIALOG_BUTTON_RIGHT_X, RATE_US_DIALOG_BUTTON_Y, false, true);
+                textButton = createTextButton(ANSWER_YES_1, TEXT_BUTTON_STYLE_WHITESMALL, RATE_DIALOG_BUTTON_WIDTH, RATE_DIALOG_BUTTON_HEIGHT, RATE_US_DIALOG_BUTTON_RIGHT_X, RATE_US_DIALOG_BUTTON_Y, false);
                 textButton.addListener(new ButtonScaleListener(true) {
                     @Override
                     public void action(InputEvent event) {
@@ -130,7 +130,7 @@ public class UiActorCreator {
                 });
                 return textButton;
             case 11: //LEFT button
-                textButton = createTextButton(ANSWER_NO_1, TEXT_BUTTON_STYLE_BORDERSMALL, RATE_DIALOG_BUTTON_WIDTH, RATE_DIALOG_BUTTON_HEIGHT, RATE_US_DIALOG_BUTTON_LEFT_X, RATE_US_DIALOG_BUTTON_Y, false, true);
+                textButton = createTextButton(ANSWER_NO_1, TEXT_BUTTON_STYLE_BORDERSMALL, RATE_DIALOG_BUTTON_WIDTH, RATE_DIALOG_BUTTON_HEIGHT, RATE_US_DIALOG_BUTTON_LEFT_X, RATE_US_DIALOG_BUTTON_Y, false);
                 textButton.addListener(new ButtonScaleListener(true) {
                     @Override
                     public void action(InputEvent event) {
@@ -147,7 +147,7 @@ public class UiActorCreator {
                 });
                 return textButton;
             case 12: //NEXT PACK button
-                textButton = createTextButton("NEXT", TEXT_BUTTON_STYLE_DARKBLUE, NEXT_PACK_BUTTON_WIDTH, BUTTON_SIZE, NEXT_PACK_BUTTON_X, NEXT_PACK_BUTTON_Y, false, true);
+                textButton = createTextButton("NEXT", TEXT_BUTTON_STYLE_DARKBLUE, NEXT_PACK_BUTTON_WIDTH, BUTTON_SIZE, NEXT_PACK_BUTTON_X, NEXT_PACK_BUTTON_Y, false);
                 textButton.addListener(new ButtonScaleListener(true) {
                     @Override
                     public void action(InputEvent event) {
@@ -156,8 +156,8 @@ public class UiActorCreator {
                 });
                 return textButton;
             case 13://EXIT button
-                textButton = createTextButton("EXIT", TEXT_BUTTON_STYLE_LIGHTBLUE, MENU_BUTTON_WIDTH, BUTTON_SIZE, MENU_BUTTON_X, EXIT_BUTTON_Y, false, true);
-                textButton.addListener(new ButtonScaleListener(true) {
+                textButton = createTextButton("EXIT", TEXT_BUTTON_STYLE_LIGHTBLUE, MENU_BUTTON_WIDTH, BUTTON_SIZE, MENU_BUTTON_X, EXIT_BUTTON_Y, false);
+                textButton.addListener(new ButtonScaleListener(false) {
                     @Override
                     public void action(InputEvent event) {
                         Gdx.app.exit();
@@ -165,7 +165,7 @@ public class UiActorCreator {
                 });
                 return textButton;
             case 14: //SIGN IN button
-                textButton = createTextButton("SIGN IN", TEXT_BUTTON_STYLE_WHITE, MENU_BUTTON_WIDTH, BUTTON_SIZE, MENU_BUTTON_X, MENU_BUTTON_Y_1, false, true);
+                textButton = createTextButton("SIGN IN", TEXT_BUTTON_STYLE_WHITE, MENU_BUTTON_WIDTH, BUTTON_SIZE, MENU_BUTTON_X, MENU_BUTTON_Y_1, false);
                 textButton.addListener(new ButtonScaleListener(true) {
                     @Override
                     public void action(InputEvent event) {
@@ -175,7 +175,7 @@ public class UiActorCreator {
                 });
                 return textButton;
             case 15: //SNAPSHOTS button
-                textButton = createTextButton("LOAD GAME", TEXT_BUTTON_STYLE_WHITE, MENU_BUTTON_WIDTH, BUTTON_SIZE, MENU_BUTTON_X, MENU_BUTTON_Y_3, false, true);
+                textButton = createTextButton("LOAD GAME", TEXT_BUTTON_STYLE_WHITE, MENU_BUTTON_WIDTH, BUTTON_SIZE, MENU_BUTTON_X, MENU_BUTTON_Y_3, false);
                 textButton.addListener(new ButtonScaleListener(false) {
                     @Override
                     public void action(InputEvent event) {
@@ -184,7 +184,7 @@ public class UiActorCreator {
                 });
                 return textButton;
             case 16: //ACHIEVEMENTS button
-                textButton = createTextButton("ACHIEVEMENTS", TEXT_BUTTON_STYLE_WHITE, MENU_BUTTON_WIDTH, BUTTON_SIZE, MENU_BUTTON_X, MENU_BUTTON_Y_2, false, true);
+                textButton = createTextButton("ACHIEVEMENTS", TEXT_BUTTON_STYLE_WHITE, MENU_BUTTON_WIDTH, BUTTON_SIZE, MENU_BUTTON_X, MENU_BUTTON_Y_2, false);
                 textButton.addListener(new ButtonScaleListener(false) {
                     @Override
                     public void action(InputEvent event) {
@@ -193,7 +193,7 @@ public class UiActorCreator {
                 });
                 return textButton;
             case 17: //SIGN OUT button
-                textButton = createTextButton("SIGN OUT", TEXT_BUTTON_STYLE_WHITE, MENU_BUTTON_WIDTH, BUTTON_SIZE, MENU_BUTTON_X, MENU_BUTTON_Y_1, false, true);
+                textButton = createTextButton("SIGN OUT", TEXT_BUTTON_STYLE_WHITE, MENU_BUTTON_WIDTH, BUTTON_SIZE, MENU_BUTTON_X, MENU_BUTTON_Y_1, false);
                 textButton.addListener(new ButtonScaleListener(true) {
                     @Override
                     public void action(InputEvent event) {
@@ -203,7 +203,7 @@ public class UiActorCreator {
                 });
                 return textButton;
             case 18: //WEBSITE button
-                textButton = createTextButton("BLACKHOR.NET", TEXT_BUTTON_STYLE_LIGHTBLUE, MENU_BUTTON_WIDTH, BUTTON_SIZE, MENU_BUTTON_X, MENU_BUTTON_Y_3, false, true);
+                textButton = createTextButton("BLACKHOR.NET", TEXT_BUTTON_STYLE_LIGHTBLUE, MENU_BUTTON_WIDTH, BUTTON_SIZE, MENU_BUTTON_X, MENU_BUTTON_Y_3, false);
                 textButton.addListener(new ButtonScaleListener(false) {
                     @Override
                     public void action(InputEvent event) {
@@ -216,16 +216,16 @@ public class UiActorCreator {
         }
     }
 
-    private static TextButton createTextButton(String text, String styleName, float width, float height, float x, float y, boolean isVisible, boolean isTransformable) {
+    private static TextButton createTextButton(String text, String styleName, float width, float height, float x, float y, boolean isVisible) {
         TextButton textButton = new TextButton(text, FRAssetManager.getTextButtonStyle(styleName));
         textButton.setBounds(x, y, width, height);
         textButton.setVisible(isVisible);
-        textButton.setTransform(isTransformable);
         textButton.setOrigin(Align.center);
+        textButton.setTransform(true);
         return textButton;
     }
 
-    public static TextButton getPackButton(int pack) {
+    static TextButton getPackButton(int pack) {
         TextButton textButton = new TextButton("", FRAssetManager.getTextButtonStyle(TEXT_BUTTON_STYLE_DARKBLUE));
         textButton.addListener(new ButtonScaleListener(true) {
             @Override
@@ -247,7 +247,7 @@ public class UiActorCreator {
         return textButton;
     }
 
-    public static SmallButtonActor getSmallButtonActor(int type) { //Маленькие кнопки актеры
+    static SmallButtonActor getSmallButtonActor(int type) { //Маленькие кнопки актеры
         switch (type) {
             case 1://PAUSE button
                 SmallButtonActor pauseButton = createSmallButtonActor(0.0f, 0.0f, SCREEN_WIDTH / 8, SCREEN_WIDTH / 8, true, FRAssetManager.getSprite(PAUSE_ICON));
@@ -433,7 +433,7 @@ public class UiActorCreator {
         return smallButtonActor;
     }
 
-    public static BackgroundActor getBackgroundActor(int type, boolean isDuplicate) {
+    static BackgroundActor getBackgroundActor(int type, boolean isDuplicate) {
         BackgroundActor backgroundActor;
         if (type == 1) {// left -> right
             backgroundActor = new LeftBackgroundActor(FRAssetManager.getBackgroundStripe(), isDuplicate ? 1f : 1.3f);

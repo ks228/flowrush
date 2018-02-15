@@ -2,13 +2,12 @@ package com.blackhornetworkshop.flowrush.view;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.blackhornetworkshop.flowrush.model.AndroidHelper;
 import com.blackhornetworkshop.flowrush.model.FRAssetManager;
+import com.blackhornetworkshop.flowrush.model.FRConstants;
 import com.blackhornetworkshop.flowrush.model.FRFileHandler;
 import com.blackhornetworkshop.flowrush.controller.LevelController;
 import com.blackhornetworkshop.flowrush.model.PlayServices;
@@ -61,7 +60,7 @@ public class FlowRush extends Game {
 
     @Override
     public void create() {
-        logDebug("FlowRush onCreate() called");
+        logDebug("FlowRush create() method called");
 
         batch = new SpriteBatch();
 
@@ -92,14 +91,12 @@ public class FlowRush extends Game {
             save.setUniqSaveName();
             logDebug("A new file save.json was created");
         }
+        FRAssetManager.initialize();
+        FRAssetManager.loadLogos();
 
-        FRAssetManager.loadAssets();
-        UIPool.initialize();
-
-        //Start a game
         ScreenManager.setLogoBHWScreen();
 
-
+        FRAssetManager.loadAssets();
     }
 
     public static void dayNightShift(){
@@ -112,7 +109,6 @@ public class FlowRush extends Game {
         MenuScreen.getInstance().show();
 
         ScreenManager.setMenuMainScreen();
-
     }
 
     public static void checkAchievements() {
@@ -176,13 +172,17 @@ public class FlowRush extends Game {
     public void pause() {
         logDebug("FlowRush pause() method called");
         getScreen().pause();
-        FRAssetManager.getBackgroundMusic().pause();
+        if(FRAssetManager.isMusicLoaded()) {
+            FRAssetManager.getBackgroundMusic().pause();
+        }
     }
 
     public void resume() {
         logDebug("FlowRush resume() method called");
         getScreen().resume();
-        if (preferences.isSoundOn()) FRAssetManager.getBackgroundMusic().play();
+        if (FRAssetManager.isMusicLoaded() && preferences.isSoundOn() && ScreenManager.getCurrentScreen() != FRConstants.ScreenType.LOGO_BHW){
+            FRAssetManager.getBackgroundMusic().play();
+        }
     }
 
     public static void logError(String msg, Throwable tr) {
@@ -208,7 +208,7 @@ public class FlowRush extends Game {
     public static OneTouchProcessor getOneTouchProcessor(){return oneTouchProcessor;}
     public static GamePreferences getPreferences(){return preferences;}
     public static SavedGame getSave(){return save;}
-    public static void loadSave(SavedGame save){ FlowRush.save = save;}
+    public static void setSave(SavedGame save){ FlowRush.save = save;}
     public static boolean isPlayServicesAvailable(){return isPlayServicesAvailable;}
 }
 

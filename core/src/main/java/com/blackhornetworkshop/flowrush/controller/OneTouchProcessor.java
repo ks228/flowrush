@@ -17,14 +17,6 @@ public class OneTouchProcessor implements InputProcessor {
         String msg = "Back key. ";
         if (keycode == Input.Keys.BACK) {
             switch (ScreenManager.getCurrentScreen()) {
-                case LOGO_BHW:
-                    msg = msg + "App exit";
-                    Gdx.app.exit();
-                    break;
-                case LOGO_FR:
-                    msg = msg + "App exit";
-                    Gdx.app.exit();
-                    break;
                 case MENU_MAIN:
                     msg = msg + "Show exit button";
                     Timer.instance().clear();

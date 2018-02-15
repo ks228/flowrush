@@ -50,11 +50,10 @@ public class AndroidLauncher extends AndroidApplication {
         else FlowRush.getInstance().setup(FRAndroidHelper.getInstance());
         FRAndroidHelper.getInstance().logDebug("FlowRush is initialized");
 
-        RelativeLayout mainLayout = (RelativeLayout)getLayoutInflater().inflate(R.layout.main_layout, null);
+/*        RelativeLayout mainLayout = (RelativeLayout)getLayoutInflater().inflate(R.layout.main_layout, null);
         View libGDXLayout = initializeForView(FlowRush.getInstance(), getConfig());
 
-        mainLayout.addView(libGDXLayout);
-
+        mainLayout.addView(libGDXLayout);*/
 
         MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
 
@@ -67,7 +66,8 @@ public class AndroidLauncher extends AndroidApplication {
             }
         });
 
-        setContentView(mainLayout);
+        //setContentView(mainLayout);
+        initialize(FlowRush.getInstance(), getConfig());
     }
 
     private AndroidApplicationConfiguration getConfig() {

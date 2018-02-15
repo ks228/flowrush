@@ -2,12 +2,12 @@ package com.blackhornetworkshop.flowrush.model;
 
 //Created by TScissors
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.SkinLoader;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -34,6 +34,8 @@ public class FRAssetManager {
     private static HashMap<String, Label.LabelStyle> dayLabelStyleHashMap, nightLabelStyleHashMap;
     private static HashMap<String, TextButton.TextButtonStyle> dayTextbuttonStyleHashMap, nightTextbuttonStyleHashMap;
 
+    private static boolean isMusicLoaded;
+
     public static void dispose() {
         FlowRush.logDebug("FRAssetManager dispose()");
         daySkin.remove("fontLarge", BitmapFont.class);// REMOVE IS IMPORTANT!
@@ -45,8 +47,6 @@ public class FRAssetManager {
         manager.dispose();
     }
 
-    private static TextureAtlas commonAtlas;
-
     //Audio
     private static Sound tapSound, lvlCompleteSound, packCompleteSound;
     private static Music backgroundMusic;
@@ -54,16 +54,20 @@ public class FRAssetManager {
     //Sprites
     private static TiledDrawable dayBackgroundDot, nightBackgroundDot;
     private static Sprite dayQuadrantSprite, nightQuadrantSprite;
-    private static Sprite fbLogo, twLogo, vkLogo;
-    private static Sprite logoBHW, logoFR;
     private static Sprite dayBackgroundStripe, nightBackgroundStripe;
     private static Sprite dayBackgroundWhite, nightBackgroundWhite;
-    private FRAssetManager() {
 
+    //Temp
+    private static TextureAtlas bhwLogoAtlas;
+    private static Sprite frLogo;
+
+    private FRAssetManager() {
     }
 
-    public static void loadAssets() {
-        FlowRush.logDebug("FRAssetManager loadAssets() method called");
+    public static void initialize(){
+        FlowRush.logDebug("FRAssetManager initialize() method called");
+
+        manager = new AssetManager();
 
         daySpriteHashMap = new HashMap<>();
         dayLabelStyleHashMap = new HashMap<>();
@@ -73,23 +77,50 @@ public class FRAssetManager {
         nightLabelStyleHashMap = new HashMap<>();
         nightTextbuttonStyleHashMap = new HashMap<>();
 
-        assetManagerLoad();
+        isMusicLoaded = false;
+    }
+
+    public static void loadLogos(){
+        manager.load("texture/bhw-logo-atlas.atlas", TextureAtlas.class);
+        manager.load("texture/fr-logo.png", Texture.class);
+
+        manager.finishLoading();
+
+        bhwLogoAtlas = manager.get("texture/bhw-logo-atlas.atlas");
+
+        Texture frTexture = manager.get("texture/fr-logo.png");
+        frLogo = new Sprite(frTexture);
+        frLogo.setSize(SCREEN_WIDTH * 0.8f, SCREEN_WIDTH * 0.8f * 0.75f);
+        frLogo.setPosition((SCREEN_WIDTH - frLogo.getWidth()) / 2, (SCREEN_HEIGHT - frLogo.getHeight() * 0.9f) / 2);
+
+    }
+
+    public static void unloadLogos(){
+        manager.unload("texture/bhw-logo-atlas.atlas");
+        manager.unload("texture/fr-logo.png");
+        bhwLogoAtlas = null;
+        frLogo = null;
+    }
+
+    public static void createAssets() {
+        FlowRush.logDebug("FRAssetManager createAssets() method called");
 
         nightSkin = manager.get("ui/night-skin.json");
         daySkin = manager.get("ui/day-skin.json");
 
         dayAtlas = daySkin.getAtlas();
         nightAtlas = nightSkin.getAtlas();
-        commonAtlas = manager.get("texture/common-atlas.atlas");
 
-        loadStyles();
+        createStyles();
         createSounds();
         createSprites();
-        createLogos();
     }
 
-    private static void assetManagerLoad() {
-        manager = new AssetManager();
+    public static boolean update(){
+        return manager.update();
+    }
+
+    public static void loadAssets() {
         InternalFileHandleResolver resolver = new InternalFileHandleResolver();
 
         FreeTypeFontGenerator.setMaxTextureSize(FreeTypeFontGenerator.NO_MAXIMUM);
@@ -124,14 +155,11 @@ public class FRAssetManager {
 
         manager.load("ui/night-skin.json", Skin.class, new SkinLoader.SkinParameter("texture/night-atlas.atlas", oMap));
         manager.load("ui/day-skin.json", Skin.class, new SkinLoader.SkinParameter("texture/day-atlas.atlas", oMap));
-        manager.load("texture/common-atlas.atlas", TextureAtlas.class);
 
         manager.load("sound/tap.ogg", Sound.class);
         manager.load("sound/lvlcomplete.ogg", Sound.class);
         manager.load("sound/background.ogg", Music.class);
         manager.load("sound/packcomplete.ogg", Sound.class);
-
-        manager.finishLoading();
     }
 
     public static Sprite getSprite(String name){
@@ -142,7 +170,7 @@ public class FRAssetManager {
         }
     }
 
-    private static void loadStyles(){
+    private static void createStyles(){
         dayLabelStyleHashMap.put(LABEL_STYLE_GREYFONT, daySkin.get(LABEL_STYLE_GREYFONT, Label.LabelStyle.class));
         dayLabelStyleHashMap.put(LABEL_STYLE_DEFAULT, daySkin.get(LABEL_STYLE_DEFAULT, Label.LabelStyle.class));
         dayLabelStyleHashMap.put(LABEL_STYLE_ALPHAWHITE, daySkin.get(LABEL_STYLE_ALPHAWHITE, Label.LabelStyle.class));
@@ -274,19 +302,6 @@ public class FRAssetManager {
         dayBackgroundWhite = dayAtlas.createSprite(TRIANGLE_BACKGROUND);
         nightBackgroundWhite = nightAtlas.createSprite(TRIANGLE_BACKGROUND);
 
-        fbLogo = commonAtlas.createSprite("fb_icon");
-        twLogo = commonAtlas.createSprite("tw_icon");
-        vkLogo = commonAtlas.createSprite("vk_icon");
-    }
-
-    private static void createLogos() {
-        logoBHW = commonAtlas.createSprite("h_logo");
-        logoBHW.setSize(SCREEN_WIDTH * 0.6f, SCREEN_WIDTH * 0.6f * 0.79f);
-        logoBHW.setPosition((SCREEN_WIDTH - logoBHW.getWidth()) / 2, (SCREEN_HEIGHT - logoBHW.getHeight()) / 2);
-
-        logoFR = commonAtlas.createSprite("fr_logo");
-        logoFR.setSize(SCREEN_WIDTH * 0.8f, SCREEN_WIDTH * 0.8f * 0.75f);
-        logoFR.setPosition((SCREEN_WIDTH - logoFR.getWidth()) / 2, (SCREEN_HEIGHT - logoFR.getHeight() * 0.9f) / 2);
     }
 
     private static void createSounds() {
@@ -303,6 +318,8 @@ public class FRAssetManager {
             }
         });
         backgroundMusic.setVolume(0.7f);
+
+        isMusicLoaded = true;
     }
 
     public static TextButton.TextButtonStyle getTextButtonStyle(String style){
@@ -327,6 +344,10 @@ public class FRAssetManager {
         }else{
             return daySkin.getFont("fontMid");
         }
+    }
+
+    public static TextureAtlas getBhwLogoAtlas() {
+        return bhwLogoAtlas;
     }
 
     //Sounds
@@ -375,23 +396,7 @@ public class FRAssetManager {
     }
 
     public static Sprite getLogoFR() {
-        return logoFR;
-    }
-
-    public static Sprite getLogoBHW() {
-        return logoBHW;
-    }
-
-    public static Sprite getFbLogo() {
-        return fbLogo;
-    }
-
-    public static Sprite getTwLogo() {
-        return twLogo;
-    }
-
-    public static Sprite getVkLogo() {
-        return vkLogo;
+        return frLogo;
     }
 
     public static Sprite getBackgroundWhite() {
@@ -401,4 +406,6 @@ public class FRAssetManager {
             return dayBackgroundWhite;
         }
     }
+
+    public static boolean isMusicLoaded(){ return isMusicLoaded;}
 }

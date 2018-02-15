@@ -21,7 +21,8 @@ public class FRFileHandler {
         try {
             return FlowRush.getGson().fromJson(Gdx.files.local("preferences.json").reader(), GamePreferences.class);
         } catch (Exception ex) {
-            throw new FlowRushException("Error loading file preferences.json", ex);
+            FlowRush.logError("Preferences error", new FlowRushException("Error loading file preferences.json", ex));
+            return new GamePreferences();
         }
     }
 
@@ -29,7 +30,8 @@ public class FRFileHandler {
         try {
             return FlowRush.getGson().fromJson(Gdx.files.local("save.json").reader(), SavedGame.class);
         } catch (Exception ex) {
-            throw new FlowRushException("Error loading file save.json", ex);
+            FlowRush.logError("Save error", new FlowRushException("Error loading file save.json", ex));
+            return new SavedGame();
         }
     }
 

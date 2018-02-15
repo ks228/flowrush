@@ -1,0 +1,244 @@
+
+bhw-logo-atlas.png
+size: 8192,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Logo Animate
+  rotate: false
+  xy: 2, 596
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 36
+Logo Animate
+  rotate: false
+  xy: 2, 299
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 15
+Logo Animate
+  rotate: false
+  xy: 529, 596
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 38
+Logo Animate
+  rotate: false
+  xy: 2, 2
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 17
+Logo Animate
+  rotate: false
+  xy: 529, 299
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 48
+Logo Animate
+  rotate: false
+  xy: 1056, 596
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 19
+Logo Animate
+  rotate: false
+  xy: 529, 2
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 26
+Logo Animate
+  rotate: false
+  xy: 1056, 299
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 35
+Logo Animate
+  rotate: false
+  xy: 1583, 596
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 53
+Logo Animate
+  rotate: false
+  xy: 1056, 2
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 29
+Logo Animate
+  rotate: false
+  xy: 1583, 299
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 49
+Logo Animate
+  rotate: false
+  xy: 2110, 596
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 40
+Logo Animate
+  rotate: false
+  xy: 1583, 2
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 20
+Logo Animate
+  rotate: false
+  xy: 2110, 299
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 21
+Logo Animate
+  rotate: false
+  xy: 2637, 596
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 23
+Logo Animate
+  rotate: false
+  xy: 2110, 2
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 24
+Logo Animate
+  rotate: false
+  xy: 2637, 299
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 25
+Logo Animate
+  rotate: false
+  xy: 3164, 596
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 4
+Logo Animate
+  rotate: false
+  xy: 2637, 2
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 5
+Logo Animate
+  rotate: false
+  xy: 3164, 299
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 28
+Logo Animate
+  rotate: false
+  xy: 3691, 596
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 7
+Logo Animate
+  rotate: false
+  xy: 3164, 2
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 37
+Logo Animate
+  rotate: false
+  xy: 3691, 299
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 9
+Logo Animate
+  rotate: false
+  xy: 4218, 596
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 39
+Logo Animate
+  rotate: false
+  xy: 3691, 2
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 46
+Logo Animate
+  rotate: false
+  xy: 4218, 299
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 42
+Logo Animate
+  rotate: false
+  xy: 4745, 596
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 43
+Logo Animate
+  rotate: false
+  xy: 4218, 2
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 33
+Logo Animate
+  rotate: false
+  xy: 4745, 299
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 51
+Logo Animate
+  rotate: false
+  xy: 5272, 596
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 52
+Logo Animate
+  rotate: false
+  xy: 4745, 2
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 31
+Logo Animate
+  rotate: false
+  xy: 5272, 299
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 11
+Logo Animate
+  rotate: false
+  xy: 5799, 596
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 27
+Logo Animate
+  rotate: false
+  xy: 5272, 2
+  size: 525, 295
+  orig: 525, 295
+  offset: 0, 0
+  index: 13
