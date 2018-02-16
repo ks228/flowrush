@@ -12,13 +12,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
+import com.blackhornetworkshop.flowrush.controller.GameLogicController;
 import com.blackhornetworkshop.flowrush.controller.RateDialogController;
 import com.blackhornetworkshop.flowrush.model.FRAssetManager;
 import com.blackhornetworkshop.flowrush.controller.MapController;
 import com.blackhornetworkshop.flowrush.model.FRFileHandler;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
 import com.blackhornetworkshop.flowrush.controller.ScreenManager;
-import com.blackhornetworkshop.flowrush.controller.SourceChecker;
 import com.blackhornetworkshop.flowrush.model.HexActor;
 import com.blackhornetworkshop.flowrush.controller.HexController;
 import com.blackhornetworkshop.flowrush.controller.LevelController;
@@ -173,8 +173,8 @@ public class GameScreen implements Screen, FRScreen {
         MapController.createNewMapGroup(LevelController.getActorList());
         mainStage.addActor(MapController.getMapGroup());
 
-        SourceChecker.getInstance().initialization();
-        SourceChecker.getInstance().update();
+        GameLogicController.getInstance().initialization();
+        GameLogicController.getInstance().update();
 
         if (!LevelController.nextLevelExist()) {
             enablePackCompleteGroup();

@@ -9,9 +9,9 @@ import com.blackhornetworkshop.flowrush.view.screens.GameScreen;
 
 //Created by TScissors.
 
-public class SourceChecker {
+public class GameLogicController {
 
-    private static SourceChecker instance;
+    private static GameLogicController instance;
 
     private HexActor actor;
     private boolean[] sourceArrayMain;
@@ -21,15 +21,15 @@ public class SourceChecker {
     private boolean doveIsOn;
     private int numReceiversOn = 0;
 
-    public static SourceChecker getInstance(){
-        if(instance == null) instance = new SourceChecker();
+    public static GameLogicController getInstance(){
+        if(instance == null) instance = new GameLogicController();
         return instance;
     }
 
-    private SourceChecker(){}
+    private GameLogicController(){}
 
     public void initialization() {
-        FlowRush.logDebug("SourceChecker initialization() method called");
+        FlowRush.logDebug("GameLogicController initialization() method called");
         clearFields();
         for (int x = 0; x < MapController.getSpecialActorsArraySize(); x++) {
             actor = MapController.getSpecialActorsArrayChildren(x);
@@ -48,7 +48,7 @@ public class SourceChecker {
 
 
     public void update() {
-        FlowRush.logDebug("SourceChecker update() method called");
+        FlowRush.logDebug("GameLogicController update() method called");
 
         disconnectAll();
 

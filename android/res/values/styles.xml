@@ -1,12 +1,5 @@
 <resources>
 
-    <style name="MainLayout">
-        <item name="android:background">#F5F5F5</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:orientation">vertical</item>
-    </style>
-
     <style name="GdxTheme" parent="android:Theme">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:colorBackgroundCacheHint">@null</item>

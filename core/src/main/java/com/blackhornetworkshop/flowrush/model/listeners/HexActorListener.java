@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.RotateToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.blackhornetworkshop.flowrush.controller.SourceChecker;
+import com.blackhornetworkshop.flowrush.controller.GameLogicController;
 import com.blackhornetworkshop.flowrush.model.HexActor;
 import com.blackhornetworkshop.flowrush.controller.HexController;
 import com.blackhornetworkshop.flowrush.model.ui.UIPool;
@@ -84,7 +84,7 @@ public class HexActorListener extends ClickListener {
             HexController.setAngle(actor, angle);
             actor.moveSources();
 
-            SourceChecker.getInstance().update();
+            GameLogicController.getInstance().update();
 
             rotateToAction.setRotation(actor.getAngle());
             if (actor.getActions().contains(rotateToAction, true)) {

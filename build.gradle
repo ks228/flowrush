@@ -34,19 +34,6 @@ allprojects {
     }
 }
 
-project(":desktop") {
-    apply plugin: "java"
-
-    dependencies {
-        compile project(":core")
-        compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-        compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
-
-		compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
-    }
-}
-
 project(":android") {
     apply plugin: "android"
 
@@ -72,8 +59,6 @@ project(":android") {
 
 project(":core") {
     apply plugin: "java"
-
-
 
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"

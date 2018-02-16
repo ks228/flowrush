@@ -95,8 +95,6 @@ public class FlowRush extends Game {
         FRAssetManager.loadLogos();
 
         ScreenManager.setLogoBHWScreen();
-
-        FRAssetManager.loadAssets();
     }
 
     public static void dayNightShift(){
@@ -199,7 +197,6 @@ public class FlowRush extends Game {
         hudStage.dispose();
         batch.dispose();
 
-        LogoScreen.getInstance().dispose();
         MenuScreen.getInstance().dispose();
         GameScreen.getInstance().dispose();
 

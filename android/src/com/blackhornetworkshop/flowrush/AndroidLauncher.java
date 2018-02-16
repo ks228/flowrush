@@ -3,10 +3,8 @@ package com.blackhornetworkshop.flowrush;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.RelativeLayout;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
@@ -50,11 +48,6 @@ public class AndroidLauncher extends AndroidApplication {
         else FlowRush.getInstance().setup(FRAndroidHelper.getInstance());
         FRAndroidHelper.getInstance().logDebug("FlowRush is initialized");
 
-/*        RelativeLayout mainLayout = (RelativeLayout)getLayoutInflater().inflate(R.layout.main_layout, null);
-        View libGDXLayout = initializeForView(FlowRush.getInstance(), getConfig());
-
-        mainLayout.addView(libGDXLayout);*/
-
         MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
 
         interstitialAd = new InterstitialAd(this);
@@ -66,7 +59,6 @@ public class AndroidLauncher extends AndroidApplication {
             }
         });
 
-        //setContentView(mainLayout);
         initialize(FlowRush.getInstance(), getConfig());
     }
 

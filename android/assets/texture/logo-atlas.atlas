@@ -1,0 +1,90 @@
+
+logo-atlas.png
+size: 4096,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bhw
+  rotate: false
+  xy: 2, 563
+  size: 550, 559
+  orig: 550, 559
+  offset: 0, 0
+  index: 50
+bhw
+  rotate: false
+  xy: 1004, 1315
+  size: 550, 559
+  orig: 550, 559
+  offset: 0, 0
+  index: 51
+bhw
+  rotate: false
+  xy: 1004, 1315
+  size: 550, 559
+  orig: 550, 559
+  offset: 0, 0
+  index: 53
+bhw
+  rotate: false
+  xy: 2, 2
+  size: 550, 559
+  orig: 550, 559
+  offset: 0, 0
+  index: 52
+bhw
+  rotate: false
+  xy: 2, 2
+  size: 550, 559
+  orig: 550, 559
+  offset: 0, 0
+  index: 54
+bhw
+  rotate: false
+  xy: 1556, 1315
+  size: 550, 559
+  orig: 550, 559
+  offset: 0, 0
+  index: 55
+bhw
+  rotate: false
+  xy: 2108, 1315
+  size: 550, 559
+  orig: 550, 559
+  offset: 0, 0
+  index: 42
+bhw
+  rotate: false
+  xy: 2660, 1315
+  size: 550, 559
+  orig: 550, 559
+  offset: 0, 0
+  index: 44
+bhw
+  rotate: false
+  xy: 3212, 1315
+  size: 550, 559
+  orig: 550, 559
+  offset: 0, 0
+  index: 46
+bhw
+  rotate: false
+  xy: 554, 563
+  size: 550, 559
+  orig: 550, 559
+  offset: 0, 0
+  index: 48
+bhw
+  rotate: false
+  xy: 554, 2
+  size: 550, 559
+  orig: 550, 559
+  offset: 0, 0
+  index: 49
+fr-logo
+  rotate: false
+  xy: 2, 1124
+  size: 1000, 750
+  orig: 1000, 750
+  offset: 0, 0
+  index: -1

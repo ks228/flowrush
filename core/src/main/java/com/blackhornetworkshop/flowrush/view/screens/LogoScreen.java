@@ -21,7 +21,7 @@ public class LogoScreen implements Screen, FRScreen {
 
     private static LogoScreen instance;
 
-    private static float elapsedTimeFromStart;
+    private float elapsedTimeFromStart;
     private static boolean isFRlogo;
     private boolean isActive;
 
@@ -32,12 +32,14 @@ public class LogoScreen implements Screen, FRScreen {
 
 
     public static LogoScreen getInstance() {
-        if (instance == null) instance = new LogoScreen();
+        if (instance == null){
+            FlowRush.logDebug("LogoScreen was created");
+            instance = new LogoScreen();
+        }
         return instance;
     }
 
-    private LogoScreen() {
-    }
+    private LogoScreen() {}
 
     @Override
     public void show() {
@@ -46,9 +48,9 @@ public class LogoScreen implements Screen, FRScreen {
         elapsedTimeAnimation = 0f;
         elapsedTimeFromStart = 0f;
 
-        Array<TextureAtlas.AtlasRegion> regions = FRAssetManager.getBhwLogoAtlas().getRegions();
-        animationWidth = SCREEN_WIDTH;
-        animationHeight = SCREEN_WIDTH * regions.get(0).getRegionHeight() / regions.get(0).getRegionWidth();
+        Array<TextureAtlas.AtlasRegion> regions = FRAssetManager.getLogoAtlas().findRegions("bhw");
+        animationWidth = SCREEN_WIDTH/2 > 550 ? 550 : SCREEN_WIDTH/2;
+        animationHeight = SCREEN_WIDTH/2 * regions.get(0).getRegionHeight() / regions.get(0).getRegionWidth();
 
         animation = new Animation<>(0.10f, regions);
 
@@ -67,6 +69,7 @@ public class LogoScreen implements Screen, FRScreen {
     public static void setFRLogo() {
         Gdx.gl.glClearColor(0.26f, 0.64f, 0.87f, 1);
         isFRlogo = true;
+        FRAssetManager.loadAssets();
     }
 
     @Override
@@ -75,33 +78,38 @@ public class LogoScreen implements Screen, FRScreen {
 
         elapsedTimeFromStart += Gdx.graphics.getDeltaTime();
 
-        FlowRush.logDebug("" + elapsedTimeFromStart);
-
-        if (FRAssetManager.update() && elapsedTimeFromStart > 70f && isFRlogo) {
-            FlowRush.logDebug("one render iteration after assets loaded");
-            FRAssetManager.createAssets();
-            UIPool.initialize();
-            ScreenManager.setMenuMainScreen();
-            if (FlowRush.getPreferences().isSoundOn()) {
-                FRAssetManager.getBackgroundMusic().play();
-            }
-            FRAssetManager.unloadLogos();
+        if (FRAssetManager.update() && elapsedTimeFromStart > 6f && isFRlogo) {
+            FlowRush.logDebug("LogoScreen method render() call after loading assets");
+            setMainMenu();
         } else {
-
-            FlowRush.getBatch().begin();
-            if (!isFRlogo & elapsedTimeFromStart > 2f) {
-                if (elapsedTimeFromStart > 50f) {
-                    ScreenManager.setLogoFRScreen();
-                }
-                elapsedTimeAnimation += Gdx.graphics.getDeltaTime();
-                FlowRush.getBatch().draw(animation.getKeyFrame(elapsedTimeAnimation, true), SCREEN_WIDTH / 2 - animationWidth / 2, SCREEN_HEIGHT / 2 - animationHeight / 2, animationWidth, animationHeight);
-            } else if (isFRlogo) {
-                FRAssetManager.getLogoFR().draw(FlowRush.getBatch());
-            }
-            FlowRush.getBatch().end();
-
-
+            drawLogo();
         }
+    }
+
+    private void drawLogo(){
+        FlowRush.getBatch().begin();
+        if (!isFRlogo & elapsedTimeFromStart > 1f) {
+            if (elapsedTimeFromStart > 4f) {
+                ScreenManager.setLogoFRScreen();
+            }
+            elapsedTimeAnimation += Gdx.graphics.getDeltaTime();
+            FlowRush.getBatch().draw(animation.getKeyFrame(elapsedTimeAnimation, false), SCREEN_WIDTH / 2 - animationWidth / 2, SCREEN_HEIGHT / 2 - animationHeight / 2, animationWidth, animationHeight);
+        } else if (isFRlogo) {
+            FRAssetManager.getLogoFR().draw(FlowRush.getBatch());
+        }
+        FlowRush.getBatch().end();
+    }
+
+    private void setMainMenu(){
+        FRAssetManager.createAssets();
+        UIPool.initialize();
+        ScreenManager.setMenuMainScreen();
+        if (FlowRush.getPreferences().isSoundOn()) {
+            FRAssetManager.getBackgroundMusic().play();
+        }
+        FRAssetManager.unloadLogos();
+        animation = null;
+        dispose();
     }
 
     @Override
@@ -126,6 +134,7 @@ public class LogoScreen implements Screen, FRScreen {
 
     @Override
     public void dispose() {
+        instance = null;
         FlowRush.logDebug("LogoScreen dispose() method called");
     }
 

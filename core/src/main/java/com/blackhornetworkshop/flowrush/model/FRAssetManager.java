@@ -7,7 +7,6 @@ import com.badlogic.gdx.assets.loaders.SkinLoader;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -58,7 +57,7 @@ public class FRAssetManager {
     private static Sprite dayBackgroundWhite, nightBackgroundWhite;
 
     //Temp
-    private static TextureAtlas bhwLogoAtlas;
+    private static TextureAtlas logoAtlas;
     private static Sprite frLogo;
 
     private FRAssetManager() {
@@ -81,24 +80,20 @@ public class FRAssetManager {
     }
 
     public static void loadLogos(){
-        manager.load("texture/bhw-logo-atlas.atlas", TextureAtlas.class);
-        manager.load("texture/fr-logo.png", Texture.class);
-
+        manager.load("texture/logo-atlas.atlas", TextureAtlas.class);
         manager.finishLoading();
 
-        bhwLogoAtlas = manager.get("texture/bhw-logo-atlas.atlas");
+        logoAtlas = manager.get("texture/logo-atlas.atlas");
 
-        Texture frTexture = manager.get("texture/fr-logo.png");
-        frLogo = new Sprite(frTexture);
+        frLogo = logoAtlas.createSprite("fr-logo");
         frLogo.setSize(SCREEN_WIDTH * 0.8f, SCREEN_WIDTH * 0.8f * 0.75f);
         frLogo.setPosition((SCREEN_WIDTH - frLogo.getWidth()) / 2, (SCREEN_HEIGHT - frLogo.getHeight() * 0.9f) / 2);
 
     }
 
     public static void unloadLogos(){
-        manager.unload("texture/bhw-logo-atlas.atlas");
-        manager.unload("texture/fr-logo.png");
-        bhwLogoAtlas = null;
+        manager.unload("texture/logo-atlas.atlas");
+        logoAtlas = null;
         frLogo = null;
     }
 
@@ -346,8 +341,8 @@ public class FRAssetManager {
         }
     }
 
-    public static TextureAtlas getBhwLogoAtlas() {
-        return bhwLogoAtlas;
+    public static TextureAtlas getLogoAtlas() {
+        return logoAtlas;
     }
 
     //Sounds
