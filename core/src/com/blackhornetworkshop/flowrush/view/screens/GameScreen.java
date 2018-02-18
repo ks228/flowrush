@@ -12,13 +12,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
+import com.blackhornetworkshop.flowrush.controller.AdController;
 import com.blackhornetworkshop.flowrush.controller.GameLogicController;
 import com.blackhornetworkshop.flowrush.controller.RateDialogController;
+import com.blackhornetworkshop.flowrush.controller.ScreenManager;
 import com.blackhornetworkshop.flowrush.model.FRAssetManager;
 import com.blackhornetworkshop.flowrush.controller.MapController;
 import com.blackhornetworkshop.flowrush.model.FRFileHandler;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
-import com.blackhornetworkshop.flowrush.controller.ScreenManager;
 import com.blackhornetworkshop.flowrush.model.HexActor;
 import com.blackhornetworkshop.flowrush.controller.HexController;
 import com.blackhornetworkshop.flowrush.controller.LevelController;
@@ -148,6 +149,12 @@ public class GameScreen implements Screen, FRScreen {
             Gdx.gl.glClearColor(0.93f, 0.93f, 0.93f, 1);
         }
 
+        if(LevelController.nextLevelExist() && ((LevelController.getCurrentLevel() > 15 && LevelController.getCurrentPack() == 1 && LevelController.getCurrentLevel() % 2 == 0) ||
+                LevelController.getCurrentLevel() % 2 == 0 && LevelController.getCurrentPack() != 1)) {
+            AdController.setShowAdOnNextScreen(true);
+        }else{
+            AdController.setShowAdOnNextScreen(false);
+        }
 
         if (!inputMultiplexer.getProcessors().contains(hexesStage, true)) {
             inputMultiplexer.addProcessor(hexesStage);
@@ -244,22 +251,25 @@ public class GameScreen implements Screen, FRScreen {
         movePauseGroupUp();
     }
 
-    public void removePause() {
-        FlowRush.logDebug("GameScreen removePause() method called");
+    public void removePauseAndRestoreTouch() {
+        FlowRush.logDebug("GameScreen removePauseAndRestoreTouch() method called");
 
         if (!inputMultiplexer.getProcessors().contains(hexesStage, true)) {
             inputMultiplexer.addProcessor(hexesStage);
         }
+
+        removePause();
+    }
+
+    public void removePause() {
+        FlowRush.logDebug("GameScreen removePause() method called");
 
         UIPool.getPauseButton().setVisible(true);
         UIPool.getPauseBackground().setVisible(false);
         movePauseGroupDown();
     }
 
-    public void setGameLevelCompleteScreen(boolean showAd) {
-        if(showAd) {
-            FlowRush.getAndroidHelper().loadAndShowAd();
-        }
+    public void setGameLevelCompleteScreen() {
         UIPool.getNextLevelButton().setVisible(true);
         UIPool.getWellDoneLabel().setVisible(true);
         UIPool.getWellDonehex().setVisible(true);
@@ -268,20 +278,12 @@ public class GameScreen implements Screen, FRScreen {
     public void levelComplete() {
         FlowRush.logDebug("GameScreen levelComplete() method called");
 
-        boolean showAd = false;
-
-        if((LevelController.getCurrentLevel() > 15 && LevelController.getCurrentPack() == 1 && LevelController.getCurrentLevel() % 2 == 0) ||
-                LevelController.getCurrentLevel() % 2 == 0 && LevelController.getCurrentPack() != 1) {
-            showAd = true;
-        }
-
         showPackCompleteNextButton = false;
 
         if (LevelController.nextLevelExist()) {
             LevelController.nextLvl();
             FlowRush.getSave().setCurrentLvl(LevelController.getCurrentLevel());
         } else {
-            showAd = false;
             FlowRush.getSave().finishPack(LevelController.getCurrentPack() - 1);
             if (LevelController.nextPackExist() && LevelController.getLevelPack(LevelController.getCurrentPack()).available) {
                 LevelController.nextPack();
@@ -301,7 +303,7 @@ public class GameScreen implements Screen, FRScreen {
             FRAssetManager.getLvlCompleteSound().play();
         }
 
-        ScreenManager.setGameLevelCompleteScreen(showAd);
+        ScreenManager.setGameLevelCompleteScreen();
     }
 
 

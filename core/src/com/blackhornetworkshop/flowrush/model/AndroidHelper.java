@@ -7,7 +7,7 @@ public interface AndroidHelper {
     void openWebsite();
     void sendMail();
     void openPlayMarket();
-    void loadAndShowAd();
+    void showAd();
     void logError(String msg, Throwable tr);
     void logDebug(String msg);
 

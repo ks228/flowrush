@@ -19,7 +19,8 @@ public class FRAndroidHelper implements AndroidHelper {
         return instance;
     }
 
-    private FRAndroidHelper() {}
+    private FRAndroidHelper() {
+    }
 
     void setup(AndroidLauncher app) {
         this.app = app;
@@ -52,11 +53,11 @@ public class FRAndroidHelper implements AndroidHelper {
     }
 
     @Override
-    public void loadAndShowAd() {
+    public void showAd() {
         app.runOnUiThread(new Runnable() {
             public void run() {
-                FRAndroidHelper.getInstance().logDebug("AndroidHelper loadAndShowAd() method called (runOnUiThread())");
-                app.loadAndShowAdd();
+                FRAndroidHelper.getInstance().logDebug("AndroidHelper showAd() method called (runOnUiThread())");
+                app.showAd();
             }
         });
     }

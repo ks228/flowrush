@@ -39,7 +39,7 @@ public class LevelController {
         currentLevel++;
         level = levelPack.levels.get(currentLevel - 1);
 
-        FlowRush.logDebug("LevelController.nextLevel: "+currentPack);
+        FlowRush.logDebug("LevelController.nextLevel: "+currentLevel);
 
         reloadActorList();
         saveProgress();

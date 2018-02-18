@@ -38,6 +38,7 @@ public class ScreenManager {
 
     public static void setMenuMainScreen() {
         checkScreen(MenuScreen.getInstance());
+        if(isShowAd(currentScreen)) AdController.showAd();
         currentScreen = MENU_MAIN;
         MenuScreen.getInstance().setMainMenuScreen();
         FlowRush.logDebug("MAIN MENU screen");
@@ -89,8 +90,9 @@ public class ScreenManager {
 
     public static void setGameMainScreen() {
         checkScreen(GameScreen.getInstance());
+        if(isShowAd(currentScreen)) AdController.showAd();
         if(currentScreen == GAME_PAUSE || currentScreen == GAME_LVL_COMPLETE_PAUSE){
-            GameScreen.getInstance().removePause();
+            GameScreen.getInstance().removePauseAndRestoreTouch();
         }
         currentScreen = GAME_MAIN;
         GameScreen.getInstance().setGameMainScreen();
@@ -109,13 +111,13 @@ public class ScreenManager {
         GameScreen.getInstance().setPauseScreen();
     }
 
-    public static void setGameLevelCompleteScreen(boolean showAd) {
+    public static void setGameLevelCompleteScreen() {
         checkScreen(GameScreen.getInstance());
         if(currentScreen == GAME_LVL_COMPLETE_PAUSE){
             GameScreen.getInstance().removePause();
         }
         currentScreen = GAME_LVL_COMPLETE;
-        GameScreen.getInstance().setGameLevelCompleteScreen(showAd);
+        GameScreen.getInstance().setGameLevelCompleteScreen();
         FlowRush.logDebug("GAME LVL COMPLETE screen");
     }
 
@@ -128,5 +130,10 @@ public class ScreenManager {
 
     private static void checkScreen(FRScreen screen) {
         if(!screen.isActive()) FlowRush.getInstance().setScreen((Screen)screen);
+    }
+
+    private static boolean isShowAd(FRConstants.ScreenType screenType){
+        return (screenType == GAME_LVL_COMPLETE || screenType == GAME_LVL_COMPLETE_PAUSE) &&
+                AdController.isAdLoaded() && AdController.isShowAdOnNextScreen();
     }
 }

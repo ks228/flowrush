@@ -45,7 +45,7 @@ public class OneTouchProcessor implements InputProcessor {
                     ScreenManager.setMenuMainScreen();
                     break;
                 case GAME_PAUSE:
-                    msg = msg + "To main menu from game pause screen";
+                    msg = msg + "To main game screen from game pause screen";
                     ScreenManager.setGameMainScreen();
                     break;
                 case GAME_LVL_COMPLETE:
@@ -57,8 +57,8 @@ public class OneTouchProcessor implements InputProcessor {
                     ScreenManager.setMenuMainScreen();
                     break;
                 case GAME_LVL_COMPLETE_PAUSE:
-                    msg = msg + "To main menu from game lvl complete pause screen";
-                    ScreenManager.setGameMainScreen();
+                    msg = msg + "To game lvl complete screen from game lvl complete pause screen";
+                    ScreenManager.setGameLevelCompleteScreen();
                     break;
                 case MENU_GOOGLE_PLAY:
                     msg = msg + "Back to main menu from google play screen";

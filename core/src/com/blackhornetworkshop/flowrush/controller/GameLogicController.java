@@ -48,7 +48,6 @@ public class GameLogicController {
 
 
     public void update() {
-        FlowRush.logDebug("GameLogicController update() method called");
 
         disconnectAll();
 

@@ -8,6 +8,7 @@ import android.view.WindowManager;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.blackhornetworkshop.flowrush.controller.AdController;
 import com.blackhornetworkshop.flowrush.model.FRConstants;
 import com.blackhornetworkshop.flowrush.view.FlowRush;
 import com.google.android.gms.ads.AdListener;
@@ -21,7 +22,7 @@ public class AndroidLauncher extends AndroidApplication {
     private InterstitialAd interstitialAd;
 
     @Override
-    public void onCreate (Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         FRAndroidHelper.getInstance().logDebug("AndroidLauncher onCreate() method");
         super.onCreate(savedInstanceState);
 
@@ -37,14 +38,15 @@ public class AndroidLauncher extends AndroidApplication {
 
         FRAndroidHelper.getInstance().setup(this);
 
-        if(isPlayServicesAvailable) {
+        if (isPlayServicesAvailable) {
             FRAndroidHelper.getInstance().logDebug("Play Services are available");
             FRPlayServices.getInstance().setup(this);
-        }else {
+        } else {
             FRAndroidHelper.getInstance().logDebug("Play Services are not available");
         }
 
-        if(isPlayServicesAvailable) FlowRush.getInstance().setup(FRAndroidHelper.getInstance(), FRPlayServices.getInstance());
+        if (isPlayServicesAvailable)
+            FlowRush.getInstance().setup(FRAndroidHelper.getInstance(), FRPlayServices.getInstance());
         else FlowRush.getInstance().setup(FRAndroidHelper.getInstance());
         FRAndroidHelper.getInstance().logDebug("FlowRush is initialized");
 
@@ -55,9 +57,15 @@ public class AndroidLauncher extends AndroidApplication {
         interstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
-                interstitialAd.show();
+                AdController.setAdLoaded();
             }
+            @Override
+            public void onAdClosed() {
+                interstitialAd.loadAd(new AdRequest.Builder().build());
+            }
+
         });
+        interstitialAd.loadAd(new AdRequest.Builder().build());
 
         initialize(FlowRush.getInstance(), getConfig());
     }
@@ -70,8 +78,8 @@ public class AndroidLauncher extends AndroidApplication {
         return config;
     }
 
-    public void loadAndShowAdd(){
-        interstitialAd.loadAd(new AdRequest.Builder().build());
+    public void showAd() {
+        interstitialAd.show();
     }
 
     @Override
@@ -86,12 +94,12 @@ public class AndroidLauncher extends AndroidApplication {
 
         if (requestCode == FRConstants.RC_SIGN_IN) {
             FRPlayServices.getInstance().handleSignInResult(intent);
-        }else if(requestCode == FRConstants.RC_LIST_SAVED_GAMES) {
+        } else if (requestCode == FRConstants.RC_LIST_SAVED_GAMES) {
             FRPlayServices.getInstance().handleSnapshotSelectResult(intent);
         }
     }
 
-    void showLoadingLabel(){
+    void showLoadingLabel() {
         runOnUiThread(new Runnable() {
             public void run() {
                 FRAndroidHelper.getInstance().logDebug("Display loading dialog");
@@ -99,7 +107,8 @@ public class AndroidLauncher extends AndroidApplication {
             }
         });
     }
-    void hideLoadingDialog(){
+
+    void hideLoadingDialog() {
         FRAndroidHelper.getInstance().logDebug("Dismiss loading dialog");
         loadingDialog.dismiss();
     }

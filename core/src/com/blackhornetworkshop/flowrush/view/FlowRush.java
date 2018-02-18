@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.blackhornetworkshop.flowrush.controller.AdController;
 import com.blackhornetworkshop.flowrush.model.AndroidHelper;
 import com.blackhornetworkshop.flowrush.model.FRAssetManager;
 import com.blackhornetworkshop.flowrush.model.FRConstants;

@@ -83,7 +83,7 @@ class UiActorCreator {
                 textButton.addListener(new ButtonScaleListener(true) {
                     @Override
                     public void action(InputEvent event) {
-                        FlowRush.getAndroidHelper().loadAndShowAd();
+
                     }
                 });
                 return textButton;
@@ -269,7 +269,7 @@ class UiActorCreator {
                         if (ScreenManager.getCurrentScreen() == ScreenType.GAME_PAUSE) {
                             ScreenManager.setGameMainScreen();
                         } else if (ScreenManager.getCurrentScreen() == ScreenType.GAME_LVL_COMPLETE_PAUSE) {
-                            ScreenManager.setGameLevelCompleteScreen(false);
+                            ScreenManager.setGameLevelCompleteScreen();
                         }
                     }
                 });
@@ -395,7 +395,7 @@ class UiActorCreator {
                 });
                 return supportUsButton;
             case 14://GOOGLE GAMES button
-                SmallButtonActor googlePlayButton = createSmallButtonActor(SCREEN_HEIGHT * 0.02f, SCREEN_HEIGHT - BUTTON_SIZE - SCREEN_HEIGHT * 0.02f, BUTTON_SIZE, BUTTON_SIZE, true, FRAssetManager.getSprite(CONTROLLER_ICON));
+                SmallButtonActor googlePlayButton = createSmallButtonActor(SCREEN_HEIGHT * 0.03f, SCREEN_HEIGHT - BUTTON_SIZE - SCREEN_HEIGHT * 0.02f, BUTTON_SIZE, BUTTON_SIZE, true, FRAssetManager.getSprite(CONTROLLER_ICON));
                 googlePlayButton.addListener(new ButtonScaleListener(true) {
                     @Override
                     public void action(InputEvent event) {
