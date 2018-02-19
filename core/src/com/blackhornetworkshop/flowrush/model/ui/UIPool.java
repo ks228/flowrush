@@ -62,7 +62,6 @@ public class UIPool {
     private static Actor triangleBackgroundTop;
     private static Actor triangleBackground;
     private static Group levelNumbersGroup;
-    //private static ArrayList<LevelNumberButton> levelNumbersGroupArray;
     private static SmallButtonActor dayNightButton;
 
     //Main buttons
@@ -263,7 +262,6 @@ public class UIPool {
             levelNumberButton.setSize(LEVEL_NUMBER_SIZE, LEVEL_NUMBER_SIZE);
             levelNumberButton.setOrigin(Align.center);
             levelNumbersGroup.addActor(levelNumberButton);
-            //levelNumbersGroupArray.add(levelNumberButton);
         }
 
         //Day night button
@@ -355,11 +353,6 @@ public class UIPool {
             levelNumberButton.setIsAvailable(levelNumberButton.getLevel() <= FlowRush.getSave().getLevelsProgress(pack - 1));
             levelNumberButton.setPack(pack);
         }
-
-/*        for (LevelNumberButton levelNumberButton : levelNumbersGroupArray) {
-            levelNumberButton.setIsAvailable(levelNumberButton.getLevel() <= FlowRush.getSave().getLevelsProgress(pack - 1));
-            levelNumberButton.setPack(pack);
-        }*/
     }
 
     private static void setLevelNumberPosition(int number, Actor actor) {

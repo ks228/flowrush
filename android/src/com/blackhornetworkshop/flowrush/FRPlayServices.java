@@ -164,20 +164,33 @@ public class FRPlayServices implements PlayServices {
                 }).continueWith(new Continuation<SnapshotsClient.DataOrConflict<Snapshot>, byte[]>() {
             @Override
             public byte[] then(@NonNull Task<SnapshotsClient.DataOrConflict<Snapshot>> task) throws Exception {
-                Snapshot snapshot = processSnapshotOpenResult(task.getResult(), FRConstants.MAX_SNAPSHOT_RESOLVE_RETRIES).getResult();
-                // Opening the snapshot was a success and any conflicts have been resolved.
-                if(snapshot != null){
+                Snapshot snapshot;
+
+                if (!task.getResult().isConflict()) {
+                    FRAndroidHelper.getInstance().logDebug("No save snapshot conflicts");
+                    snapshot = task.getResult().getData();
+                    // Set the data payload for the snapshot
+                    snapshot.getSnapshotContents().writeBytes(FlowRush.getGson().toJson(FlowRush.getSave()).getBytes());
                     writeSnapshot(snapshot);
-                }else {
-                    FRAndroidHelper.getInstance().logError("Error with saving snapshot", new NullPointerException());
+                }else{
+                    FRAndroidHelper.getInstance().logDebug("Save snapshot conflict, start resolving...");
+                    snapshot = processSnapshotOpenResult(task.getResult(), FRConstants.MAX_SNAPSHOT_RESOLVE_RETRIES).getResult();
+
+                    FRAndroidHelper.getInstance().logDebug("Opening the snapshot was a success and any conflicts have been resolved.");
+                    if(snapshot != null){
+                        writeSnapshot(snapshot);
+                    }else {
+                        FRAndroidHelper.getInstance().logError("Error with saving snapshot", new NullPointerException());
+                    }
                 }
                 return null;
             }
         });
     }
 
+    private void writeSnapshot(Snapshot snapshot) throws IOException{
+        FRAndroidHelper.getInstance().logDebug("Save snapshot: "+new String(snapshot.getSnapshotContents().readFully()));
 
-    private void writeSnapshot(Snapshot snapshot) {
         // Save the snapshot.
         SnapshotMetadataChange metadataChange = new SnapshotMetadataChange.Builder()
                 .setDescription(Calendar.getInstance().getTime().toString())
@@ -188,16 +201,16 @@ public class FRPlayServices implements PlayServices {
 
     private Task<Snapshot> processSnapshotOpenResult(SnapshotsClient.DataOrConflict<Snapshot> result, final int retryCount) throws IOException {
         if (!result.isConflict()) {
-            // There was no conflict, so return the result of the source.
+            FRAndroidHelper.getInstance().logDebug("No save snapshot conflicts, return open result");
             TaskCompletionSource<Snapshot> source = new TaskCompletionSource<Snapshot>();
             source.setResult(result.getData());
             return source.getTask();
         }
 
-        // There was a conflict.
+        FRAndroidHelper.getInstance().logDebug("Start resolving snapshot conflict...");
+
         SnapshotsClient.SnapshotConflict conflict = result.getConflict();
 
-        //Resolve
         Snapshot resolvedSnapshot = resolveConflict(conflict.getSnapshot(), conflict.getConflictingSnapshot());
 
         return snapshotsClient.resolveConflict(conflict.getConflictId(), resolvedSnapshot)
@@ -219,6 +232,7 @@ public class FRPlayServices implements PlayServices {
     }
 
     private Snapshot resolveConflict(Snapshot snapshot, Snapshot conflictSnapshot) throws IOException {
+        FRAndroidHelper.getInstance().logDebug("Resolve conflict snapshot");
         String serverJson = new String(snapshot.getSnapshotContents().readFully());
         SavedGame serverSavedGame = FlowRush.getGson().fromJson(serverJson, SavedGame.class);
 
@@ -283,7 +297,7 @@ public class FRPlayServices implements PlayServices {
             public void onComplete(@NonNull Task<byte[]> task) {
                 FRAndroidHelper.getInstance().logDebug("Downloading a snapshot from the server is complete");
                 String snapshotInJson = new String(task.getResult());
-                FRAndroidHelper.getInstance().logDebug("Save json snapshot: "+snapshotInJson);
+                FRAndroidHelper.getInstance().logDebug("Downloaded snapshot: "+snapshotInJson);
                 FlowRush.setSave(FlowRush.getGson().fromJson(snapshotInJson, SavedGame.class));
                 FRAndroidHelper.getInstance().logDebug("Snapshot reading from json is completed successfully");
                 app.hideLoadingDialog();
