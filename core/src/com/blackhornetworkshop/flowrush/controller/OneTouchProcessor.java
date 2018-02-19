@@ -1,11 +1,10 @@
 package com.blackhornetworkshop.flowrush.controller;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.utils.Timer;
 import com.blackhornetworkshop.flowrush.model.FRAssetManager;
-import com.blackhornetworkshop.flowrush.view.FlowRush;
+import com.blackhornetworkshop.flowrush.model.FlowRush;
 import com.blackhornetworkshop.flowrush.model.ui.UIPool;
 
 //Created by TScissors.

@@ -49,15 +49,6 @@ public class FRConstants {
 
     public static final float EXIT_BUTTON_Y = (SCREEN_HEIGHT - BUTTON_SIZE * 4 - BUTTON_SIZE * 1.3f - BUTTON_SIZE * 2.2f);
 
-    public static final float SOCIAL_BUTTON_Y = BUTTON_SIZE / 2.0f + SCREEN_HEIGHT * 0.02f + BUTTON_SIZE / 2.0f + (SCREEN_HEIGHT * 0.98f - BUTTON_SIZE + BUTTON_SIZE / 2.0f -
-            (BUTTON_SIZE / 2.0f + SCREEN_HEIGHT * 0.02f) - BUTTON_SIZE) * 0.05f / 2.0f + BUTTON_SIZE * 0.3f + (BUTTON_SIZE * 1.5f - BUTTON_SIZE) / 2.0f;
-
-    public final static float REMOVE_ADS_BUTTON_Y = (BUTTON_SIZE / 2 + SCREEN_HEIGHT * 0.02f) + BUTTON_SIZE / 2 + ((((SCREEN_HEIGHT * 0.98f - BUTTON_SIZE)) +
-            BUTTON_SIZE / 2) - (BUTTON_SIZE / 2 + SCREEN_HEIGHT * 0.02f) - BUTTON_SIZE) * 0.05f / 2 + BUTTON_SIZE * 1.9f;
-
-    public final static float WEBSITE_BUTTON_Y = (BUTTON_SIZE / 2 + SCREEN_HEIGHT * 0.02f) + BUTTON_SIZE / 2 + ((((SCREEN_HEIGHT * 0.98f - BUTTON_SIZE)) +
-            BUTTON_SIZE / 2) - (BUTTON_SIZE / 2 + SCREEN_HEIGHT * 0.02f) - BUTTON_SIZE) * 0.05f / 2 + BUTTON_SIZE * 1.9f + BUTTON_SIZE*1.1f;
-
     public static final float MENU_BUTTON_Y_1 = (BUTTON_SIZE / 2 + SCREEN_HEIGHT * 0.02f) + BUTTON_SIZE / 2 + ((((SCREEN_HEIGHT * 0.98f - BUTTON_SIZE)) +
             (BUTTON_SIZE) / 2) - (BUTTON_SIZE / 2 + SCREEN_HEIGHT * 0.02f) - BUTTON_SIZE) * 0.05f / 2 + BUTTON_SIZE * 0.3f;
 
@@ -111,7 +102,7 @@ public class FRConstants {
     public final static String AUTHORS_MSG= "development\nTIMUR SCISSORS\n\ndesign\nANN KOVALSKI\n\nmusic\nERIC HOPTON";
     public final static String SUPPORT_MSG= "Please support our indie development team. Join us on social media and share our game with your friends.\n\nAlso you can remove ads and in this way support our projects.";
     public final static String SIGN_IN_MSG= "By signing in your Google Play Games account, you can: save and load your in-game progress, earn in-game achievements, get experience for your Google Play Games account";
-    public final static String SIGNED_MSG= "Welcome!\nHere you can see your Flow Rush achievements and manage your saved games";
+    public final static String SIGNED_MSG= "Welcome!\nHere you can see your\nFlow Rush\n achievements and manage your saved games";
     public final static String QUESTION_1 = "ENJOYING  FLOW RUSH?";
     public final static String QUESTION_2 = "RATE THE GAME, PLEASE";
     public final static String QUESTION_3 = "SEND US FEEDBACK, PLEASE";

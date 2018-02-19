@@ -5,7 +5,6 @@ package com.blackhornetworkshop.flowrush.model;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.blackhornetworkshop.flowrush.model.ex.FlowRushException;
-import com.blackhornetworkshop.flowrush.view.FlowRush;
 
 public class FRFileHandler {
 

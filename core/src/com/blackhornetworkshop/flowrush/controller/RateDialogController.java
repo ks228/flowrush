@@ -3,7 +3,7 @@ package com.blackhornetworkshop.flowrush.controller;
 //Created by TScissors.
 
 import com.blackhornetworkshop.flowrush.model.ui.UIPool;
-import com.blackhornetworkshop.flowrush.view.FlowRush;
+import com.blackhornetworkshop.flowrush.model.FlowRush;
 
 import static com.blackhornetworkshop.flowrush.model.FRConstants.ANSWER_NO_1;
 import static com.blackhornetworkshop.flowrush.model.FRConstants.ANSWER_NO_2;

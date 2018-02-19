@@ -5,10 +5,9 @@ package com.blackhornetworkshop.flowrush.model;
 public class SavedGame {
 
     private String uniqSaveGameName;
-    private boolean[] achievements = {false, false, false, false, false, false, false, false, false, false};
     private int currentLvl = 1;
     private int currentPack = 1;
-    private int[] levelsProgress = {1, 1, 1, 1, 50};
+    private int[] levelsProgress = {50, 50, 50, 50, 50};
     private boolean[] finishedPacks = {false, false, false, false, false};
 
 
@@ -19,12 +18,6 @@ public class SavedGame {
     public String getUniqSnapshotName() {
         return uniqSaveGameName;
     }
-
-    public boolean getAchievements(int num) {
-        return achievements[num];
-    }
-
-    public void unlockAchievement(int num) { achievements[num] = true; }
 
     public int getCurrentLvl() {
         return currentLvl;
@@ -57,4 +50,13 @@ public class SavedGame {
     public void setLevelsProgress(int pack, int value) {
         levelsProgress[pack] = value;
     }
+
+    @Deprecated
+    public boolean getAchievements(int num) {
+        return achievements[num];
+    }
+    @Deprecated
+    private boolean[] achievements = {false, false, false, false, false, false, false, false, false, false};
+    @Deprecated
+    public void unlockAchievement(int num) { achievements[num] = true; }
 }

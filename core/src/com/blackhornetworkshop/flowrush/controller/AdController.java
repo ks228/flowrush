@@ -2,7 +2,7 @@ package com.blackhornetworkshop.flowrush.controller;
 
 //Created by TScissors.
 
-import com.blackhornetworkshop.flowrush.view.FlowRush;
+import com.blackhornetworkshop.flowrush.model.FlowRush;
 
 public class AdController {
 
@@ -14,7 +14,7 @@ public class AdController {
     }
 
     public static void setShowAdOnNextScreen(boolean showAdOnNextScreen){
-        FlowRush.logDebug("setShowAdOnNextScreen() " + showAdOnNextScreen);
+        FlowRush.logDebug("Show ad on next screen: " + showAdOnNextScreen);
         AdController.showAdOnNextScreen = showAdOnNextScreen;
     }
 

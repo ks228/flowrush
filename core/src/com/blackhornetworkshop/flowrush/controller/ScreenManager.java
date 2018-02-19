@@ -2,7 +2,7 @@ package com.blackhornetworkshop.flowrush.controller;
 
 import com.badlogic.gdx.Screen;
 import com.blackhornetworkshop.flowrush.model.FRConstants;
-import com.blackhornetworkshop.flowrush.view.FlowRush;
+import com.blackhornetworkshop.flowrush.model.FlowRush;
 import com.blackhornetworkshop.flowrush.view.screens.FRScreen;
 import com.blackhornetworkshop.flowrush.view.screens.GameScreen;
 import com.blackhornetworkshop.flowrush.view.screens.LogoScreen;
@@ -93,6 +93,8 @@ public class ScreenManager {
         if(isShowAd(currentScreen)) AdController.showAd();
         if(currentScreen == GAME_PAUSE || currentScreen == GAME_LVL_COMPLETE_PAUSE){
             GameScreen.getInstance().removePauseAndRestoreTouch();
+        }else if(currentScreen == GAME_PACK_COMPLETE){
+            GameScreen.hidePackCompleteGroup();
         }
         currentScreen = GAME_MAIN;
         GameScreen.getInstance().setGameMainScreen();

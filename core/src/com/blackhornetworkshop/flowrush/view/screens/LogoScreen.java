@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.Array;
 import com.blackhornetworkshop.flowrush.controller.ScreenManager;
 import com.blackhornetworkshop.flowrush.model.FRAssetManager;
 import com.blackhornetworkshop.flowrush.model.ui.UIPool;
-import com.blackhornetworkshop.flowrush.view.FlowRush;
+import com.blackhornetworkshop.flowrush.model.FlowRush;
 
 import static com.blackhornetworkshop.flowrush.model.FRConstants.SCREEN_HEIGHT;
 import static com.blackhornetworkshop.flowrush.model.FRConstants.SCREEN_WIDTH;

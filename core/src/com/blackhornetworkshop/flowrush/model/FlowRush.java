@@ -1,23 +1,14 @@
-package com.blackhornetworkshop.flowrush.view;
+package com.blackhornetworkshop.flowrush.model;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.blackhornetworkshop.flowrush.controller.AdController;
-import com.blackhornetworkshop.flowrush.model.AndroidHelper;
-import com.blackhornetworkshop.flowrush.model.FRAssetManager;
-import com.blackhornetworkshop.flowrush.model.FRConstants;
-import com.blackhornetworkshop.flowrush.model.FRFileHandler;
 import com.blackhornetworkshop.flowrush.controller.LevelController;
-import com.blackhornetworkshop.flowrush.model.PlayServices;
 import com.blackhornetworkshop.flowrush.controller.ScreenManager;
-import com.blackhornetworkshop.flowrush.model.GamePreferences;
 import com.blackhornetworkshop.flowrush.controller.OneTouchProcessor;
-import com.blackhornetworkshop.flowrush.model.SavedGame;
 import com.blackhornetworkshop.flowrush.view.screens.GameScreen;
-import com.blackhornetworkshop.flowrush.view.screens.LogoScreen;
 import com.blackhornetworkshop.flowrush.view.screens.MenuScreen;
 import com.blackhornetworkshop.flowrush.model.ui.UIPool;
 import com.google.gson.Gson;
@@ -113,12 +104,17 @@ public class FlowRush extends Game {
     public static void checkAchievements() {
         logDebug("FlowRush checkAchievements() method called");
         for (int x = 0; x < 5; x++) {
-            if (!FlowRush.getSave().getAchievements(0) && FlowRush.getSave().getLevelsProgress(x) > 1) {
+            if (FlowRush.getSave().getLevelsProgress(x) > 1) {
                 FlowRush.getInstance().unlockAchievement(1); // FIRST LEVEL IS DONE
+                break;
             }
-            if (!FlowRush.getSave().getAchievements(1) && ((x == 0 && FlowRush.getSave().getLevelsProgress(x) > 10) ||
+        }
+
+        for(int x = 0; x < 5; x++) {
+            if (((x == 0 && FlowRush.getSave().getLevelsProgress(x) > 10) ||
                     (x != 0 && FlowRush.getSave().getLevelsProgress(x) > 1))) {
                 FlowRush.getInstance().unlockAchievement(2); // FIRST LEVEL WITH A DOVE IS DONE
+                break;
             }
         }
 
@@ -128,19 +124,16 @@ public class FlowRush extends Game {
             if (!FlowRush.getSave().isPackFinished(x)) {
                 isAllPacksDone = false;
             } else {
-                if (!FlowRush.getSave().getAchievements(x + 2))
-                    FlowRush.getInstance().unlockAchievement(x + 3);
+                FlowRush.getInstance().unlockAchievement(x + 3);
             }
         }
 
-        if (!FlowRush.getSave().getAchievements(7) & isAllPacksDone)
+        if (isAllPacksDone)
             FlowRush.getInstance().unlockAchievement(8); // ALL PACKS ARE DONE
     }
 
     private void unlockAchievement(int num) {
         if (num > 0 && num < 9) {
-            save.unlockAchievement(num - 1);
-            FlowRush.logDebug("Unlock achievement local: "+num);
             if (FlowRush.isPlayServicesAvailable() && playServices.isSignedIn()) {
                 playServices.unlockAchievement(num);
             }

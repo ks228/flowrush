@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Timer;
-import com.blackhornetworkshop.flowrush.view.FlowRush;
+import com.blackhornetworkshop.flowrush.model.FlowRush;
 import com.blackhornetworkshop.flowrush.model.ui.UIPool;
 
 import static com.blackhornetworkshop.flowrush.model.FRConstants.AUTHORS_MSG;
@@ -62,7 +62,7 @@ public class MenuScreen implements Screen, FRScreen {
         hudStage.addActor(UIPool.getSupportUsButton());
         hudStage.addActor(UIPool.getRateUsButton());
         hudStage.addActor(UIPool.getFeedButton());
-        hudStage.addActor(UIPool.getRemoveAdsButton());
+        /**hudStage.addActor(UIPool.getRemoveAdsButton());*/
         hudStage.addActor(UIPool.getSocialNetworksButton());
         hudStage.addActor(UIPool.getWebsiteButton());
         hudStage.addActor(UIPool.getLevelNumbersGroup());
@@ -109,7 +109,7 @@ public class MenuScreen implements Screen, FRScreen {
         UIPool.getRateUsButton().setVisible(false);
         UIPool.getFeedButton().setVisible(false);
         UIPool.getSocialNetworksButton().setVisible(false);
-        UIPool.getRemoveAdsButton().setVisible(false);
+        /**UIPool.getRemoveAdsButton().setVisible(false);*/
         UIPool.getWebsiteButton().setVisible(false);
 
         if(FlowRush.isPlayServicesAvailable()) {
@@ -152,7 +152,7 @@ public class MenuScreen implements Screen, FRScreen {
 
         UIPool.getMessageBackground().setVisible(true);
         UIPool.getSocialNetworksButton().setVisible(true);
-        UIPool.getRemoveAdsButton().setVisible(true);
+        /**UIPool.getRemoveAdsButton().setVisible(true);*/
         UIPool.getWebsiteButton().setVisible(true);
     }
 

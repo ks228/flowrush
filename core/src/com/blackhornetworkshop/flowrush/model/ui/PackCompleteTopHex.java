@@ -2,17 +2,15 @@ package com.blackhornetworkshop.flowrush.model.ui;
 
 //Created by TScissors.
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.blackhornetworkshop.flowrush.model.FRAssetManager;
-import com.blackhornetworkshop.flowrush.view.FlowRush;
+import com.blackhornetworkshop.flowrush.model.FlowRush;
 
 import static com.blackhornetworkshop.flowrush.model.FRConstants.BIG_HEX_DARK;
 import static com.blackhornetworkshop.flowrush.model.FRConstants.SCREEN_HEIGHT;

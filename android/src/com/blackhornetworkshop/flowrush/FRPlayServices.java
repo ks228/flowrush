@@ -11,7 +11,7 @@ import com.blackhornetworkshop.flowrush.controller.ScreenManager;
 import com.blackhornetworkshop.flowrush.model.FRConstants;
 import com.blackhornetworkshop.flowrush.model.SavedGame;
 import com.blackhornetworkshop.flowrush.model.ex.FlowRushException;
-import com.blackhornetworkshop.flowrush.view.FlowRush;
+import com.blackhornetworkshop.flowrush.model.FlowRush;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -227,15 +227,6 @@ public class FRPlayServices implements PlayServices {
 
         boolean isCurrentLevelActual = true;
 
-        //check achievements
-        for (int x = 0; x < 10; x++) {
-            if (serverSavedGame.getAchievements(x) && !conflictSavedGame.getAchievements(x)) {
-                conflictSavedGame.unlockAchievement(x);
-                FRAndroidHelper.getInstance().logDebug("Updating achievement " + x + " in conflict save");
-            } else {
-                FRAndroidHelper.getInstance().logDebug("Achievement " + x + " is actual");
-            }
-        }
         //check level progress
         for (int pack = 0; pack < 5; pack++) {
             if (conflictSavedGame.getLevelsProgress(pack)< serverSavedGame.getLevelsProgress(pack)) {
@@ -315,7 +306,7 @@ public class FRPlayServices implements PlayServices {
 
     @Override
     public void unlockAchievement(int num) {
-        FRAndroidHelper.getInstance().logDebug("Unlock Play Services achievement: " + num);
+        FRAndroidHelper.getInstance().logDebug("Unlock Play Games achievement: " + num);
         String s;
         switch (num) {
             case 1:
@@ -350,8 +341,10 @@ public class FRPlayServices implements PlayServices {
 
     private void onConnected() {
         snapshotsClient = Games.getSnapshotsClient(app, googleAccount);
+        achievementsClient = Games.getAchievementsClient(app, googleAccount);
         FRAndroidHelper.getInstance().logDebug("SnapshotСlient received successfully");
         saveGame();
+        FlowRush.checkAchievements();
     }
 
     private void onDisconnected() {

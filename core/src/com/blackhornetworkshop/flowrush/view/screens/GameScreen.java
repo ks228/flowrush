@@ -19,7 +19,7 @@ import com.blackhornetworkshop.flowrush.controller.ScreenManager;
 import com.blackhornetworkshop.flowrush.model.FRAssetManager;
 import com.blackhornetworkshop.flowrush.controller.MapController;
 import com.blackhornetworkshop.flowrush.model.FRFileHandler;
-import com.blackhornetworkshop.flowrush.view.FlowRush;
+import com.blackhornetworkshop.flowrush.model.FlowRush;
 import com.blackhornetworkshop.flowrush.model.HexActor;
 import com.blackhornetworkshop.flowrush.controller.HexController;
 import com.blackhornetworkshop.flowrush.controller.LevelController;
@@ -44,6 +44,7 @@ public class GameScreen implements Screen, FRScreen {
 
     private static boolean isSpecialIconsAnimationWhite;
     private boolean isActive;
+    public static boolean showPackComplete;
     private boolean showPackCompleteNextButton;
 
     private static InputMultiplexer inputMultiplexer;
@@ -170,6 +171,9 @@ public class GameScreen implements Screen, FRScreen {
         UIPool.getWellDoneLabel().setVisible(false);
         UIPool.getWellDonehex().setVisible(false);
         UIPool.getNextLevelButton().setVisible(false);
+
+        hidePackCompleteGroup();
+
     }
 
     public void startNewLevel() {
@@ -185,18 +189,15 @@ public class GameScreen implements Screen, FRScreen {
 
         if (!LevelController.nextLevelExist()) {
             enablePackCompleteGroup();
+            showPackComplete = true;
+        }else{
+            showPackComplete = false;
         }
     }
 
 
     private void enablePackCompleteGroup() {
-        UIPool.getPackCompleteNextPackButton().setVisible(false);
-        UIPool.getPackCompleteLowerHex().setVisible(false);
-        UIPool.getPackCompleteUpperHex().setVisible(false);
-        UIPool.getPackCompleteMenuButton().setVisible(false);
-        UIPool.getDialogBackground().setVisible(false);
-        UIPool.getLeftButton().setVisible(false);
-        UIPool.getRightButton().setVisible(false);
+        hidePackCompleteGroup();
 
         hudStage.addActor(UIPool.getPackCompleteNextPackButton());
         hudStage.addActor(UIPool.getPackCompleteLowerHex());
@@ -205,6 +206,16 @@ public class GameScreen implements Screen, FRScreen {
         hudStage.addActor(UIPool.getDialogBackground());
         hudStage.addActor(UIPool.getLeftButton());
         hudStage.addActor(UIPool.getRightButton());
+    }
+
+    public static void hidePackCompleteGroup() {
+        UIPool.getPackCompleteNextPackButton().setVisible(false);
+        UIPool.getPackCompleteLowerHex().setVisible(false);
+        UIPool.getPackCompleteUpperHex().setVisible(false);
+        UIPool.getPackCompleteMenuButton().setVisible(false);
+        UIPool.getDialogBackground().setVisible(false);
+        UIPool.getLeftButton().setVisible(false);
+        UIPool.getRightButton().setVisible(false);
     }
 
     public static void hideRateDialog() {
