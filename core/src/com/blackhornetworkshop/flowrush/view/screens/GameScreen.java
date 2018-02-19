@@ -93,20 +93,6 @@ public class GameScreen implements Screen, FRScreen {
 
         hexesStage.addActor(UIPool.getBackgroundAnimation());
 
-        Timer.instance().clear();
-        Timer.schedule(new Timer.Task() {
-            @Override
-            public void run() {
-                for (int x = 0; x < MapController.getSpecialActorsArraySize(); x++) {
-                    HexActor specialActor = MapController.getSpecialActorsArrayChildren(x);
-                    if (specialActor.getInclude() == 2 && !specialActor.isPowerOn()) {
-                        HexController.animIcon(specialActor);
-                    }
-                }
-                isSpecialIconsAnimationWhite = !isSpecialIconsAnimationWhite;
-            }
-        }, 0.6f, 0.6f);
-
         inputMultiplexer.clear();
         inputMultiplexer.addProcessor(0, FlowRush.getOneTouchProcessor());
         inputMultiplexer.addProcessor(1, hudStage);
@@ -162,6 +148,20 @@ public class GameScreen implements Screen, FRScreen {
         }
 
         isSpecialIconsAnimationWhite = false;
+
+        Timer.instance().clear();
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                for (int x = 0; x < MapController.getSpecialActorsArraySize(); x++) {
+                    HexActor specialActor = MapController.getSpecialActorsArrayChildren(x);
+                    if (specialActor.getInclude() == 2 && !specialActor.isPowerOn()) {
+                        HexController.animIcon(specialActor);
+                    }
+                }
+                isSpecialIconsAnimationWhite = !isSpecialIconsAnimationWhite;
+            }
+        }, 0.6f, 0.6f);
 
         hexesStage.getRoot().setVisible(true);
         UIPool.getPauseButton().setVisible(true);

@@ -50,13 +50,13 @@ public class LogoScreen implements Screen, FRScreen {
 
         Array<TextureAtlas.AtlasRegion> regions = FRAssetManager.getLogoAtlas().findRegions("bhw");
         animationWidth = SCREEN_WIDTH/2 > 550 ? 550 : SCREEN_WIDTH/2;
-        animationHeight = SCREEN_WIDTH/2 * regions.get(0).getRegionHeight() / regions.get(0).getRegionWidth();
+        animationHeight = animationWidth * regions.get(0).getRegionHeight() / regions.get(0).getRegionWidth();
 
         animation = new Animation<>(0.10f, regions);
 
         FlowRush.logDebug("Screen width:" + SCREEN_WIDTH);
-        FlowRush.logDebug("Animation width:" + animationWidth);
-        FlowRush.logDebug("Animation height:" + animationHeight);
+        FlowRush.logDebug("Logo BHW width:" + animationWidth);
+        FlowRush.logDebug("Logo BHW height:" + animationHeight);
 
         Gdx.input.setInputProcessor(FlowRush.getOneTouchProcessor());
     }

@@ -30,8 +30,6 @@ public class FRConstants {
 
     public final static float MENU_LABEL_Y = (SCREEN_HEIGHT * 0.98f - BUTTON_SIZE);
 
-    public static final float SOCIAL_BACKGROUND_HEIGHT = BUTTON_SIZE * 1.5f;
-
     public static final float MENU_PACK_COMPLETE_BUTTON_WIDTH = SCREEN_WIDTH * 0.4f;
     public static final float MENU_PACK_COMPLETE_BUTTON_HEIGHT = BUTTON_SIZE * 0.8f;
     public static final float MENU_PACK_COMPLETE_BUTTON_X = (SCREEN_WIDTH - MENU_PACK_COMPLETE_BUTTON_WIDTH) / 2;
