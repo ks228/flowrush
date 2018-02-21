@@ -43,7 +43,7 @@ public class SavedGame {
         finishedPacks[num] = true;
     }
 
-    public boolean isPackFinished(int num){
+    public boolean isPackFinished(int num) {
         return finishedPacks[num];
     }
 
@@ -55,8 +55,12 @@ public class SavedGame {
     public boolean getAchievements(int num) {
         return achievements[num];
     }
+
     @Deprecated
     private boolean[] achievements = {false, false, false, false, false, false, false, false, false, false};
+
     @Deprecated
-    public void unlockAchievement(int num) { achievements[num] = true; }
+    public void unlockAchievement(int num) {
+        achievements[num] = true;
+    }
 }
