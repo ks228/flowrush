@@ -10,5 +10,7 @@ public interface AndroidHelper {
     void showAd();
     void logError(String msg, Throwable tr);
     void logDebug(String msg);
+    void showToast(String msg);
+    boolean isInternetConnected();
 
 }

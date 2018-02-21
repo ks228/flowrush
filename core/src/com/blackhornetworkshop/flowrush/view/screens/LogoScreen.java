@@ -62,7 +62,7 @@ public class LogoScreen implements Screen, FRScreen {
     }
 
     public static void setBHWLogo() {
-        Gdx.gl.glClearColor(0.0745f, 0.0941f, 0.1059f, 1);
+        Gdx.gl.glClearColor(0.1059f, 0.1333f, 0.1529f, 1);
         isFRlogo = false;
     }
 

@@ -7,7 +7,7 @@ public class SavedGame {
     private String uniqSaveGameName;
     private int currentLvl = 1;
     private int currentPack = 1;
-    private int[] levelsProgress = {50, 50, 50, 50, 50};
+    private int[] levelsProgress = {1, 1, 1, 1, 1};
     private boolean[] finishedPacks = {false, false, false, false, false};
 
 

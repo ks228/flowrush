@@ -15,6 +15,7 @@ import com.blackhornetworkshop.flowrush.controller.ScreenManager;
 import com.blackhornetworkshop.flowrush.model.FRAssetManager;
 import com.blackhornetworkshop.flowrush.model.FRFileHandler;
 import com.blackhornetworkshop.flowrush.model.FlowRush;
+import com.blackhornetworkshop.flowrush.model.ex.FlowRushException;
 import com.blackhornetworkshop.flowrush.model.listeners.ButtonScaleListener;
 import com.blackhornetworkshop.flowrush.view.screens.GameScreen;
 import com.blackhornetworkshop.flowrush.model.ui.background.BackgroundActor;
@@ -170,8 +171,12 @@ class UiActorCreator {
                 textButton.addListener(new ButtonScaleListener(true) {
                     @Override
                     public void action(InputEvent event) {
-                        FlowRush.getPlayServices().signIn();
-                        ScreenManager.setMenuMainScreen();
+                        if(FlowRush.getAndroidHelper().isInternetConnected()) {
+                            FlowRush.getPlayServices().signIn();
+                            ScreenManager.setMenuMainScreen();
+                        }else{
+                            FlowRush.getAndroidHelper().showToast("You are currently offline");
+                        }
                     }
                 });
                 return textButton;
@@ -180,7 +185,11 @@ class UiActorCreator {
                 textButton.addListener(new ButtonScaleListener(false) {
                     @Override
                     public void action(InputEvent event) {
-                        FlowRush.getPlayServices().showSavedSnapshots();
+                        if(FlowRush.getAndroidHelper().isInternetConnected()) {
+                            FlowRush.getPlayServices().showSavedSnapshots();
+                        }else{
+                            FlowRush.getAndroidHelper().showToast("You are currently offline");
+                        }
                     }
                 });
                 return textButton;

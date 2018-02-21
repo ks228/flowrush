@@ -6,84 +6,140 @@ filter: Linear,Linear
 repeat: none
 bhw
   rotate: false
-  xy: 2, 563
-  size: 550, 559
-  orig: 550, 559
+  xy: 2, 544
+  size: 540, 540
+  orig: 540, 540
   offset: 0, 0
-  index: 50
+  index: 1
 bhw
   rotate: false
-  xy: 1004, 1315
-  size: 550, 559
-  orig: 550, 559
+  xy: 1004, 1296
+  size: 540, 540
+  orig: 540, 540
   offset: 0, 0
-  index: 51
-bhw
-  rotate: false
-  xy: 1004, 1315
-  size: 550, 559
-  orig: 550, 559
-  offset: 0, 0
-  index: 53
+  index: 2
 bhw
   rotate: false
   xy: 2, 2
-  size: 550, 559
-  orig: 550, 559
+  size: 540, 540
+  orig: 540, 540
   offset: 0, 0
-  index: 52
+  index: 3
 bhw
   rotate: false
-  xy: 2, 2
-  size: 550, 559
-  orig: 550, 559
+  xy: 1546, 1296
+  size: 540, 540
+  orig: 540, 540
   offset: 0, 0
-  index: 54
+  index: 4
 bhw
   rotate: false
-  xy: 1556, 1315
-  size: 550, 559
-  orig: 550, 559
+  xy: 2088, 1296
+  size: 540, 540
+  orig: 540, 540
   offset: 0, 0
-  index: 55
+  index: 5
 bhw
   rotate: false
-  xy: 2108, 1315
-  size: 550, 559
-  orig: 550, 559
+  xy: 2630, 1296
+  size: 540, 540
+  orig: 540, 540
   offset: 0, 0
-  index: 42
+  index: 6
 bhw
   rotate: false
-  xy: 2660, 1315
-  size: 550, 559
-  orig: 550, 559
+  xy: 3172, 1296
+  size: 540, 540
+  orig: 540, 540
   offset: 0, 0
-  index: 44
+  index: 7
 bhw
   rotate: false
-  xy: 3212, 1315
-  size: 550, 559
-  orig: 550, 559
+  xy: 3172, 1296
+  size: 540, 540
+  orig: 540, 540
   offset: 0, 0
-  index: 46
+  index: 9
 bhw
   rotate: false
-  xy: 554, 563
-  size: 550, 559
-  orig: 550, 559
+  xy: 544, 544
+  size: 540, 540
+  orig: 540, 540
   offset: 0, 0
-  index: 48
+  index: 8
 bhw
   rotate: false
-  xy: 554, 2
-  size: 550, 559
-  orig: 550, 559
+  xy: 544, 544
+  size: 540, 540
+  orig: 540, 540
   offset: 0, 0
-  index: 49
+  index: 18
+bhw
+  rotate: false
+  xy: 544, 2
+  size: 540, 540
+  orig: 540, 540
+  offset: 0, 0
+  index: 10
+bhw
+  rotate: false
+  xy: 544, 2
+  size: 540, 540
+  orig: 540, 540
+  offset: 0, 0
+  index: 13
+bhw
+  rotate: false
+  xy: 544, 2
+  size: 540, 540
+  orig: 540, 540
+  offset: 0, 0
+  index: 11
+bhw
+  rotate: false
+  xy: 544, 2
+  size: 540, 540
+  orig: 540, 540
+  offset: 0, 0
+  index: 14
+bhw
+  rotate: false
+  xy: 544, 2
+  size: 540, 540
+  orig: 540, 540
+  offset: 0, 0
+  index: 12
+bhw
+  rotate: false
+  xy: 544, 2
+  size: 540, 540
+  orig: 540, 540
+  offset: 0, 0
+  index: 19
+bhw
+  rotate: false
+  xy: 1086, 754
+  size: 540, 540
+  orig: 540, 540
+  offset: 0, 0
+  index: 15
+bhw
+  rotate: false
+  xy: 1086, 212
+  size: 540, 540
+  orig: 540, 540
+  offset: 0, 0
+  index: 16
+bhw
+  rotate: false
+  xy: 1628, 754
+  size: 540, 540
+  orig: 540, 540
+  offset: 0, 0
+  index: 17
 fr-logo
   rotate: false
-  xy: 2, 1124
+  xy: 2, 1086
   size: 1000, 750
   orig: 1000, 750
   offset: 0, 0

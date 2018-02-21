@@ -77,6 +77,7 @@ public class AndroidLauncher extends AndroidApplication {
                 FRAndroidHelper.getInstance().logDebug("Ad is loaded");
                 AdController.setAdLoaded();
             }
+
             @Override
             public void onAdClosed() {
                 checkIsAdLoadAvailable();
@@ -87,14 +88,14 @@ public class AndroidLauncher extends AndroidApplication {
         initialize(FlowRush.getInstance(), getConfig());
     }
 
-    public void checkIsAdLoadAvailable(){
+    public void checkIsAdLoadAvailable() {
         NetworkInfo ni = cm.getActiveNetworkInfo();
-        if(ni != null && ni.isConnected() && !interstitialAd.isLoaded()){
+        if (ni != null && ni.isConnected() && !interstitialAd.isLoaded()) {
             FRAndroidHelper.getInstance().logDebug("Loading ad");
             interstitialAd.loadAd(new AdRequest.Builder().build());
-        }else if(interstitialAd.isLoaded()){
+        } else if (interstitialAd.isLoaded()) {
             FRAndroidHelper.getInstance().logDebug("Ad is already loaded");
-        }else {
+        } else {
             FRAndroidHelper.getInstance().logDebug("Network is not available");
         }
     }
@@ -111,6 +112,11 @@ public class AndroidLauncher extends AndroidApplication {
         FRAndroidHelper.getInstance().logDebug("Broadcast receiver unregistered");
         unregisterReceiver(networkStateReceiver);
         super.onPause();
+    }
+
+    public boolean isInternetConnected() {
+        NetworkInfo ni = cm.getActiveNetworkInfo();
+        return ni != null && ni.isConnected();
     }
 
 
@@ -143,7 +149,7 @@ public class AndroidLauncher extends AndroidApplication {
         }
     }
 
-    void showLoadingLabel() {
+    void showLoadingDialog() {
         runOnUiThread(new Runnable() {
             public void run() {
                 FRAndroidHelper.getInstance().logDebug("Display loading dialog");

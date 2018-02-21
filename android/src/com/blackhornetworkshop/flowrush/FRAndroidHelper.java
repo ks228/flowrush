@@ -75,7 +75,8 @@ public class FRAndroidHelper implements AndroidHelper {
         }
     }
 
-    private void showToast(final String msg) {
+    @Override
+    public void showToast(final String msg) {
         app.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -89,5 +90,10 @@ public class FRAndroidHelper implements AndroidHelper {
     public void openSocialNetworksActivity() {
         Intent intent = new Intent(app, SocialNetworksActivity.class);
         app.startActivity(intent);
+    }
+
+    @Override
+    public boolean isInternetConnected() {
+        return app.isInternetConnected();
     }
 }

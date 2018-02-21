@@ -138,7 +138,7 @@ public class FlowRush extends Game {
                 playServices.unlockAchievement(num);
             }
         } else {
-            androidHelper.logError("No such achievement!", new IllegalArgumentException());
+            androidHelper.logError("Error while unlocking achievement", new IllegalArgumentException());
         }
     }
 
