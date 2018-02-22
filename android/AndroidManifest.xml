@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="com.android.vending.BILLING" />
 
-    <uses-sdk android:minSdkVersion="15" android:targetSdkVersion="20" />
+    <uses-sdk android:minSdkVersion="15" android:targetSdkVersion="27" />
 
     <application
         android:allowBackup="true"

@@ -65,7 +65,7 @@ public class AndroidLauncher extends AndroidApplication {
             @Override
             public void onReceive(Context context, Intent intent) {
                 FRAndroidHelper.getInstance().logDebug("Connectivity changed");
-                checkIsAdLoadAvailable();
+                checkIsAdLoadAvailableAndLoadIfTrue();
             }
         };
 
@@ -82,23 +82,33 @@ public class AndroidLauncher extends AndroidApplication {
 
             @Override
             public void onAdClosed() {
-                checkIsAdLoadAvailable();
+                FRAndroidHelper.getInstance().logDebug("Ad is closed");
+                checkIsAdLoadAvailableAndLoadIfTrue();
             }
 
         });
         initialize(FlowRush.getInstance(), getConfig());
+
     }
 
-    public void checkIsAdLoadAvailable() {
-        NetworkInfo ni = cm.getActiveNetworkInfo();
-        if (ni != null && ni.isConnected() && !interstitialAd.isLoaded()) {
-            FRAndroidHelper.getInstance().logDebug("Loading ad");
-            interstitialAd.loadAd(new AdRequest.Builder().build());
-        } else if (interstitialAd.isLoaded()) {
-            FRAndroidHelper.getInstance().logDebug("Ad is already loaded");
-        } else {
-            FRAndroidHelper.getInstance().logDebug("Network is not available");
-        }
+    public void checkIsAdLoadAvailableAndLoadIfTrue() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                NetworkInfo ni = cm.getActiveNetworkInfo();
+                if (ni != null && ni.isConnected()) {
+                    boolean isAdLoaded = interstitialAd.isLoaded();
+                    if(!isAdLoaded){
+                        FRAndroidHelper.getInstance().logDebug("Loading ad");
+                        interstitialAd.loadAd(new AdRequest.Builder().build());
+                    }else{
+                        FRAndroidHelper.getInstance().logDebug("Ad is already loaded");
+                    }
+                }else {
+                    FRAndroidHelper.getInstance().logDebug("Network is not available");
+                }
+            }
+        });
     }
 
     @Override

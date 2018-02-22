@@ -78,7 +78,7 @@ public class LogoScreen implements Screen, FRScreen {
 
         elapsedTimeFromStart += Gdx.graphics.getDeltaTime();
 
-        if (FRAssetManager.update() && elapsedTimeFromStart > 6f && isFRlogo) {
+        if (FRAssetManager.update() && elapsedTimeFromStart > 8f && isFRlogo) {
             FlowRush.logDebug("LogoScreen method render() call after loading assets");
             setMainMenu();
         } else {
@@ -88,8 +88,8 @@ public class LogoScreen implements Screen, FRScreen {
 
     private void drawLogo(){
         FlowRush.getBatch().begin();
-        if (!isFRlogo & elapsedTimeFromStart > 1f) {
-            if (elapsedTimeFromStart > 4f) {
+        if (!isFRlogo & elapsedTimeFromStart > 2f) {
+            if (elapsedTimeFromStart > 5f) {
                 ScreenManager.setLogoFRScreen();
             }
             elapsedTimeAnimation += Gdx.graphics.getDeltaTime();

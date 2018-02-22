@@ -12,5 +12,4 @@ public interface AndroidHelper {
     void logDebug(String msg);
     void showToast(String msg);
     boolean isInternetConnected();
-
 }
