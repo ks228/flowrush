@@ -185,10 +185,14 @@ class UiActorCreator {
                 textButton.addListener(new ButtonScaleListener(false) {
                     @Override
                     public void action(InputEvent event) {
-                        if(FlowRush.getAndroidHelper().isInternetConnected()) {
-                            FlowRush.getPlayServices().showSavedSnapshots();
+                        if(FlowRush.getPlayServices().isSignedIn()) {
+                            if(FlowRush.getAndroidHelper().isInternetConnected()){
+                                FlowRush.getPlayServices().showSavedSnapshots();
+                            }else{
+                                FlowRush.getAndroidHelper().showToast("You are currently offline");
+                            }
                         }else{
-                            FlowRush.getAndroidHelper().showToast("You are currently offline");
+                            FlowRush.getAndroidHelper().showToast("You must first sign in");
                         }
                     }
                 });
@@ -198,7 +202,9 @@ class UiActorCreator {
                 textButton.addListener(new ButtonScaleListener(false) {
                     @Override
                     public void action(InputEvent event) {
-                        FlowRush.getPlayServices().showAchievements();
+                        if(FlowRush.getPlayServices().isSignedIn()) {
+                            FlowRush.getPlayServices().showAchievements();
+                        }
                     }
                 });
                 return textButton;
@@ -324,11 +330,12 @@ class UiActorCreator {
                         if (FlowRush.getPreferences().isSoundOn()) {
                             ((SmallButtonActor) event.getListenerActor()).setSprite(FRAssetManager.getSprite(SOUND_ON_ICON));
                             FRAssetManager.getBackgroundMusic().play();
-                            FlowRush.logDebug("Sound is off");
+                            FlowRush.logDebug("Sound is on");
                         } else {
                             ((SmallButtonActor) event.getListenerActor()).setSprite(FRAssetManager.getSprite(SOUND_OFF_ICON));
                             FRAssetManager.getBackgroundMusic().pause();
-                            FlowRush.logDebug("Sound is on");
+                            FlowRush.logDebug("Sound is off");
+
                         }
                     }
                 });

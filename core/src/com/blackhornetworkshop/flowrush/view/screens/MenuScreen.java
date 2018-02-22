@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Timer;
+import com.blackhornetworkshop.flowrush.controller.ScreenManager;
 import com.blackhornetworkshop.flowrush.model.FlowRush;
 import com.blackhornetworkshop.flowrush.model.ui.UIPool;
 
@@ -228,6 +229,7 @@ public class MenuScreen implements Screen, FRScreen {
     @Override
     public void resume() {
         FlowRush.logDebug("Main screen resume() method called");
+        ScreenManager.setMenuMainScreen();
     }
 
     @Override

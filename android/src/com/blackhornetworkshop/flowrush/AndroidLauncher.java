@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -30,8 +31,9 @@ public class AndroidLauncher extends AndroidApplication {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        FRAndroidHelper.getInstance().logDebug("AndroidLauncher onCreate() method");
         super.onCreate(savedInstanceState);
+
+        FRAndroidHelper.getInstance().logDebug("AndroidLauncher onCreate() method");
 
         loadingDialog = new ProgressDialog(this, ProgressDialog.THEME_HOLO_LIGHT);
         loadingDialog.setMessage("Loading...");
@@ -84,7 +86,6 @@ public class AndroidLauncher extends AndroidApplication {
             }
 
         });
-
         initialize(FlowRush.getInstance(), getConfig());
     }
 
@@ -109,9 +110,9 @@ public class AndroidLauncher extends AndroidApplication {
 
     @Override
     public void onPause() {
+        super.onPause();
         FRAndroidHelper.getInstance().logDebug("Broadcast receiver unregistered");
         unregisterReceiver(networkStateReceiver);
-        super.onPause();
     }
 
     public boolean isInternetConnected() {
@@ -129,7 +130,12 @@ public class AndroidLauncher extends AndroidApplication {
     }
 
     public void showAd() {
-        interstitialAd.show();
+        if(isInternetConnected()) {
+            FRAndroidHelper.getInstance().logDebug("Show ad");
+            interstitialAd.show();
+        }else{
+            FRAndroidHelper.getInstance().logDebug("Don't show ad, because internet is off");
+        }
     }
 
     @Override
@@ -163,4 +169,16 @@ public class AndroidLauncher extends AndroidApplication {
         loadingDialog.dismiss();
     }
 
+    boolean isPlayGamesPackageInstalled(){
+        boolean app_installed;
+        try {
+            getPackageManager().getPackageInfo("com.google.android.play.games",PackageManager.GET_ACTIVITIES);
+            app_installed = true;
+        }
+        catch (PackageManager.NameNotFoundException e) {
+            app_installed = false;
+        }
+        FRAndroidHelper.getInstance().logDebug("Play games package is installed: "+app_installed);
+        return app_installed;
+    }
 }

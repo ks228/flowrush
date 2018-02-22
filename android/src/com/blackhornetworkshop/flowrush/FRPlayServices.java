@@ -44,7 +44,6 @@ public class FRPlayServices implements PlayServices {
     private AndroidLauncher app;
     private GoogleSignInClient googleSignInClient;
 
-    private GoogleSignInAccount googleAccount;
     private SnapshotsClient snapshotsClient;
     private AchievementsClient achievementsClient;
 
@@ -72,11 +71,14 @@ public class FRPlayServices implements PlayServices {
                 new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
                         .requestScopes(Drive.SCOPE_APPFOLDER)
                         .build());
-        if (isSignedIn()) {
-            googleAccount = GoogleSignIn.getLastSignedInAccount(app);
+        GoogleSignInAccount googleAccount = GoogleSignIn.getLastSignedInAccount(app);
+        if (googleAccount != null && app.isPlayGamesPackageInstalled()) {
+            if(app.getCurrentFocus() != null) {
+                Games.getGamesClient(app, googleAccount).setViewForPopups(app.getCurrentFocus());
+            }
             snapshotsClient = Games.getSnapshotsClient(app, googleAccount);
             achievementsClient = Games.getAchievementsClient(app, googleAccount);
-            FRAndroidHelper.getInstance().logDebug("User signed. Google account, snapshot client, achievements client are received");
+            FRAndroidHelper.getInstance().logDebug("User signed. Google account, games client, snapshot client, achievements client are received");
         }
     }
 
@@ -87,13 +89,13 @@ public class FRPlayServices implements PlayServices {
     }
 
     void handleSignInResult(Intent intent) {
-        Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(intent);
-
         try {
-            googleAccount = task.getResult(ApiException.class);
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(intent);
+
+            task.getResult(ApiException.class);
             FRAndroidHelper.getInstance().logDebug("Google sign in success");
-            onConnected();
-        } catch (ApiException apiException) {
+            onConnected(GoogleSignIn.getLastSignedInAccount(app));
+        } catch (Exception e) {
             FRAndroidHelper.getInstance().showToast("Google sign in failure");
         }
     }
@@ -117,19 +119,17 @@ public class FRPlayServices implements PlayServices {
 
     @Override
     public boolean isSignedIn() {
-        return GoogleSignIn.getLastSignedInAccount(app) != null;
+        return GoogleSignIn.getLastSignedInAccount(app) != null && app.isPlayGamesPackageInstalled();
     }
 
     @Override
     public void showSavedSnapshots() {
         FRAndroidHelper.getInstance().logDebug("FRPlayServices showSavedSnapshots() method called");
-        if (snapshotsClient == null)
-            snapshotsClient = Games.getSnapshotsClient(app, googleAccount);
         snapshotsClient.getSelectSnapshotIntent("Flow Rush saved games", true, true, 5).addOnCompleteListener(new OnCompleteListener<Intent>() {
             @Override
             public void onComplete(@NonNull Task<Intent> task) {
                 if (!task.isSuccessful()) {
-                    FRAndroidHelper.getInstance().logError("Problem with loading snapshots list", task.getException());
+                    FRAndroidHelper.getInstance().logError("Problem with loading saved games list", task.getException());
                 } else {
                     app.startActivityForResult(task.getResult(), FRConstants.RC_LIST_SAVED_GAMES);
                 }
@@ -343,8 +343,11 @@ public class FRPlayServices implements PlayServices {
         achievementsClient.unlock(s);
     }
 
-    private void onConnected() {
+    private void onConnected(GoogleSignInAccount googleAccount) {
         snapshotsClient = Games.getSnapshotsClient(app, googleAccount);
+        if(app.getCurrentFocus() != null) {
+            Games.getGamesClient(app, googleAccount).setViewForPopups(app.getCurrentFocus());
+        }
         achievementsClient = Games.getAchievementsClient(app, googleAccount);
         FRAndroidHelper.getInstance().logDebug("SnapshotСlient received successfully");
         saveGame();
@@ -354,6 +357,7 @@ public class FRPlayServices implements PlayServices {
     private void onDisconnected() {
         FRAndroidHelper.getInstance().logDebug("Snapshot client is disconnected");
         snapshotsClient = null;
+        achievementsClient = null;
     }
 
 }

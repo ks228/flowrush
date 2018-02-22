@@ -34,7 +34,7 @@ public class FRAssetManager {
 
     private static boolean isMusicLoaded;
 
-    public static void dispose() {
+    static void dispose() {
         FlowRush.logDebug("FRAssetManager dispose()");
         daySkin.remove("fontLarge", BitmapFont.class);// REMOVE IS IMPORTANT!
         daySkin.remove("fontMid", BitmapFont.class);
@@ -62,7 +62,7 @@ public class FRAssetManager {
     private FRAssetManager() {
     }
 
-    public static void initialize(){
+    static void initialize(){
         FlowRush.logDebug("FRAssetManager initialize() method called");
 
         manager = new AssetManager();
@@ -78,7 +78,7 @@ public class FRAssetManager {
         isMusicLoaded = false;
     }
 
-    public static void loadLogos(){
+    static void loadLogos(){
         manager.load("texture/logo-atlas.atlas", TextureAtlas.class);
         manager.finishLoading();
 
