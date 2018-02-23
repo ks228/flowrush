@@ -69,10 +69,10 @@ public class AndroidLauncher extends AndroidApplication {
             }
         };
 
-        MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
+        MobileAds.initialize(this, getString(R.string.app_ads_key));
 
         interstitialAd = new InterstitialAd(this);
-        interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        interstitialAd.setAdUnitId(getString(R.string.ads_key));
         interstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {

@@ -8,7 +8,7 @@ import com.blackhornetworkshop.flowrush.model.ex.FlowRushException;
 
 public class FRFileHandler {
 
-    public static Packs loadPacks() {
+    static Packs loadPacks() {
         try {
             return FlowRush.getGson().fromJson(Gdx.files.internal("lvls/levels.json").reader(), Packs.class);
         } catch (Exception ex) {
@@ -16,7 +16,7 @@ public class FRFileHandler {
         }
     }
 
-    public static GamePreferences loadPreferences() {
+    static GamePreferences loadPreferences() {
         try {
             return FlowRush.getGson().fromJson(Gdx.files.local("preferences.json").reader(), GamePreferences.class);
         } catch (Exception ex) {
@@ -25,7 +25,7 @@ public class FRFileHandler {
         }
     }
 
-    public static SavedGame loadSavedGame() {
+    static SavedGame loadSavedGame() {
         try {
             return FlowRush.getGson().fromJson(Gdx.files.local("save.json").reader(), SavedGame.class);
         } catch (Exception ex) {

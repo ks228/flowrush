@@ -12,7 +12,7 @@ public class ButtonScaleListener extends ClickListener {
     private ScaleToAction buttonScale1;
     private ScaleToAction buttonScale2;
 
-    public ButtonScaleListener(boolean disableScaleAnimationBack) {
+    protected ButtonScaleListener(boolean disableScaleAnimationBack) {
         buttonScale1 = new ScaleToAction();
         buttonScale1.setScale(0.85f, 0.85f);
         buttonScale1.setDuration(0.05f);

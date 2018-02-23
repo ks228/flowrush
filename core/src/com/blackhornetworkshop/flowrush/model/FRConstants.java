@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx;
 public class FRConstants {
 
     public static final String TAG = "FlowRush";
-    public static final boolean IS_DEBUG = true;
+    public static final boolean IS_DEBUG = false;
 
     public static final float SCREEN_HEIGHT = Gdx.graphics.getHeight();
     public static final float SCREEN_WIDTH = Gdx.graphics.getWidth();
@@ -94,11 +94,11 @@ public class FRConstants {
     public final static int RC_SIGN_IN = 9001;
     public final static int RC_LIST_SAVED_GAMES = 9002;
     public final static int RC_ACHIEVEMENT_UI = 9003;
-    public final static int MAX_SNAPSHOT_RESOLVE_RETRIES = 20;
 
     // Texts
     public final static String AUTHORS_MSG= "development\nTIMUR SCISSORS\n\ndesign\nANN KOVALSKI\n\nmusic\nERIC HOPTON";
-    public final static String SUPPORT_MSG= "Please support our indie development team. Join us on social media and share our game with your friends.\n\nAlso you can remove ads and in this way support our projects.";
+    //public final static String SUPPORT_MSG= "Please support our indie development team. Join us on social media and share our game with your friends.\n\nAlso you can remove ads and in this way support our projects.";
+    public final static String SUPPORT_MSG= "Please support our indie development team. Join us on social media and share our game with your friends.";
     public final static String SIGN_IN_MSG= "By signing in your Google Play Games account, you can: save and load your in-game progress, earn in-game achievements, get experience for your Google Play Games account";
     public final static String SIGNED_MSG= "Welcome!\nHere you can see your\nFlow Rush\n achievements and manage your saved games";
     public final static String QUESTION_1 = "ENJOYING  FLOW RUSH?";

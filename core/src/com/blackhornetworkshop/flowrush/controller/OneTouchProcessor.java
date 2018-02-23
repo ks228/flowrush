@@ -3,7 +3,6 @@ package com.blackhornetworkshop.flowrush.controller;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.utils.Timer;
-import com.blackhornetworkshop.flowrush.model.FRAssetManager;
 import com.blackhornetworkshop.flowrush.model.FlowRush;
 import com.blackhornetworkshop.flowrush.model.ui.UIPool;
 
@@ -65,9 +64,6 @@ public class OneTouchProcessor implements InputProcessor {
                 default:
                     msg = msg + "No action.";
                     break;
-            }
-            if(FlowRush.getPreferences().isSoundOn()) {
-                FRAssetManager.getTapSound().play();
             }
             FlowRush.logDebug(msg);
         }
