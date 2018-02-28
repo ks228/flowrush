@@ -15,7 +15,6 @@ import com.blackhornetworkshop.flowrush.controller.ScreenManager;
 import com.blackhornetworkshop.flowrush.model.FRAssetManager;
 import com.blackhornetworkshop.flowrush.model.FRFileHandler;
 import com.blackhornetworkshop.flowrush.model.FlowRush;
-import com.blackhornetworkshop.flowrush.model.ex.FlowRushException;
 import com.blackhornetworkshop.flowrush.model.listeners.ButtonScaleListener;
 import com.blackhornetworkshop.flowrush.view.screens.GameScreen;
 import com.blackhornetworkshop.flowrush.model.ui.background.BackgroundActor;
@@ -80,11 +79,11 @@ class UiActorCreator {
                 });
                 return textButton;
             case 6: //REMOVE ADS button
-                textButton = createTextButton("REMOVE ADS", TEXT_BUTTON_STYLE_WHITE, MENU_BUTTON_WIDTH, BUTTON_SIZE, MENU_BUTTON_X, MENU_BUTTON_Y_2, true);
+                textButton = createTextButton("REMOVE ADS", TEXT_BUTTON_STYLE_WHITE, MENU_BUTTON_WIDTH, BUTTON_SIZE, MENU_BUTTON_X, MENU_BUTTON_Y_3, true);
                 textButton.addListener(new ButtonScaleListener(true) {
                     @Override
                     public void action(InputEvent event) {
-
+                        FlowRush.getAndroidHelper().startPurchase();
                     }
                 });
                 return textButton;
@@ -93,7 +92,7 @@ class UiActorCreator {
                 textButton.setVisible(false);
                 return textButton;
             case 8: //SOCIAL NETWORKS button
-                textButton = createTextButton("JOIN US", TEXT_BUTTON_STYLE_WHITE, MENU_BUTTON_WIDTH, BUTTON_SIZE, MENU_BUTTON_X, MENU_BUTTON_Y_1, false);
+                textButton = createTextButton("JOIN US", TEXT_BUTTON_STYLE_WHITE, MENU_BUTTON_WIDTH, BUTTON_SIZE, MENU_BUTTON_X, MENU_BUTTON_Y_2, false);
                 textButton.addListener(new ButtonScaleListener(false) {
                     @Override
                     public void action(InputEvent event) {
@@ -219,7 +218,7 @@ class UiActorCreator {
                 });
                 return textButton;
             case 18: //WEBSITE button
-                textButton = createTextButton("BLACKHOR.NET", TEXT_BUTTON_STYLE_LIGHTBLUE, MENU_BUTTON_WIDTH, BUTTON_SIZE, MENU_BUTTON_X, MENU_BUTTON_Y_2, false);
+                textButton = createTextButton("BLACKHOR.NET", TEXT_BUTTON_STYLE_LIGHTBLUE, MENU_BUTTON_WIDTH, BUTTON_SIZE, MENU_BUTTON_X, MENU_BUTTON_Y_1, false);
                 textButton.addListener(new ButtonScaleListener(false) {
                     @Override
                     public void action(InputEvent event) {

@@ -85,7 +85,7 @@ public class FRPlayServices implements PlayServices {
     @Override
     public void signIn() {
         FRAndroidHelper.getInstance().logDebug("FRPlayServices signIn() method called");
-        app.startActivityForResult(googleSignInClient.getSignInIntent(), FRConstants.RC_SIGN_IN);
+        app.startActivityForResult(googleSignInClient.getSignInIntent(), AndroidConstants.RC_SIGN_IN);
     }
 
     void handleSignInResult(Intent intent) {
@@ -131,7 +131,7 @@ public class FRPlayServices implements PlayServices {
                 if (!task.isSuccessful()) {
                     FRAndroidHelper.getInstance().logError("Problem with loading saved games list", task.getException());
                 } else {
-                    app.startActivityForResult(task.getResult(), FRConstants.RC_LIST_SAVED_GAMES);
+                    app.startActivityForResult(task.getResult(), AndroidConstants.RC_LIST_SAVED_GAMES);
                 }
             }
         });
@@ -303,7 +303,7 @@ public class FRPlayServices implements PlayServices {
                 .addOnSuccessListener(new OnSuccessListener<Intent>() {
                     @Override
                     public void onSuccess(Intent intent) {
-                        app.startActivityForResult(intent, FRConstants.RC_ACHIEVEMENT_UI);
+                        app.startActivityForResult(intent, AndroidConstants.RC_ACHIEVEMENT_UI);
                     }
                 });
     }

@@ -135,7 +135,12 @@ public class ScreenManager {
     }
 
     private static boolean isShowAd(FRConstants.ScreenType screenType){
-        return (screenType == GAME_LVL_COMPLETE || screenType == GAME_LVL_COMPLETE_PAUSE) &&
-                AdController.isAdLoaded() && AdController.isShowAdOnNextScreen();
+        if(!FlowRush.getPreferences().isAdsRemoved()) {
+            return (screenType == GAME_LVL_COMPLETE || screenType == GAME_LVL_COMPLETE_PAUSE) &&
+                    AdController.isAdLoaded() && AdController.isShowAdOnNextScreen();
+        }else{
+            FlowRush.logDebug("Don't show ad, because ads removed");
+            return false;
+        }
     }
 }

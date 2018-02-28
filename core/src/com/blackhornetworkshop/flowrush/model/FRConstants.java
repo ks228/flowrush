@@ -3,10 +3,6 @@ package com.blackhornetworkshop.flowrush.model;
 import com.badlogic.gdx.Gdx;
 
 public class FRConstants {
-
-    public static final String TAG = "FlowRush";
-    public static final boolean IS_DEBUG = false;
-
     public static final float SCREEN_HEIGHT = Gdx.graphics.getHeight();
     public static final float SCREEN_WIDTH = Gdx.graphics.getWidth();
 
@@ -89,16 +85,10 @@ public class FRConstants {
     public final static float LEVEL_NUMBER_PADDING = LEVEL_NUMBER_X_PADDING > LEVEL_NUMBER_Y_PADDING ? LEVEL_NUMBER_Y_PADDING : LEVEL_NUMBER_X_PADDING;
     public final static float LEVEL_NUMBER_GROUP_MARGIN_LEFT = (SCREEN_WIDTH-SCREEN_WIDTH*0.9f)/2+(SCREEN_WIDTH*0.9f- LEVEL_NUMBER_PADDING *4- LEVEL_NUMBER_SIZE *5)/2;
 
-    // Android
-
-    public final static int RC_SIGN_IN = 9001;
-    public final static int RC_LIST_SAVED_GAMES = 9002;
-    public final static int RC_ACHIEVEMENT_UI = 9003;
-
     // Texts
     public final static String AUTHORS_MSG= "development\nTIMUR SCISSORS\n\ndesign\nANN KOVALSKI\n\nmusic\nERIC HOPTON";
-    //public final static String SUPPORT_MSG= "Please support our indie development team. Join us on social media and share our game with your friends.\n\nAlso you can remove ads and in this way support our projects.";
-    public final static String SUPPORT_MSG= "Please support our indie development team. Join us on social media and share our game with your friends.";
+    public final static String SUPPORT_MSG= "Please support our indie development team. Join us on social media and share our game with your friends.\n\nAlso you can remove ads and in this way support our projects.";
+    public final static String SUPPORT_MSG_ADS_REMOVED= "Please support our indie development team. Join us on social media and share our game with your friends.";
     public final static String SIGN_IN_MSG= "By signing in your Google Play Games account, you can: save and load your in-game progress, earn in-game achievements, get experience for your Google Play Games account";
     public final static String SIGNED_MSG= "Welcome!\nHere you can see your\nFlow Rush\n achievements and manage your saved games";
     public final static String QUESTION_1 = "ENJOYING  FLOW RUSH?";

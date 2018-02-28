@@ -6,7 +6,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.blackhornetworkshop.flowrush.model.AndroidHelper;
-import com.blackhornetworkshop.flowrush.model.FRConstants;
 
 public class FRAndroidHelper implements AndroidHelper {
 
@@ -56,7 +55,7 @@ public class FRAndroidHelper implements AndroidHelper {
     public void showAd() {
         app.runOnUiThread(new Runnable() {
             public void run() {
-                FRAndroidHelper.getInstance().logDebug("AndroidHelper showAd() method called (runOnUiThread())");
+                FRAndroidHelper.getInstance().logDebug("AndroidHelper showAd() method called");
                 app.showAd();
             }
         });
@@ -64,14 +63,14 @@ public class FRAndroidHelper implements AndroidHelper {
 
     @Override
     public void logError(String msg, Throwable tr) {
-        Log.e(FRConstants.TAG, msg, tr);
+        Log.e(AndroidConstants.TAG, msg, tr);
         showToast(msg);
     }
 
     @Override
     public void logDebug(String msg) {
-        if (FRConstants.IS_DEBUG) {
-            Log.d(FRConstants.TAG, msg);
+        if (AndroidConstants.IS_DEBUG) {
+            Log.d(AndroidConstants.TAG, msg);
         }
     }
 
@@ -95,5 +94,21 @@ public class FRAndroidHelper implements AndroidHelper {
     @Override
     public boolean isInternetConnected() {
         return app.isInternetConnected();
+    }
+
+    @Override
+    public void initializeAds() {
+        app.initializeAds();
+        app.initializeBroadcastReceiver();
+    }
+
+    @Override
+    public void startPurchase() {
+        app.startPurchase();
+    }
+
+    @Override
+    public boolean isRemoveAdsPurchased() {
+        return app.isRemoveAdsPurchased();
     }
 }

@@ -21,7 +21,7 @@ public class FlowRush extends Game {
     private static AndroidHelper androidHelper;
     private static PlayServices playServices;
     private static OneTouchProcessor oneTouchProcessor;
-    private static Gson gson;
+    private static Gson gson = new Gson();
 
     private static GamePreferences preferences;
     private static SavedGame save;
@@ -63,10 +63,18 @@ public class FlowRush extends Game {
         Gdx.input.setCatchBackKey(true);
         oneTouchProcessor = new OneTouchProcessor();
 
-        gson = new Gson();
-
         LevelController.setPacks(FRFileHandler.loadPacks());
 
+        loadPreferences();
+        loadSavedGame();
+
+        FRAssetManager.initialize();
+        FRAssetManager.loadLogos();
+
+        ScreenManager.setLogoBHWScreen();
+    }
+
+    private void loadPreferences(){
         if (Gdx.files.local("preferences.json").exists()) {
             logDebug("Load an existing file preferences.json");
             preferences = FRFileHandler.loadPreferences();
@@ -74,7 +82,10 @@ public class FlowRush extends Game {
             logDebug("A new file preferences.json was created");
             preferences = new GamePreferences();
         }
+        preferences.setAdsIsRemoved(androidHelper.isRemoveAdsPurchased());
+    }
 
+    private void loadSavedGame(){
         if (Gdx.files.local("save.json").exists()) {
             androidHelper.logDebug("Load an existing file save.json");
             save = FRFileHandler.loadSavedGame();
@@ -83,10 +94,6 @@ public class FlowRush extends Game {
             save.setUniqSaveName();
             logDebug("A new file save.json was created");
         }
-        FRAssetManager.initialize();
-        FRAssetManager.loadLogos();
-
-        ScreenManager.setLogoBHWScreen();
     }
 
     public static void dayNightShift(){
@@ -177,7 +184,7 @@ public class FlowRush extends Game {
         }
     }
 
-    public static void logError(String msg, Throwable tr) {
+    static void logError(String msg, Throwable tr) {
         androidHelper.logError(msg, tr);
     }
 

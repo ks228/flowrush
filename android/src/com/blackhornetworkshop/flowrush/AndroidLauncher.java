@@ -1,26 +1,37 @@
 package com.blackhornetworkshop.flowrush;
 
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.android.vending.billing.IInAppBillingService;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.blackhornetworkshop.flowrush.controller.AdController;
-import com.blackhornetworkshop.flowrush.model.FRConstants;
 import com.blackhornetworkshop.flowrush.model.FlowRush;
+import com.blackhornetworkshop.flowrush.model.ex.FlowRushException;
+import com.blackhornetworkshop.flowrush.model.ui.UIPool;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class AndroidLauncher extends AndroidApplication {
 
@@ -29,11 +40,16 @@ public class AndroidLauncher extends AndroidApplication {
     private ConnectivityManager cm;
     private BroadcastReceiver networkStateReceiver;
 
+    private boolean isBroadcastReceiverInitialized;
+
+    private IInAppBillingService inAppBillingService;
+    private ServiceConnection inAppServiceConnection;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         FRAndroidHelper.getInstance().logDebug("AndroidLauncher onCreate() method");
+
+        isBroadcastReceiverInitialized = false;
 
         loadingDialog = new ProgressDialog(this, ProgressDialog.THEME_HOLO_LIGHT);
         loadingDialog.setMessage("Loading...");
@@ -50,29 +66,77 @@ public class AndroidLauncher extends AndroidApplication {
         if (isPlayServicesAvailable) {
             FRAndroidHelper.getInstance().logDebug("Play Services are available");
             FRPlayServices.getInstance().setup(this);
+            FlowRush.getInstance().setup(FRAndroidHelper.getInstance(), FRPlayServices.getInstance());
         } else {
             FRAndroidHelper.getInstance().logDebug("Play Services are not available");
+            FlowRush.getInstance().setup(FRAndroidHelper.getInstance());
         }
-
-        if (isPlayServicesAvailable)
-            FlowRush.getInstance().setup(FRAndroidHelper.getInstance(), FRPlayServices.getInstance());
-        else FlowRush.getInstance().setup(FRAndroidHelper.getInstance());
-        FRAndroidHelper.getInstance().logDebug("FlowRush is initialized");
 
         cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
 
+        inAppServiceConnection = new ServiceConnection() {
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                inAppBillingService = null;
+            }
+
+            @Override
+            public void onServiceConnected(ComponentName name,
+                                           IBinder service) {
+                inAppBillingService = IInAppBillingService.Stub.asInterface(service);
+            }
+        };
+
+        Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
+        serviceIntent.setPackage("com.android.vending");
+        bindService(serviceIntent, inAppServiceConnection, Context.BIND_AUTO_CREATE);
+
+        initialize(FlowRush.getInstance(), getConfig());
+    }
+
+    public void startPurchase(){
+        try {
+            FRAndroidHelper.getInstance().logDebug("Purchase flow started");
+            Bundle buyIntentBundle = inAppBillingService.getBuyIntent(3, getPackageName(), getString(R.string.test_remove_ads), "inapp", "");
+            PendingIntent pendingIntent = buyIntentBundle.getParcelable("BUY_INTENT");
+
+            startIntentSenderForResult(pendingIntent.getIntentSender(), AndroidConstants.RC_PURCHASE, new Intent(), 0, 0, 0);
+        }catch (Exception ex){
+            FRAndroidHelper.getInstance().logError("In-app purchase error", ex);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (inAppServiceConnection != null) {
+            unbindService(inAppServiceConnection);
+        }
+    }
+
+    public void initializeBroadcastReceiver(){
+        FRAndroidHelper.getInstance().logDebug("BroadcastReceiver initialization");
         networkStateReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 FRAndroidHelper.getInstance().logDebug("Connectivity changed");
-                checkIsAdLoadAvailableAndLoadIfTrue();
+                if (!FlowRush.getPreferences().isAdsRemoved()) {
+                    loadAdIfNotLoaded();
+                } else {
+                    FRAndroidHelper.getInstance().logDebug("Ads removed, nothing to load");
+                }
             }
         };
+        registerReceiver(networkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
+        isBroadcastReceiverInitialized = true;
+    }
 
-        MobileAds.initialize(this, getString(R.string.app_ads_key));
+    public void initializeAds(){
+        FRAndroidHelper.getInstance().logDebug("Ads initialization");
+        MobileAds.initialize(this, getString(R.string.test_app_ads_key));
 
         interstitialAd = new InterstitialAd(this);
-        interstitialAd.setAdUnitId(getString(R.string.ads_key));
+        interstitialAd.setAdUnitId(getString(R.string.test_ads_key));
         interstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
@@ -81,48 +145,53 @@ public class AndroidLauncher extends AndroidApplication {
             }
 
             @Override
+            public void onAdFailedToLoad(int i) {
+                FRAndroidHelper.getInstance().logDebug("Failed to load ad");
+            }
+
+            @Override
             public void onAdClosed() {
                 FRAndroidHelper.getInstance().logDebug("Ad is closed");
-                checkIsAdLoadAvailableAndLoadIfTrue();
+                loadAdIfNotLoaded();
             }
-
         });
-        initialize(FlowRush.getInstance(), getConfig());
-
     }
 
-    public void checkIsAdLoadAvailableAndLoadIfTrue() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                NetworkInfo ni = cm.getActiveNetworkInfo();
-                if (ni != null && ni.isConnected()) {
-                    boolean isAdLoaded = interstitialAd.isLoaded();
-                    if(!isAdLoaded){
-                        FRAndroidHelper.getInstance().logDebug("Loading ad");
-                        interstitialAd.loadAd(new AdRequest.Builder().build());
-                    }else{
-                        FRAndroidHelper.getInstance().logDebug("Ad is already loaded");
-                    }
-                }else {
-                    FRAndroidHelper.getInstance().logDebug("Network is not available");
+    public void loadAdIfNotLoaded() {
+        if (!interstitialAd.isLoading()) {
+            if (isInternetConnected()) {
+                FRAndroidHelper.getInstance().logDebug("Network is available");
+                boolean isAdLoaded = interstitialAd.isLoaded();
+                if (!isAdLoaded) {
+                    FRAndroidHelper.getInstance().logDebug("Loading ad");
+                    interstitialAd.loadAd(new AdRequest.Builder().build());
+                } else {
+                    FRAndroidHelper.getInstance().logDebug("Ad is already loaded");
                 }
+            } else {
+                FRAndroidHelper.getInstance().logDebug("Network is not available");
             }
-        });
+        } else {
+            FlowRush.logDebug("Can't start ad loading, because ad loading in already progress");
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        FRAndroidHelper.getInstance().logDebug("Broadcast receiver registered");
-        registerReceiver(networkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
+        if(isBroadcastReceiverInitialized) {
+            FRAndroidHelper.getInstance().logDebug("Broadcast receiver registered");
+            registerReceiver(networkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        FRAndroidHelper.getInstance().logDebug("Broadcast receiver unregistered");
-        unregisterReceiver(networkStateReceiver);
+        if(isBroadcastReceiverInitialized) {
+            FRAndroidHelper.getInstance().logDebug("Broadcast receiver unregistered");
+            unregisterReceiver(networkStateReceiver);
+        }
     }
 
     public boolean isInternetConnected() {
@@ -140,10 +209,10 @@ public class AndroidLauncher extends AndroidApplication {
     }
 
     public void showAd() {
-        if(isInternetConnected()) {
+        if (isInternetConnected()) {
             FRAndroidHelper.getInstance().logDebug("Show ad");
             interstitialAd.show();
-        }else{
+        } else {
             FRAndroidHelper.getInstance().logDebug("Don't show ad, because internet is off");
         }
     }
@@ -158,10 +227,58 @@ public class AndroidLauncher extends AndroidApplication {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
 
-        if (requestCode == FRConstants.RC_SIGN_IN) {
+        if (requestCode == AndroidConstants.RC_SIGN_IN) {
             FRPlayServices.getInstance().handleSignInResult(intent);
-        } else if (requestCode == FRConstants.RC_LIST_SAVED_GAMES) {
+        } else if (requestCode == AndroidConstants.RC_LIST_SAVED_GAMES) {
             FRPlayServices.getInstance().handleSnapshotSelectResult(intent);
+        } else  if (requestCode == AndroidConstants.RC_PURCHASE) {
+            //int responseCode = intent.getIntExtra("RESPONSE_CODE", 0);
+            String purchaseData = intent.getStringExtra("INAPP_PURCHASE_DATA");
+            //String dataSignature = intent.getStringExtra("INAPP_DATA_SIGNATURE");
+
+            if (resultCode == RESULT_OK) {
+                try {
+                    JSONObject jo = new JSONObject(purchaseData);
+                    String sku = jo.getString("productId");
+                    if(sku.equals(getString(R.string.test_remove_ads))){
+                        FRAndroidHelper.getInstance().logDebug("Remove ads purchase was bought");
+                        FlowRush.getPreferences().setAdsIsRemoved(true);
+                        UIPool.getRemoveAdsButton().setVisible(false);
+                        FlowRush.getAndroidHelper().showToast("Thank you! Ads removed");
+                    }
+                }
+                catch (JSONException e) {
+                    FRAndroidHelper.getInstance().logDebug("Failed to parse purchase data.");
+                    FlowRush.getAndroidHelper().showToast("Purchase failure");
+                    e.printStackTrace();
+                }
+            }else{
+                FlowRush.getAndroidHelper().showToast("Purchase failure");
+            }
+        }
+    }
+    public boolean isRemoveAdsPurchased(){
+        try {
+            Bundle ownedItems = inAppBillingService.getPurchases(3, getPackageName(), "inapp", null);
+            int response = ownedItems.getInt("RESPONSE_CODE");
+            if (response == AndroidConstants.BILLING_RESPONSE_RESULT_OK) {
+                ArrayList<String> ownedSkus = ownedItems.getStringArrayList("INAPP_PURCHASE_ITEM_LIST");
+
+                boolean removeAdsPurchased = false;
+
+                for (int i = 0; i < ownedSkus.size(); ++i) {
+                    String sku = ownedSkus.get(i);
+                    if(sku.equals(getString(R.string.test_remove_ads))) removeAdsPurchased = true;
+                }
+
+                return removeAdsPurchased;
+            }else{
+                FRAndroidHelper.getInstance().logError("Error getting info about purchases", new FlowRushException("Response code: "+response));
+                return false;
+            }
+        }catch (Exception ex){
+            FRAndroidHelper.getInstance().logError("Error getting info about purchases", ex);
+            return false;
         }
     }
 
@@ -179,16 +296,15 @@ public class AndroidLauncher extends AndroidApplication {
         loadingDialog.dismiss();
     }
 
-    boolean isPlayGamesPackageInstalled(){
+    boolean isPlayGamesPackageInstalled() {
         boolean app_installed;
         try {
-            getPackageManager().getPackageInfo("com.google.android.play.games",PackageManager.GET_ACTIVITIES);
+            getPackageManager().getPackageInfo("com.google.android.play.games", PackageManager.GET_ACTIVITIES);
             app_installed = true;
-        }
-        catch (PackageManager.NameNotFoundException e) {
+        } catch (PackageManager.NameNotFoundException e) {
             app_installed = false;
         }
-        FRAndroidHelper.getInstance().logDebug("Play games package is installed: "+app_installed);
+        FRAndroidHelper.getInstance().logDebug("Play games package is installed: " + app_installed);
         return app_installed;
     }
 }

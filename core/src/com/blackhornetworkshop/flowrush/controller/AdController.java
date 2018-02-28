@@ -9,29 +9,33 @@ public class AdController {
     private static boolean isAdLoaded = false;
     private static boolean showAdOnNextScreen = false;
 
-    public static void setAdLoaded(){
+    public static void setAdLoaded() {
         isAdLoaded = true;
     }
 
-    public static void setShowAdOnNextScreen(boolean showAdOnNextScreen){
+    public static void setShowAdOnNextScreen(boolean showAdOnNextScreen) {
         FlowRush.logDebug("Show ad on next screen: " + showAdOnNextScreen);
         AdController.showAdOnNextScreen = showAdOnNextScreen;
     }
 
-    static void showAd(){
-        FlowRush.logDebug("Show ad");
+    static void showAd() {
+        if(!FlowRush.getPreferences().isAdsRemoved()) {
+            FlowRush.logDebug("Show ad");
 
-        isAdLoaded = false;
-        showAdOnNextScreen = false;
+            isAdLoaded = false;
+            showAdOnNextScreen = false;
 
-        FlowRush.getAndroidHelper().showAd();
+            FlowRush.getAndroidHelper().showAd();
+        }else{
+            FlowRush.logDebug("Skip showing ad, because ads removed");
+        }
     }
 
-    static boolean isShowAdOnNextScreen(){
+    static boolean isShowAdOnNextScreen() {
         return showAdOnNextScreen;
     }
 
-    static boolean isAdLoaded(){
+    static boolean isAdLoaded() {
         return isAdLoaded;
     }
 }

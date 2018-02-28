@@ -141,7 +141,7 @@ public class UIPool {
         feedButton.setStyle(FRAssetManager.getTextButtonStyle(TEXT_BUTTON_STYLE_WHITE));
         websiteButton.setStyle(FRAssetManager.getTextButtonStyle(TEXT_BUTTON_STYLE_LIGHTBLUE));
 
-        /**removeAdsButton.setStyle(FRAssetManager.getTextButtonStyle(TEXT_BUTTON_STYLE_WHITE));*/
+        removeAdsButton.setStyle(FRAssetManager.getTextButtonStyle(TEXT_BUTTON_STYLE_WHITE));
 
         authorsButton.setSprite(FRAssetManager.getSprite(AUTHORS_ICON));
 
@@ -279,7 +279,7 @@ public class UIPool {
         //Authors
         authorsButton = UiActorCreator.getSmallButtonActor(7);
 
-        /**removeAdsButton = UiActorCreator.getTextButton(6);*/
+        removeAdsButton = UiActorCreator.getTextButton(6);
 
         if (FlowRush.isPlayServicesAvailable()) {
             googlePlayButton = UiActorCreator.getSmallButtonActor(14);

@@ -17,6 +17,7 @@ import static com.blackhornetworkshop.flowrush.model.FRConstants.SCREEN_HEIGHT;
 import static com.blackhornetworkshop.flowrush.model.FRConstants.SIGNED_MSG;
 import static com.blackhornetworkshop.flowrush.model.FRConstants.SIGN_IN_MSG;
 import static com.blackhornetworkshop.flowrush.model.FRConstants.SUPPORT_MSG;
+import static com.blackhornetworkshop.flowrush.model.FRConstants.SUPPORT_MSG_ADS_REMOVED;
 
 //Created by TScissors.
 
@@ -63,7 +64,9 @@ public class MenuScreen implements Screen, FRScreen {
         hudStage.addActor(UIPool.getSupportUsButton());
         hudStage.addActor(UIPool.getRateUsButton());
         hudStage.addActor(UIPool.getFeedButton());
-        /**hudStage.addActor(UIPool.getRemoveAdsButton());*/
+        if(!FlowRush.getPreferences().isAdsRemoved()) {
+            hudStage.addActor(UIPool.getRemoveAdsButton());
+        }
         hudStage.addActor(UIPool.getSocialNetworksButton());
         hudStage.addActor(UIPool.getWebsiteButton());
         hudStage.addActor(UIPool.getLevelNumbersGroup());
@@ -110,7 +113,9 @@ public class MenuScreen implements Screen, FRScreen {
         UIPool.getRateUsButton().setVisible(false);
         UIPool.getFeedButton().setVisible(false);
         UIPool.getSocialNetworksButton().setVisible(false);
-        /**UIPool.getRemoveAdsButton().setVisible(false);*/
+        if(!FlowRush.getPreferences().isAdsRemoved()) {
+            UIPool.getRemoveAdsButton().setVisible(false);
+        }
         UIPool.getWebsiteButton().setVisible(false);
 
         if(FlowRush.isPlayServicesAvailable()) {
@@ -148,12 +153,17 @@ public class MenuScreen implements Screen, FRScreen {
         UIPool.getRateUsButton().setVisible(false);
         UIPool.getFeedButton().setVisible(false);
 
-        UIPool.getMessageBackground().setText(SUPPORT_MSG);
         UIPool.getMenuLabel().setText("SUPPORT US");
 
         UIPool.getMessageBackground().setVisible(true);
         UIPool.getSocialNetworksButton().setVisible(true);
-        /**UIPool.getRemoveAdsButton().setVisible(true);*/
+
+        if(!FlowRush.getPreferences().isAdsRemoved()) {
+            UIPool.getRemoveAdsButton().setVisible(true);
+            UIPool.getMessageBackground().setText(SUPPORT_MSG);
+        }else{
+            UIPool.getMessageBackground().setText(SUPPORT_MSG_ADS_REMOVED);
+        }
         UIPool.getWebsiteButton().setVisible(true);
     }
 
