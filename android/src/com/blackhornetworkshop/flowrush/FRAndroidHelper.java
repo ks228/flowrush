@@ -105,9 +105,4 @@ public class FRAndroidHelper implements AndroidHelper {
     public void initializeInAppBillingService() {
         app.initializeInAppBillingService();
     }
-
-    @Override
-    public boolean isAdLoaded() {
-        return app.isAdLoaded();
-    }
 }

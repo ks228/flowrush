@@ -14,5 +14,4 @@ public interface AndroidHelper {
     boolean isInternetConnected();
     void initializeInAppBillingService();
     void startPurchase();
-    boolean isAdLoaded();
 }

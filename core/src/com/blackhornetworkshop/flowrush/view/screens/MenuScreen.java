@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Timer;
 import com.blackhornetworkshop.flowrush.controller.ScreenManager;
-import com.blackhornetworkshop.flowrush.model.FlowRush;
+import com.blackhornetworkshop.flowrush.controller.FlowRush;
 import com.blackhornetworkshop.flowrush.model.ui.UIPool;
 
 import static com.blackhornetworkshop.flowrush.model.FRConstants.AUTHORS_MSG;

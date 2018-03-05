@@ -10,7 +10,7 @@ class BrushActorListener extends ClickListener {
 
     private com.blackhornet.flowrush.editor.model.BrushActor actor;
 
-    public BrushActorListener(com.blackhornet.flowrush.editor.model.BrushActor actor) {
+    BrushActorListener(com.blackhornet.flowrush.editor.model.BrushActor actor) {
         this.actor = actor;
     }
 

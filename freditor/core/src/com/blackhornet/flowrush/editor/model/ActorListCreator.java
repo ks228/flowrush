@@ -6,23 +6,22 @@ import java.util.ArrayList;
 
 public class ActorListCreator {
 
-    private ArrayList<ArrayList<com.blackhornet.flowrush.editor.model.ActorInfo>> actorList;
+    private ArrayList<ArrayList<ActorInfo>> actorList;
 
     private int lengthX;
     private int lengthY;
 
     public ActorListCreator(int lengthX, int lengthY){
-        actorList = new ArrayList<ArrayList<com.blackhornet.flowrush.editor.model.ActorInfo>>();
+        actorList = new ArrayList<ArrayList<ActorInfo>>();
         this.lengthX = lengthX;
         this.lengthY = lengthY;
 
         for (int i = 0; i < lengthX; i++) {
-            ArrayList<com.blackhornet.flowrush.editor.model.ActorInfo> row = new ArrayList<com.blackhornet.flowrush.editor.model.ActorInfo>();
-            actorList.add(row);
+            actorList.add(new ArrayList<ActorInfo>());
         }
         for (int x = 0; x < lengthX; x++) {
             for (int y = 0; y < lengthY; y++) {
-                com.blackhornet.flowrush.editor.model.ActorInfo actorInfo = new com.blackhornet.flowrush.editor.model.ActorInfo();
+                ActorInfo actorInfo = new ActorInfo();
                 actorList.get(x).add(y, actorInfo);
                 System.out.println("ActorInfo on position "+x+""+y+" created!");
             }
@@ -30,7 +29,7 @@ public class ActorListCreator {
     }
 
 
-    public com.blackhornet.flowrush.editor.model.ActorInfo getActorInfo(int x, int y) {
+    ActorInfo getActorInfo(int x, int y) {
         return actorList.get(x).get(y);
     }
 

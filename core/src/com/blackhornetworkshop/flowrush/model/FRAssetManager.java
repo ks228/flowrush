@@ -34,8 +34,8 @@ public class FRAssetManager {
 
     private static boolean isMusicLoaded;
 
-    static void dispose() {
-        FlowRush.logDebug("FRAssetManager dispose()");
+    public static void dispose() {
+        com.blackhornetworkshop.flowrush.controller.FlowRush.logDebug("FRAssetManager dispose()");
         daySkin.remove("fontLarge", BitmapFont.class);// REMOVE IS IMPORTANT!
         daySkin.remove("fontMid", BitmapFont.class);
         daySkin.remove("fontSmall", BitmapFont.class);
@@ -62,8 +62,8 @@ public class FRAssetManager {
     private FRAssetManager() {
     }
 
-    static void initialize(){
-        FlowRush.logDebug("FRAssetManager initialize() method called");
+    public static void initialize(){
+        com.blackhornetworkshop.flowrush.controller.FlowRush.logDebug("FRAssetManager initialize() method called");
 
         manager = new AssetManager();
 
@@ -78,7 +78,7 @@ public class FRAssetManager {
         isMusicLoaded = false;
     }
 
-    static void loadLogos(){
+    public static void loadLogos(){
         manager.load("texture/logo-atlas.atlas", TextureAtlas.class);
         manager.finishLoading();
 
@@ -97,7 +97,7 @@ public class FRAssetManager {
     }
 
     public static void createAssets() {
-        FlowRush.logDebug("FRAssetManager createAssets() method called");
+        com.blackhornetworkshop.flowrush.controller.FlowRush.logDebug("FRAssetManager createAssets() method called");
 
         nightSkin = manager.get("ui/night-skin.json");
         daySkin = manager.get("ui/day-skin.json");
@@ -157,7 +157,7 @@ public class FRAssetManager {
     }
 
     public static Sprite getSprite(String name){
-        if(FlowRush.getPreferences().isNightMode()){
+        if(com.blackhornetworkshop.flowrush.controller.FlowRush.getPreferences().isNightMode()){
             return nightSpriteHashMap.get(name);
         }else{
             return daySpriteHashMap.get(name);
@@ -317,7 +317,7 @@ public class FRAssetManager {
     }
 
     public static TextButton.TextButtonStyle getTextButtonStyle(String style){
-        if(FlowRush.getPreferences().isNightMode()){
+        if(com.blackhornetworkshop.flowrush.controller.FlowRush.getPreferences().isNightMode()){
             return nightTextbuttonStyleHashMap.get(style);
         }else{
             return dayTextbuttonStyleHashMap.get(style);
@@ -325,7 +325,7 @@ public class FRAssetManager {
     }
 
     public static Label.LabelStyle getLabelStyle(String style){
-        if(FlowRush.getPreferences().isNightMode()){
+        if(com.blackhornetworkshop.flowrush.controller.FlowRush.getPreferences().isNightMode()){
             return nightLabelStyleHashMap.get(style);
         }else{
             return dayLabelStyleHashMap.get(style);
@@ -333,7 +333,7 @@ public class FRAssetManager {
     }
 
     public static BitmapFont getMidFont(){
-        if(FlowRush.getPreferences().isNightMode()) {
+        if(com.blackhornetworkshop.flowrush.controller.FlowRush.getPreferences().isNightMode()) {
             return nightSkin.getFont("fontMid");
         }else{
             return daySkin.getFont("fontMid");
@@ -366,7 +366,7 @@ public class FRAssetManager {
     //Sprites
 
     public static TiledDrawable getBackgroundDot() {
-        if(FlowRush.getPreferences().isNightMode()){
+        if(com.blackhornetworkshop.flowrush.controller.FlowRush.getPreferences().isNightMode()){
             return nightBackgroundDot;
         }else{
             return dayBackgroundDot;
@@ -374,7 +374,7 @@ public class FRAssetManager {
     }
 
     public static Sprite getBackgroundStripe() {
-        if(FlowRush.getPreferences().isNightMode()){
+        if(com.blackhornetworkshop.flowrush.controller.FlowRush.getPreferences().isNightMode()){
             return nightBackgroundStripe;
         }else{
             return dayBackgroundStripe;
@@ -382,7 +382,7 @@ public class FRAssetManager {
     }
 
     public static Sprite getQuadrantSprite() {
-        if(FlowRush.getPreferences().isNightMode()){
+        if(com.blackhornetworkshop.flowrush.controller.FlowRush.getPreferences().isNightMode()){
             return nightQuadrantSprite;
         }else{
             return dayQuadrantSprite;
@@ -394,7 +394,7 @@ public class FRAssetManager {
     }
 
     public static Sprite getBackgroundWhite() {
-        if(FlowRush.getPreferences().isNightMode()){
+        if(com.blackhornetworkshop.flowrush.controller.FlowRush.getPreferences().isNightMode()){
             return nightBackgroundWhite;
         }else{
             return dayBackgroundWhite;

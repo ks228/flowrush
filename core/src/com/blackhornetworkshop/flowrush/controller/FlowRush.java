@@ -1,13 +1,17 @@
-package com.blackhornetworkshop.flowrush.model;
+package com.blackhornetworkshop.flowrush.controller;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.blackhornetworkshop.flowrush.controller.LevelController;
-import com.blackhornetworkshop.flowrush.controller.ScreenManager;
-import com.blackhornetworkshop.flowrush.controller.OneTouchProcessor;
+import com.blackhornetworkshop.flowrush.model.AndroidHelper;
+import com.blackhornetworkshop.flowrush.model.FRAssetManager;
+import com.blackhornetworkshop.flowrush.model.FRConstants;
+import com.blackhornetworkshop.flowrush.model.FRFileHandler;
+import com.blackhornetworkshop.flowrush.model.GamePreferences;
+import com.blackhornetworkshop.flowrush.model.PlayServices;
+import com.blackhornetworkshop.flowrush.model.SavedGame;
 import com.blackhornetworkshop.flowrush.view.screens.GameScreen;
 import com.blackhornetworkshop.flowrush.view.screens.MenuScreen;
 import com.blackhornetworkshop.flowrush.model.ui.UIPool;
@@ -183,7 +187,7 @@ public class FlowRush extends Game {
         }
     }
 
-    static void logError(String msg, Throwable tr) {
+    public static void logError(String msg, Throwable tr) {
         androidHelper.logError(msg, tr);
     }
 

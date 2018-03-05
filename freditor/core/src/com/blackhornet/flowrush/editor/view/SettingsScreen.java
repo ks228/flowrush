@@ -90,7 +90,6 @@ public class SettingsScreen implements Screen {
                     String name = createNameField.getText();
 
                     FlowRushEditor.getInstance().setScreen(new EditorScreen(width, height, name));
-                    dispose();
 
                 } catch (NumberFormatException e) {
                     messageLabel.setText("Wrong values!");
@@ -224,11 +223,13 @@ public class SettingsScreen implements Screen {
 
     @Override
     public void hide() {
-
+        dispose();
     }
 
     @Override
     public void dispose() {
+        System.out.println("SettingsScreen dispose() called");
+        stage.dispose();
     }
 }
 

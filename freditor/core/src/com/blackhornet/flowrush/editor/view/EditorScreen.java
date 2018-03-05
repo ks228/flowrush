@@ -158,11 +158,12 @@ public class EditorScreen implements Screen {
 
     @Override
     public void hide() {
-
+        dispose();
     }
 
     @Override
     public void dispose() {
-
+        System.out.println("EditorScreen dispose() called");
+        stage.dispose();
     }
 }

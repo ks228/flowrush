@@ -2,7 +2,6 @@ package com.blackhornetworkshop.flowrush.controller;
 
 import com.badlogic.gdx.Screen;
 import com.blackhornetworkshop.flowrush.model.FRConstants;
-import com.blackhornetworkshop.flowrush.model.FlowRush;
 import com.blackhornetworkshop.flowrush.view.screens.FRScreen;
 import com.blackhornetworkshop.flowrush.view.screens.GameScreen;
 import com.blackhornetworkshop.flowrush.view.screens.LogoScreen;

@@ -3,7 +3,6 @@ package com.blackhornetworkshop.flowrush.controller;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.utils.Timer;
-import com.blackhornetworkshop.flowrush.model.FlowRush;
 import com.blackhornetworkshop.flowrush.model.HexActor;
 import com.blackhornetworkshop.flowrush.view.screens.GameScreen;
 

@@ -21,7 +21,6 @@ public class FlowRushEditor extends Game {
         builder.setPrettyPrinting();
         gson = builder.create();
     }
-
     private static TextureAtlas atlasUI;
     private static TextureAtlas mainAtlas;
     private static Skin skin;
@@ -57,8 +56,15 @@ public class FlowRushEditor extends Game {
         return gson;
     }
 
+    @Override
     public void dispose() {
+        System.out.println("FlowRushEditor dispose() called");
 
+        getScreen().dispose();
+
+        mainAtlas.dispose();
+        atlasUI.dispose();
+        skin.dispose();
     }
 
 }

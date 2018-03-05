@@ -1,6 +1,6 @@
 # Flow Rush
 
-Flow Rush is minimalistic logic puzzle game. The game was released on Android platform. This game was built with the [libGDX](https://libgdx.badlogicgames.com/) engine (the main gameplay released with help of scene2D).
+Flow Rush is minimalistic logic puzzle game. The game was released on Android&trade; platform. This game was built with the [libGDX](https://libgdx.badlogicgames.com/) engine (the main gameplay released with help of scene2D).
 
 It's some modification of 'plumber'-game. Your task is to deliver all messages to the destination points. To solve the puzzle, you should rotate and connect hex tiles in such a way as to find the right path for a delivery of abstract messages.
 
@@ -48,3 +48,7 @@ blackhornet.w@gmail.com
 
 Buy me a coffee:<br>
 [![Donate](/readme-imgs/donate.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=AEAVKFGRZM3YS)
+
+#### Trademarks:
+
+Android, AdMob, Google Play and the Google Play logo are trademarks of Google LLC

@@ -1,5 +1,7 @@
 package com.blackhornetworkshop.flowrush.model;
 
+import com.blackhornetworkshop.flowrush.controller.FlowRush;
+
 public class GamePreferences {
 
     private boolean soundIsOn = true;

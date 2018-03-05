@@ -15,7 +15,7 @@ import com.badlogic.gdx.utils.Align;
 import com.blackhornetworkshop.flowrush.model.FRAssetManager;
 import com.blackhornetworkshop.flowrush.model.FRConstants;
 import com.blackhornetworkshop.flowrush.model.ui.background.BackgroundActor;
-import com.blackhornetworkshop.flowrush.model.FlowRush;
+import com.blackhornetworkshop.flowrush.controller.FlowRush;
 import com.blackhornetworkshop.flowrush.controller.ScreenManager;
 import com.blackhornetworkshop.flowrush.controller.LevelController;
 

@@ -2,7 +2,6 @@ package com.blackhornetworkshop.flowrush.controller;
 
 import com.blackhornetworkshop.flowrush.model.ActorInfo;
 import com.blackhornetworkshop.flowrush.model.Packs;
-import com.blackhornetworkshop.flowrush.model.FlowRush;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;

@@ -20,7 +20,7 @@ import com.android.vending.billing.IInAppBillingService;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.blackhornetworkshop.flowrush.controller.AdController;
-import com.blackhornetworkshop.flowrush.model.FlowRush;
+import com.blackhornetworkshop.flowrush.controller.FlowRush;
 import com.blackhornetworkshop.flowrush.model.ex.FlowRushException;
 import com.blackhornetworkshop.flowrush.model.ui.UIPool;
 import com.google.android.gms.ads.AdListener;
@@ -184,10 +184,6 @@ public class AndroidLauncher extends AndroidApplication {
         } else {
             FlowRush.logDebug("Can't start ad loading, because ad loading in already progress");
         }
-    }
-
-    public boolean isAdLoaded(){
-        return interstitialAd.isLoaded();
     }
 
     @Override

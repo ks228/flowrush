@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.blackhornetworkshop.flowrush.model.FRAssetManager;
-import com.blackhornetworkshop.flowrush.model.FlowRush;
+import com.blackhornetworkshop.flowrush.controller.FlowRush;
 
 import static com.blackhornetworkshop.flowrush.model.FRConstants.BIG_HEX_DARK;
 import static com.blackhornetworkshop.flowrush.model.FRConstants.SCREEN_HEIGHT;

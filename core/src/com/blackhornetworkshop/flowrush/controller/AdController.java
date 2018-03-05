@@ -2,8 +2,6 @@ package com.blackhornetworkshop.flowrush.controller;
 
 //Created by TScissors.
 
-import com.blackhornetworkshop.flowrush.model.FlowRush;
-
 public class AdController {
 
     private static boolean showAdOnNextScreen = false;

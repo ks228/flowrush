@@ -43,7 +43,7 @@ public class SavedGame {
         finishedPacks[num] = true;
     }
 
-    boolean isPackFinished(int num) {
+    public boolean isPackFinished(int num) {
         return finishedPacks[num];
     }
 
