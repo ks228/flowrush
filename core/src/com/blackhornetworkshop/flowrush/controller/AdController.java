@@ -6,10 +6,10 @@ import com.blackhornetworkshop.flowrush.model.FlowRush;
 
 public class AdController {
 
-    private static boolean isAdLoaded = false;
     private static boolean showAdOnNextScreen = false;
+    private static boolean isAdLoaded = false;
 
-    public static void setAdLoaded() {
+    public static void setIsAdLoaded(){
         isAdLoaded = true;
     }
 
@@ -20,12 +20,14 @@ public class AdController {
 
     static void showAd() {
         if(!FlowRush.getPreferences().isAdsRemoved()) {
-            FlowRush.logDebug("Show ad");
-
-            isAdLoaded = false;
-            showAdOnNextScreen = false;
-
-            FlowRush.getAndroidHelper().showAd();
+            if(FlowRush.getAndroidHelper().isInternetConnected()) {
+                FlowRush.logDebug("Show ad");
+                isAdLoaded = false;
+                showAdOnNextScreen = false;
+                FlowRush.getAndroidHelper().showAd();
+            }else{
+                FlowRush.getAndroidHelper().logDebug("Don't show ad, because internet is off");
+            }
         }else{
             FlowRush.logDebug("Skip showing ad, because ads removed");
         }
@@ -35,7 +37,5 @@ public class AdController {
         return showAdOnNextScreen;
     }
 
-    static boolean isAdLoaded() {
-        return isAdLoaded;
-    }
+    static boolean isAdLoaded(){ return isAdLoaded;}
 }

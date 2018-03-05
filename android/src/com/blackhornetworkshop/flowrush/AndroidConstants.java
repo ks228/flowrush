@@ -5,7 +5,7 @@ package com.blackhornetworkshop.flowrush;
 class AndroidConstants {
 
     final static String TAG = "FlowRush";
-    final static boolean IS_DEBUG = true;
+    final static boolean IS_DEBUG = false;
 
     final static int RC_SIGN_IN = 9001;
     final static int RC_LIST_SAVED_GAMES = 9002;

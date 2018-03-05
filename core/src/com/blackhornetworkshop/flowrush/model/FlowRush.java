@@ -82,7 +82,6 @@ public class FlowRush extends Game {
             logDebug("A new file preferences.json was created");
             preferences = new GamePreferences();
         }
-        preferences.setAdsIsRemoved(androidHelper.isRemoveAdsPurchased());
     }
 
     private void loadSavedGame(){

@@ -69,12 +69,8 @@ public class LogoScreen implements Screen, FRScreen {
     public static void setFRLogo() {
         Gdx.gl.glClearColor(0.26f, 0.64f, 0.87f, 1);
         isFRlogo = true;
+        FlowRush.getAndroidHelper().initializeInAppBillingService();
         FRAssetManager.loadAssets();
-        if(!FlowRush.getPreferences().isAdsRemoved()) {
-            FlowRush.getAndroidHelper().initializeAds();
-        }else{
-            FlowRush.logDebug("Skip ads initialization, because ads removed");
-        }
     }
 
     @Override

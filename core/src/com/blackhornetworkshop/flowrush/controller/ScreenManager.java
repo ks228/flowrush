@@ -38,7 +38,9 @@ public class ScreenManager {
 
     public static void setMenuMainScreen() {
         checkScreen(MenuScreen.getInstance());
-        if(isShowAd(currentScreen)) AdController.showAd();
+        if(isShowAd(currentScreen)) {
+            AdController.showAd();
+        }
         currentScreen = MENU_MAIN;
         MenuScreen.getInstance().setMainMenuScreen();
         FlowRush.logDebug("MAIN MENU screen");
@@ -90,7 +92,9 @@ public class ScreenManager {
 
     public static void setGameMainScreen() {
         checkScreen(GameScreen.getInstance());
-        if(isShowAd(currentScreen)) AdController.showAd();
+        if(isShowAd(currentScreen)){
+            AdController.showAd();
+        }
         if(currentScreen == GAME_PAUSE || currentScreen == GAME_LVL_COMPLETE_PAUSE){
             GameScreen.getInstance().removePauseAndRestoreTouch();
         }else if(currentScreen == GAME_PACK_COMPLETE){
@@ -136,8 +140,16 @@ public class ScreenManager {
 
     private static boolean isShowAd(FRConstants.ScreenType screenType){
         if(!FlowRush.getPreferences().isAdsRemoved()) {
-            return (screenType == GAME_LVL_COMPLETE || screenType == GAME_LVL_COMPLETE_PAUSE) &&
-                    AdController.isAdLoaded() && AdController.isShowAdOnNextScreen();
+            boolean showAd = (screenType == GAME_LVL_COMPLETE || screenType == GAME_LVL_COMPLETE_PAUSE) &&
+                    AdController.isShowAdOnNextScreen() && AdController.isAdLoaded();
+            if(showAd){
+                FlowRush.logDebug("Screen manager check isShowAd() = true");
+            }else{
+                FlowRush.logDebug("Screen manager check isShowAd() = false");
+                FlowRush.logDebug("ScreenType: "+screenType+" Is ad loaded: "+AdController.isAdLoaded()
+                        +" Is show ad on next screen: "+AdController.isShowAdOnNextScreen());
+            }
+            return showAd;
         }else{
             FlowRush.logDebug("Don't show ad, because ads removed");
             return false;

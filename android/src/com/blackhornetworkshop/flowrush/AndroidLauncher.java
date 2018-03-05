@@ -51,6 +51,8 @@ public class AndroidLauncher extends AndroidApplication {
 
         isBroadcastReceiverInitialized = false;
 
+        cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+
         loadingDialog = new ProgressDialog(this, ProgressDialog.THEME_HOLO_LIGHT);
         loadingDialog.setMessage("Loading...");
         loadingDialog.setCancelable(false);
@@ -72,32 +74,13 @@ public class AndroidLauncher extends AndroidApplication {
             FlowRush.getInstance().setup(FRAndroidHelper.getInstance());
         }
 
-        cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        inAppServiceConnection = new ServiceConnection() {
-            @Override
-            public void onServiceDisconnected(ComponentName name) {
-                inAppBillingService = null;
-            }
-
-            @Override
-            public void onServiceConnected(ComponentName name,
-                                           IBinder service) {
-                inAppBillingService = IInAppBillingService.Stub.asInterface(service);
-            }
-        };
-
-        Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
-        serviceIntent.setPackage("com.android.vending");
-        bindService(serviceIntent, inAppServiceConnection, Context.BIND_AUTO_CREATE);
-
         initialize(FlowRush.getInstance(), getConfig());
     }
 
     public void startPurchase(){
         try {
             FRAndroidHelper.getInstance().logDebug("Purchase flow started");
-            Bundle buyIntentBundle = inAppBillingService.getBuyIntent(3, getPackageName(), getString(R.string.test_remove_ads), "inapp", "");
+            Bundle buyIntentBundle = inAppBillingService.getBuyIntent(3, getPackageName(), getString(R.string.flowrush_remove_ads), "inapp", "");
             PendingIntent pendingIntent = buyIntentBundle.getParcelable("BUY_INTENT");
 
             startIntentSenderForResult(pendingIntent.getIntentSender(), AndroidConstants.RC_PURCHASE, new Intent(), 0, 0, 0);
@@ -106,11 +89,38 @@ public class AndroidLauncher extends AndroidApplication {
         }
     }
 
+    public void initializeInAppBillingService(){
+        inAppServiceConnection = new ServiceConnection() {
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                inAppBillingService = null;
+                FRAndroidHelper.getInstance().logDebug("In-app billing service = null");
+            }
+
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                inAppBillingService = IInAppBillingService.Stub.asInterface(service);
+                if(!isRemoveAdsPurchased()) {
+                    initializeAds();
+                    initializeBroadcastReceiver();
+                }else{
+                    FlowRush.getPreferences().setAdsIsRemoved(true);
+                    FlowRush.logDebug("Skip ads initialization, because ads removed");
+                }
+            }
+        };
+
+        Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
+        serviceIntent.setPackage("com.android.vending");
+        bindService(serviceIntent, inAppServiceConnection, Context.BIND_AUTO_CREATE);
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         if (inAppServiceConnection != null) {
             unbindService(inAppServiceConnection);
+            FRAndroidHelper.getInstance().logDebug("Unbind in-app billing service connection");
         }
     }
 
@@ -133,15 +143,15 @@ public class AndroidLauncher extends AndroidApplication {
 
     public void initializeAds(){
         FRAndroidHelper.getInstance().logDebug("Ads initialization");
-        MobileAds.initialize(this, getString(R.string.test_app_ads_key));
+        MobileAds.initialize(this, getString(R.string.app_ads_key));
 
         interstitialAd = new InterstitialAd(this);
-        interstitialAd.setAdUnitId(getString(R.string.test_ads_key));
+        interstitialAd.setAdUnitId(getString(R.string.ads_key));
         interstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
                 FRAndroidHelper.getInstance().logDebug("Ad is loaded");
-                AdController.setAdLoaded();
+                AdController.setIsAdLoaded();
             }
 
             @Override
@@ -174,6 +184,10 @@ public class AndroidLauncher extends AndroidApplication {
         } else {
             FlowRush.logDebug("Can't start ad loading, because ad loading in already progress");
         }
+    }
+
+    public boolean isAdLoaded(){
+        return interstitialAd.isLoaded();
     }
 
     @Override
@@ -209,12 +223,7 @@ public class AndroidLauncher extends AndroidApplication {
     }
 
     public void showAd() {
-        if (isInternetConnected()) {
-            FRAndroidHelper.getInstance().logDebug("Show ad");
-            interstitialAd.show();
-        } else {
-            FRAndroidHelper.getInstance().logDebug("Don't show ad, because internet is off");
-        }
+        interstitialAd.show();
     }
 
     @Override
@@ -232,19 +241,17 @@ public class AndroidLauncher extends AndroidApplication {
         } else if (requestCode == AndroidConstants.RC_LIST_SAVED_GAMES) {
             FRPlayServices.getInstance().handleSnapshotSelectResult(intent);
         } else  if (requestCode == AndroidConstants.RC_PURCHASE) {
-            //int responseCode = intent.getIntExtra("RESPONSE_CODE", 0);
             String purchaseData = intent.getStringExtra("INAPP_PURCHASE_DATA");
-            //String dataSignature = intent.getStringExtra("INAPP_DATA_SIGNATURE");
 
             if (resultCode == RESULT_OK) {
                 try {
                     JSONObject jo = new JSONObject(purchaseData);
                     String sku = jo.getString("productId");
-                    if(sku.equals(getString(R.string.test_remove_ads))){
+                    if(sku.equals(getString(R.string.flowrush_remove_ads))){
                         FRAndroidHelper.getInstance().logDebug("Remove ads purchase was bought");
                         FlowRush.getPreferences().setAdsIsRemoved(true);
                         UIPool.getRemoveAdsButton().setVisible(false);
-                        FlowRush.getAndroidHelper().showToast("Thank you! Ads removed");
+                        FlowRush.getAndroidHelper().showToast("Thank you! Ads are removed");
                     }
                 }
                 catch (JSONException e) {
@@ -268,7 +275,7 @@ public class AndroidLauncher extends AndroidApplication {
 
                 for (int i = 0; i < ownedSkus.size(); ++i) {
                     String sku = ownedSkus.get(i);
-                    if(sku.equals(getString(R.string.test_remove_ads))) removeAdsPurchased = true;
+                    if(sku.equals(getString(R.string.flowrush_remove_ads))) removeAdsPurchased = true;
                 }
 
                 return removeAdsPurchased;

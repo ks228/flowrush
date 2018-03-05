@@ -204,9 +204,9 @@ public class FRAssetManager {
         nightSpriteHashMap.put(BACKGROUND_HEX_WITH_SOURCE, nightAtlas.createSprite(BACKGROUND_HEX_WITH_SOURCE));
 
         daySpriteHashMap.put(BACKGROUND_HEX_TOUCHED, dayAtlas.createSprite(BACKGROUND_HEX_TOUCHED));
-        nightSpriteHashMap.put(BACKGROUND_HEX_TOUCHED, dayAtlas.createSprite(BACKGROUND_HEX_TOUCHED));
+        nightSpriteHashMap.put(BACKGROUND_HEX_TOUCHED, nightAtlas.createSprite(BACKGROUND_HEX_TOUCHED));
 
-        daySpriteHashMap.put(BACKGROUND_HEX_TOUCHED_WITH_SOURCE, nightAtlas.createSprite(BACKGROUND_HEX_TOUCHED_WITH_SOURCE));
+        daySpriteHashMap.put(BACKGROUND_HEX_TOUCHED_WITH_SOURCE, dayAtlas.createSprite(BACKGROUND_HEX_TOUCHED_WITH_SOURCE));
         nightSpriteHashMap.put(BACKGROUND_HEX_TOUCHED_WITH_SOURCE, nightAtlas.createSprite(BACKGROUND_HEX_TOUCHED_WITH_SOURCE));
 
         daySpriteHashMap.put(SOURCE_ICON, dayAtlas.createSprite(SOURCE_ICON));
