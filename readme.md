@@ -7,15 +7,16 @@ It's some modification of 'plumber'-game. Your task is to deliver all messages t
 It's the first project of [blackhornet.workshop](https://blackhor.net) and we'll glad to get any feedbacks and remarks.
 
 <p align="center"><a href='https://play.google.com/store/apps/details?id=com.blackhornetworkshop.flowrush&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a></p>
-# Features:
+
+## Features:
 
 * Game was built with the [libGDX](https://libgdx.badlogicgames.com/)
 * 250 levels
 * Own level editor
 * Night mode
 * Interaction with Google Play Games&trade;
-* AdMob&trade; advertisement
-* Google&trade; In-App billing
+* AdMob&trade; advertisement integrated
+* Google&trade; In-App billing realised
 
 ## Screenshots:
 
